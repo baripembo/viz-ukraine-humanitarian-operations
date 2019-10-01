@@ -1,0 +1,42 @@
+{
+  "name": "viz-starter",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/OCHA-DAP/viz-starter.git",
+  "main": " ",
+  "scripts": {
+    "start": "http-server ./dist -c-1 -p 3000",
+    "scss": "node-sass -o dist/css src/scss/styles.scss",
+    "watch:data": "onchange 'src/data/*' -- npm run build:data",
+    "watch:html": "onchange 'src/*.html' -- npm run build:html",
+    "watch:css": "onchange 'src/scss/*.scss' -- npm run build:css",
+    "watch:js": "onchange 'src/js/*.js' -- npm run build:js",
+    "watch:assets": "onchange 'src/assets/**/*.*' -- npm run build:assets",
+    "watch": "npm-run-all --parallel watch:*",
+    "concat:js": "mkdir -p dist/js && concat -o dist/js/bundle.js ./app.js src/js/*.js",
+    "build:data": "mkdir -p dist/data/ && cp src/data/* dist/data/",
+    "build:html": "mkdir -p dist && cp src/*.html dist/",
+    "build:css": "mkdir -p dist/css && npm run scss",
+    "build:js": "npm run concat:js && browserify -t browserify-css dist/js/bundle.js | uglifyjs > dist/js/bundle.min.js",
+    "build:assets": "mkdir -p dist/assets && cp -r src/assets/ dist/assets/",
+    "prebuild": "rm -rf ./dist",
+    "build": "npm-run-all --parallel build:*",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "Erika Wei",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "browserify-css": "^0.15.0",
+    "concat": "^1.0.3",
+    "gh-pages": "^2.0.1",
+    "http-server": "^0.11.1",
+    "jquery": "^3.4.1",
+    "node-sass": "^4.12.0",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^6.0.0",
+    "uglify-es": "^3.3.9"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,54 @@
+@import '_grid';
+
+* {
+	box-sizing: border-box;
+}
+*:before,
+*:after {
+ box-sizing: border-box;
+}
+
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+	font-family: 'PT Sans', sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+main {
+	flex: 1;
+}
+
+footer {
+	background-color: #353535;
+	color: #FFF;
+	padding: 20px 0 10px;
+}
+
+.logos {
+	img {
+		margin-right: 40px;
+		margin-bottom: 0;
+		vertical-align: top;
+		width: auto;
+	}
+}
+
+
+@media only screen and (max-width: 767px) {
+	.logos {
+		.grid-container > div {
+			padding: 0;
+			text-align: center;
+		}
+		img {
+			margin: 10px;
+		}
+	}
+}

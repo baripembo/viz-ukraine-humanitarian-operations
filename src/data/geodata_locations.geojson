@@ -1,0 +1,114 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Galabadja, Bangui",
+        "icon": "icon_start",
+        "iconSize": 0.3,
+        "textAnchor": "left",
+        "textOffset": [1, 0],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.5434627532959,
+          4.41367716120559
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bangui Central Mosque",
+        "icon": "icon_middle",
+        "iconSize": 0.25,
+        "textAnchor": "left",
+        "textOffset": [1, 0],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.538055419921875,
+          4.37900731600158
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sibut",
+        "icon": "icon_middle",
+        "iconSize": 0.25,
+        "textAnchor": "right",
+        "textOffset": [-1, 0],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.0867,
+          5.7378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bornou Mosque IDP Site",
+        "icon": "icon_middle",
+        "iconSize": 0.25,
+        "textAnchor": "left",
+        "textOffset": [-0.5, 2],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.682063102722168,
+          5.763079465859658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PK3 IDP Site",
+        "icon": "icon_middle",
+        "iconSize": 0.25,
+        "textAnchor": "left",
+        "textOffset": [1, 0],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.991447806358337,
+          6.537258570895912
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bornou neighborhood",
+        "icon": "icon_middle",
+        "iconSize": 0.25,
+        "textAnchor": "left",
+        "textAnchor": "right",
+        "textOffset": [-1.5, 0],
+        "textMaxWidth": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.989264488220215,
+          6.553492082176923
+        ]
+      }
+    }
+  ]
+}
