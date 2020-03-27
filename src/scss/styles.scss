@@ -1,3 +1,4 @@
+@import '_font';
 @import '_grid';
 
 * {
@@ -5,7 +6,7 @@
 }
 *:before,
 *:after {
- box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 
@@ -14,9 +15,9 @@ html, body {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-	font-family: 'PT Sans', sans-serif;
+ 	display: flex;
+  	flex-direction: column;
+	font-family: 'Source Sans Pro', sans-serif;
 	margin: 0;
 	padding: 0;
 }
