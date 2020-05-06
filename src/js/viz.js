@@ -1,26 +1,35 @@
 $( document ).ready(function() {
   const DATA_URL = 'data/';
-  let isMobile = $(window).width()<600? true : false;
-  let dataUrls = ['geodata_locations.geojson'];
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZXJpa2F3ZWkiLCJhIjoiY2pqb2kzeXJoMmM1eDNsc280YnBub2d6aCJ9.DapwlemDz4dhkDIG7sNdwQ';
+
+  var isMobile = $(window).width()<600? true : false;
+  var dataUrls = ['geodata_locations.geojson'];
+  var map;
 
   function getData() {
-    dataUrls.forEach(function (url, index) {
-      loadData(url, function (responseText) {
-        parseData(JSON.parse(responseText), index);
-      })
-    })
+    // dataUrls.forEach(function (url, index) {
+    //   loadData(url, function (responseText) {
+    //     parseData(JSON.parse(responseText), index);
+    //   })
+    // })
+    initMap();
   }
 
-  function loadData(dataPath, done) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () { return done(this.responseText) }
-    xhr.open('GET', DATA_URL+dataPath, true);
-    xhr.send();
-  }
+  function initMap() {
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v10',
+      //center: [20, 5.5],
+      minZoom: 2,
+      zoom: 2,
+    });
 
-  function parseData(geoData, index) {
-    //do something with the data
-    console.log(geoData, index)
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // map.addSource('locationSource', {
+    //   type: 'csv',
+    //   data: DATA_URL+'data/geodata_locations.geojson'
+    // });
   }
 
   function initTracking() {
