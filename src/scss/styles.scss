@@ -177,7 +177,8 @@ a:visited {
 	}
 }
 
-#map{
+#map,
+#cmap{
 	fill: #A6D8E8;
   position: relative;
   .map-regions{
@@ -230,6 +231,13 @@ a:visited {
       font-size: 12px;
     }
   }
+}
+
+#cmap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	fill: transparent;
 }
 
 .country-label{

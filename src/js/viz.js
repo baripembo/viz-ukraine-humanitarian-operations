@@ -1,9 +1,10 @@
 $( document ).ready(function() {
   var isMobile = window.innerWidth<768? true : false;
-  var geomPath = 'data/simpl_COL.geojson';
+  var geomPath = 'data/worldmap.json';
+  var colPath = 'data/simpl_COL.geojson';
   var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
   var cumulativePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=195339920&single=true&output=csv';
-  var geomData, geomFilteredData, globalData, cumulativeData, timeseriesData, date, totalCases, totalDeaths = '';
+  var geomData, geomFilteredData, colData, globalData, cumulativeData, timeseriesData, date, totalCases, totalDeaths = '';
   var countryCodeList = [];
   var selectedCountries = [];
   var numFormat = d3.format(",");
@@ -18,12 +19,14 @@ console.log(geomPath)
     Promise.all([
       d3.json(geomPath),
       d3.csv(cumulativePath),
-      d3.csv(timeseriesPath)
+      d3.csv(timeseriesPath),
+      d3.json(colPath)
     ]).then(function(data){
       //parse data
-      geomData = data[0];//topojson.feature(data[0], data[0].objects.geom);
+      geomData = topojson.feature(data[0], data[0].objects.geom);//data[0]
       cumulativeData = data[1];
       timeseriesData = data[2];
+      colData = data[3];
 
       //get list of priority countries
       cumulativeData.forEach(function(item, index) {
@@ -38,7 +41,7 @@ console.log(geomPath)
       });
 
       //filter for priority countries
-      //geomFilteredData = geomData.features.filter((country) => countryCodeList.includes(country.properties.ISO_A3));
+      geomFilteredData = geomData.features.filter((country) => countryCodeList.includes(country.properties.ISO_A3));
     
       //get most recent date from timeseries data
       var lastUpdated = new Date(Math.max.apply(null, timeseriesData.map(function(e) {
@@ -112,7 +115,8 @@ console.log(geomPath)
   function initMap(){
     setTimeout(function() {
       //viewportHeight = $('.panel').height();
-      drawMap();
+      drawGlobalMap();
+      drawCountryMap();
       //createMapLegend();
     }, 100);
   }
@@ -151,21 +155,64 @@ console.log(geomPath)
       .text(max);
   }
 
-  function drawMap(){
+  var cmapsvg, cg;
+  function drawCountryMap(){
     var width = viewportWidth;
     var height = (isMobile) ? viewportHeight * .5 : viewportHeight;
     var mapScale = (isMobile) ? width/3.5 : width/5.5;
-    var mapCenter = (isMobile) ? [10, 30] : [75, 8];
+    var mapCenter = (isMobile) ? [10, 30] : [45, 8];
+
+
+    var projection = d3.geoMercator()
+      .center(mapCenter)
+      .scale(mapScale)
+      .translate([width / 2, height / 2]);
+
+    zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed);
+
+    var path = d3.geoPath().projection(projection);
+
+    cmapsvg = d3.select('#cmap').append('svg')
+      .attr("width", width)
+      .attr("height", height)
+      .call(zoom)
+      .on("wheel.zoom", null)
+      .on("dblclick.zoom", null);
+
+    cmapsvg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+        
+    //draw map
+    cg = cmapsvg.append("g");
+    cg.selectAll("path")
+    .data(colData.features)
+    .enter()
+      .append("path")
+      .attr("class", "map-regions")
+      .attr("id", function(d) {
+        //console.log(d.properties.ADM1_REF, d.properties.ADM0_REF)
+        return d.properties.ISO_A3;
+      })
+      .attr("d", path);
+  }
+
+
+  function drawGlobalMap(){
+    var width = viewportWidth;
+    var height = (isMobile) ? viewportHeight * .5 : viewportHeight;
+    var mapScale = (isMobile) ? width/3.5 : width/5.5;
+    var mapCenter = (isMobile) ? [10, 30] : [45, 8];
 
 
     var max = d3.max(cumulativeData, function(d) { return +d['confirmed cases']; } );
 
     var projection = d3.geoMercator()
-      //.center(mapCenter)
-      .scale(100)
+      .center(mapCenter)
+      .scale(mapScale)
       .translate([width / 2, height / 2]);
-
-    console.log('scale',projection.scale())
 
     zoom = d3.zoom()
       .scaleExtent([1, 8])
@@ -197,38 +244,38 @@ console.log(geomPath)
       .append("path")
       .attr("class", "map-regions")
       .attr("id", function(d) {
-        console.log(d.properties.ADM1_REF, d.properties.ADM0_REF)
-        return d.properties.ADM1_REF;
+        //console.log(d.properties.ADM1_REF, d.properties.ADM0_REF)
+        return d.properties.ISO_A3;
       })
       .attr("d", path)
-      // .on("mouseover", function(d){ 
-      //   if (isHRP(d.properties.ISO_A3)){
-      //     tooltip.style("opacity", 1); 
-      //   }
-      // })
-      // .on("mouseout", function(d) { tooltip.style("opacity", 0); })
-      // .on("mousemove", function(d) {
-      //   if (isHRP(d.properties.ISO_A3)){
-      //     createMapTooltip(d.properties['ISO_A3'], d.properties.NAME_LONG);
-      //   }
-      // })
-      // .on("click", function(d) {
-      //   if (isHRP(d.properties.ISO_A3))
-      //     selectCountry(d);
-      // });
+      .on("mouseover", function(d){ 
+        if (isHRP(d.properties.ISO_A3)){
+          tooltip.style("opacity", 1); 
+        }
+      })
+      .on("mouseout", function(d) { tooltip.style("opacity", 0); })
+      .on("mousemove", function(d) {
+        if (isHRP(d.properties.ISO_A3)){
+          createMapTooltip(d.properties['ISO_A3'], d.properties.NAME_LONG);
+        }
+      })
+      .on("click", function(d) {
+        if (isHRP(d.properties.ISO_A3))
+          selectCountry(d);
+      });
 
     //country labels
-    // var label = g.selectAll(".country-label")
-    //   .data(geomFilteredData)
-    //   .enter().append("text")
-    //     .attr("class", "country-label")
-    //     .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-    //     .attr("dy", function() {
-    //       var dy = (isMobile) ? 0 : '1em';
-    //       return dy;
-    //     })
-    //     .text(function(d) { return d.properties.NAME_LONG; })
-    //     .call(wrap, 100);
+    var label = g.selectAll(".country-label")
+      .data(geomFilteredData)
+      .enter().append("text")
+        .attr("class", "country-label")
+        .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+        .attr("dy", function() {
+          var dy = (isMobile) ? 0 : '1em';
+          return dy;
+        })
+        .text(function(d) { return d.properties.NAME_LONG; })
+        .call(wrap, 100);
 
     // //create count markers
     // var countMarker = g.append("g")
