@@ -1,6 +1,6 @@
 $( document ).ready(function() {
   var isMobile = window.innerWidth<768? true : false;
-  var geomPath = 'data/hrp_adm1_TCD.geojson';
+  var geomPath = 'data/simpl_COL.geojson';
   var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
   var cumulativePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=195339920&single=true&output=csv';
   var geomData, geomFilteredData, globalData, cumulativeData, timeseriesData, date, totalCases, totalDeaths = '';
