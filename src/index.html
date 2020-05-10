@@ -23,35 +23,56 @@
     </div>
 
     <main>
-      <!-- <header>
-        <h1>OAD COVID-19 Dashboard</h1> <div class='date small'>
-          Last updated: <span></span>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths' target='_blank'>DATA</a></div>
-        <div class='link'><a href='https://data.humdata.org/visualization/covid-19' target='_blank'><span>Open fullscreen</span>&nbsp;&nbsp;<i class='humanitarianicons-Out-of-platform'></i></a></div>
-      </header> -->
       
       <div class='content'>
         <div class='content-left'>
-          <h1>COVID incidence and impact in locations with a Humanitarian Response Plan</h1>
+          <div class='menu'>
+            <h1>COVID incidence and impact in locations with a Humanitarian Response Plan</h1>
+            <h2>Global</h2>
+
+            <ul class='menu-indicators'>
+              <li data-id='#affected+infected' class='selected'><i class='humanitarianicons-House'></i> COVID-19 Cases</li>
+              <li data-id='#access+constraints'><i class='humanitarianicons-Analysis'></i>Humanitarian Access Constraints</li>
+              <li data-id='#access+impact'><i class='humanitarianicons-Analysis'></i>Humanitarian Access Impact</li>
+              <li data-id='#severity+type'><i class='humanitarianicons-Analysis'></i>INFORM Risk</li>
+              <li data-id='#affected+inneed'><i class='humanitarianicons-Analysis'></i>People in Need 2020</li>
+              <li data-id='#value+funding+funding+usd'><i class='humanitarianicons-Analysis'></i>HRP Funding Received</li>
+              <li data-id='#value+funding+required+usd'><i class='humanitarianicons-Analysis'></i>GHRP Request (USD)</i></li>
+            </ul>
+          </div>
+          <div class='logos'>
+            <a href='https://centre.humdata.org' target='_blank'>
+              <img height='50' src='assets/logo-centre-gray.png'>
+            </a>
+            <a href='https://www.unocha.org' target='_blank'>
+              <img height='37' src='assets/logo-ocha-gray.png'>
+            </a>
+          </div>
         </div>
 
-        <div class='content-right panel'>
-          <div id='map'>            
+        <div class='content-right'>
+          <select class='country-select'></select>
+
+          <div id='global-map'>  
+            <div id='country-map'></div>          
             <div class='zoom-controls'>
               <button id='zoom_in'>+</button>
               <button id='zoom_out'>–</button>
+            </div>
+            <div class='global-stats'>
+              <ul>
+                <li>COVID-19 cases</li>
+                <li>Total Confirmed Cases<br><span class='cases'>11913</span></li>
+                <li>Total Confirmed Deaths<br><span class='deaths'>288</span></li>
+              </ul>
             </div>
             <!-- <div class='map-legend'>
               <div class='legend-inner'></div>
             </div> -->
           </div>
-          <div id='cmap'></div>
-          <!-- <div class='panel-inner'>
-            <button id='reset'>Reset</button>
-            <div class='timeseries-chart'></div>
-            <div class='stats stats-priority'></div>
-            <div class='stats stats-global'></div>
-          </div> -->
+          
         </div>
+
       </div>
       
       <div class='tooltip'><div class='tooltip-inner'></div></div>
