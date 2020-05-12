@@ -74,3 +74,23 @@ function truncateString(str, num) {
   }
   return str.slice(0, num) + '...';
 }
+
+function formatValue(val) {
+  var n = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
+  return n;
+}
+
+function setSelect(id, valueToSelect) {    
+  let element = document.getElementById(id);
+  element.value = valueToSelect;
+}
+
+function getAccessLabels(data) {
+  var accessData = Object.entries(data);
+  var accessLabels = {};
+  accessData.forEach(function(item) {
+    if (item[1].indexOf('access')>-1)
+      accessLabels[item[1]] = item[0];
+  });
+  return accessLabels;
+}

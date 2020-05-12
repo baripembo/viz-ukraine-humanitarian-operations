@@ -12,6 +12,7 @@
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="http://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
   </head>
 
@@ -34,10 +35,10 @@
               <li data-id='#affected+infected' class='selected'><i class='humanitarianicons-House'></i> COVID-19 Cases</li>
               <li data-id='#access+constraints'><i class='humanitarianicons-Analysis'></i>Humanitarian Access Constraints</li>
               <li data-id='#access+impact'><i class='humanitarianicons-Analysis'></i>Humanitarian Access Impact</li>
-              <li data-id='#severity+type'><i class='humanitarianicons-Analysis'></i>INFORM Risk</li>
+              <li data-id='#severity+num'><i class='humanitarianicons-Analysis'></i>INFORM Risk</li>
               <li data-id='#affected+inneed'><i class='humanitarianicons-Analysis'></i>People in Need 2020</li>
-              <li data-id='#value+funding+funding+usd'><i class='humanitarianicons-Analysis'></i>HRP Funding Received</li>
-              <li data-id='#value+funding+required+usd'><i class='humanitarianicons-Analysis'></i>GHRP Request (USD)</i></li>
+              <li data-id='#value+covid+funding+total+usd'><i class='humanitarianicons-Analysis'></i>HRP Funding Received</li>
+              <li data-id='#value+funding+precovid+required+usd'><i class='humanitarianicons-Analysis'></i>GHRP Request (USD)</i></li>
             </ul>
           </div>
           <div class='logos'>
@@ -51,7 +52,7 @@
         </div>
 
         <div class='content-right'>
-          <select class='country-select'></select>
+          <select id='countrySelect' class='country-select'></select>
 
           <div id='global-map'>  
             <div id='country-map'></div>          
@@ -61,16 +62,40 @@
             </div>
             <div class='global-stats'>
               <ul>
-                <li>COVID-19 cases</li>
-                <li>Total Confirmed Cases<br><span class='cases'>11913</span></li>
-                <li>Total Confirmed Deaths<br><span class='deaths'>288</span></li>
+                <li>COVID-19 Pandemic in HRP Locations</li>
+                <li>Total Confirmed Cases<br><span class='cases'></span></li>
+                <li>Total Confirmed Deaths<br><span class='deaths'></span></li>
               </ul>
             </div>
-            <!-- <div class='map-legend'>
-              <div class='legend-inner'></div>
-            </div> -->
+            <div class='map-legend global'>
+              <h4>MAP DATA LAYER</h4>
+            </div>
+            <div class='map-legend country'>
+              <h4>MAP DATA LAYER</h4>
+              <label>Food Security <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
+            </div>
           </div>
           
+          <div class='country-panel'>
+            <h3></h3>
+            <div class='covid'>
+              <h5>COVID-19 Cases and Projections</h5>
+            </div>
+            <div class='timeseries-chart'></div>
+            <div class='humanitarian-access'>
+              <h5>Humanitarian Access - Constraints</h5>
+            </div>
+            <div class='hrp'>
+              <h5>2020 HRP (pre COVID-19)</h5>
+            </div>
+            <div class='inform'>
+              <h5>INFORM COVID Index</h5>
+            </div>
+            <div class='schools'>
+              <h5>School Closure</h5>
+            </div>
+          </div>
         </div>
 
       </div>
