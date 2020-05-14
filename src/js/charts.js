@@ -1,61 +1,40 @@
-function initBarCharts(data) {
-	var countries = new Set();
-	countries.add('x');
-	//group data by indicator
-	var groupByIndicator = d3.nest()
-    .key(function(d){ return d['Indicator']; })
-    .key(function(d) { 
-    	countries.add(d['Country']);
-    	return d['ISO3']; 
-    })
-    .entries(data);
-  countries = Array.from(countries);
-
-  //format data for chart
-  groupByIndicator.forEach(function(indicator, index) {
-  	var chartName = 'indicator' + index;
-  	var arr = [indicator.key];
-  	indicator.values.forEach(function(v) {
-  		arr.push(v.values[0].Value);
-  	});
-  	$('.indicator-charts').append('<div class="indicator-chart '+ chartName + '"></div>');
-  	
-		createBarChart(chartName, countries, arr);
-  });
-
-}
-
-function createBarChart(name, countries, values) {
-	var chart = c3.generate({
-    bindto: '.' + name,
+function createBarChart(chartName, title, data, barColor) {
+  var chart = c3.generate({
+    bindto: chartName,
     title: {
-  		text: values[0]
-		},
-		data: {
-			x: 'x',
-			columns: [
-				countries,
-				values
-			],
-			type: 'bar'
-		},
-		bar: {
-			width: {
-				ratio: 0.5 
-			}
-		},
+      text: title,
+      position: 'upper-left',
+    },
+    size: { height: 100 },
+    padding: { left: 45 },
+    data: {
+      columns: [ data ],
+      type: 'bar',
+      labels: { format: d3.format('.2s') },
+      color: function() { return barColor; }
+    },
+    legend: { show: false },
     axis: {
       rotated: true,
       x: {
-      	type: 'category'
-      }
+        type: 'category',
+        categories: ['Imperial', 'LSHTM'],
+        tick: { outer: false }
+      },
+      y: { show: false }
     },
-    legend: {
-      show: false
+    tooltip: {
+      format: { value: d3.format('.2s') }
     }
-	});
+  });
 }
 
+function updateBarChart(chart, data) {
+  chart.load({
+    columns: data,
+    unload: true
+  });
+}
 
 function initTimeseries(data) {
   var timeseriesArray = formatTimeseriesData(data);
@@ -105,6 +84,9 @@ function formatTimeseriesData(data) {
 var timeseriesChart;
 function createTimeSeries(array) {
 	timeseriesChart = c3.generate({
+    size: {
+      height: 240
+    },
     padding: {
       top: 10,
       left: 35,

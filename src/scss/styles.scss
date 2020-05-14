@@ -38,6 +38,9 @@ h2 {
   font-size: 16px;
   font-weight: normal;
   margin: 0;
+  a {
+  	text-decoration: none;
+  }
 }
 
 h3 {
@@ -52,6 +55,7 @@ h4 {
   font-size: 12px;
   font-weight: normal;
   letter-spacing: 0.3px;
+  line-height: 16px;
   margin: 0 0 10px;
 }
 
@@ -62,7 +66,8 @@ h5 {
   font-size: 15px;
   font-weight: normal;
   line-height: 50px;
-  padding: 0 22px;
+  margin: 20px 0;
+  padding: 0 20px;
 }
 
 h6 {
@@ -112,13 +117,14 @@ a:visited {
 		position: relative;
 	}
 	&.country-view {
+		.country-select,
 		.map-legend.global,
 		.menu-indicators,
 		.global-stats {
 			display: none;
 		}
 		.map-legend.country {
-			display: block !important;
+			display: block;
 		}
 		.country-panel {
 			display: block;
@@ -172,6 +178,7 @@ a:visited {
 
 .country-select {    
 	background-color: #FFF;
+	display: block;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 16px;
 	font-weight: 700;
@@ -242,38 +249,39 @@ a:visited {
       outline: 0;
     }
   }
-  .map-legend {
-  	background-color: #FFF;
-  	color: #000;
-  	fill: #000;
-  	height: 135px;
-  	left: 40px;
-  	padding: 10px 20px;
-  	position: absolute;
-  	top: 120px;
-  	width: 230px;
-  	label {    
-  		display: flex;
-    	flex-direction: row-reverse;
-    	justify-content: flex-end;
-  		fill: #000;
-			font-family: 'Gotham Bold', sans-serif;
-  		font-size: 12px;
-  	}
-  	input {
-  		margin: 0 6px 10px 0;
-  	}
-  	&.global {
-			display: block;
-  	}
-  	&.country {
-  		display: none;
-  		height: 200px;
-  		svg {
-  			margin-top: 10px
-  		}
-  	}
-  }
+}
+
+.map-legend {
+	background-color: #FFF;
+	color: #000;
+	fill: #000;
+	height: 235px;
+	left: 40px;
+	padding: 10px 20px;
+	position: absolute;
+	top: 120px;
+	width: 215px;
+	label {    
+		display: flex;
+  	flex-direction: row-reverse;
+  	justify-content: flex-end;
+		fill: #000;
+		font-family: 'Gotham Bold', sans-serif;
+		font-size: 12px;
+	}
+	input {
+		margin: 0 6px 10px 0;
+	}
+	&.global {
+		display: block;
+	}
+	&.country {
+		display: none;
+		height: 200px;
+		svg {
+			margin-top: 10px
+		}
+	}
 }
 
 #country-map {
@@ -290,6 +298,16 @@ a:visited {
   pointer-events: none;
   text-anchor: middle;
   width: 100px;
+}
+
+.count-marker,
+circle.swatch {
+  //fill-opacity: 0.5;
+  fill: #888;
+  stroke: #CCC;
+}
+.count-marker {
+	cursor: pointer;
 }
 
 .tooltip{
@@ -333,12 +351,23 @@ a:visited {
 	display: none;
 	opacity: 0;
 	overflow: scroll;
-	padding: 30px;
+	padding: 0 30px 30px;
 	position: absolute;
 	top: 30px;
 	right: 30px;
 	width: 416px;
 	transition: opacity 0.3s ease;
+	.panel-header {
+		background-color: #FFF;
+		padding: 30px 0 15px;
+		position: sticky;
+		top: 0;
+		width: 356px;
+		z-index: 1000;
+	}
+	.panel-inner {
+		padding-left: 20px;
+	}
 	.figure {
 		display: inline-block;
 		margin-bottom: 20px;
@@ -353,8 +382,41 @@ a:visited {
 		}
 		&.risk-class {
 			.stat {
-				font-size: 34px;
+				font-size: 32px;
 			}
+		}
+	}
+	.humanitarian-access {
+		.access-title {
+			margin: 20px 0 5px;
+		}
+		.access-row {
+			display: flex;
+			flex-flow: row;
+			font-size: 14px;
+			line-height: 24px;
+		}
+		.access-icon {
+			align-self: flex-start;
+			background-color: #888;
+			color: #FFF;
+			font-size: 14px;
+			font-weight: 700;
+			height: 16px;
+			line-height: 16px;
+			margin: 5px 10px 0 0;
+			min-width: 36px;
+			text-align: center;
+			width: 36px;
+			&.yes {
+				background-color: #F2645A;
+			}
+		}
+	}
+	.projections {
+		margin-top: 20px;
+		.projections-deaths {
+			margin-top: 10px;
 		}
 	}
 }
@@ -379,6 +441,11 @@ a:visited {
   }
 }
 
+.bar-chart {
+	.c3-title {
+  	font-family: 'Gotham-Book', sans-serif;
+	}
+}
 .c3-title {
   font-family: 'Gotham-Bold', sans-serif;
 	font-size: 14px;
@@ -388,6 +455,20 @@ a:visited {
 
 .c3-legend-background {
   stroke: none;
+}
+
+.c3-axis .tick {
+	text {
+		font-family: 'Source Sans Pro', sans-serif;
+	}
+	line {
+		display: none;
+	}
+}
+
+.c3-text {
+	fill: #000 !important;
+	font-family: 'Source Sans Pro', sans-serif;
 }
 
 @media only screen and (max-width: 767px) {
