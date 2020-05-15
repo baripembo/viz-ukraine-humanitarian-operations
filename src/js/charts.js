@@ -1,11 +1,16 @@
 function createBarChart(data, type) {
+  data.forEach(function(item, index) {
+    if (item.min=='' || item.max=='')
+      data.splice(index, 1);
+  });
+
   var barColor = (type=='Cases') ? '#007CE1' : '#000';
   var maxVal = d3.max(data, function(d) { return +d.max; })
   var barHeight = 25;
   var barPadding = 20;
   var margin = {top: 0, right: 40, bottom: 30, left: 50},
       width = 300,
-      height = 90;
+      height = (barHeight + barPadding) * data.length;
   
   x = d3.scaleLinear()
     .domain([0, maxVal])

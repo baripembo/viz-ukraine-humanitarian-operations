@@ -117,6 +117,7 @@ a:visited {
 		position: relative;
 	}
 	&.country-view {
+		.description,
 		.country-label,
 		.map-legend.global,
 		.menu-indicators,
@@ -126,6 +127,7 @@ a:visited {
 		.map-legend.country {
 			left: 40px;
 			opacity: 1;
+			z-index: 1;
 		}
 		.country-panel {
 			display: block;
@@ -179,14 +181,18 @@ a:visited {
 	}
 }
 
-.country-select {    
+.country-select,
+.indicator-select {    
 	background-color: #FFF;
-	display: block;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 16px;
 	font-weight: 700;
-	left: 40px;
 	height: 48px;
+	width: 100%;
+}
+
+.country-select {
+	left: 40px;
 	position: absolute;
 	top: 40px;
 	width: 195px;
@@ -230,7 +236,7 @@ a:visited {
   .zoom-controls {
     position: absolute;
     left: 40px;
-    bottom: 40px;
+    bottom: 20px;
     display: grid;
     grid-gap: 5px;  
     button {
@@ -282,6 +288,7 @@ a:visited {
 		height: 200px;
 		left: -215px;
 		opacity: 0;
+		z-index: -1;
 		svg {
 			margin-top: 10px;
 			width: 190px;
@@ -296,6 +303,9 @@ a:visited {
 	position: absolute;
 	top: 0;
 	transition: opacity 0.5s ease;
+	.map-regions {
+		stroke: #999;
+	}
 }
 
 .country-label,
@@ -313,13 +323,22 @@ a:visited {
 
 .count-marker,
 circle.swatch {
-  //fill-opacity: 0.5;
   fill: #888;
   stroke: #CCC;
 }
 .count-marker {
 	cursor: pointer;
 	display: block;
+}
+
+.description {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #888;
+	display: block;
+	padding: 10px 20px;
+	position: absolute;
+	bottom: 16px;
+	right: 460px;
 }
 
 .tooltip{
@@ -368,13 +387,23 @@ circle.swatch {
 	right: 30px;
 	width: 416px;
 	transition: opacity 0.3s ease;
-	.panel-header {
+	.panel-header {    
 		background-color: #FFF;
 		padding: 30px 0 15px;
 		position: sticky;
 		top: 0;
 		width: 356px;
 		z-index: 1000;
+		.panel-title {
+   		align-items: center;
+			display: flex;
+			margin-bottom: 20px;
+		}
+		.flag {
+			height: 35px;
+			margin-right: 10px;
+			width: 35px;
+		}
 	}
 	.panel-inner {
 		padding-left: 20px;
@@ -426,6 +455,11 @@ circle.swatch {
 	}
 	.projections {
 		margin-top: 20px;
+	}
+	.covid {
+		h5 {
+			margin-top: 0;
+		}
 	}
 }
 

@@ -78,7 +78,18 @@
           
           <div class='country-panel'>
             <div class='panel-header'>
-              <h3></h3>
+              <div class='panel-title'>
+                <img src='' class='flag'/>
+                <h3></h3>
+              </div>
+              <select id='indicatorSelect' class='indicator-select'>
+                <option value=''>Jump to indicators</option>
+                <option value='covid'>COVID-19 Cases and Projections</option>
+                <option value='humanitarian-access'>Humanitarian Access - Constraints</option>
+                <option value='hrp'>HRP (pre COVID-19)</option>
+                <option value='inform'>INFORM COVID Index</option>
+                <option value='schools'>School Closure</option>
+              </select>
             </div>
             <div class='covid'>
               <h5>COVID-19 Cases and Projections</h5>
@@ -107,6 +118,8 @@
               <div class='panel-inner'></div>
             </div>
           </div>
+
+          <div class='description'></div>
         </div>
 
       </div>
