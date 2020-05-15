@@ -1,39 +1,76 @@
-function createBarChart(chartName, title, data, barColor) {
-  var chart = c3.generate({
-    bindto: chartName,
-    title: {
-      text: title,
-      position: 'upper-left',
-    },
-    size: { height: 100 },
-    padding: { left: 45 },
-    data: {
-      columns: [ data ],
-      type: 'bar',
-      labels: { format: d3.format('.2s') },
-      color: function() { return barColor; }
-    },
-    legend: { show: false },
-    axis: {
-      rotated: true,
-      x: {
-        type: 'category',
-        categories: ['Imperial', 'LSHTM'],
-        tick: { outer: false }
-      },
-      y: { show: false }
-    },
-    tooltip: {
-      format: { value: d3.format('.2s') }
-    }
-  });
-}
+function createBarChart(data, type) {
+  var barColor = (type=='Cases') ? '#007CE1' : '#000';
+  var maxVal = d3.max(data, function(d) { return +d.max; })
+  var barHeight = 25;
+  var barPadding = 20;
+  var margin = {top: 0, right: 40, bottom: 30, left: 50},
+      width = 300,
+      height = 90;
+  
+  x = d3.scaleLinear()
+    .domain([0, maxVal])
+    .range([0, width - margin.left - margin.right]);
 
-function updateBarChart(chart, data) {
-  chart.load({
-    columns: data,
-    unload: true
-  });
+  // set the ranges
+  y = d3.scaleBand().range([0, height]);
+  y.domain(data.map(function(d) { return d.model; }));
+            
+  var div = '.projections-'+ type.toLowerCase();
+  var svg = d3.select(div).append('svg')
+      .attr('width', width)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  // add the y axis
+  svg.append('g')
+    .attr('transform', 'translate(0, 0)')
+    .call(d3.axisLeft(y)
+      .tickSizeOuter(0))
+
+  // add the x axis
+  svg.append('g')
+    .attr('transform', 'translate(0, '+height+')')
+    .call(d3.axisBottom(x)
+      .tickSizeOuter(0)
+      .ticks(5, 's'));
+
+  // append bars
+  bars = svg.selectAll('.bar')
+      .data(data)
+    .enter().append('g')
+      .attr('class', 'bar-container')
+      .attr('transform', function(d, i) { return 'translate(' + x(d.min) + ', ' + (y(d.model)+10) + ')'; });
+
+  bars.append('rect')
+    .attr('class', 'bar')
+    .attr('fill', barColor)
+    .attr('height', barHeight)
+    .attr('width', function(d) {
+      var w = x(d.max) - x(d.min);
+      if (w<0) w = 0;
+      return w;
+    });
+
+  // add min/max labels
+  bars.append('text')
+    .attr('class', 'label-num')
+    .attr('x', function(d) {
+      return x(d.max) - x(d.min) + 4;
+    })
+    .attr('y', function(d) { return barHeight/2 + 4; })
+    .text(function (d) {
+      return d3.format('.3s')(d.max);
+    });
+
+  bars.append('text')
+    .attr('class', 'label-num')
+    .attr('text-anchor', 'end')
+    .attr('x', -4)
+    .attr('y', function(d) { return barHeight/2 + 4; })
+    .text(function (d) {
+      return d3.format('.3s')(d.min);
+    });
 }
 
 function initTimeseries(data) {
