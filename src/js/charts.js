@@ -76,6 +76,23 @@ function createBarChart(data, type) {
     .text(function (d) {
       return d3.format('.3s')(d.min);
     });
+
+  //source
+  if (type=='Deaths') {
+    var projectionsDiv = $('.projections .panel-inner');
+    var date = new Date();
+    projectionsDiv.append('<p class="small source"></p>');
+    data.forEach(function(d) {
+      var source = getSource('#affected+infected+cases+min+'+d.model.toLowerCase());
+      var sourceDate = new Date(source['#date']);
+      if (sourceDate.getTime()!=date.getTime()) {
+        date = sourceDate;
+        projectionsDiv.find('.source').append(' <span class="date">'+ dateFormat(date) +'</span>');
+      }
+      projectionsDiv.find('.source').append(' | '+ d.model +': <a href="'+ source['#meta+url'] +'" class="dataURL" target="_blank">DATA</a>');
+    });
+  }
+
 }
 
 function initTimeseries(data) {
@@ -124,17 +141,18 @@ function formatTimeseriesData(data) {
 }
 
 var timeseriesChart;
-function createTimeSeries(array) {
+function createTimeSeries(array , div) {
 	timeseriesChart = c3.generate({
     size: {
       height: 240
     },
     padding: {
+      bottom: 0,
       top: 10,
-      left: 35,
+      left: 30,
       right: 16
     },
-    bindto: '.timeseries-chart',
+    bindto: '.country-timeseries-chart',
     title: {
   		text: 'Number of Confirmed Cases Over Time',
   		position: 'upper-left',
@@ -166,7 +184,8 @@ function createTimeSeries(array) {
 				min: 0,
 				padding: { top:0, bottom:0 },
         tick: { 
-          outer: false
+          outer: false,
+          format: shortenNumFormat
         }
 			}
 		},
@@ -184,6 +203,11 @@ function createTimeSeries(array) {
     transition: { duration: 300 }
 	});
 
+
+  var lastUpdated = new Date(Math.max.apply(null, timeseriesData.map(function(e) {
+    return new Date(e.Date);
+  })));
+  $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">Source</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank">DATA</a></p>');
   createTimeseriesLegend();
 }
 
@@ -195,7 +219,7 @@ function createTimeseriesLegend() {
   });
 
   //custom legend
-  d3.select('.timeseries-chart').insert('div').attr('class', 'timeseries-legend').selectAll('div')
+  d3.select('.country-timeseries-chart').insert('div').attr('class', 'timeseries-legend').selectAll('div')
     .data(names)
     .enter().append('div')
     .attr('data-id', function(id) {

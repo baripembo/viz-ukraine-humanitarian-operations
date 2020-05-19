@@ -60,6 +60,7 @@
               <button id='zoom_out'>–</button>
             </div>
             <div class='global-stats'>
+              <!-- <div class='global-timeseries-chart'></div> -->
               <ul>
                 <li>COVID-19 Pandemic in 25 HRP Locations</li>
                 <li>Total Confirmed Cases<br><span class='cases'></span></li>
@@ -68,11 +69,16 @@
             </div>
             <div class='map-legend global'>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
+              <div class='indicator-source'></div>
             </div>
             <div class='map-legend country'>
               <h4>MAP DATA LAYER</h4>
-              <label>Food Security <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <label>Acute Food Insecurity (% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <div class='source-container food-security-source'></div>
               <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <div class='source-container population-source'></div>
+              <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
+              <div class='source-container orgs-source'></div>
             </div>
           </div>
           
@@ -95,8 +101,8 @@
               <h5>COVID-19 Cases and Projections</h5>
               <div class='panel-inner'></div>
             </div>
-            <div class='panel-inner'>
-              <div class='timeseries-chart'></div>
+            <div class='panel-inner cases-timeseries'>
+              <div class='country-timeseries-chart'></div>
             </div>
             <div class='projections'>
               <div class='panel-inner'></div>

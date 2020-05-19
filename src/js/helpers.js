@@ -1,6 +1,6 @@
 function getMonth(m) {
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return months[m];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[m];
 }
 
 function compare(a, b) {
@@ -50,6 +50,10 @@ function truncateString(str, num) {
 function formatValue(val) {
   var n = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
   return n;
+}
+
+function roundUp(x, limit) {
+  return Math.ceil(x/limit)*limit;
 }
 
 function setSelect(id, valueToSelect) {    

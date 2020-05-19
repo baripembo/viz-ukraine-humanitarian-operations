@@ -56,7 +56,7 @@ h4 {
   font-weight: normal;
   letter-spacing: 0.3px;
   line-height: 16px;
-  margin: 0 0 10px;
+  margin: 0;
 }
 
 h5 {
@@ -81,6 +81,7 @@ h6 {
 	color: #888;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 12px;
+	margin: 0;
 }
 
 .stat {
@@ -203,8 +204,8 @@ a:visited {
 	background-color: #FFF;
 	bottom: 16px;
 	display: block;
-	height: 196px;
-	padding: 30px 25px;
+	height: 205px;
+	padding: 25px;
 	position: absolute;
 	right: 24px;
 	width: 416px;
@@ -264,7 +265,7 @@ a:visited {
 	background-color: #FFF;
 	color: #000;
 	fill: #000;
-	height: 235px;
+	height: 270px;
 	left: 40px;
 	padding: 10px 20px;
 	position: absolute;
@@ -277,21 +278,33 @@ a:visited {
 		fill: #000;
 		font-family: 'Gotham Bold', sans-serif;
 		font-size: 12px;
+		line-height: 14px;
 	}
 	input {
-		margin: 0 6px 10px 0;
+		margin: 0 6px 0 0;
 	}
 	&.global {
 		display: block;
+		svg {
+			margin-top: 10px;
+			width: 195px;
+		}
 	}
 	&.country {
-		height: 200px;
+		height: auto;
 		left: -215px;
 		opacity: 0;
 		z-index: -1;
+		label {
+			margin-top: 10px;
+		}
 		svg {
+			height: 85px;
 			margin-top: 10px;
 			width: 190px;
+		}
+		.source-container {
+			margin-left: 18px;
 		}
 	}
 }
@@ -416,6 +429,7 @@ circle.swatch {
 		width: 50%;
 		.figure-inner {
 			border-bottom: 1px solid #CCC;
+			padding-bottom: 15px;
 			.title {
 				height: 36px;
 			}
@@ -452,6 +466,9 @@ circle.swatch {
 				background-color: #F2645A;
 			}
 		}
+		.source {
+			margin-top: 15px;
+		}
 	}
 	.projections {
 		margin-top: 20px;
@@ -463,11 +480,17 @@ circle.swatch {
 	}
 }
 
+.cases-timeseries {
+	p {
+		margin-top: 0;
+	}
+}
+
 .timeseries-legend {
   background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid #CCC;
   left: 43px;
-  max-height: 196px;
+  max-height: 150px;
   overflow: scroll;
   padding: 5px 10px 0 0;
   position: absolute;
@@ -483,7 +506,9 @@ circle.swatch {
   }
 }
 
+.c3-title,
 .chart-title {
+	fill: #000;
   font-family: 'Gotham-Book', sans-serif;
 	font-size: 14px;
 	line-height: 21px;
@@ -495,10 +520,15 @@ circle.swatch {
   stroke: none;
 }
 
-
 .c3-text {
 	fill: #000 !important;
 	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.c3-axis {
+	.tick text {
+		fill: #000;
+	}
 }
 
 @media only screen and (max-width: 767px) {
