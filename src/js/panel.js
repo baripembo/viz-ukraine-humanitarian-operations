@@ -14,8 +14,8 @@ function initCountryPanel() {
   //covid
   var covidDiv = $('.country-panel .covid .panel-inner');
   covidDiv.children().remove();  
-  createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: data['#affected+infected'], indicator: '#affected+infected'});
-  createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: data['#affected+killed'], indicator: '#affected+killed'});
+  createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormt(data['#affected+infected']), indicator: '#affected+infected'});
+  createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormt(data['#affected+killed']), indicator: '#affected+killed'});
 
   //projections
   var projectionsDiv = $('.country-panel .projections .panel-inner');
@@ -114,16 +114,14 @@ function createFigure(div, obj) {
 function createSource(div, indicator) {
   var sourceObj = getSource(indicator);
   var date = dateFormat(new Date(sourceObj['#date']));
-  div.append('<p class="small source"><span class="date">'+ date +'</span> | <span class="source-name">Source</span> | <a href="'+ sourceObj['#meta+url'] +'" class="dataURL" target="_blank">DATA</a></p>');
+  div.append('<p class="small source"><span class="date">'+ date +'</span> | <span class="source-name">'+ sourceObj['#meta+source'] +'</span> | <a href="'+ sourceObj['#meta+url'] +'" class="dataURL" target="_blank">DATA</a></p>');
 }
 
 function updateSource(div, indicator) {
-  //fix this
-  var id = (indicator=='#value+covid+funding+pct') ? '#value+funding+covid+pct' : indicator;
-  var sourceObj = getSource(id);
+  var sourceObj = getSource(indicator);
   var date = dateFormat(new Date(sourceObj['#date']));
   div.find('.date').text(date);
-  div.find('.source-name').text('Source');
+  div.find('.source-name').text(sourceObj['#meta+source']);
   div.find('.dataURL').attr('href', sourceObj['#meta+url']);
 }
 

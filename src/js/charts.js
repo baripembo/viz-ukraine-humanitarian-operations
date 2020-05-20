@@ -83,7 +83,7 @@ function createBarChart(data, type) {
     var date = new Date();
     projectionsDiv.append('<p class="small source"></p>');
     data.forEach(function(d) {
-      var source = getSource('#affected+infected+cases+min+'+d.model.toLowerCase());
+      var source = getSource('#affected+deaths+'+ d.model.toLowerCase() +'+min');
       var sourceDate = new Date(source['#date']);
       if (sourceDate.getTime()!=date.getTime()) {
         date = sourceDate;
@@ -95,9 +95,9 @@ function createBarChart(data, type) {
 
 }
 
-function initTimeseries(data) {
+function initTimeseries(data, div) {
   var timeseriesArray = formatTimeseriesData(data);
-  createTimeSeries(timeseriesArray);
+  createTimeSeries(timeseriesArray, div);
 }
 
 function formatTimeseriesData(data) {
@@ -140,9 +140,9 @@ function formatTimeseriesData(data) {
   return timeseriesArray;
 }
 
-var timeseriesChart;
+var countryTimeseriesChart;
 function createTimeSeries(array , div) {
-	timeseriesChart = c3.generate({
+	var chart = c3.generate({
     size: {
       height: 240
     },
@@ -152,7 +152,7 @@ function createTimeSeries(array , div) {
       left: 30,
       right: 16
     },
-    bindto: '.country-timeseries-chart',
+    bindto: div,
     title: {
   		text: 'Number of Confirmed Cases Over Time',
   		position: 'upper-left',
@@ -203,23 +203,26 @@ function createTimeSeries(array , div) {
     transition: { duration: 300 }
 	});
 
-
   var lastUpdated = new Date(Math.max.apply(null, timeseriesData.map(function(e) {
     return new Date(e.Date);
   })));
-  $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">Source</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank">DATA</a></p>');
-  createTimeseriesLegend();
+
+  if (div=='.country-timeseries-chart') {
+    countryTimeseriesChart = chart;
+    $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">WHO</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank">DATA</a></p>');
+  }
+  createTimeseriesLegend(chart, div);
 }
 
 
-function createTimeseriesLegend() {
+function createTimeseriesLegend(chart, div) {
   var names = [];
-  timeseriesChart.data.shown().forEach(function(d) {
+  chart.data.shown().forEach(function(d) {
     names.push(d.id)
   });
 
   //custom legend
-  d3.select('.country-timeseries-chart').insert('div').attr('class', 'timeseries-legend').selectAll('div')
+  d3.select(div).insert('div').attr('class', 'timeseries-legend').selectAll('div')
     .data(names)
     .enter().append('div')
     .attr('data-id', function(id) {
@@ -229,13 +232,13 @@ function createTimeseriesLegend() {
       return '<span></span>'+id;
     })
     .each(function(id) {
-      d3.select(this).select('span').style('background-color', timeseriesChart.color(id));
+      d3.select(this).select('span').style('background-color', chart.color(id));
     })
     .on('mouseover', function(id) {
-      timeseriesChart.focus(id);
+      chart.focus(id);
     })
     .on('mouseout', function(id) {
-      timeseriesChart.revert();
+      chart.revert();
     });
 }
 
@@ -244,12 +247,12 @@ function updateTimeseries(data, selected) {
   var timeseriesArray = formatTimeseriesData(updatedData);
 
   //load new data
-  timeseriesChart.load({
+  countryTimeseriesChart.load({
     columns: timeseriesArray,
     unload: true,
     done: function() {
-      $('.timeseries-legend').remove();
-      createTimeseriesLegend();
+      $('.country-timeseries-chart .timeseries-legend').remove();
+      createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart');
     }
   });
 }

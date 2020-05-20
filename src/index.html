@@ -32,12 +32,22 @@
             <h2>Global</h2>
 
             <ul class='menu-indicators'>
-              <li data-id='#access+constraints' data-legend='Humanitarian Access Constraints Percentage' class='selected'><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</li>
-              <!-- <li data-id='#access+impact'><i class='humanitarianicons-Analysis'></i>Humanitarian Access Impact</li> -->
-              <li data-id='#severity+type' data-legend='INFORM Risk Class'><i class='humanitarianicons-Analysis'></i>INFORM Risk</li>
-              <li data-id='#affected+inneed' data-legend='Number of People in Need'><i class='humanitarianicons-Analysis'></i>People in Need 2020</li>
-              <li data-id='#value+covid+funding+pct' data-legend='HRP Funding Level'><i class='humanitarianicons-Analysis'></i>HRP Funding Level</li>
-              <!-- <li data-id='#value+funding+precovid+required+usd'><i class='humanitarianicons-Analysis'></i>GHRP Request (USD)</i></li> -->
+              <li data-id='#access+constraints' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
+                <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
+                <p class='description small'></p>
+              </li>
+              <li data-id='#severity+type' data-legend='INFORM Risk Class'>
+                <div><i class='humanitarianicons-Analysis'></i>INFORM Risk</div>
+              </li>
+              <li data-id='#affected+inneed' data-legend='Number of People in Need'>
+                <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
+              </li>
+              <li data-id='#value+covid+funding+pct' data-legend='HRP Funding Level'>
+                <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
+              </li>
+              <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
+                <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
+              </li>
             </ul>
           </div>
           <div class='logos'>
@@ -60,12 +70,9 @@
               <button id='zoom_out'>–</button>
             </div>
             <div class='global-stats'>
+              <h2>COVID-19 Pandemic in 25 HRP Locations</h2>
               <!-- <div class='global-timeseries-chart'></div> -->
-              <ul>
-                <li>COVID-19 Pandemic in 25 HRP Locations</li>
-                <li>Total Confirmed Cases<br><span class='cases'></span></li>
-                <li>Total Confirmed Deaths<br><span class='deaths'></span></li>
-              </ul>
+              <div class='stats stats-priority'></div>
             </div>
             <div class='map-legend global'>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
@@ -73,12 +80,20 @@
             </div>
             <div class='map-legend country'>
               <h4>MAP DATA LAYER</h4>
-              <label>Acute Food Insecurity (% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <label>Acute Food Insecurity<br>(% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
               <div class='source-container food-security-source'></div>
               <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
               <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
               <div class='source-container orgs-source'></div>
+              <label>Health facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
+              <div class='source-container health-facilities-source'></div>
+              <h4 class='subtitle'>Immunization</h4>
+              <div class='source-container immunization-source'></div>
+              <label>Hepatitis B <input name='countryIndicators' type='radio' value='#population+hepb3+pct+vaccinated' id='hepb'></label>
+              <label>Inactivated Polio <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='ipv'></label>
+              <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
+              <label>Measles <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='mcv'></label>
             </div>
           </div>
           
@@ -124,8 +139,6 @@
               <div class='panel-inner'></div>
             </div>
           </div>
-
-          <div class='description'></div>
         </div>
 
       </div>
