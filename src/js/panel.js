@@ -14,8 +14,8 @@ function initCountryPanel() {
   //covid
   var covidDiv = $('.country-panel .covid .panel-inner');
   covidDiv.children().remove();  
-  createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormt(data['#affected+infected']), indicator: '#affected+infected'});
-  createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormt(data['#affected+killed']), indicator: '#affected+killed'});
+  createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormat(data['#affected+infected']), indicator: '#affected+infected'});
+  createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
 
   //projections
   var projectionsDiv = $('.country-panel .projections .panel-inner');
