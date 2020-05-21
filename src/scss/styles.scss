@@ -112,6 +112,14 @@ a:visited {
 	color: #007CE1;
 }
 
+.footnote {
+  bottom: 16px;
+  font-size: 11px;
+  font-style: italic;
+  left: 80px;
+	position: absolute;
+}
+
 .content {
 	display: flex;
 	flex-flow: row;
@@ -346,9 +354,6 @@ a:visited {
 				font-family: 'Gotham-Bold', sans-serif;
 		    letter-spacing: 0.2px;
 			}
-		}
-		.disclaimer {
-			margin-top: 10px;
 		}
 		.source-container {
 			margin-left: 18px;

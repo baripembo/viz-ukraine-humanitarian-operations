@@ -321,6 +321,7 @@ $( document ).ready(function() {
   function updateGlobalMap() {
     //set up color scales
     var max = (currentIndicator.id.indexOf('access')>-1 || currentIndicator.id.indexOf('funding')>-1) ? 1 : d3.max(nationalData, function(d) { return +d[currentIndicator.id]; })
+    if (currentIndicator.id=='#severity+economic+num') max = 10;
     colorScale = d3.scaleQuantize().domain([0, max]).range(colorRange);
 
     //toggle description
@@ -370,7 +371,6 @@ $( document ).ready(function() {
     svg.append('g')
       .attr('class', 'scale')
       .call(legend);
-
 
     //cases
     $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
@@ -656,13 +656,6 @@ $( document ).ready(function() {
     svg.append('g')
       .attr('class', 'scale')
       .call(legend);
-
-    if (currentCountry=='PSE') {
-      $('.map-legend.country').append('<p class="disclaimer small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>');
-    }
-    else {
-      $('.map-legend.country').find('.disclaimer').remove();
-    }
   }
 
   function updateCountryLegend(scale) {
