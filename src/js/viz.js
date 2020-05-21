@@ -5,6 +5,7 @@ var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
+var foodPricesColor = '#3B97E1';
 var colorDefault = '#F2F2EF';
 var geomData, geomFilteredData, nationalData, accessData, subnationalData, timeseriesData, dataByCountry, totalCases, totalDeaths, maxCases, colorScale, currentCountry = '';
   
@@ -114,6 +115,20 @@ $( document ).ready(function() {
     $('.country-select').prepend('<option value="">Select Country</option>');
     $('.country-select').val($('.country-select option:first').val());
 
+    //set content height
+    $('.content').height(viewportHeight);
+
+    //set access constraints description    
+    $('.description').text(accessLabels['#access+constraints']);
+
+    //global stats
+    maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
+    totalCases = d3.sum(nationalData, function(d) { return d['#affected+infected']; });
+    totalDeaths = d3.sum(nationalData, function(d) { return d['#affected+killed']; });
+    createKeyFigure('.stats-priority', 'Total Confirmed Cases', 'cases', totalCases);
+    createKeyFigure('.stats-priority', 'Total Confirmed Deaths', 'deaths', totalDeaths);
+    createSource($('.global-stats'), '#affected+infected');
+
     //country select event
     d3.select('.country-select').on('change',function(e) {
       var selected = d3.select('.country-select').node().value;
@@ -126,7 +141,31 @@ $( document ).ready(function() {
       }
     });
 
-    //indicator select event
+    //menu events
+    $('.menu-indicators li').on('click', function() {
+      $('.menu-indicators li').removeClass('selected')
+      $(this).addClass('selected');
+      currentIndicator = {id: $(this).attr('data-id'), name: $(this).text()};
+
+      //toggle description
+      if (currentIndicator.id=='#access+constraints') $('.description').show();
+      else $('.description').hide();
+
+      //set food prices view
+      if (currentIndicator.id=='#food-prices') $('.content').addClass('food-prices-view');
+      else  $('.content').removeClass('food-prices-view');
+
+      updateGlobalMap();
+    });
+    currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
+
+    //back to global event
+    $('.menu h2').on('click', function() {
+      resetMap();
+    });
+
+
+    //country panel indicator select event
     d3.select('.indicator-select').on('change',function(e) {
       var selected = d3.select('.indicator-select').node().value;
       if (selected!='') {
@@ -135,33 +174,6 @@ $( document ).ready(function() {
         var offset = $('.panel-header').innerHeight();
         container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop() - offset}, 300);
       }
-    });
-
-    //set content height
-    $('.content').height(viewportHeight);
-
-    //global stats
-    maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
-    totalCases = d3.sum(nationalData, function(d) { return d['#affected+infected']; });
-    totalDeaths = d3.sum(nationalData, function(d) { return d['#affected+killed']; });
-    createKeyFigure('.stats-priority', 'Total Confirmed Cases', 'cases', totalCases);
-    createKeyFigure('.stats-priority', 'Total Confirmed Deaths', 'deaths', totalDeaths);
-    createSource($('.global-stats'), '#affected+infected');
-
-    //access constraints description    
-    $('.description').text(accessLabels['#access+constraints']);
-
-    //set up menu events
-    $('.menu-indicators li').on('click', function() {
-      $('.menu-indicators li').removeClass('selected')
-      $(this).addClass('selected');
-      currentIndicator = {id: $(this).attr('data-id'), name: $(this).text()};
-      updateGlobalMap();
-    });
-    currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
-
-    $('.menu h2').on('click', function() {
-      resetMap();
     });
 
     //set up radio button events
@@ -251,20 +263,26 @@ $( document ).ready(function() {
       .attr("id", function(d) { return d.properties.ISO_A3; })
       .attr("d", path)
       .on("mouseover", function(d){ 
-        if (isHRP(d.properties.ISO_A3)){
+        if (isHRP(d.properties.ISO_A3) && currentIndicator.id!='#food-prices') {
           tooltip.style("opacity", 1); 
         }
       })
       .on("mouseout", function(d) { tooltip.style("opacity", 0); })
       .on("mousemove", function(d) {
-        if (isHRP(d.properties.ISO_A3)){
+        if (isHRP(d.properties.ISO_A3) && currentIndicator.id!='#food-prices') {
           createMapTooltip(d.properties['ISO_A3'], d.properties.NAME_LONG);
         }
       })
       .on("click", function(d) {
         if (isHRP(d.properties.ISO_A3)) {
           currentCountry = d.properties.ISO_A3;
-          getCountryData();
+        
+          //country click        
+          if (currentIndicator.id=='#food-prices') {
+            launchModal();
+            console.log('food prices')
+          }
+          else getCountryData();
         }
       });
 
@@ -323,12 +341,6 @@ $( document ).ready(function() {
     var max = (currentIndicator.id.indexOf('access')>-1 || currentIndicator.id.indexOf('funding')>-1) ? 1 : d3.max(nationalData, function(d) { return +d[currentIndicator.id]; })
     colorScale = d3.scaleQuantize().domain([0, max]).range(colorRange);
 
-    //toggle description
-    if (currentIndicator.id=='#access+constraints')
-      $('.description').show();
-    else
-      $('.description').hide();
-    
     //update choropleth
     mapsvg.selectAll('.map-regions')
       .attr("fill", function(d) {
@@ -341,6 +353,9 @@ $( document ).ready(function() {
           if (currentIndicator.id=='#severity+type') {
             colorScale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
             clr = (val=='') ? colorDefault : colorScale(val);
+          }
+          else if (currentIndicator.id=='#food-prices') {
+            clr = foodPricesColor;
           }
           else {
             clr = (val<0 || val=='') ? colorDefault : colorScale(val);

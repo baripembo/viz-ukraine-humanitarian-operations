@@ -145,6 +145,49 @@ a:visited {
 			opacity: 1;
 		}
 	}
+	&.food-prices-view {
+		.map-legend.global,
+		.count-marker,
+		.global-stats {
+			display: none;
+		}
+		.food-prices-description {
+			display: block;
+		}
+	}
+}
+
+.food-prices-description {
+	background-color: #FFF;
+	display: none;
+	left: 40px;
+	padding: 15px;
+	position: absolute;
+	top: 120px;
+	width: 240px;
+}
+
+.modal-bg-overlay {
+	background-color: rgba(51, 51, 51, 0.7);
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 101;
+}
+
+.modal {
+	background-color: #FFF;
+	display: none;
+	height: 750px;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 840px;
+	z-index: 101;
 }
 
 .logos {

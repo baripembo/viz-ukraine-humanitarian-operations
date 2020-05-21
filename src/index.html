@@ -48,6 +48,9 @@
               <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
                 <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
               </li>
+              <li data-id='#food-prices' data-legend='Food Market Prices'>
+                <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
+              </li>
             </ul>
           </div>
           <div class='logos'>
@@ -61,6 +64,8 @@
         </div>
 
         <div class='content-right'>
+          <div class='modal-bg-overlay'></div>
+          <div class='modal'></div>
           <select id='countrySelect' class='country-select'></select>
 
           <div id='global-map'>  
@@ -95,6 +100,7 @@
               <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
               <label>Measles <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='mcv'></label>
             </div>
+            <div class='food-prices-description'><h4>Click a country to explore prices for different products</h4></div>
           </div>
           
           <div class='country-panel'>
