@@ -1,4 +1,5 @@
-.loader {
+.loader,
+.modal-loader {
 	color: #000;
 	font-size: 11px;
 	text-align: center;
@@ -6,6 +7,10 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+.modal-loader {
+	top: 55%;
 }
 
 .sp {

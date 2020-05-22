@@ -1,6 +1,7 @@
 @import '_fonts';
 @import '_grid';
 @import '_loader';
+@import '_foodprices';
 
 * {
 	box-sizing: border-box;
@@ -189,13 +190,23 @@ a:visited {
 .modal {
 	background-color: #FFF;
 	display: none;
-	height: 750px;
 	left: 50%;
+	max-height: 90%;
+	min-height: 300px;
+	overflow: scroll;
+	padding: 0 4px 20px;
 	position: absolute;
 	top: 50%;
 	transform: translate(-50%, -50%);
 	width: 840px;
 	z-index: 101;
+}
+
+.modal-close-btn {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 18px;
 }
 
 .logos {

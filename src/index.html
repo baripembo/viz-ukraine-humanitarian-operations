@@ -14,6 +14,7 @@
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
+    <script src='//alexmacy.github.io/crossfilter/crossfilter.v1.min.js' defer></script>
   </head>
 
   <body>
@@ -65,7 +66,16 @@
 
         <div class='content-right'>
           <div class='modal-bg-overlay'></div>
-          <div class='modal'></div>
+          <div class='modal food-prices'>
+            <div class='modal-close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
+            <div id='header'></div>
+            <div class='modal-subnav'></div>
+            <div class='modal-loader'>
+              <div class="sp sp-circle"></div>
+              Loading data...
+            </div>
+            <div id="charts"></div>
+          </div>
           <select id='countrySelect' class='country-select'></select>
 
           <div id='global-map'>  

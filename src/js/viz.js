@@ -137,7 +137,11 @@ $( document ).ready(function() {
       }
       else {        
         currentCountry = selected;
-        getCountryData();
+
+        if (currentIndicator.id=='#food-prices') {
+          openModal(currentCountry);
+        }
+        else getCountryData();
       }
     });
 
@@ -153,7 +157,10 @@ $( document ).ready(function() {
 
       //set food prices view
       if (currentIndicator.id=='#food-prices') $('.content').addClass('food-prices-view');
-      else  $('.content').removeClass('food-prices-view');
+      else {
+        $('.content').removeClass('food-prices-view');
+        closeModal();
+      }
 
       updateGlobalMap();
     });
@@ -279,8 +286,7 @@ $( document ).ready(function() {
         
           //country click        
           if (currentIndicator.id=='#food-prices') {
-            launchModal();
-            console.log('food prices')
+            openModal(d.properties.NAME_LONG);
           }
           else getCountryData();
         }
