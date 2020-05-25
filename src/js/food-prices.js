@@ -305,17 +305,17 @@ function getAVG(sum,count){
 }
 
 function generateTimeCharts(data,cf,title){
-    $('#nav_chart').html('<p>Select a portion of the chart below to zoom in the data.</p><p><span id="brush6" class="setbrush">Last 6 months</span><span id="brush12" class="setbrush">1 year</span><span id="brush60" class="setbrush">5 years</span></p>');
+    //$('#nav_chart').html('<p>Select a portion of the chart below to zoom in the data.</p><p><span id="brush6" class="setbrush">Last 6 months</span><span id="brush12" class="setbrush">1 year</span><span id="brush60" class="setbrush">5 years</span></p>');
 
-    $('#brush6').click(function(){
-        setBrushExtent(data,6);
-    });
-    $('#brush12').click(function(){
-        setBrushExtent(data,12);
-    });
-    $('#brush60').click(function(){
-        setBrushExtent(data,60);
-    });
+    // $('#brush6').click(function(){
+    //     setBrushExtent(data,6);
+    // });
+    // $('#brush12').click(function(){
+    //     setBrushExtent(data,12);
+    // });
+    // $('#brush60').click(function(){
+    //     setBrushExtent(data,60);
+    // });
 
     var margin = {top: 10, right: 20, bottom: 20, left: 60},
         width = $('#nav_chart').width() - margin.left - margin.right,
@@ -331,28 +331,28 @@ function generateTimeCharts(data,cf,title){
         xAxis2 = d3.axisBottom().scale(x2).ticks(5),
         yAxis = d3.axisLeft().scale(y).ticks(5);
 
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];        
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];        
 
-    var brush = d3.brushX()
-        .extent([[0, 0], [width, height]])
-        //.x(x2)        
-        .on("brush", brushed)
-        .on("end", function(){
-        		var selection = d3.event.selection;
-            cf.byDate.filterRange(selection===null ? x2.domain() : selection);
-            var dates = selection===null ? x2.domain() : selection;
-            var dateFormatted = monthNames[dates[0].getMonth()] +" " + dates[0].getFullYear() + " - " +  monthNames[dates[1].getMonth()] +" " + dates[1].getFullYear();
+    // var brush = d3.brushX()
+    //     .extent([[0, 0], [width, height]])
+    //     //.x(x2)        
+    //     .on("brush", brushed)
+    //     .on("end", function(){
+    //     		//cf.byDate.filterRange(brush.empty() ? x2.domain() : brush.extent());
+    //         //var dates = brush.empty() ? x2.domain() : brush.extent();
+    //     		var selection = d3.event.selection;
+    //         cf.byDate.filterRange(selection===null ? x2.domain() : selection);
+    //         var dates = selection===null ? x2.domain() : selection;
+    //         var dateFormatted = monthNames[dates[0].getMonth()] +" " + dates[0].getFullYear() + " - " +  monthNames[dates[1].getMonth()] +" " + dates[1].getFullYear();
     
-            $("#dateextent").html("Average Price for period " + dateFormatted);
-            if(curLevel === "adm0"){
-                transitionBarChart(getAVG(cf.groupByAdm1Sum.all(),cf.groupByAdm1Count.all()));
-            }
-            if(curLevel === "adm1"){
-                transitionBarChart(getAVG(cf.groupByMktSum.all(),cf.groupByMktCount.all()));
-            }                        
-        });
+    //         $("#dateextent").html("Average Price for period " + dateFormatted);
+    //         if(curLevel === "adm0"){
+    //             transitionBarChart(getAVG(cf.groupByAdm1Sum.all(),cf.groupByAdm1Count.all()));
+    //         }
+    //         if(curLevel === "adm1"){
+    //             transitionBarChart(getAVG(cf.groupByMktSum.all(),cf.groupByMktCount.all()));
+    //         }                        
+    //     });
         
     var area = d3.area()
         //.interpolate("monotone")
@@ -380,13 +380,13 @@ function generateTimeCharts(data,cf,title){
         .attr("class", "focus")
         .attr("transform", "translate(" + margin.left + "," + (margin.top+10) + ")");
 
-    var nav_chart = d3.select("#nav_chart").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height2 + margin.top + margin.bottom);
+    // var nav_chart = d3.select("#nav_chart").append("svg")
+    //     .attr("width", width + margin.left + margin.right)
+    //     .attr("height", height2 + margin.top + margin.bottom);
 
-    var context = nav_chart.append("g")
-        .attr("class", "context")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // var context = nav_chart.append("g")
+    //     .attr("class", "context")
+    //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     x.domain(d3.extent(data.map(function(d) { return d.key; })));
     y.domain([0, d3.max(data.map(function(d) { return d.value; }))]);
@@ -485,18 +485,18 @@ function generateTimeCharts(data,cf,title){
         .attr("transform", "translate(0," + height2 + ")")
         .call(xAxis2);
 
-    context.append("g")
-        .attr("class", "x brush")
-        //.call(brush.extent(x2.domain()))
-        .call(brush)
-        .selectAll("rect")
-            .attr("y", -6)
-            .attr("height", height2+6)
-            .style({
-                "stroke-width":2,
-                "stroke":"#6fbfff",
-                "fill-opacity": "0"
-            });  
+    // context.append("g")
+    //     .attr("class", "x brush")
+    //     //.call(brush.extent(x2.domain()))
+    //     .call(brush)
+    //     .selectAll("rect")
+    //         .attr("y", -6)
+    //         .attr("height", height2+6)
+    //         .style({
+    //             "stroke-width":2,
+    //             "stroke":"#6fbfff",
+    //             "fill-opacity": "0"
+    //         });  
 
   
     main_chart.append("text")
@@ -515,27 +515,27 @@ function generateTimeCharts(data,cf,title){
     });
     
     //var dates = d3.event.selection==null ? x2.domain() : d3.event.selection;
-    var dates = x2.domain();
-    var dateFormatted = monthNames[dates[0].getMonth()] +" " + dates[0].getFullYear() + " - " +  monthNames[dates[1].getMonth()] +" " + dates[1].getFullYear();
+    // var dates = x2.domain();
+    // var dateFormatted = monthNames[dates[0].getMonth()] +" " + dates[0].getFullYear() + " - " +  monthNames[dates[1].getMonth()] +" " + dates[1].getFullYear();
     
-    $("#dateextent").html("Average Price for period " + dateFormatted);
+    //$("#dateextent").html("Average Price for period " + dateFormatted);
   
-    function brushed() {
-    	var selection = d3.event.selection;
-      x.domain(selection===null ? x2.domain() : selection);
-      focus.select(".area").attr("d", area);
-      focus.select(".x.axis").call(xAxis);
-      focus.selectAll(".priceline").attr("d", line); 
-    }
+    // function brushed() {
+    // 	var selection = d3.event.selection;
+    //   x.domain(selection===null ? x2.domain() : selection);
+    //   focus.select(".area").attr("d", area);
+    //   focus.select(".x.axis").call(xAxis);
+    //   focus.selectAll(".priceline").attr("d", line); 
+    // }
     
-    function setBrushExtent(data,months){
-      var domain = d3.extent(data.map(function(d) { return d.key; }));  
-      var endDate = domain[1];
-      var tempDate = new Date(endDate.getFullYear(), endDate.getMonth()-months, endDate.getDate());
-      var begDate = tempDate < domain[0] ? domain[0] : tempDate;
-      d3.select(".brush").call(brush.extent([begDate,endDate]));
-      brushed();
-    }
+    // function setBrushExtent(data,months){
+    //   var domain = d3.extent(data.map(function(d) { return d.key; }));  
+    //   var endDate = domain[1];
+    //   var tempDate = new Date(endDate.getFullYear(), endDate.getMonth()-months, endDate.getDate());
+    //   var begDate = tempDate < domain[0] ? domain[0] : tempDate;
+    //   d3.select(".brush").call(brush.extent([begDate,endDate]));
+    //   brushed();
+    // }
 }
 
 function downloadData(data,name,title){

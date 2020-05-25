@@ -34,7 +34,7 @@ function initCountryPanel() {
   var hrpDiv = $('.country-panel .hrp .panel-inner');
   hrpDiv.children().remove();  
   createFigure(hrpDiv, {className: 'pin', title: 'Number of People in Need', stat: shortenNumFormat(data['#affected+inneed']), indicator: '#affected+inneed'});
-  createFigure(hrpDiv, {className: 'funding-level', title: 'HRP Funding Level', stat: data['#value+covid+funding+pct']+'%', indicator: '#affected+inneed'});
+  createFigure(hrpDiv, {className: 'funding-level', title: 'HRP Funding Level', stat: (data['#value+covid+funding+pct']*100)+'%', indicator: '#affected+inneed'});
   createFigure(hrpDiv, {className: 'funding-received', title: 'HRP Funding Received', stat: shortenNumFormat(data['#value+covid+funding+total+usd']), indicator: '#affected+inneed'});
   createFigure(hrpDiv, {className: 'funding-required', title: 'GHRP Request (USD)', stat: shortenNumFormat(data['#value+funding+precovid+required+usd']), indicator: '#affected+inneed'});
 
