@@ -6,26 +6,164 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link rel='icon' type='image/png' href='https://data.humdata.org/images/icons/hdx.ico' />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.css"/>
     <link href='css/styles.css' rel='stylesheet' />
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
+    <script src='//alexmacy.github.io/crossfilter/crossfilter.v1.min.js' defer></script>
   </head>
 
   <body>
 
-    <main>
-      <div id='map' style='width: 100%; height: 100%;'></div>
-    </main>
+    <div class='loader'>
+      <div class="sp sp-circle"></div>
+      Loading data...
+    </div>
 
-    <footer>
-      <div class='logos'>
-        <a href='https://www.unocha.org' target='_blank'>
-          <img height='30' src='assets/logo-ocha-gray.png'>
-        </a>
-        <a href='https://centre.humdata.org' target='_blank'>
-          <img height='38' src='assets/logo-centre-gray.png'>
-        </a>
+    <main>
+      
+      <div class='content'>
+        <div class='content-left'>
+          <div class='menu'>
+            <h1>Covid-19 Impact on Humanitarian Operations</h1>
+            <h2>Global</h2>
+
+            <ul class='menu-indicators'>
+              <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
+                <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
+                <p class='description small'></p>
+              </li>
+              <li data-id='#severity+type' data-legend='INFORM Risk Class'>
+                <div><i class='humanitarianicons-Analysis'></i>INFORM Risk</div>
+              </li>
+              <li data-id='#affected+inneed' data-legend='Number of People in Need'>
+                <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
+              </li>
+              <li data-id='#value+covid+funding+hrp+pct' data-legend='HRP Funding Level'>
+                <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
+              </li>
+              <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
+                <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
+              </li>
+              <li data-id='#food-prices' data-legend='Food Market Prices'>
+                <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
+              </li>
+            </ul>
+          </div>
+          <div class='logos'>
+            <a href='https://centre.humdata.org' target='_blank'>
+              <img height='50' src='assets/logo-centre-gray.png'>
+            </a>
+            <a href='https://www.unocha.org' target='_blank'>
+              <img height='37' src='assets/logo-ocha-gray.png'>
+            </a>
+          </div>
+        </div>
+
+        <div class='content-right'>
+          <div class='modal-bg-overlay'></div>
+          <div class='modal food-prices'>
+            <div class='modal-close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
+            <div id='header'></div>
+            <div class='modal-subnav'></div>
+            <div class='modal-loader'>
+              <div class="sp sp-circle"></div>
+              Loading data...
+            </div>
+            <div id="charts"></div>
+          </div>
+          <select id='countrySelect' class='country-select'></select>
+
+          <div id='global-map'>  
+            <div id='country-map'></div>          
+            <div class='zoom-controls'>
+              <button id='zoom_in'>+</button>
+              <button id='zoom_out'>–</button>
+            </div>
+            <div class='global-stats'>
+              <h2>COVID-19 Pandemic in 25 HRP Locations</h2>
+              <!-- <div class='global-timeseries-chart'></div> -->
+              <div class='stats stats-priority'></div>
+            </div>
+            <div class='map-legend global'>
+              <h4 class='indicator-title'>MAP DATA LAYER</h4>
+              <div class='indicator-source'></div>
+            </div>
+            <div class='map-legend country'>
+              <h4>MAP DATA LAYER</h4>
+              <label>Acute Food Insecurity<br>(% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <div class='source-container food-security-source'></div>
+              <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <div class='source-container population-source'></div>
+              <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
+              <div class='source-container orgs-source'></div>
+              <label>Health facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
+              <div class='source-container health-facilities-source'></div>
+              <h4 class='subtitle'>Immunization Coverage</h4>
+              <div class='source-container immunization-source'></div>
+              <label>Hepatitis B <input name='countryIndicators' type='radio' value='#population+hepb3+pct+vaccinated' id='hepb'></label>
+              <label>Inactivated Polio <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='ipv'></label>
+              <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
+              <label>Measles <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='mcv'></label>
+            </div>
+            <div class='food-prices-description'><h4>Click a country to explore prices for different products</h4></div>
+          </div>
+
+          <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
+          
+          <div class='country-panel'>
+            <div class='panel-header'>
+              <div class='panel-title'>
+                <img src='' class='flag'/>
+                <h3></h3>
+              </div>
+              <select id='indicatorSelect' class='indicator-select'>
+                <option value=''>Jump to indicators</option>
+                <option value='covid'>COVID-19 Cases and Projections</option>
+                <option value='humanitarian-access'>Humanitarian Access - Constraints</option>
+                <option value='hrp'>HRP (pre COVID-19)</option>
+                <option value='inform'>INFORM COVID Index</option>
+                <option value='schools'>School Closure</option>
+              </select>
+            </div>
+            <div class='covid'>
+              <h5>COVID-19 Cases and Projections</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='panel-inner cases-timeseries'>
+              <div class='country-timeseries-chart'></div>
+            </div>
+            <div class='projections'>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='humanitarian-access'>
+              <h5>Humanitarian Access - Constraints</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='hrp'>
+              <h5>2020 HRP (pre COVID-19)</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='inform'>
+              <h5>INFORM COVID Index</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='schools'>
+              <h5>School Closure</h5>
+              <div class='panel-inner'></div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </footer>
+      
+      <div class='tooltip'><div class='tooltip-inner'></div></div>
+
+    </main>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     
