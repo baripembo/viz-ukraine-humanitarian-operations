@@ -47,9 +47,9 @@ $( document ).ready(function() {
 
       //format data
       nationalData.forEach(function(item) {
-        if (item['#access+constraints']!=undefined) item['#access+constraints'] = item['#access+constraints'].replace('%','')/100;
+        if (item['#access+constraints+pct']!=undefined) item['#access+constraints+pct'] = item['#access+constraints+pct'].replace('%','')/100;
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
-        item['#value+covid+funding+pct'] = item['#value+covid+funding+pct']/100;
+        item['#value+covid+funding+hrp+pct'] = item['#value+covid+funding+hrp+pct'].replace('%','')/100;
       })
 
       subnationalData.forEach(function(item) {
@@ -117,6 +117,7 @@ $( document ).ready(function() {
 
     //set content height
     $('.content').height(viewportHeight);
+    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 120);
 
     //set access constraints description    
     $('.description').text(accessLabels['#access+constraints']);
