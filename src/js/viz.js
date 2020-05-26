@@ -423,7 +423,7 @@ $( document ).ready(function() {
     $('.map-legend.global .indicator-title').text(legendTitle);
     updateSource($('.indicator-source'), currentIndicator.id);
 
-    var legendFormat = (currentIndicator.id=='#access+constraints' || currentIndicator.id=='#value+covid+funding+pct') ? percentFormat : shortenNumFormat;
+    var legendFormat = (currentIndicator.id=='#access+constraints+pct' || currentIndicator.id=='#value+covid+funding+pct') ? percentFormat : shortenNumFormat;
     var legend = d3.legendColor()
       .labelFormat(legendFormat)
       .cells(colorRange.length)
