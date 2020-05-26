@@ -475,15 +475,15 @@ function generateTimeCharts(data,cf,title){
         .attr("class", "y axis")
         .call(yAxis);
  
-    context.append("path")
-        .datum(data)
-        .attr("class", "area")
-        .attr("d", area2);
+    // context.append("path")
+    //     .datum(data)
+    //     .attr("class", "area")
+    //     .attr("d", area2);
 
-    context.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height2 + ")")
-        .call(xAxis2);
+    // context.append("g")
+    //     .attr("class", "x axis")
+    //     .attr("transform", "translate(0," + height2 + ")")
+    //     .call(xAxis2);
 
     // context.append("g")
     //     .attr("class", "x brush")
