@@ -49,19 +49,12 @@ $( document ).ready(function() {
 
       //format data
       nationalData.forEach(function(item) {
-        if (item['#access+constraints+pct']!=undefined) item['#access+constraints+pct'] = item['#access+constraints+pct'].replace('%','')/100;
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
-        item['#value+covid+funding+hrp+pct'] = item['#value+covid+funding+hrp+pct'].replace('%','')/100;
       })
 
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
         if (item['#population']!=undefined) item['#population'] = parseInt(pop.replace(/,/g, ''), 10);
-        item['#affected+food+p3+pct'] = item['#affected+food+p3+pct']/100;
-        item['#population+hepb3+pct+vaccinated'] = item['#population+hepb3+pct+vaccinated']/100;
-        item['#population+ipv1+pct+vaccinated'] = item['#population+ipv1+pct+vaccinated']/100;
-        item['#population+mcv2+pct+vaccinated'] = item['#population+mcv2+pct+vaccinated']/100;
-        item['#population+pct+pol3+vaccinated'] = item['#population+pct+pol3+vaccinated']/100;
         item['#org+count+num'] = +item['#org+count+num'];
       })
 
@@ -423,7 +416,7 @@ $( document ).ready(function() {
     $('.map-legend.global .indicator-title').text(legendTitle);
     updateSource($('.indicator-source'), currentIndicator.id);
 
-    var legendFormat = (currentIndicator.id=='#access+constraints+pct' || currentIndicator.id=='#value+covid+funding+pct') ? percentFormat : shortenNumFormat;
+    var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? percentFormat : shortenNumFormat;
     var legend = d3.legendColor()
       .labelFormat(legendFormat)
       .cells(colorRange.length)

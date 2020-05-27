@@ -7,6 +7,13 @@ function initCountryPanel() {
   //timeseries
   updateTimeseries(timeseriesData, data['#country+code']);
 
+// header: 2020 HRP and COVID-19 funding:
+// - (3rd figure)
+// COVID-19 GHRP requirement ($87m for sudan)
+// - (4th figure)
+// COVID-19 GHRP allocation:
+
+
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name']);
@@ -33,10 +40,14 @@ function initCountryPanel() {
   //hrp
   var hrpDiv = $('.country-panel .hrp .panel-inner');
   hrpDiv.children().remove();  
-  createFigure(hrpDiv, {className: 'pin', title: 'Number of People in Need', stat: shortenNumFormat(data['#affected+inneed']), indicator: '#affected+inneed'});
-  createFigure(hrpDiv, {className: 'funding-level', title: 'HRP Funding Level', stat: (data['#value+covid+funding+hrp+pct']*100)+'%', indicator: '#affected+inneed'});
-  createFigure(hrpDiv, {className: 'funding-received', title: 'HRP Funding Received', stat: shortenNumFormat(data['#value+covid+funding+hrp+total+usd']), indicator: '#affected+inneed'});
-  createFigure(hrpDiv, {className: 'funding-required', title: 'GHRP Request (USD)', stat: shortenNumFormat(data['#value+funding+precovid+required+usd']), indicator: '#affected+inneed'});
+  //HRP requirement, HRP funding level, COVID-19 GHRP requirement, COVID-19 GHRP allocation, CERF COVID-19 allocation, CBPF COVID allocation
+  //createFigure(hrpDiv, {className: 'pin', title: 'Number of People in Need', stat: shortenNumFormat(data['#affected+inneed']), indicator: '#affected+inneed'});
+  createFigure(hrpDiv, {className: 'funding-required', title: 'HRP requirement', stat: shortenNumFormat(data['#value+funding+hrp+required+usd']), indicator: '#value+funding+hrp+required+usd'});
+  createFigure(hrpDiv, {className: 'funding-level', title: 'HRP Funding Level', stat: percentFormat(data['#value+funding+hrp+pct']), indicator: '#value+covid+funding+hrp+pct'});
+  createFigure(hrpDiv, {className: 'funding-covid-required', title: 'COVID-19 GHRP requirement', stat: shortenNumFormat(data['#value+covid+funding+hrp+required+usd']), indicator: '#value+covid+funding+hrp+required+usd'});
+  createFigure(hrpDiv, {className: 'funding-covid-allocation', title: 'COVID-19 GHRP allocation', stat: shortenNumFormat(data['#value+covid+funding+hrp+total+usd']), indicator: '#value+covid+funding+hrp+total+usd'});
+  createFigure(hrpDiv, {className: 'funding-covid-cerf-allocation', title: 'CERF COVID-19 allocation', stat: shortenNumFormat(data['#value+cerf+covid+funding+total+usd']), indicator: '#value+cerf+covid+funding+total+usd'});
+  createFigure(hrpDiv, {className: 'funding-covid-cbpf-allocation', title: 'CBPF COVID allocation', stat: shortenNumFormat(data['#value+cbpf+covid+funding+total+usd']), indicator: '#value+cbpf+covid+funding+total+usd'});
 
   //inform
   var informDiv = $('.country-panel .inform .panel-inner');
@@ -98,7 +109,7 @@ function initCountryPanel() {
     content += '<div>'+ accessLabels[key] +'</div></div>';
     accessDiv.append(content);
   }
-  createSource(accessDiv, '#access+constraints');
+  createSource(accessDiv, '#access+constraints+pct');
 }
 
 
