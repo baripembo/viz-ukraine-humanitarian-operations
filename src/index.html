@@ -2,11 +2,12 @@
 <html>
   <head>
     <meta charset='utf-8' />
-    <title>OAD COVID-19 Dashboard</title>
+    <title>Covid19 Humanitarian Operations</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link rel='icon' type='image/png' href='https://data.humdata.org/images/icons/hdx.ico' />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.css"/>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
     <link href='css/styles.css' rel='stylesheet' />
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
@@ -15,6 +16,8 @@
     <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
     <script src='//alexmacy.github.io/crossfilter/crossfilter.v1.min.js' defer></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
   </head>
 
   <body>
@@ -43,7 +46,7 @@
               <li data-id='#affected+inneed' data-legend='Number of People in Need'>
                 <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
               </li>
-              <li data-id='#value+covid+funding+hrp+pct' data-legend='HRP Funding Level'>
+              <li data-id='#value+funding+hrp+pct' data-legend='HRP Funding Level'>
                 <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
               </li>
               <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
@@ -78,12 +81,12 @@
           </div>
           <select id='countrySelect' class='country-select'></select>
 
-          <div id='global-map'>  
+          <div id='global-map' style='width: 100%; height: 100%;'>  
             <div id='country-map'></div>          
-            <div class='zoom-controls'>
+            <!-- <div class='zoom-controls'>
               <button id='zoom_in'>+</button>
               <button id='zoom_out'>–</button>
-            </div>
+            </div> -->
             <div class='global-stats'>
               <h2>COVID-19 Pandemic in 25 HRP Locations</h2>
               <!-- <div class='global-timeseries-chart'></div> -->
@@ -125,7 +128,7 @@
                 <option value=''>Jump to indicators</option>
                 <option value='covid'>COVID-19 Cases and Projections</option>
                 <option value='humanitarian-access'>Humanitarian Access - Constraints</option>
-                <option value='hrp'>HRP (pre COVID-19)</option>
+                <option value='hrp'>2020 HRP and COVID-19 funding</option>
                 <option value='inform'>INFORM COVID Index</option>
                 <option value='schools'>School Closure</option>
               </select>
@@ -145,7 +148,7 @@
               <div class='panel-inner'></div>
             </div>
             <div class='hrp'>
-              <h5>2020 HRP (pre COVID-19)</h5>
+              <h5>2020 HRP and COVID-19 funding</h5>
               <div class='panel-inner'></div>
             </div>
             <div class='inform'>

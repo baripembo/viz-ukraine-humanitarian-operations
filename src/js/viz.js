@@ -25,6 +25,8 @@ $( document ).ready(function() {
   var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
   var sourcesPath = 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D1837381168%26single%3Dtrue%26output%3Dcsv';
 
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
+
   var viewportWidth = window.innerWidth - $('.content-left').innerWidth();
   var viewportHeight = window.innerHeight;
   var tooltip = d3.select(".tooltip");
@@ -49,19 +51,12 @@ $( document ).ready(function() {
 
       //format data
       nationalData.forEach(function(item) {
-        if (item['#access+constraints+pct']!=undefined) item['#access+constraints+pct'] = item['#access+constraints+pct'].replace('%','')/100;
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
-        item['#value+covid+funding+hrp+pct'] = item['#value+covid+funding+hrp+pct'].replace('%','')/100;
       })
 
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
         if (item['#population']!=undefined) item['#population'] = parseInt(pop.replace(/,/g, ''), 10);
-        item['#affected+food+p3+pct'] = item['#affected+food+p3+pct']/100;
-        item['#population+hepb3+pct+vaccinated'] = item['#population+hepb3+pct+vaccinated']/100;
-        item['#population+ipv1+pct+vaccinated'] = item['#population+ipv1+pct+vaccinated']/100;
-        item['#population+mcv2+pct+vaccinated'] = item['#population+mcv2+pct+vaccinated']/100;
-        item['#population+pct+pol3+vaccinated'] = item['#population+pct+pol3+vaccinated']/100;
         item['#org+count+num'] = +item['#org+count+num'];
       })
 
@@ -85,6 +80,7 @@ $( document ).ready(function() {
       geomFilteredData = geomData.features.filter((country) => countryCodeList.includes(country.properties.ISO_A3));
 
       initDisplay();
+      initMap();
     });
   }
 
@@ -119,6 +115,7 @@ $( document ).ready(function() {
 
     //set content height
     $('.content').height(viewportHeight);
+    $('.content-right').width(viewportWidth);
     $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 120);
 
     //set access constraints description    
@@ -165,7 +162,8 @@ $( document ).ready(function() {
         closeModal();
       }
 
-      updateGlobalMap();
+      updateGlobalMapbox();
+      //updateGlobalMap();
     });
     currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
 
@@ -193,13 +191,9 @@ $( document ).ready(function() {
       updateCountryMap();
     });
 
-    drawGlobalMap();
+    //drawGlobalMap();
     //initTimeseries(timeseriesData, '.global-timeseries-chart');
     initTimeseries(timeseriesData, '.country-timeseries-chart');
-
-    //remove loader and show vis
-    $('.loader').hide();
-    $('main, footer').css('opacity', 1);
   }
 
 
@@ -212,6 +206,7 @@ $( document ).ready(function() {
 
     initCountryPanel();
   }
+
 
 
   /****************************/
@@ -347,7 +342,7 @@ $( document ).ready(function() {
 
   function updateGlobalMap() {
     //set up color scales
-    var max = (currentIndicator.id.indexOf('access')>-1 || currentIndicator.id.indexOf('funding')>-1) ? 1 : d3.max(nationalData, function(d) { return +d[currentIndicator.id]; })
+    var max = (currentIndicator.id.indexOf('pct')>-1) ? 1 : d3.max(nationalData, function(d) { return +d[currentIndicator.id]; })
     if (currentIndicator.id=='#severity+economic+num') max = 10;
     colorScale = d3.scaleQuantize().domain([0, max]).range(colorRange);
 
@@ -378,60 +373,7 @@ $( document ).ready(function() {
     updateGlobalLegend(colorScale);
   }
 
-  function createGlobalLegend(scale) {
-    //current indicator
-    var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
-    $('.map-legend.global .indicator-title').text(legendTitle);
-    createSource($('.map-legend.global .indicator-source'), currentIndicator.id);
-
-    var legend = d3.legendColor()
-      .labelFormat(percentFormat)
-      .cells(colorRange.length)
-      .scale(scale);
-
-    var div = d3.select('.map-legend.global');
-    var svg = div.append('svg')
-      .attr('height', '90px');
-    svg.append('g')
-      .attr('class', 'scale')
-      .call(legend);
-
-    //cases
-    $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
-    createSource($('.map-legend.global'), '#affected+infected');
-    var markersvg = div.append('svg')
-      .attr('height', '55px');
-    markersvg.append('g')
-      .attr("transform", "translate(5, 10)")
-      .attr('class', 'legendSize');
-
-    var legendSize = d3.legendSize()
-      .scale(markerScale)
-      .shape('circle')
-      .shapePadding(40)
-      .labelFormat(numFormat)
-      .labelOffset(15)
-      .cells(2)
-      .orient('horizontal');
-
-    markersvg.select('.legendSize')
-      .call(legendSize);
-  }
-
-  function updateGlobalLegend(scale) {
-    var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
-    $('.map-legend.global .indicator-title').text(legendTitle);
-    updateSource($('.indicator-source'), currentIndicator.id);
-
-    var legendFormat = (currentIndicator.id=='#access+constraints+pct' || currentIndicator.id=='#value+covid+funding+pct') ? percentFormat : shortenNumFormat;
-    var legend = d3.legendColor()
-      .labelFormat(legendFormat)
-      .cells(colorRange.length)
-      .scale(scale);
-
-    var g = d3.select('.map-legend.global .scale');
-    g.call(legend);
-  }
+  
 
   function selectCountry(d) {
     setSelect('countrySelect', d.properties.ISO_A3);
