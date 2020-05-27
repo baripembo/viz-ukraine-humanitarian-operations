@@ -23,14 +23,8 @@ function initMap() {
     var expression = ['match', ['get', 'ADM0_REF']];
     colorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
     nationalData.forEach(function(d) {
-      var val = d['#access+constraints+pct'];
-      var color = colorDefault;
-      // if (val <= .20) color = colorRange[0];
-      // else if (val <= .40) color = colorRange[1];
-      // else if (val <= .60) color = colorRange[2];
-      // else if (val <= .80) color = colorRange[3];
-      // else color = colorRange[4];
-      color = colorScale(val);
+      var val = d[currentIndicator.id];
+      var color = (val<0 || val=='') ? colorDefault : colorScale(val);
       expression.push(d['#country+name'], color);
     });
 
@@ -130,16 +124,14 @@ function updateGlobalMapbox() {
     var color = colorDefault;
     if (currentIndicator.id=='#severity+type') {
       colorScale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
-      if (val=='Very Low') color = informColorRange[0];
-      else if (val=='Low') color = informColorRange[1];
-      else if (val=='Medium') color = informColorRange[2];
-      else if (val=='High') color = informColorRange[3];
-      else color = informColorRange[4];
+      color = (val=='') ? colorDefault : colorScale(val);
+    }
+    else if (currentIndicator.id=='#food-prices') {
+      color = foodPricesColor;
     }
     else {
-      color = colorScale(val);
+      color = (val<0 || val=='') ? colorDefault : colorScale(val);
     }
-    
     expression.push(d['#country+name'], color);
   });
 
