@@ -48,7 +48,7 @@ function truncateString(str, num) {
 }
 
 function formatValue(val) {
-  var n = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
+  var n = (isNaN(val) || val==0) ? val : d3.format('$.2s')(val).replace(/G/, 'B');
   return n;
 }
 
