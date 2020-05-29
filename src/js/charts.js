@@ -141,7 +141,7 @@ function formatTimeseriesData(data) {
 }
 
 var countryTimeseriesChart;
-function createTimeSeries(array , div) {
+function createTimeSeries(array, div) {
 	var chart = c3.generate({
     size: {
       height: 240
@@ -150,7 +150,7 @@ function createTimeSeries(array , div) {
       bottom: 0,
       top: 10,
       left: 30,
-      right: 16
+      right: 30
     },
     bindto: div,
     title: {
@@ -160,11 +160,11 @@ function createTimeSeries(array , div) {
 		data: {
 			x: 'x',
 			columns: array,
-      type: 'spline'
+      type: 'spline',
+      color: function() {
+        return '#007CE1';
+      }
 		},
-    color: {
-        pattern: ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-    },
     spline: {
       interpolation: {
         type: 'basis'
@@ -175,8 +175,10 @@ function createTimeSeries(array , div) {
 			x: {
 				type: 'timeseries',
 				tick: {
-          count: 8,
-				  format: '%-m/%-d/%y',
+          //count: 8,
+				  //format: '%-m/%-d/%y',
+          count: 5,
+          format: '%b %d, %Y',
           outer: false
 				}
 			},

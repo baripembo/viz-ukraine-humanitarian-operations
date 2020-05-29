@@ -48,8 +48,14 @@ function truncateString(str, num) {
 }
 
 function formatValue(val) {
-  var n = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
-  return n;
+  var value;
+  if (val=='') {
+    value = 'NA';
+  }
+  else {
+    value = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
+  }
+  return value;
 }
 
 function roundUp(x, limit) {

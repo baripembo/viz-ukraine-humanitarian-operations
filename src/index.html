@@ -15,9 +15,9 @@
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
-    <script src='//alexmacy.github.io/crossfilter/crossfilter.v1.min.js' defer></script>
+    <script src="//alexmacy.github.io/crossfilter/crossfilter.v1.min.js" defer></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
   </head>
 
   <body>
@@ -36,15 +36,15 @@
             <h2>Global</h2>
 
             <ul class='menu-indicators'>
-              <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
+              <!-- <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
                 <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
                 <p class='description small'></p>
+              </li> -->
+              <li data-id='#affected+inneed' data-legend='Number of People in Need' class='selected'>
+                <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
               </li>
               <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
                 <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
-              </li>
-              <li data-id='#affected+inneed' data-legend='Number of People in Need'>
-                <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
               </li>
               <li data-id='#value+funding+hrp+pct' data-legend='HRP Funding Level'>
                 <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
