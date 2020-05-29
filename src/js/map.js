@@ -54,14 +54,18 @@ function initMap() {
 
     map.getStyle().layers.map(function (layer) {
       if (layer.id.indexOf('adm0-fills') >= 0) {
-        globalLayer = layer;
-        map.setPaintProperty(layer.id, 'fill-color', expression);
+        globalLayer = layer.id;
+        map.setPaintProperty(globalLayer, 'fill-color', expression);
+      }
+      else if (layer.id.indexOf('adm1-fills') >= 0) {
+        countryLayer = layer.id;
+        map.setLayoutProperty(countryLayer, 'visibility', 'none');
       }
     });
 
 
     //create country layer
-    //initCountryLayer();
+    initCountryLayer();
 
     //create tooltip
     tooltip = new mapboxgl.Popup({
@@ -244,14 +248,7 @@ function initCountryLayer() {
   //   'waterway-label'
   // );
   // countryLayer = 'adm1-fills';
-  map.getStyle().layers.map(function (layer) {
-    if (layer.id.indexOf('adm1-fills') >= 0) {
-      countryLayer = layer;
-      map.setPaintProperty(layer.id, 'fill-color', colorDefault);
-    }
-  });
-
-  map.setLayoutProperty(countryLayer, 'visibility', 'none');
+  map.setPaintProperty(countryLayer, 'fill-color', colorDefault);
 }
 
 function updateCountryLayer() {
