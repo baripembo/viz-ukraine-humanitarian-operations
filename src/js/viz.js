@@ -7,7 +7,7 @@ var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var foodPricesColor = '#3B97E1';
 var colorDefault = '#F2F2EF';
-var geomData, geomFilteredData, nationalData, accessData, subnationalData, timeseriesData, dataByCountry, totalCases, totalDeaths, maxCases, colorScale, currentCountry = '';
+var geomData, geomFilteredData, nationalData, accessData, subnationalData, timeseriesData, dataByCountry, totalCases, totalDeaths, maxCases, colorScale, currentCountry, currentCountryName = '';
   
 var countryCodeList = [];
 var currentIndicator = {};
@@ -160,12 +160,12 @@ $( document ).ready(function() {
         closeModal();
       }
 
-      updateGlobalMap();
+      updateGlobalLayer();
     });
     currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
 
     //back to global event
-    $('.menu h2').on('click', function() {
+    $('.country-menu h2').on('click', function() {
       resetMap();
     });
 
@@ -181,7 +181,7 @@ $( document ).ready(function() {
       }
     });
 
-    //set up radio button events
+    //country legend radio events
     $('input[type="radio"]').click(function(){
       var selected = $('input[name="countryIndicators"]:checked');
       currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};

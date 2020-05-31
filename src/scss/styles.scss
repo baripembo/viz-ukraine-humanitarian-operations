@@ -129,7 +129,7 @@ a:visited {
 		flex-flow: column;
 		overflow: scroll;
 		padding: 12px;
-		width: 270px;
+		width: 255px;
 	}
 	.content-right {
 		height: 100%;
@@ -139,7 +139,7 @@ a:visited {
 		.description,
 		.country-label,
 		.map-legend.global,
-		.menu-indicators,
+		.global-menu,
 		.global-stats {
 			display: none;
 		}
@@ -148,13 +148,9 @@ a:visited {
 			opacity: 1;
 			z-index: 1;
 		}
-		.country-panel {
-			// opacity: 1;
-			// display: block;
+		.country-menu {
+			display: block;
 		}
-		// #country-map {
-		// 	opacity: 1;
-		// }
 	}
 	&.food-prices-view {
 		.map-legend.global,
@@ -226,16 +222,26 @@ a:visited {
 .menu {
 	h2 {
 		padding-left: 20px;
-  	padding-bottom: 15px;
+	}
+	h4 {
+		font-size: 11px;
+		line-height: 12px;
+		padding: 15px 0 10px 20px;
+		text-transform: uppercase;
+	}
+	.global-menu {
+		display: block;
+	}
+	.country-menu {
+		display: none;
 	}
 }
 
 .menu-indicators {
-	display: block;
 	li {
 		color: #888;
 		cursor: pointer;
-		font-size: 16px;
+		font-size: 14px;
 		div {
 			align-items: center;
 			display: flex;
@@ -260,10 +266,12 @@ a:visited {
 .country-select,
 .indicator-select {    
 	background-color: #FFF;
-	font-family: 'Source Sans Pro', sans-serif;
-	font-size: 16px;
-	font-weight: 700;
+  border-color: #FFF;
+	border-radius: 8px;
+	box-shadow: 0 0 8px rgba(0,0,0,.3);
+	font: 700 16px 'Source Sans Pro', sans-serif;;
 	height: 48px;
+	padding: 0 20px;
 	width: 100%;
 }
 
@@ -323,7 +331,6 @@ a:visited {
 
 .label-header {
 	display: block;
-	font-weight: 700;
 	margin: 0;
 	padding-bottom: 0;
 }
@@ -386,11 +393,23 @@ a:visited {
 	input {
 		margin: 0 6px 0 0;
 	}
+	svg {
+		margin-top: 5px;
+		width: 190px;
+	}
+	.no-data {
+		height: 20px;
+		rect {
+			fill: #F2F2EF;
+		}
+		text {
+			transform: translate(25px, 12.5px);
+		}
+	}
 	&.global {
 		display: block;
-		svg {
-			margin-top: 10px;
-			width: 195px;
+		.legend-container {
+			height: 83px;
 		}
 	}
 	&.country {
@@ -402,12 +421,10 @@ a:visited {
 		label {
 			margin-top: 10px;
 		}
-		svg {
-			height: 110px;
-			margin-top: 10px;
+		.legend-container {
+			height: 118px;
 			overflow: visible;
 			transform: translate(0px, 20px);
-			width: 190px;
 			.legendTitle {
 				font-family: 'Gotham-Bold', sans-serif;
 		    letter-spacing: 0.2px;
@@ -466,47 +483,63 @@ circle.swatch {
 	display: none;
 }
 
-.description {
-	color: #A1A1A1;
-	font-weight: normal;
-	display: block;
-	padding: 0 20px 10px;
+.mapboxgl-popup.map-tooltip {
+	z-index: 2;
+	.mapboxgl-popup-content {
+		border-radius: 8px;
+	  box-shadow: 0 0 8px rgba(0,0,0,.3);
+		font-family: 'Source Sans Pro', sans-serif;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 18px;
+		padding: 15px;
+		h2 {
+			margin-bottom: 10px;
+		}
+		.stat {
+			font-size: 32px;
+			margin: 15px 0;
+		}
+		.cases {
+			color: #888;
+		}
+	}
 }
 
-.tooltip{
-  background-color: #FFF;
-  border: 0px;
-  border-radius: 3px;
-  color: #000;
-  font-size: 14px;
-  line-height: 18px;
-  height: 80px;
-  opacity: 0;
-  padding: 10px;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  transition: 0.3s opacity ease;
-  width: 200px;
-  z-index: 100;
-  &:after {
-    border-color: rgba(136, 183, 213, 0);
-    border: solid transparent;
-    border-top-color: #FFF;
-    border-width: 10px;
-    content: " ";
-    height: 0;
-    left: 50%;
-    margin-left: -10px;
-    pointer-events: none;
-    position: absolute;
-    top: 100%;
-    width: 0;
-  }
-  .label-header{
-    padding-bottom: 5px;
-  }
-}
+// .tooltip{
+//   background-color: #FFF;
+//   border: 0px;
+//   border-radius: 3px;
+//   color: #000;
+//   font-size: 14px;
+//   line-height: 18px;
+//   height: 80px;
+//   opacity: 0;
+//   padding: 10px;
+//   pointer-events: none;
+//   position: absolute;
+//   top: 0;
+//   transition: 0.3s opacity ease;
+//   width: 200px;
+//   z-index: 100;
+//   &:after {
+//     border-color: rgba(136, 183, 213, 0);
+//     border: solid transparent;
+//     border-top-color: #FFF;
+//     border-width: 10px;
+//     content: " ";
+//     height: 0;
+//     left: 50%;
+//     margin-left: -10px;
+//     pointer-events: none;
+//     position: absolute;
+//     top: 100%;
+//     width: 0;
+//   }
+//   .label-header{
+//     padding-bottom: 5px;
+//   }
+// }
 
 .country-panel {
 	background-color: #FFF;
@@ -518,6 +551,7 @@ circle.swatch {
 	top: 30px;
 	right: 30px;
 	width: 416px;
+	z-index: 1;
 	.panel-header {    
 		background-color: #FFF;
 		padding: 30px 0 15px;
