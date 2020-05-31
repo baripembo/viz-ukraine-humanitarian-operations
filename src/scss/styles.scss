@@ -589,7 +589,8 @@ circle.swatch {
 				height: 36px;
 			}
 		}
-		&.cases {
+		&.cases,
+		&.deaths {
 			.stat {
 				font-size: 52px;
 			}
