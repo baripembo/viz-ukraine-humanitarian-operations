@@ -4,10 +4,11 @@ var percentFormat = d3.format('.0%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
+var vaccinationColorRange = ['#F2645A','#EEEEEE'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var foodPricesColor = '#3B97E1';
 var colorDefault = '#F2F2EF';
-var geomData, geomFilteredData, nationalData, accessData, subnationalData, timeseriesData, dataByCountry, totalCases, totalDeaths, maxCases, colorScale, currentCountry, currentCountryName = '';
+var nationalData, accessData, subnationalData, vaccinationData, timeseriesData, dataByCountry, totalCases, totalDeaths, maxCases, colorScale, currentCountry, currentCountryName = '';
   
 var countryCodeList = [];
 var currentIndicator = {};
@@ -18,12 +19,12 @@ $( document ).ready(function() {
   var prod = true;//(window.location.href.indexOf('ocha-dap')>-1) ? true : false;
   console.log(prod);
   var isMobile = window.innerWidth<768? true : false;
-  var geomPath = 'data/worldmap.json';
   var nationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
   var subnationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv';
   var accessPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k/pub?gid=0&single=true&output=csv';
   var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
   var sourcesPath = 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D1837381168%26single%3Dtrue%26output%3Dcsv';
+  var vaccinationPath = 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT8m53T3ITzFdJWWKkdRRVRjezgt6MeeU5c2tJWl9SNff7SYn3iJ9_7DZZ_tYSmYI67-vH7cqze1VE0%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
 
@@ -34,20 +35,20 @@ $( document ).ready(function() {
 
   function getData() {
     Promise.all([
-      d3.json(geomPath),
       d3.json(nationalPath),
       d3.json(subnationalPath),
       d3.csv(accessPath),
       d3.csv(timeseriesPath),
-      d3.json(sourcesPath)
+      d3.json(sourcesPath),
+      d3.json(vaccinationPath)
     ]).then(function(data){
       //parse data
-      geomData = topojson.feature(data[0], data[0].objects.geom);
-      nationalData = data[1];
-      subnationalData = data[2];
-      accessData = data[3];
-      timeseriesData = data[4];
-      sourcesData = data[5];
+      nationalData = data[0];
+      subnationalData = data[1];
+      accessData = data[2];
+      timeseriesData = data[3];
+      sourcesData = data[4];
+      vaccinationData = data[5];
 
       //format data
       nationalData.forEach(function(item) {
@@ -60,24 +61,34 @@ $( document ).ready(function() {
         item['#org+count+num'] = +item['#org+count+num'];
       })
 
-      //parse out access labels
-      accessLabels = getAccessLabels(accessData[0]);
-
-      //group data by country    
-      dataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .object(nationalData);
-
-      console.log(nationalData)
-      console.log(subnationalData)
-
       //get list of priority countries
       nationalData.forEach(function(item, index) {
         countryCodeList.push(item['#country+code']);
       });
 
       //filter for priority countries
-      geomFilteredData = geomData.features.filter((country) => countryCodeList.includes(country.properties.ISO_A3));
+      vaccinationData = vaccinationData.filter((row) => countryCodeList.includes(row['#country+code']));
+
+      //parse out access labels
+      accessLabels = getAccessLabels(accessData[0]);
+
+      //group national data by country    
+      dataByCountry = d3.nest()
+        .key(function(d) { return d['#country+code']; })
+        .object(nationalData);
+
+      //group vaccination data by country    
+      vaccinationDataByCountry = d3.nest()
+        .key(function(d) { return d['#country+code']; })
+        .object(vaccinationData);
+
+      // vaccinationDataByCountry.forEach(function(country) {
+      //   console.log(country)
+      // })
+
+      console.log(nationalData)
+      console.log(subnationalData)
+      console.log(vaccinationDataByCountry)
 
       initDisplay();
       initMap();
@@ -116,7 +127,7 @@ $( document ).ready(function() {
     //set content height
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 120);
+    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 20);
 
     //set access constraints description    
     $('.description').text(accessLabels['#access+constraints']);

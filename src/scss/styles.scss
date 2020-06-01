@@ -114,11 +114,12 @@ a:visited {
 }
 
 .footnote {
-  bottom: 16px;
+  bottom: 34px;
   font-size: 11px;
   font-style: italic;
-  left: 80px;
+  left: 10px;
 	position: absolute;
+	z-index: 1;
 }
 
 .content {
@@ -285,7 +286,7 @@ a:visited {
 
 .global-stats {
 	background-color: #FFF;
-	bottom: 16px;
+	bottom: 25px;
 	display: block;
 	padding: 25px;
 	position: absolute;
@@ -401,6 +402,7 @@ a:visited {
 		height: 20px;
 		rect {
 			fill: #F2F2EF;
+			stroke: #CCC;
 		}
 		text {
 			transform: translate(25px, 12.5px);

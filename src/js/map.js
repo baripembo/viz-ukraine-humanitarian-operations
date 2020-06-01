@@ -1,13 +1,15 @@
-var map, globalLayer, countryLayer, tooltip;
+var map, globalLayer, globalCentroidLayer, countryLayer, countryCentroidLayer, tooltip, markerScale;
 function initMap() {
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh',
+    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh/draft',
     center: [10, 6],
-    minZoom: 2
+    minZoom: 2,
+    attributionControl: false
   });
 
-  map.addControl(new mapboxgl.NavigationControl());
+  map.addControl(new mapboxgl.NavigationControl())
+     .addControl(new mapboxgl.AttributionControl(), 'bottom-right');
 
   map.on('load', function() {
     //remove loader and show vis
@@ -19,14 +21,18 @@ function initMap() {
       if (layer.id.indexOf('adm0-fills') >= 0) {
         globalLayer = layer.id;
       }
+      else if (layer.id.indexOf('hrp25-centroid-int-uncs') >= 0) {
+        globalCentroidLayer = layer.id;
+      }
       else if (layer.id.indexOf('adm1-fills') >= 0) {
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
       }
-      else if (layer.id.indexOf('adm1-boundaries') >= 0) {
-        countryBoundaryLayer = layer.id;
-        map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
+      else if (layer.id.indexOf('hrp25-centroid-adm1-simplified-o') >= 0) {
+        countryCentroidLayer = layer.id;
+        map.setLayoutProperty(countryCentroidLayer, 'visibility', 'none');
       }
+
     });
 
     //init global and country layers
@@ -47,23 +53,39 @@ function initMap() {
 /*** GLOBAL MAP FUNCTIONS ***/
 /****************************/
 function initGlobalLayer() {
+  //create log scale for circle markers
+  markerScale = d3.scaleSqrt()
+    .domain([1, maxCases])
+    .range([2, 15]);
+  
   //color scale
   colorScale = getGlobalColorScale();
   setGlobalLegend(colorScale);
-  
+
   //data join
   var expression = ['match', ['get', 'ISO_3']];
+  var expressionMarkers = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
     var val = d[currentIndicator.id];
     var color = (val<0 || val=='') ? colorDefault : colorScale(val);
     expression.push(d['#country+code'], color);
+
+    //covid markers
+    var covidVal = d['#affected+infected'];
+    var size = markerScale(covidVal);
+    expressionMarkers.push(d['#country+code'], size);
   });
 
   //default value for no data
   expression.push(colorDefault);
+  expressionMarkers.push(0);
   
-  //set choropleths
+  //set properties
   map.setPaintProperty(globalLayer, 'fill-color', expression);
+  map.setPaintProperty(globalCentroidLayer, 'circle-radius', expressionMarkers);
+  //map.setPaintProperty(globalCentroidLayer, 'circle-opacity', 0.6);
+  map.setPaintProperty(globalCentroidLayer, 'circle-stroke-color', '#CCC');
+  map.setPaintProperty(globalCentroidLayer, 'circle-translate', [0,-10]);
 
   //define mouse events
   map.on('mouseenter', globalLayer, function(e) {
@@ -102,14 +124,17 @@ function initGlobalLayer() {
       else {
         updateCountryLayer();
         map.setLayoutProperty(globalLayer, 'visibility', 'none');
+        map.setLayoutProperty(globalCentroidLayer, 'visibility', 'none');
+        map.setLayoutProperty('adm0-label', 'visibility', 'none');
+        map.setLayoutProperty('wrl-polbndl-int-15m-uncs', 'visibility', 'none');
         map.setLayoutProperty(countryLayer, 'visibility', 'visible');
-        //map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'visible');
+        map.setLayoutProperty(countryCentroidLayer, 'visibility', 'visible');
         //var center = turf.centerOfMass(features);
         //console.log(center.geometry.coordinates)
         var bbox = turf.bbox(turf.featureCollection(features));
         var offset = 50;
         map.fitBounds(bbox, {
-          padding: {left: $('.map-legend.country').outerWidth()+offset, right: $('.country-panel').outerWidth()+offset},
+          padding: {left: $('.map-legend.country').outerWidth()+offset+10, right: $('.country-panel').outerWidth()+offset},
           linear: true
         });
 
@@ -186,6 +211,27 @@ function setGlobalLegend(scale) {
     nodata.append('text')
       .attr('class', 'label')
       .text('No Data');
+
+    //cases
+    $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
+    createSource($('.map-legend.global'), '#affected+infected');
+    var markersvg = div.append('svg')
+      .attr('height', '55px');
+    markersvg.append('g')
+      .attr("transform", "translate(5, 10)")
+      .attr('class', 'legendSize');
+
+    var legendSize = d3.legendSize()
+      .scale(markerScale)
+      .shape('circle')
+      .shapePadding(40)
+      .labelFormat(numFormat)
+      .labelOffset(15)
+      .cells(2)
+      .orient('horizontal');
+
+    markersvg.select('.legendSize')
+      .call(legendSize);
   }
   else {
     updateSource($('.indicator-source'), currentIndicator.id);
@@ -203,26 +249,6 @@ function setGlobalLegend(scale) {
   var g = d3.select('.map-legend.global .scale');
   g.call(legend);
 
-  //cases
-  // $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
-  // createSource($('.map-legend.global'), '#affected+infected');
-  // var markersvg = div.append('svg')
-  //   .attr('height', '55px');
-  // markersvg.append('g')
-  //   .attr("transform", "translate(5, 10)")
-  //   .attr('class', 'legendSize');
-
-  // var legendSize = d3.legendSize()
-  //   .scale(markerScale)
-  //   .shape('circle')
-  //   .shapePadding(40)
-  //   .labelFormat(numFormat)
-  //   .labelOffset(15)
-  //   .cells(2)
-  //   .orient('horizontal');
-
-  // markersvg.select('.legendSize')
-  //   .call(legendSize);
 }
 
 
@@ -236,7 +262,7 @@ function initCountryLayer() {
   var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
   createCountryLegend(countryColorScale);
 
-  //data join
+  //data join for choropleths
   var expression = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
     var val = (d['#country+code']==currentCountry) ? d[currentCountryIndicator.id] : '';
@@ -290,18 +316,26 @@ function updateCountryLayer() {
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
   var expressionOutline = ['match', ['get', 'ADM1_PCODE']];
+  var expressionText = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
     var val = (d['#country+code']==currentCountry) ? d[currentCountryIndicator.id] : '';
     var color  = (val<0 || val=='' || isNaN(val) || currentCountryIndicator.id=='#loc+count+health') ? colorDefault : countryColorScale(val);
     var colorOutline  = (d['#country+code']==currentCountry) ? '#CCC' : colorDefault;
+    var textOpacity = (d['#country+code']==currentCountry) ? 1 : 0;
     
     expression.push(d['#adm1+code'], color);
     expressionOutline.push(d['#adm1+code'], colorOutline);
+    expressionText.push(d['#adm1+code'], textOpacity);
   });
   expression.push(colorDefault);
   expressionOutline.push(colorDefault);
+  expressionText.push(0);
+
+  //set properties
   map.setPaintProperty(countryLayer, 'fill-color', expression);
   map.setPaintProperty(countryLayer, 'fill-outline-color', expressionOutline);
+  map.setLayoutProperty(countryCentroidLayer, 'visibility', 'visible');
+  map.setPaintProperty(countryCentroidLayer, 'text-opacity', expressionText);
 
   //toggle health layer
   if (currentCountryIndicator.id=='#loc+count+health') $('.health-layer').fadeIn()
@@ -446,6 +480,7 @@ function initCountryView() {
 
 function resetMap() {
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
+  map.setLayoutProperty(countryCentroidLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
   $('.country-panel').fadeOut();
   setSelect('countrySelect', '');
@@ -459,6 +494,9 @@ function resetMap() {
   });
   map.once('moveend', function() {
     map.setLayoutProperty(globalLayer, 'visibility', 'visible');
+    map.setLayoutProperty(globalCentroidLayer, 'visibility', 'visible');
+    map.setLayoutProperty('adm0-label', 'visibility', 'visible');
+    map.setLayoutProperty('wrl-polbndl-int-15m-uncs', 'visibility', 'visible');
   });
 }
 
