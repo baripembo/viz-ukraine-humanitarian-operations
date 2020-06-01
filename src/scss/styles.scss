@@ -464,6 +464,10 @@ a:visited {
 	display: block;
 }
 
+.label-num  {
+	fill: #000;
+}
+
 .health-marker,
 .count-marker,
 circle.swatch {
@@ -617,6 +621,7 @@ circle.swatch {
 			align-self: flex-start;
 			background-color: #888;
 			color: #FFF;
+			font-family: 'Source Sans Pro', sans-serif;
 			font-size: 14px;
 			font-weight: 700;
 			height: 16px;

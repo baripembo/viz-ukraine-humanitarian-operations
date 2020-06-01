@@ -9,7 +9,7 @@ function createBarChart(data, type) {
   var barHeight = 25;
   var barPadding = 20;
   var margin = {top: 0, right: 40, bottom: 30, left: 50},
-      width = 300,
+      width = 336,
       height = (barHeight + barPadding) * data.length;
   
   x = d3.scaleLinear()
