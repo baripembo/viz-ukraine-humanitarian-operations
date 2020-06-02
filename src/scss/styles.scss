@@ -401,7 +401,7 @@ a:visited {
 	.no-data {
 		height: 20px;
 		rect {
-			fill: #F2F2EF;
+			fill: #FFF;
 			stroke: #CCC;
 		}
 		text {
@@ -412,6 +412,9 @@ a:visited {
 		display: block;
 		.legend-container {
 			height: 83px;
+			&.vaccination-campaign {
+				height: 32px;
+			}
 		}
 	}
 	&.country {
@@ -490,6 +493,7 @@ circle.swatch {
 }
 
 .mapboxgl-popup.map-tooltip {
+	max-width: 270px;
 	z-index: 2;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
@@ -512,40 +516,31 @@ circle.swatch {
 	}
 }
 
-// .tooltip{
-//   background-color: #FFF;
-//   border: 0px;
-//   border-radius: 3px;
-//   color: #000;
-//   font-size: 14px;
-//   line-height: 18px;
-//   height: 80px;
-//   opacity: 0;
-//   padding: 10px;
-//   pointer-events: none;
-//   position: absolute;
-//   top: 0;
-//   transition: 0.3s opacity ease;
-//   width: 200px;
-//   z-index: 100;
-//   &:after {
-//     border-color: rgba(136, 183, 213, 0);
-//     border: solid transparent;
-//     border-top-color: #FFF;
-//     border-width: 10px;
-//     content: " ";
-//     height: 0;
-//     left: 50%;
-//     margin-left: -10px;
-//     pointer-events: none;
-//     position: absolute;
-//     top: 100%;
-//     width: 0;
-//   }
-//   .label-header{
-//     padding-bottom: 5px;
-//   }
-// }
+
+table {
+	font-size: 12px;
+	line-height: 14px;
+	th {
+		text-align: left;
+		vertical-align: bottom;
+	}
+	tr {
+		td {
+			&:first-child,
+			&:last-child {
+				font-weight: 700;
+			}
+		}
+		&.covid-postpone {
+			td {
+				&:first-child,
+				&:last-child {
+					color: #F2645A;
+				}
+			}
+		}
+	}
+}
 
 .country-panel {
 	background-color: #FFF;
