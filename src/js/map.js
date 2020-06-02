@@ -18,25 +18,6 @@ function initMap() {
 
     //get layers
     map.getStyle().layers.map(function (layer) {
-      // if (layer.id.indexOf('adm0-fills') >= 0) {
-      //   globalLayer = layer.id;
-      // }
-      // else if (layer.id.indexOf('hrp25-centroid-int-uncs') >= 0) {
-      //   globalMarkerLayer = layer.id;
-      // }
-      // else if (layer.id.indexOf('adm1-fills') >= 0) {
-      //   countryLayer = layer.id;
-      //   map.setLayoutProperty(countryLayer, 'visibility', 'none');
-      // }
-      // else if (layer.id.indexOf('hrp25-centroid-adm1-simplified-o') >= 0) {
-      //   countryLabelLayer = layer.id;
-      //   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
-      // }
-      // else if (layer.id.indexOf('hrp25-centroid-adm1-simplified-o-circle') >= 0) {
-      //   countryMarkerLayer = layer.id;
-      //   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
-      //   console.log('country markers')
-      // }
       switch(layer.id) {
         case 'adm0-fills':
           globalLayer = layer.id;
@@ -57,12 +38,6 @@ function initMap() {
           map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
           console.log('country markers')
           break;
-        // case '':
-        //   globalMarkerLayer = layer.id;
-        //   break;
-        // case '':
-        //   globalMarkerLayer = layer.id;
-        //   break;
         default:
           //do nothing
       }
