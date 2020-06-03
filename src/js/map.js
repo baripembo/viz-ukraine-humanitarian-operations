@@ -331,6 +331,14 @@ function setGlobalLegend(scale) {
 /*****************************/
 /*** COUNTRY MAP FUNCTIONS ***/
 /*****************************/
+function initCountryView() {
+  setSelect('countrySelect', currentCountry);
+  $('.content').addClass('country-view');
+  $('.country-panel').show().scrollTop(0);
+
+  initCountryPanel();
+}
+
 function initCountryLayer() {
   //color scale
   var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
@@ -438,15 +446,21 @@ function updateCountryLayer() {
 
 function checkIPCData() {
   var index = 0;
+  var isEmpty = false;
   subnationalData.forEach(function(d) {
     if (d['#country+code']==currentCountry) {
       var val = +d[currentCountryIndicator.id];
       if (index==0 && val==' ') {
-        currentCountryIndicator.id = '#affected+ch+food+p3+pct';
+        isEmpty = true;
+      }
+      if (isEmpty && index==1 && val!=' ') {
+        isEmpty = false;
       }
       index++;
     }
   });
+
+  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3+pct';
 }
 
 function getCountryIndicatorMax() {
@@ -594,13 +608,7 @@ function showMapTooltip(content) {
 }
 
 
-function initCountryView() {
-  setSelect('countrySelect', currentCountry);
-  $('.content').addClass('country-view');
-  $('.country-panel').show().scrollTop(0);
 
-  initCountryPanel();
-}
 
 
 function resetMap() {
