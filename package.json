@@ -1,8 +1,8 @@
 {
-  "name": "viz-starter",
+  "name": "viz-covid19-humanitarian-operations",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/OCHA-DAP/viz-starter.git",
+  "homepage": "https://github.com/OCHA-DAP/viz-covid19-humanitarian-operations",
   "main": " ",
   "scripts": {
     "start": "http-server ./dist -c-1 -p 3000",
