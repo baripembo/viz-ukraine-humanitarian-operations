@@ -82,6 +82,7 @@ $( document ).ready(function() {
         .key(function(d) { return d['#country+code']; })
         .entries(vaccinationData);
 
+      //format dates and set overall status
       vaccinationDataByCountry.forEach(function(country) {
         var postponed = 'On Track';
         country.values.forEach(function(campaign) {
@@ -102,7 +103,7 @@ $( document ).ready(function() {
       // console.log(subnationalData)
       console.log('Loading data...')
 
-      //show message for mobile users
+      //detect mobile users
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
         $('.mobile-message').show();
       }
@@ -110,12 +111,12 @@ $( document ).ready(function() {
         $(this).remove();
       });
 
-      initGlobalView();
+      initView();
       initMap();
     });
   }
 
-  function initGlobalView() {
+  function initView() {
     //create country select 
     var countrySelect = d3.select('.country-select')
       .selectAll('option')

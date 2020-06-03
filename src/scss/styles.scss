@@ -399,7 +399,7 @@ a:visited {
 		margin-top: 5px;
 		width: 190px;
 	}
-	.no-data {
+	.no-data-key {
 		height: 20px;
 		rect {
 			fill: #FFF;
@@ -434,6 +434,12 @@ a:visited {
 			.legendTitle {
 				font-family: 'Gotham-Bold', sans-serif;
 		    letter-spacing: 0.2px;
+			}
+			&.no-data {
+				height: 20px;
+				.legendCells {
+					display: none;
+				}
 			}
 		}
 		.source-container {
