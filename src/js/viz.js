@@ -17,9 +17,8 @@ var currentCountryIndicator = {};
 var accessLabels = {};
 
 $( document ).ready(function() {
-  var prod = (window.location.href.indexOf('ocha-dap')>-1) ? true : false;
+  var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')) ? true : false;
   //console.log(prod);
-  var isMobile = window.innerWidth<768? true : false;
   var nationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
   var subnationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv';
   //var accessPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k/pub?gid=0&single=true&output=csv';
@@ -29,9 +28,11 @@ $( document ).ready(function() {
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
 
-  var viewportWidth = window.innerWidth - $('.content-left').innerWidth();
+
+  var minWidth = 1000;
+  var viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
   var viewportHeight = window.innerHeight;
-  var tooltip = d3.select(".tooltip");
+  var tooltip = d3.select('.tooltip');
 
 
   function getData() {
@@ -99,14 +100,22 @@ $( document ).ready(function() {
 
       // console.log(nationalData)
       // console.log(subnationalData)
-      // console.log(sourcesData)
+      console.log('Loading data...')
 
-      initDisplay();
+      //show message for mobile users
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        $('.mobile-message').show();
+      }
+      $('.mobile-message').on('click', function() {
+        $(this).remove();
+      });
+
+      initGlobalView();
       initMap();
     });
   }
 
-  function initDisplay() {
+  function initGlobalView() {
     //create country select 
     var countrySelect = d3.select('.country-select')
       .selectAll('option')
@@ -119,10 +128,11 @@ $( document ).ready(function() {
     $('.country-select').prepend('<option value="">Select Country</option>');
     $('.country-select').val($('.country-select option:first').val());
 
-    //set content height
+    //set content sizes
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 40);
+    $('.content-right').css('min-width', viewportWidth);
+    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 50);
 
     //global stats
     maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
@@ -203,6 +213,7 @@ $( document ).ready(function() {
       'page type': 'datavis'
     });
   }
+
 
   getData();
   //initTracking();
