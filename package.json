@@ -1,8 +1,8 @@
 {
-  "name": "oad-dashboard",
+  "name": "viz-starter",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/OCHA-DAP/viz-covid19-humanitarian-operations",
+  "homepage": "https://github.com/OCHA-DAP/viz-starter.git",
   "main": " ",
   "scripts": {
     "start": "http-server ./dist -c-1 -p 3000",

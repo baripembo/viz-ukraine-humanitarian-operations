@@ -2,19 +2,21 @@
 <html>
   <head>
     <meta charset='utf-8' />
-    <title>Covid19 Humanitarian Operations</title>
+    <title>COVID-19 Humanitarian Operations</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link rel='icon' type='image/png' href='https://data.humdata.org/images/icons/hdx.ico' />
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.css"/>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
     <link href='css/styles.css' rel='stylesheet' />
     <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
-    <script src='//alexmacy.github.io/crossfilter/crossfilter.v1.min.js' defer></script>
+    <script src="//alexmacy.github.io/crossfilter/crossfilter.v1.min.js" defer></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
   </head>
 
   <body>
@@ -29,31 +31,52 @@
       <div class='content'>
         <div class='content-left'>
           <div class='menu'>
-            <h1>Covid-19 Impact on Humanitarian Operations</h1>
-            <h2>Global</h2>
+            <h1>COVID-19 incidence and impact in locations with a Humanitarian Response Plan</h1>
 
-            <ul class='menu-indicators'>
-              <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
-                <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
-                <p class='description small'></p>
-              </li>
-              <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
-                <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
-              </li>
-              <li data-id='#affected+inneed' data-legend='Number of People in Need'>
-                <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
-              </li>
-              <li data-id='#value+funding+hrp+pct' data-legend='HRP Funding Level'>
-                <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
-              </li>
-              <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
-                <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
-              </li>
-              <li data-id='#food-prices' data-legend='Food Market Prices'>
-                <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
-              </li>
-            </ul>
+            <div class='global-menu'>
+              <h2>Global</h2>
+              <h4>Vulnerability and Socio-Economic Risk</h4>
+              <ul class='menu-indicators'>
+                <!-- <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
+                  <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
+                  <p class='description small'></p>
+                </li> -->
+                <li data-id='#affected+inneed' data-legend='Number of People in Need' class='selected'>
+                  <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
+                </li>
+                <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
+                  <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
+                </li>
+                <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
+                  <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
+                </li>
+                <li data-id='#food-prices' data-legend='Food Market Prices'>
+                  <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
+                </li>
+                <li data-id='#vaccination-campaigns' data-legend='Vaccination Campaign Status'>
+                  <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
+                </li>
+              </ul>
+
+              <h4>Humanitarian Funding and International Financing</h4>
+              <ul class='menu-indicators'>
+                <li data-id='#value+funding+hrp+pct' data-legend='HRP Funding Level'>
+                  <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
+                </li>
+                <li data-id='#value+cerf+covid+funding+total+usd' data-legend='CERF COVID-19 Allocations'>
+                  <div><i class='humanitarianicons-Analysis'></i>CERF COVID-19 Allocations</div>
+                </li>
+                <li data-id='#value+cbpf+covid+funding+total+usd' data-legend='CBPF COVID-19 Allocations'>
+                  <div><i class='humanitarianicons-Analysis'></i>CBPF COVID-19 Allocations</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class='country-menu'>
+              <h2><a href="#">< Back to Global View</a></h2>
+            </div>
           </div>
+
           <div class='logos'>
             <a href='https://centre.humdata.org' target='_blank'>
               <img height='50' src='assets/logo-centre-gray.png'>
@@ -62,6 +85,7 @@
               <img height='37' src='assets/logo-ocha-gray.png'>
             </a>
           </div>
+
         </div>
 
         <div class='content-right'>
@@ -78,15 +102,9 @@
           </div>
           <select id='countrySelect' class='country-select'></select>
 
-          <div id='global-map'>  
-            <div id='country-map'></div>          
-            <div class='zoom-controls'>
-              <button id='zoom_in'>+</button>
-              <button id='zoom_out'>–</button>
-            </div>
+          <div id='global-map' style='width: 100%; height: 100%;'>
             <div class='global-stats'>
               <h2>COVID-19 Pandemic in 25 HRP Locations</h2>
-              <!-- <div class='global-timeseries-chart'></div> -->
               <div class='stats stats-priority'></div>
             </div>
             <div class='map-legend global'>
@@ -95,7 +113,7 @@
             </div>
             <div class='map-legend country'>
               <h4>MAP DATA LAYER</h4>
-              <label>Acute Food Insecurity<br>(% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+p3+pct' id='foodSecurity'></label>
+              <label>Acute Food Insecurity<br> (% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+ipc+p3+pct' id='foodSecurity'></label>
               <div class='source-container food-security-source'></div>
               <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
@@ -110,63 +128,63 @@
               <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
               <label>Measles <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='mcv'></label>
             </div>
-            <div class='food-prices-description'><h4>Click a country to explore prices for different products</h4></div>
-          </div>
+            <div class='food-prices-description'>
+              <h4>Click on a country to explore commodity prices</h4>
+              <!-- <p class="small source"><span class="date"> XXX</span> | <span class="source-name">WFP</span> | <a href="https://data.humdata.org/dataset/wfp-food-prices" class="dataURL" target="_blank">DATA</a></p> -->
+            </div>
 
-          <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
-          
-          <div class='country-panel'>
-            <div class='panel-header'>
-              <div class='panel-title'>
-                <img src='' class='flag'/>
-                <h3></h3>
+            <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
+            
+            <div class='country-panel'>
+              <div class='panel-header'>
+                <div class='panel-title'>
+                  <img src='' class='flag'/>
+                  <h3></h3>
+                </div>
+                <select id='indicatorSelect' class='indicator-select'>
+                  <option value=''>Jump to indicators</option>
+                  <option value='covid'>COVID-19 Cases and Projections</option>
+                  <!-- <option value='humanitarian-access'>Humanitarian Access - Constraints</option> -->
+                  <option value='hrp'>2020 HRP and COVID-19 funding</option>
+                  <option value='inform'>INFORM COVID Index</option>
+                  <option value='schools'>School Closure</option>
+                </select>
               </div>
-              <select id='indicatorSelect' class='indicator-select'>
-                <option value=''>Jump to indicators</option>
-                <option value='covid'>COVID-19 Cases and Projections</option>
-                <option value='humanitarian-access'>Humanitarian Access - Constraints</option>
-                <option value='hrp'>2020 HRP and COVID-19 funding</option>
-                <option value='inform'>INFORM COVID Index</option>
-                <option value='schools'>School Closure</option>
-              </select>
+              <div class='covid'>
+                <h5>COVID-19 Cases and Projections</h5>
+                <div class='panel-inner'></div>
+              </div>
+              <div class='panel-inner cases-timeseries'>
+                <div class='country-timeseries-chart'></div>
+              </div>
+              <div class='projections'>
+                <div class='panel-inner'></div>
+              </div>
+              <!-- <div class='humanitarian-access'>
+                <h5>Humanitarian Access - Constraints</h5>
+                <div class='panel-inner'></div>
+              </div> -->
+              <div class='hrp'>
+                <h5>2020 HRP and COVID-19 funding</h5>
+                <div class='panel-inner'></div>
+              </div>
+              <div class='inform'>
+                <h5>INFORM COVID Index</h5>
+                <div class='panel-inner'></div>
+              </div>
+              <div class='schools'>
+                <h5>School Closure</h5>
+                <div class='panel-inner'></div>
+              </div>
             </div>
-            <div class='covid'>
-              <h5>COVID-19 Cases and Projections</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='panel-inner cases-timeseries'>
-              <div class='country-timeseries-chart'></div>
-            </div>
-            <div class='projections'>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='humanitarian-access'>
-              <h5>Humanitarian Access - Constraints</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='hrp'>
-              <h5>2020 HRP and COVID-19 funding</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='inform'>
-              <h5>INFORM COVID Index</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='schools'>
-              <h5>School Closure</h5>
-              <div class='panel-inner'></div>
-            </div>
+
           </div>
         </div>
 
       </div>
-      
-      <div class='tooltip'><div class='tooltip-inner'></div></div>
 
     </main>
 
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
-    
     <!-- start Mixpanel -->
     <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
       0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
