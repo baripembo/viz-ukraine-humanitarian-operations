@@ -18,7 +18,7 @@ var accessLabels = {};
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1) ? true : false;
-  console.log(prod);
+  //console.log(prod);
   var isMobile = window.innerWidth<768? true : false;
   var nationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
   var subnationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv';
@@ -92,13 +92,14 @@ $( document ).ready(function() {
 
         nationalData.forEach(function(item) {
           if (item['#country+code'] == country.key) {
-            item['#vaccination-campaign'] = postponed;
+            item['#vaccination-campaigns'] = postponed;
           }
         });
       });
 
-      console.log(nationalData)
-      console.log(subnationalData)
+      // console.log(nationalData)
+      // console.log(subnationalData)
+      // console.log(sourcesData)
 
       initDisplay();
       initMap();
@@ -121,7 +122,7 @@ $( document ).ready(function() {
     //set content height
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 20);
+    $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 40);
 
     //global stats
     maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })

@@ -147,7 +147,7 @@ a:visited {
 		.map-legend.country {
 			left: 40px;
 			opacity: 1;
-			z-index: 1;
+			z-index: 3;
 		}
 		.country-menu {
 			display: block;
@@ -281,7 +281,7 @@ a:visited {
 	position: absolute;
 	top: 40px;
 	width: 215px;
-	z-index: 100;
+	z-index: 3;
 }
 
 .global-stats {
@@ -292,7 +292,7 @@ a:visited {
 	position: absolute;
 	right: 24px;
 	width: 416px;
-	z-index: 101;
+	z-index: 3;
 	.stats {
 		display: flex;
 		padding-top: 20px;
@@ -381,7 +381,7 @@ a:visited {
 	position: absolute;
 	top: 120px;
 	width: 215px;
-	z-index: 1;
+	z-index: 3;
 	label {    
 		display: flex;
   	flex-direction: row-reverse;
@@ -494,7 +494,7 @@ circle.swatch {
 
 .mapboxgl-popup.map-tooltip {
 	max-width: 270px;
-	z-index: 2;
+	z-index: 4;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
 	  box-shadow: 0 0 8px rgba(0,0,0,.3);

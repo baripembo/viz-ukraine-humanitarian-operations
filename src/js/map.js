@@ -253,7 +253,7 @@ function getGlobalColorScale() {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, 1]).range(reverseRange);
   }
-  else if (currentIndicator.id=='#vaccination-campaign') {
+  else if (currentIndicator.id=='#vaccination-campaigns') {
     scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
   }
   else {
@@ -321,7 +321,7 @@ function setGlobalLegend(scale) {
   var g = d3.select('.map-legend.global .scale');
   g.call(legend);
 
-  if (currentIndicator.id=='#vaccination-campaign')
+  if (currentIndicator.id=='#vaccination-campaigns')
     $('.legend-container').addClass('vaccination-campaign');
   else
     $('.legend-container').removeClass('vaccination-campaign');
@@ -493,9 +493,9 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  if (currentIndicator.id.indexOf('food') >-1) {
-    ('.map-legend.country .food-security-source').empty();
-    createSource($('.map-legend.country .food-security-source'), currentIndicator.id);
+  if (currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3+pct') {
+    $('.map-legend.country .food-security-source').empty();
+    createSource($('.map-legend.country .food-security-source'), currentCountryIndicator.id);
   }
 
   var legendFormat;
@@ -531,7 +531,7 @@ function createMapTooltip(country_code, country_name){
   var val = country[0][currentIndicator.id];
 
   //format content for tooltip
-  if (currentIndicator.id=='#vaccination-campaign') {
+  if (currentIndicator.id=='#vaccination-campaigns') {
     var vaccData = [];
     vaccinationDataByCountry.forEach(function(country) {
       if (country.key==country_code) {
