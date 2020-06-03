@@ -17,12 +17,12 @@ var currentCountryIndicator = {};
 var accessLabels = {};
 
 $( document ).ready(function() {
-  var prod = true;//(window.location.href.indexOf('ocha-dap')>-1) ? true : false;
+  var prod = (window.location.href.indexOf('ocha-dap')>-1) ? true : false;
   console.log(prod);
   var isMobile = window.innerWidth<768? true : false;
   var nationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
   var subnationalPath = (prod) ? 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv' : 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTP8bQCTObeCb8j6binSiC0PmU_sCh6ZdfDnK9s28Pi89I-7DT_KhcVw-ZQTcWi4_VplTBBeMnP1d68%2Fpub%3Fgid%3D433791951%26single%3Dtrue%26output%3Dcsv';
-  var accessPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k/pub?gid=0&single=true&output=csv';
+  //var accessPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k/pub?gid=0&single=true&output=csv';
   var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
   var sourcesPath = 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT9_g7AItbqJwDkPi55VyVhqOdB81c3FePhqAoFlIL9160mxqtqg-OofaoTZtdq39BATa37PYQ4813k%2Fpub%3Fgid%3D1837381168%26single%3Dtrue%26output%3Dcsv';
   var vaccinationPath = 'https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&force=on&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vT8m53T3ITzFdJWWKkdRRVRjezgt6MeeU5c2tJWl9SNff7SYn3iJ9_7DZZ_tYSmYI67-vH7cqze1VE0%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv';
@@ -38,18 +38,18 @@ $( document ).ready(function() {
     Promise.all([
       d3.json(nationalPath),
       d3.json(subnationalPath),
-      d3.csv(accessPath),
       d3.csv(timeseriesPath),
       d3.json(sourcesPath),
       d3.json(vaccinationPath)
+      //d3.csv(accessPath),
     ]).then(function(data){
       //parse data
       nationalData = data[0];
       subnationalData = data[1];
-      accessData = data[2];
-      timeseriesData = data[3];
-      sourcesData = data[4];
-      vaccinationData = data[5];
+      timeseriesData = data[2];
+      sourcesData = data[3];
+      vaccinationData = data[4];
+      //accessData = data[5];
 
       //format data
       nationalData.forEach(function(item) {
@@ -69,7 +69,7 @@ $( document ).ready(function() {
       vaccinationData = vaccinationData.filter((row) => countryCodeList.includes(row['#country+code']));
 
       //parse out access labels
-      accessLabels = getAccessLabels(accessData[0]);
+      //accessLabels = getAccessLabels(accessData[0]);
 
       //group national data by country    
       dataByCountry = d3.nest()
@@ -84,6 +84,9 @@ $( document ).ready(function() {
       vaccinationDataByCountry.forEach(function(country) {
         var postponed = 'On Track';
         country.values.forEach(function(campaign) {
+          var d = moment(campaign['#date+start'], ['YYYY-MM','MM/DD/YYYY']);
+          var date = new Date(d.year(), d.month(), d.date());
+          campaign['#date+start'] = (isNaN(date.getTime())) ? campaign['#date+start'] : getMonth(date.getMonth()) + ' ' + date.getFullYear();
           if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) postponed = 'Postponed / May postpone';
         });
 
@@ -96,7 +99,6 @@ $( document ).ready(function() {
 
       console.log(nationalData)
       console.log(subnationalData)
-      console.log(vaccinationDataByCountry)
 
       initDisplay();
       initMap();
@@ -129,23 +131,8 @@ $( document ).ready(function() {
     createKeyFigure('.stats-priority', 'Total Confirmed Deaths', 'deaths', totalDeaths);
     createSource($('.global-stats'), '#affected+infected');
 
-    //country select event
-    // d3.select('.country-select').on('change',function(e) {
-    //   var selected = d3.select('.country-select').node().value;
-    //   if (selected=='') {
-    //     resetMap();
-    //   }
-    //   else {        
-    //     currentCountry = selected;
-
-    //     if (currentIndicator.id=='#food-prices') {
-    //       openModal(currentCountry);
-    //     }
-    //     else {
-    //       getCountryData();
-    //     }
-    //   }
-    // });
+    //set food prices source
+    createSource($('.food-prices-description'), '#food-prices');
 
     //menu events
     $('.menu-indicators li').on('click', function() {
@@ -170,7 +157,6 @@ $( document ).ready(function() {
     $('.country-menu h2').on('click', function() {
       resetMap();
     });
-
 
     //country panel indicator select event
     d3.select('.indicator-select').on('change',function(e) {
