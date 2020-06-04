@@ -1,8 +1,9 @@
 var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
 function initMap() {
+  console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh/draft',
+    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh',
     center: [10, 6],
     minZoom: 2,
     attributionControl: false
@@ -14,75 +15,83 @@ function initMap() {
   map.on('load', function() {
     console.log('Map loaded')
     
-    //remove loader and show vis
-    $('.loader').hide();
-    $('main, footer').css('opacity', 1);
-
-    //get layers
-    map.getStyle().layers.map(function (layer) {
-      switch(layer.id) {
-        case 'adm0-fills':
-          globalLayer = layer.id;
-          break;
-        case 'adm0-label':
-          globalLabelLayer = layer.id;
-          break;
-        case 'hrp25-centroid-int-uncs':
-          globalMarkerLayer = layer.id;
-          break;
-        case 'adm1-fills':
-          countryLayer = layer.id;
-          map.setLayoutProperty(countryLayer, 'visibility', 'none');
-          break;
-        case 'hrp25-centroid-adm1-simplified-o':
-          countryLabelLayer = layer.id;
-          map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
-          break;
-        case 'adm1-marker-points':
-          countryMarkerLayer = layer.id;
-          map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
-          break;
-        default:
-          //do nothing
-      }
-    });
-
-    mapFeatures = map.queryRenderedFeatures();
-
-    //country select event
-    d3.select('.country-select').on('change',function(e) {
-      var selected = d3.select('.country-select').node().value;
-      if (selected=='') {
-        resetMap();
-      }
-      else {        
-        currentCountry = selected;
-        currentCountryName = d3.select('.country-select option:checked').text();
-
-        //find matched features
-        var selectedFeatures = matchMapFeatures(currentCountry);
-        
-        if (currentIndicator.id=='#food-prices') {
-          openModal(currentCountryName);
-        }
-        else {
-          selectCountry(selectedFeatures);
-        }
-      }
-    });
-
-    //init global and country layers
-    initGlobalLayer();
-    initCountryLayer();
-
-    //create tooltip
-    tooltip = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      className: 'map-tooltip'
-    });
+    mapLoaded = true;
+    if (dataLoaded==true) displayMap();
   });
 }
+
+function displayMap() {
+  console.log('Display map')
+
+  //remove loader and show vis
+  $('.loader').hide();
+  $('main, footer').css('opacity', 1);
+
+  //get layers
+  map.getStyle().layers.map(function (layer) {
+    switch(layer.id) {
+      case 'adm0-fills':
+        globalLayer = layer.id;
+        break;
+      case 'adm0-label':
+        globalLabelLayer = layer.id;
+        break;
+      case 'hrp25-centroid-int-uncs':
+        globalMarkerLayer = layer.id;
+        break;
+      case 'adm1-fills':
+        countryLayer = layer.id;
+        map.setLayoutProperty(countryLayer, 'visibility', 'none');
+        break;
+      case 'hrp25-centroid-adm1-simplified-o':
+        countryLabelLayer = layer.id;
+        map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
+        break;
+      case 'adm1-marker-points':
+        countryMarkerLayer = layer.id;
+        map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
+        break;
+      default:
+        //do nothing
+    }
+  });
+
+  mapFeatures = map.queryRenderedFeatures();
+
+  //country select event
+  d3.select('.country-select').on('change',function(e) {
+    var selected = d3.select('.country-select').node().value;
+    if (selected=='') {
+      resetMap();
+    }
+    else {        
+      currentCountry = selected;
+      currentCountryName = d3.select('.country-select option:checked').text();
+
+      //find matched features
+      var selectedFeatures = matchMapFeatures(currentCountry);
+      
+      if (currentIndicator.id=='#food-prices') {
+        openModal(currentCountryName);
+      }
+      else {
+        selectCountry(selectedFeatures);
+      }
+    }
+  });
+
+  //init global and country layers
+  initGlobalLayer();
+  initCountryLayer();
+
+  //create tooltip
+  tooltip = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+    className: 'map-tooltip'
+  });
+}
+
 
 function matchMapFeatures(country_code) {
   //loop through mapFeatures to find matches to currentCountry

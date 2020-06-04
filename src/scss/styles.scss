@@ -337,40 +337,9 @@ a:visited {
 	padding-bottom: 0;
 }
 
-#global-map,
-#country-map{
-	fill: #A6D8E8;
-  position: relative;
-  .map-regions{
-    stroke: #CCC;
-    cursor: pointer;
-    transition: fill 0.5s ease;
-  }
-  .zoom-controls {
-    position: absolute;
-    left: 40px;
-    bottom: 20px;
-    display: grid;
-    grid-gap: 5px;  
-    button {
-      width: 30px;
-      height: 30px;
-      font-size: 18px;
-      border-radius: 50% !important;
-      background: #FFF;
-      color: #000;
-      border: none;
-      user-select: none;
-      cursor: pointer;
-      text-align: center;
-    }
-    button:active {
-      background: rgba(255, 255, 255, 0.8);
-    }
-    button:focus {
-      outline: 0;
-    }
-  }
+#global-map {
+	height: 100%;
+	width: 100%;
 }
 
 .map-legend {
@@ -727,6 +696,12 @@ table {
 }
 
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 767px) {}
 
+@media only screen and (max-height: 696px) {
+	.map-legend {
+		&.country {
+			overflow: scroll;
+		}
+	}
 }
