@@ -387,7 +387,6 @@ function updateCountryLayer() {
   if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
 
   $('.map-legend.country .legend-container').removeClass('no-data');
-  //$('.map-legend.country .legend-container').show();
   var max = getCountryIndicatorMax();
   if (currentCountryIndicator.id.indexOf('pct')>0 && max>0) max = 1;
   if (currentCountryIndicator.id=='#org+count+num') max = roundUp(max, 10);
@@ -455,7 +454,6 @@ function updateCountryLayer() {
     updateCountryLegend(countryColorScale);
   else
     $('.map-legend.country .legend-container').addClass('no-data');
-    //$('.map-legend.country .legend-container').hide();
 }
 
 function checkIPCData() {
@@ -555,7 +553,7 @@ function updateCountryLegend(scale) {
 /*************************/
 /*** TOOLTIP FUNCTIONS ***/
 /*************************/
-function createMapTooltip(country_code, country_name){
+function createMapTooltip(country_code, country_name) {
   var country = nationalData.filter(c => c['#country+code'] == country_code);
   var val = country[0][currentIndicator.id];
 
@@ -598,8 +596,7 @@ function createMapTooltip(country_code, country_name){
   showMapTooltip(content);
 }
 
-function createCountryMapTooltip(adm1_name){
-  console.log('createCountryMapTooltip',currentCountry)
+function createCountryMapTooltip(adm1_name) {
   var adm1 = subnationalData.filter(function(c) {
     if (c['#adm1+name']==adm1_name && c['#country+code']==currentCountry)
       return c;
