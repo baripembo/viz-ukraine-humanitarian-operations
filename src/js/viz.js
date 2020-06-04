@@ -44,8 +44,8 @@ $( document ).ready(function() {
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.content-right').css('min-width', viewportWidth);
-    //$('.map-legend.country').height(viewportHeight - parseInt($('.map-legend.country').css('top')) - 50);
     $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 50);
+    if (viewportHeight<696) $('.map-legend.country').height(viewportHeight - parseInt($('.map-legend.country').css('top')) - 60);
 
     getData();
     initMap();

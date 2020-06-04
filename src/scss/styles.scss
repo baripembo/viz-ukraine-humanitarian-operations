@@ -704,4 +704,18 @@ table {
 			overflow: scroll;
 		}
 	}
+	.global-stats {
+		width: 290px;
+		.stats {
+			flex-flow: column;
+			.key-figure {
+				width: 100%;
+				&:first-child {
+					.inner {
+						border-bottom: 0;
+					}
+				}
+			}
+		}
+	}
 }
