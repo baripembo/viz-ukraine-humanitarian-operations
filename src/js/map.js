@@ -12,6 +12,8 @@ function initMap() {
      .addControl(new mapboxgl.AttributionControl(), 'bottom-right');
 
   map.on('load', function() {
+    console.log('Map loaded')
+    
     //remove loader and show vis
     $('.loader').hide();
     $('main, footer').css('opacity', 1);

@@ -36,6 +36,7 @@ $( document ).ready(function() {
 
 
   function getData() {
+    console.log('Loading data...')
     Promise.all([
       d3.json(nationalPath),
       d3.json(subnationalPath),
@@ -101,7 +102,8 @@ $( document ).ready(function() {
 
       // console.log(nationalData)
       // console.log(subnationalData)
-      console.log('Loading data...')
+      console.log('Data loaded')
+      console.log('Loading map')
 
       //detect mobile users
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
