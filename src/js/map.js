@@ -467,7 +467,6 @@ function updateCountryLayer() {
   else
     $('.map-legend.country .legend-container').addClass('no-data');
 
-
   //load pop density raster
   var id = currentCountry.toLowerCase();
   var raster = '';
@@ -676,7 +675,6 @@ function createCountryMapTooltip(adm1_name) {
 function showMapTooltip(content) {
   tooltip.setHTML(content);
 }
-
 
 
 function resetMap() {
