@@ -1,9 +1,9 @@
-var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
+var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
 function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh',
+    style: 'mapbox://styles/humdata/ckaoa6kf53laz1ioek5zq97qh/draft',
     center: [10, 6],
     minZoom: 1,
     zoom: 2,
@@ -43,6 +43,10 @@ function displayMap() {
       case 'adm1-fills':
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
+        break;
+      case 'adm1-boundaries':
+        countryBoundaryLayer = layer.id;
+        map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
         break;
       case 'hrp25-centroid-adm1-simplified-o':
         countryLabelLayer = layer.id;
@@ -216,6 +220,7 @@ function selectCountry(features) {
   map.setLayoutProperty(globalLayer, 'visibility', 'none');
   map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLayer, 'visibility', 'visible');
+  map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
@@ -418,16 +423,14 @@ function updateCountryLayer() {
 
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
-  var expressionOutline = ['match', ['get', 'ADM1_PCODE']];
-  var expressionText = ['match', ['get', 'ADM1_PCODE']];
+  var expressionOpacity = ['match', ['get', 'ADM1_PCODE']];
   //var expressionMarkers = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
-    var color, colorOutline, textOpacity, markerSize;
+    var color, layerOpacity, markerSize;
     if (d['#country+code']==currentCountry) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || val==' ' || isNaN(val)) ? colorNoData : countryColorScale(val);
-      colorOutline = '#CCC';
-      textOpacity = 1;
+      layerOpacity = 1;
 
       //health facility markers
       // var healthVal = (currentCountryIndicator.id=='#loc+count+health') ? d['#loc+count+health'] : 0;
@@ -435,25 +438,22 @@ function updateCountryLayer() {
     }
     else {
       color = colorDefault;
-      colorOutline = colorDefault;
-      textOpacity = 0;
-      markerSize = 0;
+      layerOpacity = 0;
+      //markerSize = 0;
     }
     
     expression.push(d['#adm1+code'], color);
-    expressionOutline.push(d['#adm1+code'], colorOutline);
-    expressionText.push(d['#adm1+code'], textOpacity);
+    expressionOpacity.push(d['#adm1+code'], layerOpacity);
     //expressionMarkers.push(d['#adm1+code'], markerSize);
   });
   expression.push(colorDefault);
-  expressionOutline.push(colorDefault);
-  expressionText.push(0);
+  expressionOpacity.push(0);
   //expressionMarkers.push(0);
 
   //set properties
   map.setPaintProperty(countryLayer, 'fill-color', expression);
-  map.setPaintProperty(countryLayer, 'fill-outline-color', expressionOutline);
-  map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionText);
+  map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
+  map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
   //set health facility markers
   // map.setPaintProperty(countryMarkerLayer, 'circle-radius', expressionMarkers);
@@ -466,6 +466,51 @@ function updateCountryLayer() {
     updateCountryLegend(countryColorScale);
   else
     $('.map-legend.country .legend-container').addClass('no-data');
+
+
+  //load pop density raster
+  var id = currentCountry.toLowerCase();
+  var raster = '';
+  switch(id) {
+    case 'ukr':
+      raster = 'adkwa0bw';
+      break;
+    case 'bdi':
+      raster = '85uxb0dw';
+      break;
+    case 'col':
+      raster = 'awxirkoh';
+      break;
+    case 'pse':
+      raster = '1emy37d7';
+      break;
+    default:
+      //
+  }
+
+  if (currentCountryIndicator.id=='#population' && raster!='') {
+    map.addSource(id+'-pop-tileset', {
+      type: 'raster',
+      url: 'mapbox://humdata.'+raster
+    });
+
+    map.addLayer(
+      {
+        'id': id+'-popdensity',
+        'type': 'raster',
+        'source': id+'-pop-tileset'
+      },
+      countryBoundaryLayer
+    );
+  }
+  else {
+    if (map.getLayer(id+'-popdensity')) {
+      map.removeLayer(id+'-popdensity');
+    }
+    if (map.getSource(id+'-pop-tileset')) {
+      map.removeSource(id+'-pop-tileset');
+    }
+  }
 }
 
 function checkIPCData() {
