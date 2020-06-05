@@ -488,6 +488,15 @@ function updateCountryLayer() {
       //
   }
 
+
+  if (map.getLayer(id+'-popdensity')) {
+    map.removeLayer(id+'-popdensity');
+  }
+  if (map.getSource(id+'-pop-tileset')) {
+    map.removeSource(id+'-pop-tileset');
+  }
+
+
   if (currentCountryIndicator.id=='#population' && raster!='') {
     map.addSource(id+'-pop-tileset', {
       type: 'raster',
@@ -502,14 +511,6 @@ function updateCountryLayer() {
       },
       countryBoundaryLayer
     );
-  }
-  else {
-    if (map.getLayer(id+'-popdensity')) {
-      map.removeLayer(id+'-popdensity');
-    }
-    if (map.getSource(id+'-pop-tileset')) {
-      map.removeSource(id+'-pop-tileset');
-    }
   }
 }
 
@@ -680,6 +681,16 @@ function showMapTooltip(content) {
 
 
 function resetMap() {
+
+  var id = currentCountry.toLowerCase();
+  if (map.getLayer(id+'-popdensity')) {
+    map.removeLayer(id+'-popdensity');
+  }
+  if (map.getSource(id+'-pop-tileset')) {
+    map.removeSource(id+'-pop-tileset');
+  }
+
+  
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
