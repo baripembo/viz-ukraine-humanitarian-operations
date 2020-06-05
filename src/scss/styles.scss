@@ -130,6 +130,7 @@ a:visited {
 		flex-flow: column;
 		overflow: scroll;
 		padding: 12px;
+		min-width: 255px;
 		width: 255px;
 	}
 	.content-right {
@@ -336,40 +337,9 @@ a:visited {
 	padding-bottom: 0;
 }
 
-#global-map,
-#country-map{
-	fill: #A6D8E8;
-  position: relative;
-  .map-regions{
-    stroke: #CCC;
-    cursor: pointer;
-    transition: fill 0.5s ease;
-  }
-  .zoom-controls {
-    position: absolute;
-    left: 40px;
-    bottom: 20px;
-    display: grid;
-    grid-gap: 5px;  
-    button {
-      width: 30px;
-      height: 30px;
-      font-size: 18px;
-      border-radius: 50% !important;
-      background: #FFF;
-      color: #000;
-      border: none;
-      user-select: none;
-      cursor: pointer;
-      text-align: center;
-    }
-    button:active {
-      background: rgba(255, 255, 255, 0.8);
-    }
-    button:focus {
-      outline: 0;
-    }
-  }
+#global-map {
+	height: 100%;
+	width: 100%;
 }
 
 .map-legend {
@@ -398,7 +368,7 @@ a:visited {
 		margin-top: 5px;
 		width: 190px;
 	}
-	.no-data {
+	.no-data-key {
 		height: 20px;
 		rect {
 			fill: #FFF;
@@ -433,6 +403,12 @@ a:visited {
 			.legendTitle {
 				font-family: 'Gotham-Bold', sans-serif;
 		    letter-spacing: 0.2px;
+			}
+			&.no-data {
+				height: 20px;
+				.legendCells {
+					display: none;
+				}
 			}
 		}
 		.source-container {
@@ -590,12 +566,12 @@ table {
 				height: 36px;
 			}
 		}
-		&.cases,
-		&.deaths {
-			.stat {
-				font-size: 52px;
-			}
-		}
+		// &.cases,
+		// &.deaths {
+		// 	.stat {
+		// 		font-size: 52px;
+		// 	}
+		// }
 		&.risk-class {
 			.stat {
 				font-size: 32px;
@@ -698,6 +674,34 @@ table {
 	}
 }
 
-@media only screen and (max-width: 767px) {
+.mobile-message {    
+  background-color: rgba(0,0,0,0.5);
+  display: none;
+	position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  .message {
+  	color: #FFF;
+  	padding: 20px;
+  	text-align: center;
+  }
+  .mobile-close-btn {
+  	color: #FFF;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
 
+
+@media only screen and (max-width: 767px) {}
+
+@media only screen and (max-height: 696px) {
+	.map-legend {
+		&.country {
+			overflow: scroll;
+		}
+	}
 }
