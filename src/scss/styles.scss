@@ -22,7 +22,7 @@ body {
 }
 
 main {
-  opacity: 0;
+  //opacity: 0;
   transition: 0.5s all ease;
 }
 
@@ -279,6 +279,7 @@ a:visited {
 
 .country-select {
 	left: 40px;
+	opacity: 0;
 	position: absolute;
 	top: 40px;
 	width: 215px;
@@ -289,6 +290,7 @@ a:visited {
 	background-color: #FFF;
 	bottom: 25px;
 	display: block;
+	opacity: 0;
 	padding: 25px;
 	position: absolute;
 	right: 24px;
@@ -338,8 +340,20 @@ a:visited {
 }
 
 #global-map {
+	background-color: #99DAEA;
 	height: 100%;
 	width: 100%;
+	visibility: hidden;
+}
+
+#static-map {
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .map-legend {
@@ -347,6 +361,7 @@ a:visited {
 	color: #000;
 	fill: #000;
 	left: 40px;
+	opacity: 0;
 	padding: 15px 20px 5px;
 	position: absolute;
 	top: 120px;

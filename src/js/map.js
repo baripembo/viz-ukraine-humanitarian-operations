@@ -21,12 +21,61 @@ function initMap() {
   });
 }
 
+function createEvents() {
+  //menu events
+  $('.menu-indicators li').on('click', function() {
+    $('.menu-indicators li').removeClass('selected')
+    $(this).addClass('selected');
+    currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
+
+    //set food prices view
+    if (currentIndicator.id=='#food-prices') {
+      $('.content').addClass('food-prices-view');
+    }
+    else {
+      $('.content').removeClass('food-prices-view');
+      closeModal();
+    }
+
+    updateGlobalLayer();
+  });
+  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
+  
+  //back to global event
+  $('.country-menu h2').on('click', function() {
+    resetMap();
+  });
+
+  //country panel indicator select event
+  d3.select('.indicator-select').on('change',function(e) {
+    var selected = d3.select('.indicator-select').node().value;
+    if (selected!='') {
+      var container = $('.country-panel');
+      var section = $('.'+selected);
+      var offset = $('.panel-header').innerHeight();
+      container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop() - offset}, 300);
+    }
+  });
+
+  //country legend radio events
+  $('input[type="radio"]').click(function(){
+    var selected = $('input[name="countryIndicators"]:checked');
+    currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
+    updateCountryLayer();
+  });
+}
+
 function displayMap() {
-  console.log('Display map')
+  console.log('Display map');
 
   //remove loader and show vis
-  $('.loader').hide();
-  $('main, footer').css('opacity', 1);
+  $('.loader').remove();
+  $('.country-select, .map-legend, .global-stats').css('opacity', 1);
+
+  $('#global-map').css('visibility', 'visible');
+  $('#static-map').remove();
+
+  createEvents();
 
   //get layers
   map.getStyle().layers.map(function (layer) {
@@ -143,6 +192,7 @@ function initGlobalLayer() {
   
   //set properties
   map.setPaintProperty(globalLayer, 'fill-color', expression);
+  map.setPaintProperty(globalMarkerLayer, 'circle-opacity', 1);
   map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
   map.setPaintProperty(globalMarkerLayer, 'circle-translate', [0,-10]);
 

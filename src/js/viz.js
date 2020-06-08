@@ -46,53 +46,12 @@ $( document ).ready(function() {
     $('.footnote').width(viewportWidth - $('.global-stats').innerWidth() - 50);
     if (viewportHeight<696) $('.map-legend.country').height(viewportHeight - parseInt($('.map-legend.country').css('top')) - 60);
 
+
+    var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckaoa6kf53laz1ioek5zq97qh/static/10,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
+    $('#static-map').css('background-image', 'url('+staticURL+')');
+  
     getData();
     initMap();
-    createEvents();
-  }
-
-  function createEvents() {
-    //menu events
-    $('.menu-indicators li').on('click', function() {
-      $('.menu-indicators li').removeClass('selected')
-      $(this).addClass('selected');
-      currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-
-      //set food prices view
-      if (currentIndicator.id=='#food-prices') {
-        $('.content').addClass('food-prices-view');
-      }
-      else {
-        $('.content').removeClass('food-prices-view');
-        closeModal();
-      }
-
-      updateGlobalLayer();
-    });
-    currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
-    
-    //back to global event
-    $('.country-menu h2').on('click', function() {
-      resetMap();
-    });
-
-    //country panel indicator select event
-    d3.select('.indicator-select').on('change',function(e) {
-      var selected = d3.select('.indicator-select').node().value;
-      if (selected!='') {
-        var container = $('.country-panel');
-        var section = $('.'+selected);
-        var offset = $('.panel-header').innerHeight();
-        container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop() - offset}, 300);
-      }
-    });
-
-    //country legend radio events
-    $('input[type="radio"]').click(function(){
-      var selected = $('input[name="countryIndicators"]:checked');
-      currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
-      updateCountryLayer();
-    });
   }
 
   function getData() {
@@ -102,6 +61,9 @@ $( document ).ready(function() {
       d3.csv(timeseriesPath)
     ]).then(function(data) {
       console.log('Data loaded')
+
+      $('.loader span').text('Initializing map...');
+      
       dataLoaded = true;
       if (mapLoaded==true) displayMap();
 
