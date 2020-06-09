@@ -139,6 +139,8 @@ function initGlobalLayer() {
   
   //set properties
   map.setPaintProperty(globalLayer, 'fill-color', expression);
+  map.setPaintProperty(globalMarkerLayer, 'circle-opacity', 1);
+  map.setPaintProperty(globalMarkerLayer, 'circle-stroke-opacity', 1);
   map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
   map.setPaintProperty(globalMarkerLayer, 'circle-translate', [0,-10]);
 
