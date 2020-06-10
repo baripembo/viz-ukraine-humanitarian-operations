@@ -2,7 +2,7 @@
 /*** PANEL FUNCTIONS ***/
 /***********************/
 function initCountryPanel() {
-  var data = dataByCountry[currentCountry][0];
+  var data = dataByCountry[currentCountry.code][0];
 
   //timeseries
   updateTimeseries(timeseriesData, data['#country+name']);

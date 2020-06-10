@@ -6,11 +6,11 @@ var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var vaccinationColorRange = ['#F2645A','#EEEEEE'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
-var foodPricesColor = '#3B97E1';
+var foodPricesColor = '#007CE1';
 var travelColor = '#007CE1';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, dataByCountry, colorScale, currentCountry, currentCountryName = '';
+var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, dataByCountry, colorScale = '';
 var mapLoaded = false;
 var dataLoaded = false;
 
@@ -19,6 +19,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var accessLabels = {};
 var popDataByCountry = {};
+var currentCountry = {};
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')) ? true : false;

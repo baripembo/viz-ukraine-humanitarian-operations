@@ -72,11 +72,11 @@ function displayMap() {
       resetMap();
     }
     else {        
-      currentCountry = selected;
-      currentCountryName = d3.select('.country-select option:checked').text();
+      currentCountry.code = selected;
+      currentCountry.name = d3.select('.country-select option:checked').text();
 
       //find matched features and zoom to country
-      var selectedFeatures = matchMapFeatures(currentCountry);
+      var selectedFeatures = matchMapFeatures(currentCountry.code);
       selectCountry(selectedFeatures);
     }
   });
@@ -95,10 +95,10 @@ function displayMap() {
 
 
 function matchMapFeatures(country_code) {
-  //loop through mapFeatures to find matches to currentCountry
+  //loop through mapFeatures to find matches to currentCountry.code
   var selectedFeatures = [];
   mapFeatures.forEach(function(feature) {
-    if (feature.sourceLayer=='hrp25_polbnda_int_15m_uncs' && feature.properties.ISO_3==currentCountry) {
+    if (feature.sourceLayer=='hrp25_polbnda_int_15m_uncs' && feature.properties.ISO_3==currentCountry.code) {
       selectedFeatures.push(feature)
     }
   });
@@ -246,20 +246,20 @@ function handleGlobalEvents(layer) {
     });
   
     if (target!=null) {
-      currentCountry = target.properties.ISO_3;
-      currentCountryName = target.properties.Terr_Name;
+      currentCountry.code = target.properties.ISO_3;
+      currentCountry.name = target.properties.Terr_Name;
 
-      if (currentCountry!=undefined) {
+      if (currentCountry.code!=undefined) {
         if (currentIndicator.id=='#food-prices') {
-          openModal(currentCountryName);
+          openModal(currentCountry.name);
         }
         if (currentIndicator.id=='#severity+travel') {
-          setTravelDescription(currentCountry, currentCountryName);
+          setTravelDescription(currentCountry);
         }
         // else {
         //   //get all geometry for PSE
-        //   if (currentCountry=='PSE') {
-        //     var features = matchMapFeatures(currentCountry);
+        //   if (currentCountry.code=='PSE') {
+        //     var features = matchMapFeatures(currentCountry.code);
         //   }
         //   selectCountry(features);
         // }
@@ -269,9 +269,14 @@ function handleGlobalEvents(layer) {
   });
 }
 
-function setTravelDescription(country_name) {
-  var content = '<h2 class="title">'+ country_name +'</h2>';
-  $('.layer-description .description-content').append(content);
+function setTravelDescription(country) { 
+  var data = dataByCountry[country.code][0];
+  var text = truncateString(data['#severity+travel'], 275);
+  var content = '<h2 class="title">'+ country.name +'</h2>';
+  content += '<span class="small">Published on: '+ data['#severity+date+travel'] +'</span>';
+  content += '<p>Restrictions: '+ text +'</p>';
+  content += '<a href="https://unwfp.maps.arcgis.com/apps/opsdashboard/index.html#/db5b5df309ac4f10bfd36145a6f8880e" target="_blank">Read More&nbsp;&nbsp;<i class="humanitarianicons-Out-of-platform"></i></a>';
+  $('.layer-description .description-content').empty().append(content);
 }
 
 
@@ -335,8 +340,8 @@ function updateGlobalLayer() {
     map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
 
     var layer = $('.layer-description');
-    layer.find('.description-content').empty();    
-    createSource($('.layer-description .description-content'), currentIndicator.id);
+    layer.find('.description-content, .description-source').empty();    
+    createSource($('.layer-description .description-source'), currentIndicator.id);
     if (currentIndicator.id=='#food-prices') {
       layer.find('h4').text('Click on a country to explore commodity prices');
     }
@@ -468,8 +473,8 @@ function initCountryLayer() {
 
   map.on('mousemove', countryLayer, function(e) {
     var f = map.queryRenderedFeatures(e.point)[0];
-    if (f.properties.ADM0_REF=='State of Palestine' || f.properties.ADM0_REF=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_REF = currentCountryName;
-    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountryName) {
+    if (f.properties.ADM0_REF=='State of Palestine' || f.properties.ADM0_REF=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_REF = currentCountry.name;
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
       map.getCanvas().style.cursor = 'pointer';
       createCountryMapTooltip(f.properties.ADM1_REF);
       tooltip
@@ -502,7 +507,7 @@ function updateCountryLayer() {
 
   //create log scale for circle markers
   // var healthFacilityMax = d3.max(subnationalData, function(d) {
-  //   if (d['#country+code']==currentCountry)
+  //   if (d['#country+code']==currentCountry.code)
   //     return +d['#loc+count+health']; 
   // })
   // var markerScale = d3.scaleSqrt()
@@ -515,7 +520,7 @@ function updateCountryLayer() {
   //var expressionMarkers = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
     var color, layerOpacity, markerSize;
-    if (d['#country+code']==currentCountry) {
+    if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || val==' ' || isNaN(val)) ? colorNoData : countryColorScale(val);
       layerOpacity = 1;
@@ -556,7 +561,7 @@ function updateCountryLayer() {
     $('.map-legend.country .legend-container').addClass('no-data');
 
   //load pop density raster
-  var id = currentCountry.toLowerCase();
+  var id = currentCountry.code.toLowerCase();
   var raster = '';
   switch(id) {
     case 'ukr':
@@ -606,7 +611,7 @@ function checkIPCData() {
   var index = 0;
   var isEmpty = false;
   subnationalData.forEach(function(d) {
-    if (d['#country+code']==currentCountry) {
+    if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       if (index==0 && val==' ') {
         isEmpty = true;
@@ -623,7 +628,7 @@ function checkIPCData() {
 
 function getCountryIndicatorMax() {
   var max =  d3.max(subnationalData, function(d) { 
-    if (d['#country+code']==currentCountry) {
+    if (d['#country+code']==currentCountry.code) {
       return +d[currentCountryIndicator.id]; 
     }
   });
@@ -748,7 +753,7 @@ function createMapTooltip(country_code, country_name) {
 
 function createCountryMapTooltip(adm1_name) {
   var adm1 = subnationalData.filter(function(c) {
-    if (c['#adm1+name']==adm1_name && c['#country+code']==currentCountry)
+    if (c['#adm1+name']==adm1_name && c['#country+code']==currentCountry.code)
       return c;
   });
 
@@ -775,20 +780,26 @@ function showMapTooltip(content) {
 
 
 function resetMap() {
-  var id = currentCountry.toLowerCase();
+  var id = currentCountry.code.toLowerCase();
   if (map.getLayer(id+'-popdensity')) {
     map.removeLayer(id+'-popdensity');
   }
   if (map.getSource(id+'-pop-tileset')) {
     map.removeSource(id+'-pop-tileset');
   }
-
   
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
   $('.country-panel').fadeOut();
   setSelect('countrySelect', '');
+
+  if (currentIndicator.id=='#food-prices') {
+    $('.content').addClass('food-prices-view');
+  }
+  if (currentIndicator.id=='#severity+travel') {
+    $('.content').addClass('travel-restrictions-view');
+  }
 
   updateGlobalLayer();
 
@@ -799,7 +810,7 @@ function resetMap() {
   });
   map.once('moveend', function() {
     map.setLayoutProperty(globalLayer, 'visibility', 'visible');
-    map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
+    //map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
   });
 }
 

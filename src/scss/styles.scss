@@ -178,10 +178,21 @@ a:visited {
 	top: 120px;
 	width: 240px;
 	z-index: 1;
+	.description-source {
+		padding-top: 10px;
+	}
 	.description-content {
 		padding-top: 5px;
 		.title {
 			padding-top: 30px;
+		}
+		p {
+			margin: 0;
+		}
+		a {
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 14px;
+			text-decoration: none;
 		}
 	}
 }
