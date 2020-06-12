@@ -268,7 +268,6 @@ function createSparkline(data, div) {
   data.forEach(function(d) {
     d.date = parseDate(d.date);
     d.value = +d.value;
-    console.log(d.value)
   });
 
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -276,6 +275,7 @@ function createSparkline(data, div) {
 
   var svg = d3.select(div)
     .append('svg')
+    .attr('class', 'sparkline')
     .attr('width', width)
     .attr('height', height)
     .append('g')

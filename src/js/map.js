@@ -269,7 +269,7 @@ function handleGlobalEvents(layer) {
      
   map.on('mouseleave', globalLayer, function() {
     map.getCanvas().style.cursor = '';
-    tooltip.remove();
+    //tooltip.remove();
   });
 
   map.on('click', function(e) {
@@ -742,23 +742,25 @@ function createMapTooltip(country_code, country_name) {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
 
-      //covid cases layer show sparkline
-      if (currentIndicator.id=='#covid+trend+pct') {
-        var sparklineArray = [];
-        covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d.date, value: d.pc_growth_rate};
-          sparklineArray.push(obj);
-        });
-        //content += '<div class="sparkline"></div>';
-        //createSparkline(sparklineArray, '.global-figures')
-      }
-
       //covid cases and deaths
       content += '<div class="cases">COVID-19 Cases: ' + numFormat(country[0]['#affected+infected']) + '<br/>';
       content += 'COVID-19 Deaths: ' + numFormat(country[0]['#affected+killed']) + '</div>';
     }
 
-    showMapTooltip(content);
+    tooltip.setHTML(content);
+
+    //covid cases layer show sparkline
+    if (currentIndicator.id=='#covid+trend+pct') {
+      $('.sparkline').remove();
+      var sparklineArray = [];
+      covidTrendData[country_code].forEach(function(d) {
+        var obj = {date: d.date, value: d.pc_growth_rate};
+        sparklineArray.push(obj);
+      });
+      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat')
+    }
+
+    //showMapTooltip(content);
   }
   lastHovered = country_code;
 }
