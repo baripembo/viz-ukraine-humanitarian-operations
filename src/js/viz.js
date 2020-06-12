@@ -10,14 +10,12 @@ var foodPricesColor = '#007CE1';
 var travelColor = '#007CE1';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, dataByCountry, colorScale = '';
+var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale = '';
 var mapLoaded = false;
 var dataLoaded = false;
 
-var countryCodeList = [];
 var currentIndicator = {};
 var currentCountryIndicator = {};
-var accessLabels = {};
 var popDataByCountry = {};
 var currentCountry = {};
 
@@ -63,7 +61,8 @@ $( document ).ready(function() {
     console.log('Loading data...')
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
-      d3.csv(timeseriesPath)
+      d3.csv(timeseriesPath),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/date_window/hrp_covid_rates.json')
     ]).then(function(data) {
       console.log('Data loaded')
       $('.loader span').text('Initializing map...');
@@ -71,6 +70,7 @@ $( document ).ready(function() {
       //parse data
       var allData = data[0];
       timeseriesData = data[1];
+      covidTrendData = data[2];
       worldData = allData.world_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
@@ -94,18 +94,18 @@ $( document ).ready(function() {
       var numCERF = 0;
       var numCBPF = 0;
       nationalData.forEach(function(item) {
-        //create list of priority countries
-        countryCodeList.push(item['#country+code']);
-
         //normalize PSE name
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
 
         //calculate and inject PIN percentage
-        item['#affected+inneed+pct'] = item['#affected+inneed']/popDataByCountry[item['#country+code']];
-
+        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
+       
         //tally countries with cerf and cbpf data
         if (item['#value+cerf+covid+funding+total+usd']!='') numCERF++;
         if (item['#value+cbpf+covid+funding+total+usd']!='') numCBPF++;
+
+        //store covid daily increase %
+        item['#covid+trend+pct'] = (covidTrendData[item['#country+code']]!=undefined) ? covidTrendData[item['#country+code']][0].pc_growth_rate/100 : 0;
       })
 
       //inject data to world data
@@ -116,9 +116,6 @@ $( document ).ready(function() {
       dataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
         .object(nationalData);
-
-      //filter for priority countries
-      vaccinationData = vaccinationData.filter((row) => countryCodeList.includes(row['#country+code']));
 
       //group vaccination data by country    
       vaccinationDataByCountry = d3.nest()
@@ -140,7 +137,8 @@ $( document ).ready(function() {
         });
       });
 
-      console.log(nationalData)
+      //console.log(nationalData)
+      //console.log(covidTrendData)
       // console.log(subnationalData)
 
       dataLoaded = true;
@@ -151,10 +149,11 @@ $( document ).ready(function() {
   }
 
   function initView() {
-    //create country select 
+    //create country select
+    var hrpData = nationalData.filter((row) => countryCodeList.includes(row['#country+code']));
     var countrySelect = d3.select('.country-select')
       .selectAll('option')
-      .data(nationalData)
+      .data(hrpData)
       .enter().append('option')
         .text(function(d) { return d['#country+name']; })
         .attr('value', function (d) { return d['#country+code']; });

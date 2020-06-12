@@ -248,12 +248,42 @@ function updateTimeseries(data, selected) {
   countryTimeseriesChart.focus(selected);
   $('.c3-chart-lines .c3-line').css('stroke', '#999');
   $('.c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
-  // Update colors
-  // countryTimeseriesChart.data.colors({
-  //   'Sudan': '#007CE1',
-  // });
 
   $('.country-timeseries-chart .timeseries-legend').remove();
   createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);
+}
+
+
+function createSparkline(data, div) {
+  var width = 75;
+  var height = 24;
+  var x = d3.scaleLinear().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+  var parseDate = d3.timeParse("%Y-%m-%d");
+  var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.value); })
+    .curve(d3.curveBasis);
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+    console.log(d.value)
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.value; }));
+
+  var svg = d3.select(div)
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(0, 2)');
+    
+  svg.append('path')
+   .datum(data)
+   .attr('class', 'sparkline')
+   .attr('d', line);
 }
 

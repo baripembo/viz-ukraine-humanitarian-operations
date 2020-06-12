@@ -67,3 +67,31 @@ function setSelect(id, valueToSelect) {
   let element = document.getElementById(id);
   element.value = valueToSelect;
 }
+
+const countryCodeList = [
+  'AFG',
+  'BDI',
+  'BFA',
+  'CAF',
+  'CMR',
+  'COD',
+  'COL',
+  'ETH',
+  'HTI',
+  'IRQ',
+  'LBY',
+  'MLI',
+  'MMR',
+  'NER',
+  'NGA',
+  'PSE',
+  'SDN',
+  'SOM',
+  'SSD',
+  'SYR',
+  'TCD',
+  'UKR',
+  'VEN',
+  'YEM',
+  'ZWE'
+];
