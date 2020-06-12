@@ -59,9 +59,9 @@ function createSource(div, indicator) {
 
 function updateSource(div, indicator) {
   var sourceObj = getSource(indicator);
-  var date = (sourceObj==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
-  var sourceName = (sourceObj==undefined) ? '' : sourceObj['#meta+source'];
-  var sourceURL = (sourceObj==undefined) ? '#' : sourceObj['#meta+url'];
+  var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
+  var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
+  var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
   div.find('.date').text(date);
   div.find('.source-name').text(sourceName);
   div.find('.dataURL').attr('href', sourceURL);
