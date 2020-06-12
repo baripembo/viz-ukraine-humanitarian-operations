@@ -27,18 +27,13 @@
         <h4>This dashboard is best viewed on a desktop</h4>
       </div>
     </div>
-    
-    <div class='loader'>
-      <div class="sp sp-circle"></div>
-      Loading data...
-    </div>
 
     <main>
       
       <div class='content'>
         <div class='content-left'>
           <div class='menu'>
-            <h1>COVID-19 incidence and impact in locations with a Humanitarian Response Plan</h1>
+            <h1>COVID-19 and Humanitarian Operations</h1>
 
             <div class='global-menu'>
               <h2>Global</h2>
@@ -48,7 +43,10 @@
                   <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
                   <p class='description small'></p>
                 </li> -->
-                <li data-id='#affected+inneed' data-legend='Number of People in Need' class='selected'>
+                <li data-id='#covid+trend+pct' data-legend='Daily % increase of COVID-19 cases (last 7 days average)' class='selected'>
+                  <div><i class='humanitarianicons-Analysis'></i>Daily % Increase of COVID-19 Cases</div>
+                </li>
+                <li data-id='#affected+inneed+pct' data-legend='Percent of People in Need'>
                   <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
                 </li>
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
@@ -62,6 +60,9 @@
                 </li>
                 <li data-id='#vaccination-campaigns' data-legend='Vaccination Campaign Status'>
                   <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
+                </li>
+                <li data-id='#severity+travel' data-legend='Travel Restrictions'>
+                  <div><i class='humanitarianicons-Analysis'></i>Travel Restrictions</div>
                 </li>
               </ul>
 
@@ -84,14 +85,14 @@
             </div>
           </div>
 
-          <div class='logos'>
+<!--           <div class='logos'>
             <a href='https://centre.humdata.org' target='_blank'>
               <img height='50' src='assets/logo-centre-gray.png'>
             </a>
             <a href='https://www.unocha.org' target='_blank'>
               <img height='37' src='assets/logo-ocha-gray.png'>
             </a>
-          </div>
+          </div> -->
 
         </div>
 
@@ -109,9 +110,9 @@
           </div>
           <select id='countrySelect' class='country-select'></select>
 
-          <div class='global-stats'>
-            <h2>COVID-19 Pandemic in 25 HRP Locations</h2>
-            <div class='stats stats-priority'></div>
+          <div class='global-figures'>
+            <h2>COVID-19 Pandemic in 63 GHRP Locations</h2>
+            <div class='figures'></div>
           </div>
             
           <div id='global-map'>
@@ -136,9 +137,10 @@
               <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
               <label>Measles <input name='countryIndicators' type='radio' value='#population+mcv1+pct+vaccinated' id='mcv'></label>
             </div>
-            <div class='food-prices-description'>
-              <h4>Click on a country to explore commodity prices</h4>
-              <!-- <p class="small source"><span class="date"> XXX</span> | <span class="source-name">WFP</span> | <a href="https://data.humdata.org/dataset/wfp-food-prices" class="dataURL" target="_blank">DATA</a></p> -->
+            <div class='layer-description'>
+              <h4></h4>
+              <div class='description-source'></div>
+              <div class='description-content'></div>
             </div>
 
             <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
@@ -186,6 +188,11 @@
               </div>
             </div>
 
+          </div>
+          <div id="static-map"></div>
+          <div class='loader'>
+            <div class="sp sp-circle"></div>
+            <span>Loading data...</span>
           </div>
         </div>
 

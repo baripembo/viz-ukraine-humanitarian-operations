@@ -7,6 +7,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	z-index: 3;
 }
 
 .modal-loader {
@@ -35,4 +36,12 @@
 @keyframes spCircRot {
 	from { transform: rotate(0deg); }
 	to { transform: rotate(359deg); }
+}
+
+@media only screen and (max-width: 1535px) { //1535 is static map max width 1280 + left nav width
+	.loader,
+	.modal-loader {
+		background-color: rgba(255, 255, 255, 0.9);
+		padding: 10px 20px;
+	}
 }

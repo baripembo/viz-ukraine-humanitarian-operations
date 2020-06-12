@@ -144,6 +144,7 @@ var countryTimeseriesChart;
 function createTimeSeries(array, div) {
 	var chart = c3.generate({
     size: {
+      width: 336,
       height: 240
     },
     padding: {
@@ -162,7 +163,7 @@ function createTimeSeries(array, div) {
 			columns: array,
       type: 'spline',
       color: function() {
-        return '#007CE1';
+        return '#999';
       }
 		},
     spline: {
@@ -175,8 +176,6 @@ function createTimeSeries(array, div) {
 			x: {
 				type: 'timeseries',
 				tick: {
-          //count: 8,
-				  //format: '%-m/%-d/%y',
           count: 5,
           format: '%b %d, %Y',
           outer: false
@@ -217,10 +216,11 @@ function createTimeSeries(array, div) {
 }
 
 
-function createTimeseriesLegend(chart, div) {
+function createTimeseriesLegend(chart, div, country) {
   var names = [];
   chart.data.shown().forEach(function(d) {
-    names.push(d.id)
+    if (d.id==country)
+      names.push(d.id)
   });
 
   //custom legend
@@ -234,28 +234,56 @@ function createTimeseriesLegend(chart, div) {
       return '<span></span>'+id;
     })
     .each(function(id) {
-      d3.select(this).select('span').style('background-color', chart.color(id));
+      d3.select(this).select('span').style('background-color', '#007CE1');
     })
     .on('mouseover', function(id) {
       chart.focus(id);
     })
     .on('mouseout', function(id) {
-      chart.revert();
+      //chart.revert();
     });
 }
 
 function updateTimeseries(data, selected) {
-  var updatedData = (selected != undefined) ? data.filter((country) => selected.includes(country['Country Code'])) : data;
-  var timeseriesArray = formatTimeseriesData(updatedData);
+  countryTimeseriesChart.focus(selected);
+  $('.c3-chart-lines .c3-line').css('stroke', '#999');
+  $('.c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
 
-  //load new data
-  countryTimeseriesChart.load({
-    columns: timeseriesArray,
-    unload: true,
-    done: function() {
-      $('.country-timeseries-chart .timeseries-legend').remove();
-      createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart');
-    }
+  $('.country-timeseries-chart .timeseries-legend').remove();
+  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);
+}
+
+
+function createSparkline(data, div) {
+  var width = 75;
+  var height = 24;
+  var x = d3.scaleLinear().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+  var parseDate = d3.timeParse("%Y-%m-%d");
+  var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.value); })
+    .curve(d3.curveBasis);
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+    console.log(d.value)
   });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.value; }));
+
+  var svg = d3.select(div)
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(0, 2)');
+    
+  svg.append('path')
+   .datum(data)
+   .attr('class', 'sparkline')
+   .attr('d', line);
 }
 

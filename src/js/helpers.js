@@ -48,12 +48,13 @@ function truncateString(str, num) {
 }
 
 function formatValue(val) {
+  var format = d3.format('$.3s');
   var value;
   if (val=='') {
     value = 'NA';
   }
   else {
-    value = (isNaN(val) || val==0) ? val : d3.format('$.3s')(val).replace(/G/, 'B');
+    value = (isNaN(val) || val==0) ? val : format(val).replace(/G/, 'B');
   }
   return value;
 }
@@ -67,18 +68,30 @@ function setSelect(id, valueToSelect) {
   element.value = valueToSelect;
 }
 
-function getAccessLabels(data) {
-  var accessData = Object.entries(data);
-  var accessLabels = {};
-  accessData.forEach(function(item) {
-    if (item[1].indexOf('access')>-1)
-      accessLabels[item[1]] = item[0];
-  });
-  return accessLabels;
-}
-
-function createKeyFigure(target, title, className, value) {
-  var targetDiv = $(target);
-  //<p class='date small'><span>"+ date +"</span></p>
-  return targetDiv.append("<div class='key-figure'><div class='inner'><h3>"+ title +"</h3><div class='num " + className + "'>"+ numFormat(value) +"</div></div></div></div>");
-}
+const countryCodeList = [
+  'AFG',
+  'BDI',
+  'BFA',
+  'CAF',
+  'CMR',
+  'COD',
+  'COL',
+  'ETH',
+  'HTI',
+  'IRQ',
+  'LBY',
+  'MLI',
+  'MMR',
+  'NER',
+  'NGA',
+  'PSE',
+  'SDN',
+  'SOM',
+  'SSD',
+  'SYR',
+  'TCD',
+  'UKR',
+  'VEN',
+  'YEM',
+  'ZWE'
+];
