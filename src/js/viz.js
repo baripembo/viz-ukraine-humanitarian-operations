@@ -7,7 +7,7 @@ var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var vaccinationColorRange = ['#F2645A','#EEEEEE'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var foodPricesColor = '#007CE1';
-var travelColor = '#007CE1';//'#6EB4ED'
+var travelColor = '#F2645A';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale = '';
@@ -62,7 +62,7 @@ $( document ).ready(function() {
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.csv(timeseriesPath),
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/date_window/hrp_covid_rates.json')
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json')
     ]).then(function(data) {
       console.log('Data loaded')
       $('.loader span').text('Initializing map...');
@@ -93,6 +93,8 @@ $( document ).ready(function() {
       //parse national data
       var numCERF = 0;
       var numCBPF = 0;
+      var numIFI = 0;
+      var numPIN = 0;
       nationalData.forEach(function(item) {
         //normalize PSE name
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
@@ -100,17 +102,23 @@ $( document ).ready(function() {
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
        
-        //tally countries with cerf and cbpf data
+        //tally countries with cerf, cbpf, and pin data
         if (item['#value+cerf+covid+funding+total+usd']!='') numCERF++;
         if (item['#value+cbpf+covid+funding+total+usd']!='') numCBPF++;
+        if (item['#value+ifi+percap']!='') numIFI++;
+        if (item['#affected+inneed']!='') numPIN++;
 
-        //store covid daily increase %
-        item['#covid+trend+pct'] = (covidTrendData[item['#country+code']]!=undefined) ? covidTrendData[item['#country+code']][0].pc_growth_rate/100 : 0;
+        //store covid trend data
+        var covidByCountry = covidTrendData[item['#country+code']];
+        item['#covid+trend+pct'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_pc_change/100 : 0;
+        item['#covid+cases+per+capita'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht : 0;
       })
 
       //inject data to world data
+      worldData.numPINCountries = numPIN;
       worldData.numCERFCountries = numCERF;
       worldData.numCBPFCountries = numCBPF;
+      worldData.numIFICountries = numIFI;
 
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()
@@ -138,8 +146,7 @@ $( document ).ready(function() {
       });
 
       //console.log(nationalData)
-      //console.log(covidTrendData)
-      // console.log(subnationalData)
+      //console.log(subnationalData)
 
       dataLoaded = true;
       if (mapLoaded==true) displayMap();

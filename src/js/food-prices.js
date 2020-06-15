@@ -41,12 +41,14 @@ function getCountryIDs() {
       var results = [];
       data.result.records.forEach(function(e){
         getCountryNames(e.adm0_id);
+        console.log('--',e.adm0_id)
       });
     }
   });     
 }
 
 function getCountryNames(adm0) {
+      console.log('adm0',adm0)
   var sql = 'SELECT distinct adm0_name FROM "'  +datastoreID + '" where adm0_id=' + adm0;
 
   $.ajax({
@@ -54,6 +56,7 @@ function getCountryNames(adm0) {
     url: dataDomain + '/api/3/action/datastore_search_sql?sql=' + encodeURIComponent(sql),
     success: function(data) {
     	countryLookup[data.result.records[0].adm0_name] = adm0;
+      //console.log('////',data.result.records[0].adm0_name)
       //initCountry(adm0, data.result.records[0].adm0_name);
     }
   });

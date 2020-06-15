@@ -277,13 +277,64 @@ function createSparkline(data, div) {
     .append('svg')
     .attr('class', 'sparkline')
     .attr('width', width)
-    .attr('height', height)
+    .attr('height', height+5)
     .append('g')
-    .attr('transform', 'translate(0, 2)');
+      .attr('transform', 'translate(0,0)');
     
   svg.append('path')
    .datum(data)
    .attr('class', 'sparkline')
    .attr('d', line);
+}
+
+
+function createTrendBarChart(data, div) {
+  var total = data.length;
+  var barMargin = 1;
+  var barWidth = 3;//width/total - barMargin;
+  var width = (barWidth+barMargin) * data.length;
+  var height = 24;
+  var parseDate = d3.timeParse("%Y-%m-%d");
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+  });
+  var min = d3.min(data, function(d) { return d.value; });
+  var max = d3.max(data, function(d) { return d.value; });
+
+  var x = d3.scaleTime()
+    .domain([data[0].date, data[total-1].date])
+    .range([0, width]);
+
+  // set the ranges
+  var y = d3.scaleLinear()
+    .domain(d3.extent(data, function(d) { return d.value; }))
+    .range([height, 0]);
+
+  var svg = d3.select(div)
+    .append('svg')
+    .attr('width', width+barWidth)
+    .attr('height', height)
+    .append('g')
+      .attr('x', 0)
+      .attr('transform', 'translate(0,0)');
+
+  // append bars
+  var bars = svg.selectAll('.bar')
+    .data(data)
+    .enter().append('rect')
+    .attr('class', 'bar')
+    .attr('x', function(d) {
+      return x(d.date);
+    })
+    .attr('y', function(d, i) { 
+      return (d.value>0) ? y(d.value) : y(0);
+    })
+    .attr('fill', function(d) {
+      return (d.value>0) ? '#BFBFBF' : '#10BDE4';
+    })
+    .attr('height', function(d) { return Math.abs(y(d.value) - y(0)); })
+    .attr('width', barWidth);
 }
 

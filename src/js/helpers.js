@@ -68,6 +68,7 @@ function setSelect(id, valueToSelect) {
   element.value = valueToSelect;
 }
 
+//25 HRP country codes
 const countryCodeList = [
   'AFG',
   'BDI',

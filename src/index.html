@@ -39,14 +39,10 @@
               <h2>Global</h2>
               <h4>Vulnerability and Socio-Economic Risk</h4>
               <ul class='menu-indicators'>
-                <!-- <li data-id='#access+constraints+pct' data-legend='Humanitarian Access Constraints Percentage' class='selected'>
-                  <div><i class='humanitarianicons-House'></i>Humanitarian Access Constraints</div>
-                  <p class='description small'></p>
-                </li> -->
-                <li data-id='#covid+trend+pct' data-legend='Daily % increase of COVID-19 cases (last 7 days average)' class='selected'>
-                  <div><i class='humanitarianicons-Analysis'></i>Daily % Increase of COVID-19 Cases</div>
+                <li data-id='#covid+cases+per+capita' data-legend='Weekly number of new cases per 100,000 people' class='selected'>
+                  <div><i class='humanitarianicons-Analysis'></i>COVID-19 Cases and Deaths</div>
                 </li>
-                <li data-id='#affected+inneed+pct' data-legend='Percent of People in Need'>
+                <li data-id='#affected+inneed+pct' data-legend='Percentage of People in Need'>
                   <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
                 </li>
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
@@ -68,14 +64,17 @@
 
               <h4>Humanitarian Funding and International Financing</h4>
               <ul class='menu-indicators'>
-                <li data-id='#value+funding+hrp+pct' data-legend='HRP Funding Level'>
-                  <div><i class='humanitarianicons-Analysis'></i>HRP Funding Level</div>
+                <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP/GHRP)'>
+                  <div><i class='humanitarianicons-Analysis'></i>Humanitarian Funding Level</div>
                 </li>
                 <li data-id='#value+cerf+covid+funding+total+usd' data-legend='CERF COVID-19 Allocations'>
                   <div><i class='humanitarianicons-Analysis'></i>CERF COVID-19 Allocations</div>
                 </li>
                 <li data-id='#value+cbpf+covid+funding+total+usd' data-legend='CBPF COVID-19 Allocations'>
                   <div><i class='humanitarianicons-Analysis'></i>CBPF COVID-19 Allocations</div>
+                </li>
+                <li data-id='#value+ifi+percap' data-legend='Total funding (IMF/World Bank) per capita'>
+                  <div><i class='humanitarianicons-Analysis'></i>IFI Financing for COVID-19 Response</div>
                 </li>
               </ul>
             </div>
@@ -154,7 +153,6 @@
                 <select id='indicatorSelect' class='indicator-select'>
                   <option value=''>Jump to indicators</option>
                   <option value='covid'>COVID-19 Cases and Projections</option>
-                  <!-- <option value='humanitarian-access'>Humanitarian Access - Constraints</option> -->
                   <option value='hrp'>2020 HRP and COVID-19 funding</option>
                   <option value='inform'>INFORM COVID Index</option>
                   <option value='schools'>School Closure</option>
@@ -170,10 +168,6 @@
               <div class='projections'>
                 <div class='panel-inner'></div>
               </div>
-              <!-- <div class='humanitarian-access'>
-                <h5>Humanitarian Access - Constraints</h5>
-                <div class='panel-inner'></div>
-              </div> -->
               <div class='hrp'>
                 <h5>2020 HRP and COVID-19 funding</h5>
                 <div class='panel-inner'></div>

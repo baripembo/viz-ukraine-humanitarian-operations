@@ -92,6 +92,9 @@ h6 {
 		margin-top: 2px;
 	}
 }
+.subtext {
+	color: #888;
+}
 
 .stat {
   font-family: 'Gotham-Light', sans-serif;
@@ -529,6 +532,11 @@ circle.swatch {
 		.stat {
 			font-size: 32px;
 			margin: 15px 0;
+			position: relative;
+			> svg {
+				left: 85px;
+				position: absolute;
+			}
 		}
 		.cases {
 			color: #888;
@@ -734,7 +742,7 @@ table {
 
 .sparkline {
   fill: none;
-  margin-left: 20px;
+  margin-left: 6px;
   stroke: #007CE1;
   stroke-width: 1px;
 }
