@@ -17,7 +17,7 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+ghrp+required+usd']));
 		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+pct']));
 		createKeyFigure('.figures', 'Countries Affected', '', nationalData.length);
-		//createSource(globalFigures, '#affected+inneed');
+		createSource(globalFigures, '#value+funding+required+usd');
 	}
 	//CERF
 	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {
@@ -36,7 +36,7 @@ function setGlobalFigures() {
 	//IFI
 	else if (currentIndicator.id=='#value+ifi+percap') {
 		globalFigures.find('h2').text('IFI Financing Overview');
-		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(d3.sum(nationalData, function(d) { return d['#value+ifi+total']; })));
+		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
 		createSource(globalFigures, '#value+ifi+percap');
 	}

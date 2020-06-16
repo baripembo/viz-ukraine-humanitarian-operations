@@ -1,10 +1,22 @@
 var datastoreID = '12d7c8e3-eff9-4db0-93b7-726825c4fe9a';
 var dataDomain = 'https://data.humdata.org';
-var countryLookup = {};
 
-//getCountryIDs();
+// const foodPricesCountries = {};
+// getCountryIDs();
+const foodPricesCountries = {1: "Afghanistan", 4: "Algeria", 8: "Angola", 12: "Argentina", 13: "Armenia", 19: "Azerbaijan", 23: "Bangladesh", 26: "Belarus", 29: "Benin", 31: "Bhutan", 33: "Bolivia", 42: "Burkina Faso", 43: "Burundi", 44: "Cambodia", 45: "Cameroon", 47: "Cape Verde", 49: "Central African Republic", 50: "Chad", 52: "China", 57: "Colombia", 59: "Congo", 61: "Costa Rica", 66: "Cote d'Ivoire", 68: "Democratic Republic of the Congo", 70: "Djibouti", 72: "Dominican Republic", 73: "Ecuador", 75: "El Salvador", 77: "Eritrea", 79: "Ethiopia", 89: "Gabon", 90: "Gambia", 92: "Georgia", 94: "Ghana", 103: "Guatemala", 105: "Guinea-Bissau", 106: "Guinea", 108: "Haiti", 111: "Honduras", 115: "Bassas da India", 116: "Indonesia", 117: "Iran  (Islamic Republic of)", 118: "Iraq", 122: "Italy", 126: "Japan", 130: "Jordan", 132: "Kazakhstan", 133: "Kenya", 138: "Kyrgyzstan", 139: "Lao People's Democratic Republic", 141: "Lebanon", 142: "Lesotho", 144: "Liberia", 145: "Libya", 150: "Madagascar", 152: "Malawi", 155: "Mali", 159: "Mauritania", 162: "Mexico", 165: "Moldova Republic of", 167: "Mongolia", 170: "Mozambique", 171: "Myanmar", 172: "Namibia", 175: "Nepal", 180: "Nicaragua", 181: "Niger", 182: "Nigeria", 188: "Pakistan", 191: "Panama", 194: "Paraguay", 195: "Peru", 196: "Philippines", 204: "Russian Federation", 205: "Rwanda", 217: "Senegal", 221: "Sierra Leone", 226: "Somalia", 227: "South Africa", 231: "Sri Lanka", 235: "Swaziland", 238: "Syrian Arab Republic", 239: "Tajikistan", 240: "Thailand", 242: "Timor-Leste", 243: "Togo", 249: "Turkey", 253: "Uganda", 254: "Ukraine", 257: "United Republic of Tanzania", 263: "Venezuela", 264: "Viet Nam", 269: "Yemen", 270: "Zambia", 271: "Zimbabwe", 999: "State of Palestine", 40764: "Sudan", 40765: "Egypt", 70001: "South Sudan"};
 
 $('.modal-bg-overlay, .modal-close-btn').on('click', closeModal);
+
+function getCountryNameByID(adm0_id) {
+  return foodPricesCountries[adm0_id];
+}
+
+function getCountryIDByName(adm0_name) {
+  const entries = Object.entries(foodPricesCountries)
+  for (const [id, name] of entries) {
+    if (name==adm0_name) return id;
+  }
+}
 
 function resetModal() {
 	$('#header, #charts, .modal-subnav').empty();
@@ -21,8 +33,6 @@ function openModal(country_name) {
 	$('.modal-bg-overlay').fadeIn();
 	$('.modal').fadeIn();
 
-	//getCountryIDs();
-	//var adm0_id = countryLookup[country_name];
 	var adm0_id = getCountryIDByName(country_name);
 	initCountry(adm0_id, country_name);
 }
@@ -41,23 +51,19 @@ function getCountryIDs() {
       var results = [];
       data.result.records.forEach(function(e){
         getCountryNames(e.adm0_id);
-        console.log('--',e.adm0_id)
       });
     }
   });     
 }
 
 function getCountryNames(adm0) {
-      console.log('adm0',adm0)
   var sql = 'SELECT distinct adm0_name FROM "'  +datastoreID + '" where adm0_id=' + adm0;
 
   $.ajax({
     type: 'GET',
     url: dataDomain + '/api/3/action/datastore_search_sql?sql=' + encodeURIComponent(sql),
     success: function(data) {
-    	countryLookup[data.result.records[0].adm0_name] = adm0;
-      //console.log('////',data.result.records[0].adm0_name)
-      //initCountry(adm0, data.result.records[0].adm0_name);
+      foodPricesCountries[adm0] = data.result.records[0].adm0_name;
     }
   });
 }
@@ -107,8 +113,11 @@ function generateSparklines(results,adm0_code,adm0_name){
     var curUnit = '';
     var topMonth = 0;
 
-    var headerHtml = '<h5>'+adm0_name+' Food Market Prices – since '+ results[0].mp_year +' <span class="source small"><a href="">DATA</a></span></h5>';
+    var headerHtml = '<h5>'+adm0_name+' Food Market Prices – since '+ results[0].mp_year +' <span class="source small"><a href="" target="_blank">DATA</a></span></h5>';
     $(targetHeader).html(headerHtml);
+
+    var country_name = adm0_name.replace(/\s+/g, '-').toLowerCase();
+    $(targetHeader).find('.source a').attr('href', 'https://data.humdata.org/dataset/wfp-food-prices-for-'+country_name);
 
     var html='<div class="chart-container">';
 

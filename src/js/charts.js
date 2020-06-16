@@ -1,6 +1,6 @@
 function createBarChart(data, type) {
   data.forEach(function(item, index) {
-    if (item.min=='' || item.max=='')
+    if (!isVal(item.min) || !isVal(item.max))
       data.splice(index, 1);
   });
 
@@ -245,6 +245,8 @@ function createTimeseriesLegend(chart, div, country) {
 }
 
 function updateTimeseries(data, selected) {
+  if (selected=='Syrian Arab Republic') selected = 'Syria';
+
   countryTimeseriesChart.focus(selected);
   $('.c3-chart-lines .c3-line').css('stroke', '#999');
   $('.c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');

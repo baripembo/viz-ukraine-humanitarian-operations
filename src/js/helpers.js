@@ -50,7 +50,7 @@ function truncateString(str, num) {
 function formatValue(val) {
   var format = d3.format('$.3s');
   var value;
-  if (val=='') {
+  if (!isVal(val)) {
     value = 'NA';
   }
   else {
@@ -67,6 +67,11 @@ function setSelect(id, valueToSelect) {
   let element = document.getElementById(id);
   element.value = valueToSelect;
 }
+
+function isVal(value) {
+  return (value!='' && value!=' ' && value!=undefined) ? true : false;
+}
+
 
 //25 HRP country codes
 const countryCodeList = [
