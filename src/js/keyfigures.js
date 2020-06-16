@@ -16,7 +16,7 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(worldData['#value+funding+required+usd']));
 		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+ghrp+required+usd']));
 		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+pct']));
-		createKeyFigure('.figures', 'Countries Affected', '', nationalData.length);
+		createKeyFigure('.figures', 'Countries Affected', '', worldData.numFundingPctCountries);
 		createSource(globalFigures, '#value+funding+required+usd');
 	}
 	//CERF

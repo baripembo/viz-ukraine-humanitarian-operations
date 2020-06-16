@@ -90,11 +90,14 @@ $( document ).ready(function() {
         .rollup(function(v) { return d3.sum(v, function(d) { return d['#population']; }); })
         .object(subnationalData);
 
+      //init tally counts
+      worldData.numPINCountries = 0;
+      worldData.numFundingPctCountries = 0;
+      worldData.numCERFCountries = 0;
+      worldData.numCBPFCountries = 0;
+      worldData.numIFICountries = 0;
+
       //parse national data
-      var numCERF = 0;
-      var numCBPF = 0;
-      var numIFI = 0;
-      var numPIN = 0;
       nationalData.forEach(function(item) {
         //normalize PSE name
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
@@ -102,23 +105,18 @@ $( document ).ready(function() {
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
        
-        //tally countries with cerf, cbpf, and pin data
-        if (item['#value+cerf+covid+funding+total+usd']!='') numCERF++;
-        if (item['#value+cbpf+covid+funding+total+usd']!='') numCBPF++;
-        if (item['#value+ifi+percap']!='') numIFI++;
-        if (item['#affected+inneed']!='') numPIN++;
+        //tally countries with funding and pin data
+        if (!isVal(item['#affected+inneed'])) worldData.numPINCountries++;
+        if (!isVal(item['#value+funding+hrp+pct'])) worldData.numFundingPctCountries++;
+        if (!isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
+        if (!isVal(item['#value+cbpf+covid+funding+total+usd'])) worldData.numCBPFCountries++;
+        if (!isVal(item['#value+ifi+percap'])) worldData.numIFICountries++;
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
         item['#covid+trend+pct'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_pc_change/100 : 0;
         item['#covid+cases+per+capita'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht : 0;
       })
-
-      //inject data to world data
-      worldData.numPINCountries = numPIN;
-      worldData.numCERFCountries = numCERF;
-      worldData.numCBPFCountries = numCBPF;
-      worldData.numIFICountries = numIFI;
 
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()

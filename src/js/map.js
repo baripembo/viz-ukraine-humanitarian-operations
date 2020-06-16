@@ -30,7 +30,7 @@ function displayMap() {
   $('#global-map, .country-select, .map-legend, .global-figures').css('opacity', 1);
 
   createEvents();
-
+  
   //get layers
   map.getStyle().layers.map(function (layer) {
     switch(layer.id) {
