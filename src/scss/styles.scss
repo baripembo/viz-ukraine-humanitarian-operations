@@ -27,7 +27,7 @@ main {
 }
 
 h1 {
-	font-family: 'Gotham Bold', sans-serif;
+	font-family: 'Gotham-Bold', sans-serif;
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 18px;
@@ -91,6 +91,9 @@ h6 {
 	&.source {
 		margin-top: 2px;
 	}
+}
+.subtext {
+	color: #888;
 }
 
 .stat {
@@ -235,7 +238,7 @@ a:visited {
   display: flex;
   flex-flow: column;
 	margin-top: auto;
-	padding-bottom: 15px;
+	padding: 20px 0;
 	img {
 		margin-top: 12px;
 	}
@@ -529,6 +532,11 @@ circle.swatch {
 		.stat {
 			font-size: 32px;
 			margin: 15px 0;
+			position: relative;
+			> svg {
+				left: 85px;
+				position: absolute;
+			}
 		}
 		.cases {
 			color: #888;
@@ -734,6 +742,7 @@ table {
 
 .sparkline {
   fill: none;
+  margin-left: 6px;
   stroke: #007CE1;
   stroke-width: 1px;
 }
