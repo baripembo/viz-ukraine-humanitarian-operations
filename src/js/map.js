@@ -31,6 +31,9 @@ function displayMap() {
 
   createEvents();
 
+
+  map.setFeatureState({source: '63_polbnda_int_uncs-29lk4r', id: 'adm0-fills'}, { hover: false});
+  
   //get layers
   map.getStyle().layers.map(function (layer) {
     switch(layer.id) {
