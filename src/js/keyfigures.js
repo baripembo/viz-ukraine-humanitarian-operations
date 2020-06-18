@@ -37,7 +37,7 @@ function setGlobalFigures() {
 	else if (currentIndicator.id=='#value+ifi+percap') {
 		globalFigures.find('h2').text('IFI Financing Overview');
 		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
-		createKeyFigure('.figures', 'Number of Countries', '', nationalData.length);
+		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
 		createSource(globalFigures, '#value+ifi+percap');
 	}
 	else {	

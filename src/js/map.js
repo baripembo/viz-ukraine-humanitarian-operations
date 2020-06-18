@@ -267,7 +267,7 @@ function handleGlobalEvents(layer) {
         );
       }
       hoveredStateId = e.features[0].id;
-      console.log('hoveredStateId', hoveredStateId  )
+      //console.log('hoveredStateId', hoveredStateId  )
       map.setFeatureState(
         { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
         { hover: true }
