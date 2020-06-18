@@ -92,10 +92,8 @@ $( document ).ready(function() {
 
       //init tally counts
       worldData.numPINCountries = 0;
-      worldData.numFundingPctCountries = 0;
       worldData.numCERFCountries = 0;
       worldData.numCBPFCountries = 0;
-      worldData.numIFICountries = 0;
 
       //parse national data
       nationalData.forEach(function(item) {
@@ -107,10 +105,8 @@ $( document ).ready(function() {
        
         //tally countries with funding and pin data
         if (!isVal(item['#affected+inneed'])) worldData.numPINCountries++;
-        if (!isVal(item['#value+funding+hrp+pct'])) worldData.numFundingPctCountries++;
         if (!isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
         if (!isVal(item['#value+cbpf+covid+funding+total+usd'])) worldData.numCBPFCountries++;
-        if (!isVal(item['#value+ifi+percap'])) worldData.numIFICountries++;
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
@@ -144,7 +140,7 @@ $( document ).ready(function() {
       });
 
       console.log(nationalData)
-      //console.log(subnationalData)
+      console.log(subnationalData)
 
       dataLoaded = true;
       if (mapLoaded==true) displayMap();

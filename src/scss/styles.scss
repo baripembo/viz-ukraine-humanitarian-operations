@@ -433,6 +433,10 @@ a:visited {
 				height: 32px;
 			}
 		}
+		.source-secondary {
+			margin-bottom: 10px;
+			margin-top: -8px;
+		}
 	}
 	&.country {
 		height: auto;
@@ -540,9 +544,7 @@ circle.swatch {
 		}
 		.cases {
 			color: #888;
-		}
-		.pins {
-			padding-bottom: 10px;
+			margin-top: 10px;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
 var adm0SourceLayer = '63_polbnda_int_uncs-29lk4r';
+var hoveredStateId = null;
 function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
@@ -30,12 +31,25 @@ function displayMap() {
   $('#global-map, .country-select, .map-legend, .global-figures').css('opacity', 1);
 
   createEvents();
-  
+
+
   //get layers
   map.getStyle().layers.map(function (layer) {
     switch(layer.id) {
       case 'adm0-fills':
         globalLayer = layer.id;
+
+        // map.setPaintProperty(globalLayer, 'fill-opacity', [
+        //   'case',
+        //   ['boolean', ['feature-state', 'hover'], false],
+        //   1,
+        //   0.5
+        // );
+
+        map.setFeatureState(
+          { source: 'composite', sourceLayer: adm0SourceLayer, id: globalLayer },
+          { hover: false }
+        );
         break;
       case 'adm0-label':
         globalLabelLayer = layer.id;
@@ -246,6 +260,18 @@ function handleGlobalEvents(layer) {
     map.getCanvas().style.cursor = 'pointer';
     if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#severity+travel') {
       //console.log(e)
+      if (hoveredStateId) {
+        map.setFeatureState(
+          { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
+          { hover: false }
+        );
+      }
+      hoveredStateId = e.features[0].id;
+      console.log('hoveredStateId', hoveredStateId  )
+      map.setFeatureState(
+        { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
+        { hover: true }
+      );
     }
     else {
       tooltip.addTo(map);
@@ -262,6 +288,7 @@ function handleGlobalEvents(layer) {
       });
       if (target!=undefined) {
         tooltip.setLngLat(e.lngLat);
+        if (target.properties.Terr_Name=='CuraÃ§ao') target.properties.Terr_Name = 'Curaçao';
         createMapTooltip(target.properties.ISO_3, target.properties.Terr_Name)
       }
     }
@@ -302,7 +329,7 @@ function updateGlobalLayer() {
 
   //color scales
   colorScale = getGlobalColorScale();
-  colorNoData = (currentIndicator.id=='#affected+inneed+pct') ? '#e7e4e6' : '#FFF';
+  colorNoData = (currentIndicator.id=='#affected+inneed+pct' || currentIndicator.id=='#value+funding+hrp+pct') ? '#e7e4e6' : '#FFF';
 
   //data join
   var expression = ['match', ['get', 'ISO_3']];
@@ -385,6 +412,7 @@ function setGlobalLegend(scale) {
 
   //catch PIN pct indicator
   var indicator = (currentIndicator.id=='#affected+inneed+pct') ? '#affected+inneed' : currentIndicator.id;
+  $('.map-legend.global .source-secondary').empty();
 
   if (d3.select('.map-legend.global .scale').empty()) {
     createSource($('.map-legend.global .indicator-source'), indicator);
@@ -403,6 +431,9 @@ function setGlobalLegend(scale) {
     nodata.append('text')
       .attr('class', 'label')
       .text('No Data');
+
+    //secondary source
+    $('.map-legend.global').append('<div class="source-secondary"></div>');
 
     //cases
     $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
@@ -434,6 +465,13 @@ function setGlobalLegend(scale) {
 
   if (currentIndicator.id=='#affected+inneed+pct') {
     $('.no-data-key .label').text('Refugee/IDP data only');
+    $('.no-data-key rect').css('fill', '#e7e4e6');
+
+    createSource($('.map-legend.global .source-secondary'), '#affected+refugees');
+    createSource($('.map-legend.global .source-secondary'), '#affected+displaced');
+  }
+  else if (currentIndicator.id=='#value+funding+hrp+pct') {
+    $('.no-data-key .label').text('Other response plans');
     $('.no-data-key rect').css('fill', '#e7e4e6');
   }
   else {
@@ -719,8 +757,41 @@ function createMapTooltip(country_code, country_name) {
 
   //format content for tooltip
   if (lastHovered!=country_code) {
-    //vaccination campaigns tooltip 
-    if (currentIndicator.id=='#vaccination-campaigns') {
+    //set formats for value
+    if (isVal(val)) {
+      if (currentIndicator.id.indexOf('pct')>-1) val = (isNaN(val)) ? 'No Data' : percentFormat(val);
+      if (currentIndicator.id=='#severity+economic+num') val = shortenNumFormat(val);
+      if (currentIndicator.id.indexOf('funding+total')>-1) val = formatValue(val);
+      if (currentIndicator.id=='#value+ifi+percap') val = d3.format('$,.0f')(val);
+    }
+    else {
+      val = 'No Data';
+    }
+
+    //format content for display
+    var content = '<h2>' + country_name + '</h2>';
+
+    //COVID trend layer shows sparklines
+    if (currentIndicator.id=='#covid+cases+per+capita') {
+      if (val!='No Data') {
+        val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
+      }
+      content += "Weekly number of new cases per 100,000 people" + ':<div class="stat covid-capita">' + val + '</div>';
+      content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
+    }
+    //PIN layer shows refugees and IDPs
+    else if (currentIndicator.id=='#affected+inneed+pct') {
+      if (val!='No Data') {
+        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+      content += '<div class="pins">';
+      if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
+      if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
+      if (isVal(country[0]['#affected+displaced'])) content += 'IDPs: '+ numFormat(country[0]['#affected+displaced']) +'<br/>';
+      content += '</div>';
+    }
+    //Vaccination campaigns layer
+    else if (currentIndicator.id=='#vaccination-campaigns') {
       var vaccData = [];
       vaccinationDataByCountry.forEach(function(country) {
         if (country.key==country_code) {
@@ -740,71 +811,55 @@ function createMapTooltip(country_code, country_name) {
         content += '</table>';
       }
     }
-    //all other tooltips
-    else {
-      //set formats for value
-      if (isVal(val)) {
-        if (currentIndicator.id.indexOf('pct')>-1) val = (isNaN(val)) ? 'No Data' : percentFormat(val);
-        if (currentIndicator.id=='#severity+economic+num') val = shortenNumFormat(val);
-        if (currentIndicator.id.indexOf('funding+total')>-1) val = formatValue(val);
-        if (currentIndicator.id=='#value+ifi+percap') val = d3.format('$,.0f')(val);
+    //Humanitarian Funding Level layer
+    else if (currentIndicator.id=='#value+funding+hrp+pct') {
+      if (val!='No Data') {
+        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+        if (isVal(country[0]['#value+funding+hrp+total+usd'])) content += 'HRP requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
+        if (isVal(country[0]['#value+funding+hrp+total+usd'])) content += 'COVID-19 GHRP requirement: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
       }
       else {
-        val = 'No Data';
-      }
+        if (isVal(country[0]['#value+funding+other+planname'])) {
+          var planArray = country[0]['#value+funding+other+planname'].split('|');
+          var planPctArray = (isVal(country[0]['#value+funding+other+pct'])) ? country[0]['#value+funding+other+pct'].split('|') : [0];
+          var planRequiredArray = (isVal(country[0]['#value+funding+other+required+usd'])) ? country[0]['#value+funding+other+required+usd'].split('|') : [0];
+          var planTotalArray = (isVal(country[0]['#value+funding+other+total+usd'])) ? country[0]['#value+funding+other+total+usd'].split('|') : [0];
 
-      //format content for display
-      var content = '<h2>' + country_name + '</h2>';
-
-      //PIN layer shows refugees and IDPs
-      if (currentIndicator.id=='#affected+inneed+pct') {
-        if (val!='No Data') {
-          content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+          planArray.forEach(function(plan, index) {
+            content +=  plan + ' Funding Level:<div class="stat">' + percentFormat(planPctArray[index]) + '</div>';
+            content += 'Requirement: '+ formatValue(planRequiredArray[index]) +'<br/>';
+            content += 'Total: '+ formatValue(planTotalArray[index]) +'<br/>';
+            if (index==0 && planArray.length>1) content += '<br/>';
+          });
         }
-        content += '<div class="pins">';
-        if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
-        if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
-        if (isVal(country[0]['#affected+displaced'])) content += 'IDPs: '+ numFormat(country[0]['#affected+displaced']) +'<br/>';
+      }
+    }
+    //IFI financing layer
+    else if (currentIndicator.id=='#value+ifi+percap') {
+      content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      if (val!='No Data') {
+        if (isVal(country[0]['#value+gdp+ifi+pct'])) content += 'Percentage combined of GDP: '+ percentFormat(country[0]['#value+gdp+ifi+pct']) +'<br/>';
+        if (isVal(country[0]['#value+ifi+total'])) content += 'Total amount combined: '+ formatValue(country[0]['#value+ifi+total']);
+      
+        content += '<div class="subtext">Breakdown:<br/>';
+        var fundingArray = ['adb','afdb','devco','eib','imf','isdb','ladb','unmptf','wb'];
+        fundingArray.forEach(function(fund) {
+          var fundName = (fund=='wb') ?  'World Bank' : fund.toUpperCase(); 
+          if (isVal(country[0]['#value+'+fund+'+total'])) content += fundName +': '+ formatValue(country[0]['#value+'+fund+'+total']) +'<br/>';
+        });
         content += '</div>';
       }
-      //COVID trend layer shows sparklines
-      else if (currentIndicator.id=='#covid+cases+per+capita') {
-        if (val!='No Data') {
-          val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
-        }
-        content += "Weekly number of new cases per 100,000 people" + ':<div class="stat covid-capita">' + val + '</div>';
-        content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
-      }
-      //Humanitarian Funding Level layer
-      else if (currentIndicator.id=='#value+funding+hrp+pct') {
-        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        if (val!='No Data') {
-          if (isVal(country[0]['#value+funding+hrp+total+usd'])) content += 'HRP requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
-          if (isVal(country[0]['#value+funding+hrp+total+usd'])) content += 'COVID-19 GHRP requirement: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/><br/>';
-        }
-      }
-      //IFI financing layer
-      else if (currentIndicator.id=='#value+ifi+percap') {
-        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        if (val!='No Data') {
-          if (isVal(country[0]['#value+gdp+ifi+pct'])) content += 'Percentage combined of GDP: '+ percentFormat(country[0]['#value+gdp+ifi+pct']) +'<br/>';
-          if (isVal(country[0]['#value+ifi+total'])) content += 'Total amount combined: '+ formatValue(country[0]['#value+ifi+total']);
-        
-          content += '<div class="subtext">Breakdown:<br/>';
-          if (isVal(country[0]['#value+imf+total'])) content += 'IMF: '+ formatValue(country[0]['#value+imf+total']) +'<br/>';
-          if (isVal(country[0]['#value+wb+total'])) content += 'World Bank: '+ formatValue(country[0]['#value+wb+total']) +'<br/><br/>';
-          content += '</div>';
-        }
-      }
-      //all other layers
-      else {
-        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-      }
-
-      //covid cases and deaths
-      if (!isNaN(country[0]['#affected+infected'])) content += '<div class="cases">COVID-19 Cases: ' + numFormat(country[0]['#affected+infected']) + '<br/>';
-      if (!isNaN(country[0]['#affected+killed'])) content += 'COVID-19 Deaths: ' + numFormat(country[0]['#affected+killed']) + '</div>';
     }
+    //all other layers
+    else {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+    }
+
+    //covid cases and deaths
+    var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
+    var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
+    content += '<div class="cases">COVID-19 Cases: ' + numCases + '<br/>';
+    content += 'COVID-19 Deaths: ' + numDeaths + '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);

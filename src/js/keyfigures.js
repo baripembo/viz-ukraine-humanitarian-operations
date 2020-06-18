@@ -9,14 +9,14 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numPINCountries);
 		createSource(globalFigures, '#affected+inneed');
 	}
-	//funding
+	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
 		globalFigures.find('h2').text('Humanitarian Funding Overview');
 		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
 		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(worldData['#value+funding+required+usd']));
 		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+ghrp+required+usd']));
 		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+pct']));
-		createKeyFigure('.figures', 'Countries Affected', '', worldData.numFundingPctCountries);
+		createKeyFigure('.figures', 'Countries Affected', '', nationalData.length);
 		createSource(globalFigures, '#value+funding+required+usd');
 	}
 	//CERF
@@ -37,7 +37,7 @@ function setGlobalFigures() {
 	else if (currentIndicator.id=='#value+ifi+percap') {
 		globalFigures.find('h2').text('IFI Financing Overview');
 		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
-		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
+		createKeyFigure('.figures', 'Number of Countries', '', nationalData.length);
 		createSource(globalFigures, '#value+ifi+percap');
 	}
 	else {	
