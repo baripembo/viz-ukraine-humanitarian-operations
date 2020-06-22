@@ -520,7 +520,7 @@ circle.swatch {
 }
 
 .mapboxgl-popup.map-tooltip {
-	max-width: 270px;
+	max-width: 250px !important;
 	z-index: 4;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
@@ -538,7 +538,7 @@ circle.swatch {
 			margin: 15px 0;
 			position: relative;
 			> svg {
-				left: 85px;
+				left: 110px;
 				position: absolute;
 			}
 		}

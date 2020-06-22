@@ -34,11 +34,11 @@ function setGlobalFigures() {
 		createSource(globalFigures, '#value+cbpf+covid+funding+total+usd');
 	}
 	//IFI
-	else if (currentIndicator.id=='#value+ifi+percap') {
+	else if (currentIndicator.id=='#value+gdp+ifi+pct') {
 		globalFigures.find('h2').text('IFI Financing Overview');
 		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
-		createSource(globalFigures, '#value+ifi+percap');
+		createSource(globalFigures, '#value+gdp+ifi+pct');
 	}
 	else {	
 		//global figures
@@ -60,7 +60,7 @@ function setGlobalFigures() {
     });
 		createSparkline(sparklineArray, '.global-figures .cases-capita');
 
-		createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(0) + '%');
+		createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 
     var pctArray = [];
     covidGlobal.forEach(function(d) {

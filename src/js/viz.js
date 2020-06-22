@@ -1,6 +1,6 @@
 var numFormat = d3.format(',');
 var shortenNumFormat = d3.format('.2s');
-var percentFormat = d3.format('.0%');
+var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
@@ -71,6 +71,7 @@ $( document ).ready(function() {
       var allData = data[0];
       timeseriesData = data[1];
       covidTrendData = data[2];
+      console.log(covidTrendData)
       worldData = allData.world_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
@@ -98,8 +99,9 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
-        //normalize PSE name
+        //normalize counry names
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
+        if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
@@ -108,7 +110,7 @@ $( document ).ready(function() {
         if (isVal(item['#affected+inneed'])) worldData.numPINCountries++;
         if (isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
         if (isVal(item['#value+cbpf+covid+funding+total+usd'])) worldData.numCBPFCountries++;
-        if (isVal(item['#value+ifi+percap'])) worldData.numIFICountries++;
+        if (isVal(item['#value+gdp+ifi+pct'])) worldData.numIFICountries++;
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
@@ -193,6 +195,5 @@ $( document ).ready(function() {
   }
 
   init();
-  //getData();
-  //initTracking();
+  initTracking();
 });

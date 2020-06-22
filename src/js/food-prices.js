@@ -78,7 +78,20 @@ function getProductsByCountryID(adm0_code,adm0_name){
     success: function(data) {
     	$('.modal-loader').hide();
     	$('.modal-subnav').empty();
-      generateSparklines(data.result.records,adm0_code,adm0_name);
+
+        //remove products from data that dont have 2020 data
+        // var dataByProduct = d3.nest()
+        //     .key(function(d) { return d.cm_name; })
+        //     .entries(data.result.records);
+        // dataByProduct.forEach(function(product) {
+        //     var latestYear = product.values[product.values.length-1].mp_year;
+        //     if (latestYear<2020) {
+        //         data.result.records = data.result.records.filter(function(record) { console.log(record.cm_name); return record.cm_name!=product.key; })
+        //     }
+        // });
+        //
+
+        generateSparklines(data.result.records,adm0_code,adm0_name);
     }
   });     
 }
@@ -92,15 +105,15 @@ function getProductDataByCountryID(adm0_code,cm_id,um_id,adm0_name,cm_name,um_na
     type: 'GET',
     url: dataDomain + '/api/3/action/datastore_search_sql?sql=' + encodeURIComponent(sql),
     success: function(data) {
-			var cf = crossfilterData(data.result.records); 
-			if(adm1_name===''){
-			  generateChartView(cf,adm0_name,cm_name,um_name,adm0_code); 
-			} else if (mkt_name===''){
-			  generateADMChartView(cf,adm1_name,cm_name,um_name,adm0_name,adm0_code);  
-			} else {
-			  cf.byAdm1.filter(adm1_name);
-			  generateMktChartView(cf,mkt_name,cm_name,um_name,adm0_name,adm0_code,adm1_name); 
-			}
+		var cf = crossfilterData(data.result.records); 
+		if(adm1_name===''){
+		  generateChartView(cf,adm0_name,cm_name,um_name,adm0_code); 
+		} else if (mkt_name===''){
+		  generateADMChartView(cf,adm1_name,cm_name,um_name,adm0_name,adm0_code);  
+		} else {
+		  cf.byAdm1.filter(adm1_name);
+		  generateMktChartView(cf,mkt_name,cm_name,um_name,adm0_name,adm0_code,adm1_name); 
+		}
     }
   });    
 }
