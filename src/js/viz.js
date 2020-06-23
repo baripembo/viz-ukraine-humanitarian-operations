@@ -71,7 +71,6 @@ $( document ).ready(function() {
       var allData = data[0];
       timeseriesData = data[1];
       covidTrendData = data[2];
-      console.log(covidTrendData)
       worldData = allData.world_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
@@ -114,8 +113,8 @@ $( document ).ready(function() {
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_pc_change/100 : 0;
-        item['#covid+cases+per+capita'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht : 0;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_pc_change/100;
+        item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
       })
 
       //group national data by country -- drives country panel    
@@ -131,11 +130,16 @@ $( document ).ready(function() {
       //format dates and set overall status
       vaccinationDataByCountry.forEach(function(country) {
         var postponed = 'On Track';
+        var isPostponed = false;
         country.values.forEach(function(campaign) {
           var d = moment(campaign['#date+start'], ['YYYY-MM','MM/DD/YYYY']);
           var date = new Date(d.year(), d.month(), d.date());
           campaign['#date+start'] = (isNaN(date.getTime())) ? campaign['#date+start'] : getMonth(date.getMonth()) + ' ' + date.getFullYear();
-          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) postponed = 'Postponed / May postpone';
+          if (campaign['#status+name'].toLowerCase().indexOf('unknown')>-1 && !isPostponed) postponed = 'Unknown';
+          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) {
+            isPostponed = true;
+            postponed = 'Postponed / May postpone';
+          }
         });
 
         nationalData.forEach(function(item) {

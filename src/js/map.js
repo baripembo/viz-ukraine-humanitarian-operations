@@ -198,7 +198,7 @@ function selectCountry(features) {
   map.once('moveend', initCountryView);
 }
 
-function setTravelDescription(country) { 
+function setTravelDescription(country) {
   var data = dataByCountry[country.code][0];
   var text = truncateString(data['#severity+travel'], 275);
   var content = '<h2 class="title">'+ country.name +'</h2>';
@@ -228,7 +228,7 @@ function initGlobalLayer() {
   var expressionMarkers = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
     var val = d[currentIndicator.id];
-    var color = (val<=0 || val=='' || isNaN(val)) ? colorNoData : colorScale(val);
+    var color = (val==null) ? colorNoData : colorScale(val);
     expression.push(d['#country+code'], color);
 
     //covid markers
@@ -309,7 +309,7 @@ function handleGlobalEvents(layer) {
   
     if (target!=null) {
       currentCountry.code = target.properties.ISO_3;
-      currentCountry.name = target.properties.Terr_Name;
+      currentCountry.name = (target.properties.Terr_Name=='CuraÃ§ao') ? 'Curaçao' : target.properties.Terr_Name;
 
       if (currentCountry.code!=undefined) {
         if (currentIndicator.id=='#food-prices' && getCountryIDByName(currentCountry.name)!=undefined) {
@@ -341,11 +341,17 @@ function updateGlobalLayer() {
       var id = getCountryIDByName(d['#country+name']);
       color = (id!=undefined) ? foodPricesColor : colorNoData;
     }
+    else if (currentIndicator.id=='#covid+cases+per+capita') {
+      color = (val==null) ? colorNoData : colorScale(val);
+    }
     else if (currentIndicator.id=='#severity+travel') {
       color = travelColor;
     }
-    else if (currentIndicator.id=='#severity+type' || currentIndicator.id=='#vaccination-campaigns') {
+    else if (currentIndicator.id=='#severity+type') {
       color = (!isVal(val)) ? colorNoData : colorScale(val);
+    }
+    else if (currentIndicator.id=='#vaccination-campaigns') {
+      color = (!isVal(val) || val=='Unknown') ? colorNoData : colorScale(val);
     }
     else {
       color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
@@ -463,20 +469,25 @@ function setGlobalLegend(scale) {
   var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
   $('.map-legend.global .indicator-title').text(legendTitle);
 
+  var noDataKey = $('.map-legend.global .no-data-key');
   if (currentIndicator.id=='#affected+inneed+pct') {
-    $('.no-data-key .label').text('Refugee/IDP data only');
-    $('.no-data-key rect').css('fill', '#e7e4e6');
+    noDataKey.find('.label').text('Refugee/IDP data only');
+    noDataKey.find('rect').css('fill', '#E7E4E6');
 
     createSource($('.map-legend.global .source-secondary'), '#affected+refugees');
     createSource($('.map-legend.global .source-secondary'), '#affected+displaced');
   }
   else if (currentIndicator.id=='#value+funding+hrp+pct') {
-    $('.no-data-key .label').text('Other response plans');
-    $('.no-data-key rect').css('fill', '#e7e4e6');
+    noDataKey.find('.label').text('Other response plans');
+    noDataKey.find('rect').css('fill', '#E7E4E6');
+  }
+  else if (currentIndicator.id=='#vaccination-campaigns') {
+    noDataKey.find('.label').text('No Data/Unknown');
+    noDataKey.find('rect').css('fill', '#FFF');
   }
   else {
-    $('.no-data-key .label').text('No Data');
-    $('.no-data-key rect').css('fill', '#FFF');
+    noDataKey.find('.label').text('No Data');
+    noDataKey.find('rect').css('fill', '#FFF');
   }
 
   var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
@@ -541,6 +552,7 @@ function initCountryLayer() {
 }
 
 function updateCountryLayer() {
+  colorNoData = '#FFF';
   if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
 
   $('.map-legend.country .legend-container').removeClass('no-data');

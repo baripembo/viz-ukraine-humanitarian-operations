@@ -1,9 +1,9 @@
 var datastoreID = '12d7c8e3-eff9-4db0-93b7-726825c4fe9a';
 var dataDomain = 'https://data.humdata.org';
 
-// const foodPricesCountries = {};
-// getCountryIDs();
-const foodPricesCountries = {1: "Afghanistan", 4: "Algeria", 8: "Angola", 12: "Argentina", 13: "Armenia", 19: "Azerbaijan", 23: "Bangladesh", 26: "Belarus", 29: "Benin", 31: "Bhutan", 33: "Bolivia", 42: "Burkina Faso", 43: "Burundi", 44: "Cambodia", 45: "Cameroon", 47: "Cape Verde", 49: "Central African Republic", 50: "Chad", 52: "China", 57: "Colombia", 59: "Congo", 61: "Costa Rica", 66: "Cote d'Ivoire", 68: "Democratic Republic of the Congo", 70: "Djibouti", 72: "Dominican Republic", 73: "Ecuador", 75: "El Salvador", 77: "Eritrea", 79: "Ethiopia", 89: "Gabon", 90: "Gambia", 92: "Georgia", 94: "Ghana", 103: "Guatemala", 105: "Guinea-Bissau", 106: "Guinea", 108: "Haiti", 111: "Honduras", 115: "Bassas da India", 116: "Indonesia", 117: "Iran  (Islamic Republic of)", 118: "Iraq", 122: "Italy", 126: "Japan", 130: "Jordan", 132: "Kazakhstan", 133: "Kenya", 138: "Kyrgyzstan", 139: "Lao People's Democratic Republic", 141: "Lebanon", 142: "Lesotho", 144: "Liberia", 145: "Libya", 150: "Madagascar", 152: "Malawi", 155: "Mali", 159: "Mauritania", 162: "Mexico", 165: "Moldova Republic of", 167: "Mongolia", 170: "Mozambique", 171: "Myanmar", 172: "Namibia", 175: "Nepal", 180: "Nicaragua", 181: "Niger", 182: "Nigeria", 188: "Pakistan", 191: "Panama", 194: "Paraguay", 195: "Peru", 196: "Philippines", 204: "Russian Federation", 205: "Rwanda", 217: "Senegal", 221: "Sierra Leone", 226: "Somalia", 227: "South Africa", 231: "Sri Lanka", 235: "Swaziland", 238: "Syrian Arab Republic", 239: "Tajikistan", 240: "Thailand", 242: "Timor-Leste", 243: "Togo", 249: "Turkey", 253: "Uganda", 254: "Ukraine", 257: "United Republic of Tanzania", 263: "Venezuela", 264: "Viet Nam", 269: "Yemen", 270: "Zambia", 271: "Zimbabwe", 999: "State of Palestine", 40764: "Sudan", 40765: "Egypt", 70001: "South Sudan"};
+//const foodPricesCountries = {};
+//getCountryIDs();
+const foodPricesCountries = {1: "Afghanistan",8: "Angola",12: "Argentina",13: "Armenia",23: "Bangladesh",26: "Belarus",29: "Benin",33: "Bolivia",42: "Burkina Faso",43: "Burundi",44: "Cambodia",45: "Cameroon",47: "Cape Verde",49: "Central African Republic",50: "Chad",52: "China",57: "Colombia",59: "Congo",66: "Cote d'Ivoire",68: "Democratic Republic of the Congo",70: "Djibouti",72: "Dominican Republic",73: "Ecuador",75: "El Salvador",79: "Ethiopia",90: "Gambia",94: "Ghana",103: "Guatemala",105: "Guinea-Bissau",106: "Guinea",108: "Haiti",111: "Honduras",115: "Bassas da India",116: "Indonesia",117: "Iran  (Islamic Republic of)",118: "Iraq",126: "Japan",130: "Jordan",132: "Kazakhstan",133: "Kenya",138: "Kyrgyzstan",139: "Lao People's Democratic Republic",141: "Lebanon",142: "Lesotho",144: "Liberia",145: "Libya",152: "Malawi",155: "Mali",159: "Mauritania",162: "Mexico",167: "Mongolia",170: "Mozambique",171: "Myanmar",172: "Namibia",180: "Nicaragua",181: "Niger",182: "Nigeria",188: "Pakistan",191: "Panama",194: "Paraguay",195: "Peru",196: "Philippines",204: "Russian Federation",205: "Rwanda",217: "Senegal",221: "Sierra Leone",226: "Somalia",227: "South Africa",231: "Sri Lanka",235: "Swaziland",238: "Syrian Arab Republic",239: "Tajikistan",240: "Thailand",243: "Togo",249: "Turkey",253: "Uganda",257: "United Republic of Tanzania",269: "Yemen",270: "Zambia",999: "State of Palestine",40764: "Sudan",40765: "Egypt",70001: "South Sudan"};
 
 $('.modal-bg-overlay, .modal-close-btn').on('click', closeModal);
 
@@ -42,7 +42,8 @@ function initCountry(adm0_code, adm0_name){
 }
 
 function getCountryIDs() {
-  var sql = 'SELECT distinct adm0_id FROM "' + datastoreID + '"';
+  var today = new Date();
+  var sql = 'SELECT distinct adm0_id FROM "' + datastoreID + '" WHERE mp_year='+today.getFullYear();
 
   $.ajax({
     type: 'GET',
@@ -68,8 +69,11 @@ function getCountryNames(adm0) {
   });
 }
 
-function getProductsByCountryID(adm0_code,adm0_name){    
-  var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';    
+function getProductsByCountryID(adm0_code,adm0_name){  
+console.log('getProductsByCountryID')  
+  var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
+  //var today = new Date();
+  //var sql = 'SELECT cm_id,cm_name,um_id,um_name,avg(cast(mp_month as double precision)) as month_num,mp_year,avg(mp_price) FROM "'+datastoreID+'" where adm0_id='+adm0_code+' and mp_year>2009 and EXISTS (SELECT mp_year FROM "'+datastoreID+'" WHERE adm0_id='+adm0_code+' and mp_year='+today.getFullYear()+') group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
   var data = encodeURIComponent(JSON.stringify({sql: sql}));
 
   $.ajax({
@@ -80,16 +84,15 @@ function getProductsByCountryID(adm0_code,adm0_name){
     	$('.modal-subnav').empty();
 
         //remove products from data that dont have 2020 data
-        // var dataByProduct = d3.nest()
-        //     .key(function(d) { return d.cm_name; })
-        //     .entries(data.result.records);
-        // dataByProduct.forEach(function(product) {
-        //     var latestYear = product.values[product.values.length-1].mp_year;
-        //     if (latestYear<2020) {
-        //         data.result.records = data.result.records.filter(function(record) { console.log(record.cm_name); return record.cm_name!=product.key; })
-        //     }
-        // });
-        //
+        var dataByProduct = d3.nest()
+            .key(function(d) { return d.cm_name; })
+            .entries(data.result.records);
+        dataByProduct.forEach(function(product) {
+            var latestYear = product.values[product.values.length-1].mp_year;
+            if (latestYear<2020) {
+                data.result.records = data.result.records.filter(function(record) { return record.cm_name!=product.key; })
+            }
+        });
 
         generateSparklines(data.result.records,adm0_code,adm0_name);
     }
@@ -97,6 +100,7 @@ function getProductsByCountryID(adm0_code,adm0_name){
 }
 
 function getProductDataByCountryID(adm0_code,cm_id,um_id,adm0_name,cm_name,um_name,adm1_name,mkt_name){
+console.log('getProductDataByCountryID')  
   var sql = 'SELECT adm1_id,adm1_name,mkt_id,mkt_name, cast(mp_month as double precision) as month_num, mp_year, mp_price FROM "'+datastoreID+'" where adm0_id='+adm0_code+' and cm_id='+cm_id+' and um_id='+um_id;
 
   var data = encodeURIComponent(JSON.stringify({sql: sql}));

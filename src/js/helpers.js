@@ -69,7 +69,7 @@ function setSelect(id, valueToSelect) {
 }
 
 function isVal(value) {
-  return (value!='' && value!=' ' && value!=undefined) ? true : false;
+  return (value!='' && value!=' ' && value!=undefined || value==0) ? true : false;
 }
 
 
