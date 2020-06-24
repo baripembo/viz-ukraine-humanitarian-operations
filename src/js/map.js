@@ -144,9 +144,10 @@ function createEvents() {
       $('.content').removeClass('travel-restrictions-view');
     }
 
+    mpTrack('wrl', $(this).find('div').text());
     updateGlobalLayer();
   });
-  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected div').text()};
+  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend')};
   
   //back to global event
   $('.country-menu h2').on('click', function() {
@@ -169,6 +170,7 @@ function createEvents() {
     var selected = $('input[name="countryIndicators"]:checked');
     currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
     updateCountryLayer();
+    mpTrack(currentCountry.code, currentCountryIndicator.name);
   });
 }
 
@@ -196,6 +198,7 @@ function selectCountry(features) {
   });
 
   map.once('moveend', initCountryView);
+  mpTrack(currentCountry.code, currentCountryIndicator.name);
 }
 
 function setTravelDescription(country) {

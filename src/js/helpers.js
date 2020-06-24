@@ -1,3 +1,14 @@
+function mpTrack(view, content) {
+  mixpanel.track('viz interaction', {
+    'page title': document.title,
+    'embedded in': window.location.href,
+    'action': 'switch viz',
+    'viz type': 'oad covid-19',
+    'current view': view,
+    'content': content
+  });
+}
+
 function getMonth(m) {
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return months[m];
