@@ -168,6 +168,15 @@ a:visited {
 		}
 		.layer-description {
 			display: block;
+			svg {
+				height: 33px;
+				width: 200px;
+			}
+		}
+	}
+	&.travel-restrictions-view {
+		.description-legend {
+			display: none;
 		}
 	}
 }
@@ -197,6 +206,10 @@ a:visited {
 			font-size: 14px;
 			text-decoration: none;
 		}
+	}
+	.description-legend {
+		display: block;
+		margin-top: 10px;
 	}
 }
 
@@ -740,6 +753,10 @@ table {
 	td>span {
 		display: none;
 	}
+}
+
+.c3-focused .c3-lines .c3-line {
+	stroke: #007CE1 !important;
 }
 
 .sparkline {

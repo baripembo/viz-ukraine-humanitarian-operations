@@ -410,6 +410,9 @@ function getGlobalColorScale() {
   else if (currentIndicator.id=='#vaccination-campaigns') {
     scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
   }
+  else if (currentIndicator.id=='#food-prices') {
+    scale = d3.scaleOrdinal().domain(['Data Available', 'No Data']).range([foodPricesColor, colorNoData]);
+  }
   else {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
   }
