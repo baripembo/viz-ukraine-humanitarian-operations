@@ -69,11 +69,10 @@ function getCountryNames(adm0) {
   });
 }
 
-function getProductsByCountryID(adm0_code,adm0_name){  
-console.log('getProductsByCountryID')  
-  var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
-  //var today = new Date();
-  //var sql = 'SELECT cm_id,cm_name,um_id,um_name,avg(cast(mp_month as double precision)) as month_num,mp_year,avg(mp_price) FROM "'+datastoreID+'" where adm0_id='+adm0_code+' and mp_year>2009 and EXISTS (SELECT mp_year FROM "'+datastoreID+'" WHERE adm0_id='+adm0_code+' and mp_year='+today.getFullYear()+') group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
+function getProductsByCountryID(adm0_code,adm0_name){
+  //var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
+  var today = new Date();
+  var sql = 'SELECT T1.cm_id,T1.cm_name,T1.um_id,T1.um_name,avg(cast(T1.mp_month as double precision)) AS month_num,T1.mp_year,avg(T1.mp_price) FROM "' + datastoreID + '" AS T1 INNER JOIN (SELECT DISTINCT adm0_id,cm_id,um_id from "' + datastoreID + '" WHERE mp_year='+today.getFullYear()+') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(today.getFullYear()-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
   var data = encodeURIComponent(JSON.stringify({sql: sql}));
 
   $.ajax({
@@ -84,15 +83,15 @@ console.log('getProductsByCountryID')
     	$('.modal-subnav').empty();
 
         //remove products from data that dont have 2020 data
-        var dataByProduct = d3.nest()
-            .key(function(d) { return d.cm_name; })
-            .entries(data.result.records);
-        dataByProduct.forEach(function(product) {
-            var latestYear = product.values[product.values.length-1].mp_year;
-            if (latestYear<2020) {
-                data.result.records = data.result.records.filter(function(record) { return record.cm_name!=product.key; })
-            }
-        });
+        // var dataByProduct = d3.nest()
+        //     .key(function(d) { return d.cm_name; })
+        //     .entries(data.result.records);
+        // dataByProduct.forEach(function(product) {
+        //     var latestYear = product.values[product.values.length-1].mp_year;
+        //     if (latestYear<2020) {
+        //         data.result.records = data.result.records.filter(function(record) { return record.cm_name!=product.key; })
+        //     }
+        // });
 
         generateSparklines(data.result.records,adm0_code,adm0_name);
     }
@@ -100,7 +99,6 @@ console.log('getProductsByCountryID')
 }
 
 function getProductDataByCountryID(adm0_code,cm_id,um_id,adm0_name,cm_name,um_name,adm1_name,mkt_name){
-console.log('getProductDataByCountryID')  
   var sql = 'SELECT adm1_id,adm1_name,mkt_id,mkt_name, cast(mp_month as double precision) as month_num, mp_year, mp_price FROM "'+datastoreID+'" where adm0_id='+adm0_code+' and cm_id='+cm_id+' and um_id='+um_id;
 
   var data = encodeURIComponent(JSON.stringify({sql: sql}));

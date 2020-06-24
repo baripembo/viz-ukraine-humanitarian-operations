@@ -365,6 +365,7 @@ function updateGlobalLayer() {
   map.setPaintProperty(globalLayer, 'fill-color', expression);
   setGlobalLegend(colorScale);
 
+  //food prices and travel restrictions layers
   if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#severity+travel') {
     map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
 
@@ -378,6 +379,7 @@ function updateGlobalLayer() {
       layer.find('h4').text('Click on a country to view travel restrictions');
     }
   }
+  //all other layers
   else {
     map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
   }

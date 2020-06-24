@@ -104,7 +104,8 @@ $( document ).ready(function() {
 
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
-       
+
+        console.log('PIN',item['#country+name'], item['#affected+inneed+pct'], isVal(item['#affected+inneed+pct']))
         //tally countries with funding and pin data
         if (isVal(item['#affected+inneed'])) worldData.numPINCountries++;
         if (isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
@@ -115,6 +116,7 @@ $( document ).ready(function() {
         var covidByCountry = covidTrendData[item['#country+code']];
         item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_pc_change/100;
         item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
+        console.log(item['#country+name'], item['#covid+cases+per+capita'], isVal(item['#covid+cases+per+capita']))
       })
 
       //group national data by country -- drives country panel    
@@ -190,7 +192,7 @@ $( document ).ready(function() {
 
   function initTracking() {
     //initialize mixpanel
-    let MIXPANEL_TOKEN = window.location.hostname=='data.humdata.org'? '5cbf12bc9984628fb2c55a49daf32e74' : '99035923ee0a67880e6c05ab92b6cbc0';
+    var MIXPANEL_TOKEN = window.location.hostname=='data.humdata.org'? '5cbf12bc9984628fb2c55a49daf32e74' : '99035923ee0a67880e6c05ab92b6cbc0';
     mixpanel.init(MIXPANEL_TOKEN);
     mixpanel.track('page view', {
       'page title': document.title,
