@@ -400,7 +400,7 @@ function getGlobalColorScale() {
   if (currentIndicator.id=='#severity+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
-  else if (currentIndicator.id.indexOf('funding')>-1 || currentIndicator.id=='#value+gdp+ifi+pct') {
+  else if (currentIndicator.id.indexOf('funding')>-1) {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
   }
@@ -412,6 +412,12 @@ function getGlobalColorScale() {
   }
   else if (currentIndicator.id=='#food-prices') {
     scale = d3.scaleOrdinal().domain(['Data Available', 'No Data']).range([foodPricesColor, colorNoData]);
+  }
+  else if (currentIndicator.id=='#value+gdp+ifi+pct') {
+    var reverseRange = colorRange.slice().reverse();
+    scale = d3.scaleThreshold()
+      .domain([ .01, .02, .03, .04, .05 ])
+      .range(reverseRange);
   }
   else {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
@@ -498,11 +504,24 @@ function setGlobalLegend(scale) {
     noDataKey.find('rect').css('fill', '#FFF');
   }
 
-  var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
-  var legend = d3.legendColor()
-    .labelFormat(legendFormat)
-    .cells(colorRange.length)
-    .scale(scale);
+
+  var legend;
+  if (currentIndicator.id=='#value+gdp+ifi+pct') {
+    var legendFormat = d3.format('.0%');
+    legend = d3.legendColor()
+      .labelFormat(legendFormat)
+      .cells(colorRange.length)
+      .labels(d3.legendHelpers.thresholdLabels)
+      .useClass(true)
+      .scale(scale);
+  }
+  else {
+    var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
+    legend = d3.legendColor()
+      .labelFormat(legendFormat)
+      .cells(colorRange.length)
+      .scale(scale);
+  }
 
   var g = d3.select('.map-legend.global .scale');
   g.call(legend);
