@@ -416,7 +416,7 @@ function getGlobalColorScale() {
   else if (currentIndicator.id=='#value+gdp+ifi+pct') {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleThreshold()
-      .domain([ .01, .02, .03, .04, .05 ])
+      .domain([ .01, .02, .03, .05, .05 ])
       .range(reverseRange);
   }
   else {
@@ -879,7 +879,7 @@ function createMapTooltip(country_code, country_name) {
         if (isVal(country[0]['#value+ifi+total'])) content += 'Total amount combined: '+ formatValue(country[0]['#value+ifi+total']);
       
         content += '<div class="subtext">Breakdown:<br/>';
-        var fundingArray = ['adb','afdb','devco','eib','imf','isdb','ladb','unmptf','wb'];
+        var fundingArray = ['adb','afdb','devco','eib','iadb','imf','isdb','unmptf','wb'];
         fundingArray.forEach(function(fund) {
           var fundName = (fund=='wb') ?  'World Bank' : fund.toUpperCase(); 
           if (isVal(country[0]['#value+'+fund+'+total'])) content += fundName +': '+ formatValue(country[0]['#value+'+fund+'+total']) +'<br/>';
