@@ -80,6 +80,30 @@ function displayMap() {
 
   mapFeatures = map.queryRenderedFeatures();
 
+  //load pop density rasters
+  var countryList = Object.keys(countryCodeList);
+  countryList.forEach(function(country_code) {
+    var id = country_code.toLowerCase();
+    var raster = countryCodeList[country_code];
+    if (raster!='') {
+      map.addSource(id+'-pop-tileset', {
+        type: 'raster',
+        url: 'mapbox://humdata.'+raster
+      });
+
+      map.addLayer(
+        {
+          'id': id+'-popdensity',
+          'type': 'raster',
+          'source': id+'-pop-tileset'
+        },
+        countryBoundaryLayer
+      );
+
+      map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+    }
+  });
+
   //country select event
   d3.select('.country-select').on('change',function(e) {
     var selected = d3.select('.country-select').node().value;
@@ -602,13 +626,15 @@ function updateCountryLayer() {
 
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
+  var expressionBoundary = ['match', ['get', 'ADM1_PCODE']];
   var expressionOpacity = ['match', ['get', 'ADM1_PCODE']];
   //var expressionMarkers = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
-    var color, layerOpacity, markerSize;
+    var color, boundaryColor, layerOpacity, markerSize;
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || val=='' || isNaN(val)) ? colorNoData : countryColorScale(val);
+      boundaryColor = (currentCountryIndicator.id=='#population') ? '#FFF' : '#E0E0E0';
       layerOpacity = 1;
 
       //health facility markers
@@ -617,21 +643,40 @@ function updateCountryLayer() {
     }
     else {
       color = colorDefault;
+      boundaryColor = '#E0E0E0';
       layerOpacity = 0;
       //markerSize = 0;
     }
     
     expression.push(d['#adm1+code'], color);
+    expressionBoundary.push(d['#adm1+code'], boundaryColor);
     expressionOpacity.push(d['#adm1+code'], layerOpacity);
     //expressionMarkers.push(d['#adm1+code'], markerSize);
   });
   expression.push(colorDefault);
+  expressionBoundary.push('#E0E0E0');
   expressionOpacity.push(0);
   //expressionMarkers.push(0);
 
+  
+  //hide all pop density rasters
+  var countryList = Object.keys(countryCodeList);
+  countryList.forEach(function(country_code) {
+    var id = country_code.toLowerCase();
+    if (map.getLayer(id+'-popdensity'))
+      map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+  });
+
   //set properties
-  map.setPaintProperty(countryLayer, 'fill-color', expression);
+  if (currentCountryIndicator.id=='#population') {
+    var id = currentCountry.code.toLowerCase();
+    map.setLayoutProperty(id+'-popdensity', 'visibility', 'visible');
+  }
+  else {
+    map.setPaintProperty(countryLayer, 'fill-color', expression);
+  }
   map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
+  map.setPaintProperty(countryBoundaryLayer, 'line-color', expressionBoundary);
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
   //set health facility markers
@@ -645,51 +690,6 @@ function updateCountryLayer() {
     updateCountryLegend(countryColorScale);
   else
     $('.map-legend.country .legend-container').addClass('no-data');
-
-  //load pop density raster
-  // var id = currentCountry.code.toLowerCase();
-  // var raster = '';
-  // switch(id) {
-  //   case 'ukr':
-  //     raster = 'adkwa0bw';
-  //     break;
-  //   case 'bdi':
-  //     raster = '85uxb0dw';
-  //     break;
-  //   case 'col':
-  //     raster = 'awxirkoh';
-  //     break;
-  //   case 'pse':
-  //     raster = '1emy37d7';
-  //     break;
-  //   default:
-  //     //
-  // }
-
-
-  // if (map.getLayer(id+'-popdensity')) {
-  //   map.removeLayer(id+'-popdensity');
-  // }
-  // if (map.getSource(id+'-pop-tileset')) {
-  //   map.removeSource(id+'-pop-tileset');
-  // }
-
-
-  // if (currentCountryIndicator.id=='#population' && raster!='') {
-  //   map.addSource(id+'-pop-tileset', {
-  //     type: 'raster',
-  //     url: 'mapbox://humdata.'+raster
-  //   });
-
-  //   map.addLayer(
-  //     {
-  //       'id': id+'-popdensity',
-  //       'type': 'raster',
-  //       'source': id+'-pop-tileset'
-  //     },
-  //     countryBoundaryLayer
-  //   );
-  // }
 }
 
 function checkIPCData() {
@@ -952,13 +952,13 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-  // var id = currentCountry.code.toLowerCase();
-  // if (map.getLayer(id+'-popdensity')) {
-  //   map.removeLayer(id+'-popdensity');
-  // }
-  // if (map.getSource(id+'-pop-tileset')) {
-  //   map.removeSource(id+'-pop-tileset');
-  // }
+  var id = currentCountry.code.toLowerCase();
+  if (map.getLayer(id+'-popdensity')) {
+    map.removeLayer(id+'-popdensity');
+  }
+  if (map.getSource(id+'-pop-tileset')) {
+    map.removeSource(id+'-pop-tileset');
+  }
   
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
