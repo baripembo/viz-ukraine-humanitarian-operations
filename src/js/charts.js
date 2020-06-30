@@ -246,6 +246,7 @@ function createTimeseriesLegend(chart, div, country) {
 
 function updateTimeseries(data, selected) {
   if (selected=='Syrian Arab Republic') selected = 'Syria';
+  if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.focus(selected);
   $('.c3-chart-lines .c3-line').css('stroke', '#999');
