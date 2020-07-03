@@ -42,6 +42,7 @@ $( document ).ready(function() {
 
     //set content sizes based on viewport
     $('.content').height(viewportHeight);
+    $('.global-figures').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.content-right').css('min-width', viewportWidth);
     $('.footnote').width(viewportWidth - $('.global-figures').innerWidth() - 50);

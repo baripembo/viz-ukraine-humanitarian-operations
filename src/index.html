@@ -46,7 +46,7 @@
               <h4>Vulnerability and Socio-Economic Risk</h4>
               <ul class='menu-indicators'>
                 <li data-id='#covid+cases+per+capita' data-legend='Weekly number of new cases per 100,000 people' class='selected'>
-                  <div><i class='humanitarianicons-Analysis'></i>COVID-19 Cases and Deaths</div>
+                  <div class='expand'><i class='humanitarianicons-Analysis'></i>COVID-19 Cases and Deaths</div>
                 </li>
                 <li data-id='#affected+inneed+pct' data-legend='Percentage of People in Need'>
                   <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
@@ -63,9 +63,9 @@
                 <li data-id='#vaccination-campaigns' data-legend='Vaccination Campaign Status'>
                   <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
                 </li>
-                <li data-id='#severity+travel' data-legend='Travel Restrictions'>
+<!--                 <li data-id='#severity+travel' data-legend='Travel Restrictions'>
                   <div><i class='humanitarianicons-Analysis'></i>Travel Restrictions</div>
-                </li>
+                </li> -->
               </ul>
 
               <h4>Humanitarian Funding and International Financing</h4>
@@ -117,8 +117,10 @@
           <select id='countrySelect' class='country-select'></select>
 
           <div class='global-figures'>
-            <h2>COVID-19 Pandemic in 63 GHRP Locations</h2>
+            <div class='source-container'></div>
             <div class='figures'></div>
+            <h6 class='ranking-title'></h6>
+            <div class='ranking-chart'></div>
           </div>
             
           <div id='global-map'>

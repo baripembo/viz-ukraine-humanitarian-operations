@@ -123,8 +123,10 @@ function matchMapFeatures(country_code) {
 function createEvents() {
   //menu events
   $('.menu-indicators li').on('click', function() {
-    $('.menu-indicators li').removeClass('selected')
+    $('.menu-indicators li').removeClass('selected');
+    $('.menu-indicators li div').removeClass('expand');
     $(this).addClass('selected');
+    $(this).find('div').addClass('expand');
     currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
 
     //set food prices view

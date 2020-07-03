@@ -1,4 +1,7 @@
-function createBarChart(data, type) {
+/*******************************/
+/*** COVID PROJECTIONS CHART ***/
+/*******************************/
+function createProjectionsChart(data, type) {
   data.forEach(function(item, index) {
     if (!isVal(item.min) || !isVal(item.max))
       data.splice(index, 1);
@@ -92,9 +95,11 @@ function createBarChart(data, type) {
       projectionsDiv.find('.source').append(' | '+ d.model +': <a href="'+ source['#meta+url'] +'" class="dataURL" target="_blank">DATA</a>');
     });
   }
-
 }
 
+/****************************************/
+/*** COVID TIMESERIES CHART FUNCTIONS ***/
+/****************************************/
 function initTimeseries(data, div) {
   var timeseriesArray = formatTimeseriesData(data);
   createTimeSeries(timeseriesArray, div);
@@ -194,10 +199,10 @@ function createTimeSeries(array, div) {
       show: false,
       position: 'inset',
       inset: {
-          anchor: 'top-left',
-          x: 10,
-          y: 0,
-          step: 8
+        anchor: 'top-left',
+        x: 10,
+        y: 0,
+        step: 8
       }
     },
 		tooltip: { grouped: false },
@@ -257,6 +262,9 @@ function updateTimeseries(data, selected) {
 }
 
 
+/******************/
+/*** SPARKLINES ***/
+/******************/
 function createSparkline(data, div) {
   var width = 75;
   var height = 24;
@@ -290,7 +298,9 @@ function createSparkline(data, div) {
    .attr('d', line);
 }
 
-
+/*****************************/
+/*** COVID TREND BAR CHART ***/
+/*****************************/
 function createTrendBarChart(data, div) {
   var total = data.length;
   var barMargin = 1;
@@ -335,9 +345,64 @@ function createTrendBarChart(data, div) {
       return (d.value>0) ? y(d.value) : y(0);
     })
     .attr('fill', function(d) {
-      return (d.value>0) ? '#BFBFBF' : '#10BDE4';
+      return (d.value>0) ? '#F2645B' : '#BFBFBF';
     })
     .attr('height', function(d) { return Math.abs(y(d.value) - y(0)); })
     .attr('width', barWidth);
+}
+
+
+/*************************/
+/*** RANKING BAR CHART ***/
+/*************************/
+function createRankingChart(data, div) {
+  var dataLabels = [];
+  var dataValues = ['data1'];
+  data.forEach(function(d) {
+    if (d.value!=null) {
+      dataLabels.push(d.key)
+      dataValues.push(d.value);
+    }
+  });
+
+  var total = data.length;
+  var barMargin = 9;
+  var barHeight = 13;
+  var height = (barHeight+barMargin) * data.length;
+  var chart = c3.generate({
+    size: {
+      height: height
+    },
+    bindto: div,
+    data: {
+      columns: [
+        dataValues
+      ],
+      types: {
+        data1: 'bar',
+      },
+      color: function() {
+        return '#F2645B';
+      }
+    },
+    axis: {
+      rotated: true,
+      x: {
+        type: 'category',
+        categories: dataLabels
+      },
+      y: {
+        tick: {
+          count: 5,
+          format: d3.format(",.2r")
+        }
+      }
+    },
+    grid: {
+      y: {
+        show: true
+      }
+    }
+  });
 }
 
