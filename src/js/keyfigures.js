@@ -50,7 +50,7 @@ function setGlobalFigures() {
 
 		var covidGlobal = covidTrendData.H63;
 		var casesPerCapita = covidGlobal[covidGlobal.length-1].weekly_new_cases_per_ht;
-		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_pc_change;
+		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_new_cases_pc_change;
 		createKeyFigure('.figures', 'Weekly number of new cases per 100,000 people', 'cases-capita', casesPerCapita.toFixed(0));
 
 		var sparklineArray = [];
@@ -64,7 +64,7 @@ function setGlobalFigures() {
 
     var pctArray = [];
     covidGlobal.forEach(function(d) {
-      var obj = {date: d.date_epicrv, value: d.weekly_pc_change};
+      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
       pctArray.push(obj);
     });
     createTrendBarChart(pctArray, '.global-figures .cases-trend');

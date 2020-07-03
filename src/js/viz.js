@@ -113,7 +113,7 @@ $( document ).ready(function() {
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_pc_change/100;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_pc_change/100;
         item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
       })
 

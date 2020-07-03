@@ -915,7 +915,7 @@ function createMapTooltip(country_code, country_name) {
       if (country[0]['#covid+trend+pct']!=undefined) {
         var pctArray = [];
         covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d.date_epicrv, value: d.weekly_pc_change};
+          var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
           pctArray.push(obj);
         });
         createTrendBarChart(pctArray, '.mapboxgl-popup-content .stat.covid-pct');
