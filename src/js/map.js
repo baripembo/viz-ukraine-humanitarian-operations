@@ -32,7 +32,6 @@ function displayMap() {
 
   createEvents();
 
-
   //get layers
   map.getStyle().layers.map(function (layer) {
     switch(layer.id) {
