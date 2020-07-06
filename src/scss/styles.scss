@@ -117,12 +117,10 @@ a:visited {
 }
 
 .footnote {
-  bottom: 34px;
-  font-size: 11px;
+  font-size: 10px;
   font-style: italic;
-  left: 10px;
-	position: absolute;
-	z-index: 1;
+  line-height: 12px;
+  padding-bottom: 10px;
 }
 
 .content {
@@ -162,10 +160,7 @@ a:visited {
 	&.food-prices-view,
 	&.travel-restrictions-view {
 		.map-legend.global,
-		.count-marker,
-		.global-figures {
-			display: none;
-		}
+		.count-marker
 		.layer-description {
 			display: block;
 			svg {
@@ -288,14 +283,14 @@ a:visited {
 			align-items: center;
 			display: flex;
 			height: 60px;
-			padding: 0 30px 0 25px;
+			padding: 0 50px 0 25px;
 			position: relative;
 			&:after {
-				color: #888;
+				color: #CCC;
 				content: '\e96e';
 				font-family: 'Humanitarian-Icons-v02';
 				position: absolute;
-				right: 15px;
+				right: 20px;
 			}
 			&.expand {
 				&:after {
@@ -345,14 +340,24 @@ a:visited {
 	left: 0;
 	opacity: 0;
 	overflow: auto;
-	padding: 25px;
+	padding: 20px 25px;
 	position: absolute;
 	top: 0;
 	width: 255px;
 	z-index: 3;
+	.close-btn {
+		cursor: pointer;
+		color: #888;
+		right: 20px;
+		position: absolute;
+		top: 20px;
+	}
 	.source-container {
 		border-bottom: 1px solid #CCC;
 		padding-bottom: 15px;
+		.source {
+			padding-right: 50px;
+		}
 	}
 	.figures {
 		padding-top: 10px;
@@ -392,6 +397,23 @@ a:visited {
 		padding: 5px 0;
 		span {
 			font-size: 26px;
+		}
+	}
+}
+
+.ranking-chart {    
+	margin-top: 20px;
+	max-height: 234px;
+  overflow: scroll;
+	.bar {
+		fill: #F2645B;
+	}
+	.name {
+		text-anchor: end;
+	}
+	.y.axis {
+		text {
+			display: none;
 		}
 	}
 }
@@ -472,7 +494,7 @@ a:visited {
 		height: auto;
 		left: -215px;
 		opacity: 0;
-		padding-bottom: 15px;
+		padding-bottom: 5px;
 		z-index: -1;
 		label {
 			margin-top: 10px;
@@ -774,14 +796,6 @@ table {
 
 .c3-focused .c3-lines .c3-line {
 	stroke: #007CE1 !important;
-}
-
-.ranking-chart {
-	.c3-axis-x {
-		.tick line {
-			display: none;
-		}
-	}
 }
 
 .sparkline {

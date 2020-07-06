@@ -1,18 +1,10 @@
 function setGlobalFigures() {
 	var globalFigures = $('.global-figures');
 	var globalFiguresSource = $('.global-figures .source-container');
-	globalFigures.find('.figures, .source-container').empty();
+	globalFigures.find('.figures, .source-container, .ranking-chart').empty();
 
-
-
-	var rankingByCountry = d3.nest()
-    .key(function(d) { return d['#country+name']; })
-    .rollup(function(v) { return v[0][currentIndicator.id]; })
-    .entries(nationalData)
-    .sort(function(a, b){ return d3.descending(a.value, b.value); })
-
-	globalFigures.find('.ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
-	createRankingChart(rankingByCountry, '.global-figures .ranking-chart');
+	//ranking chart
+	createRankingChart();
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
@@ -59,9 +51,9 @@ function setGlobalFigures() {
 
 		var covidGlobal = covidTrendData.H63;
 		var casesPerCapita = covidGlobal[covidGlobal.length-1].weekly_new_cases_per_ht;
-		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_pc_change;
 		
 		//weekly new cases per capita
+		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_new_cases_pc_change;
 		createKeyFigure('.figures', 'Weekly number of new cases per 100,000 people', 'cases-capita', casesPerCapita.toFixed(0));
 		var sparklineArray = [];
 		covidGlobal.forEach(function(d) {
@@ -74,7 +66,7 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
     var pctArray = [];
     covidGlobal.forEach(function(d) {
-      var obj = {date: d.date_epicrv, value: d.weekly_pc_change};
+      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
       pctArray.push(obj);
     });
     createTrendBarChart(pctArray, '.global-figures .cases-trend');

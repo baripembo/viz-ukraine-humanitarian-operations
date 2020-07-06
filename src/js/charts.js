@@ -355,54 +355,104 @@ function createTrendBarChart(data, div) {
 /*************************/
 /*** RANKING BAR CHART ***/
 /*************************/
-function createRankingChart(data, div) {
-  var dataLabels = [];
-  var dataValues = ['data1'];
-  data.forEach(function(d) {
-    if (d.value!=null) {
-      dataLabels.push(d.key)
-      dataValues.push(d.value);
-    }
-  });
+function createRankingChart() {  
+  //set title
+  $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
 
-  var total = data.length;
-  var barMargin = 9;
-  var barHeight = 13;
-  var height = (barHeight+barMargin) * data.length;
-  var chart = c3.generate({
-    size: {
-      height: height
-    },
-    bindto: div,
-    data: {
-      columns: [
-        dataValues
-      ],
-      types: {
-        data1: 'bar',
-      },
-      color: function() {
-        return '#F2645B';
-      }
-    },
-    axis: {
-      rotated: true,
-      x: {
-        type: 'category',
-        categories: dataLabels
-      },
-      y: {
-        tick: {
-          count: 5,
-          format: d3.format(",.2r")
-        }
-      }
-    },
-    grid: {
-      y: {
-        show: true
-      }
-    }
+  var indicator = (currentIndicator.id=='#severity+type') ? '#severity+num' : currentIndicator.id;
+
+  //format data
+  var rankingByCountry = d3.nest()
+    .key(function(d) { return d['#country+name']; })
+    .rollup(function(v) { return v[0][indicator]; })
+    .entries(nationalData);
+
+  var rankingData = rankingByCountry.filter(function(item) { 
+    return isVal(item.value) && !isNaN(item.value);
   });
+  rankingData.sort(function(a, b){ return d3.descending(+a.value, +b.value); });
+
+  console.log(rankingData);
+
+  var valueMax = d3.max(rankingData, function(d) { return +d.value; });
+  
+  var valueFormat;
+  if (indicator.indexOf('pct')>-1) valueFormat = percentFormat;
+  else if (indicator.indexOf('funding')>-1) valueFormat = formatValue;
+  else valueFormat = d3.format(',.2r')
+
+  //console.log(rankingData);
+
+  var barHeight = 13;
+  var barPadding = 9;
+  var margin = {top: 0, right: 40, bottom: 15, left: 100},
+      width = $('.global-figures').width() - margin.left - margin.right,
+      height = (barHeight + barPadding) * rankingData.length;
+
+  var svg = d3.select('.ranking-chart').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  var x = d3.scaleLinear()
+    .range([0, width])
+    .domain([0, valueMax]);
+
+  var y = d3.scaleBand()
+    .range([0, height])
+    .domain(rankingData.map(function (d) {
+      return d.key;
+    }));
+
+  var yAxis = d3.axisLeft(y)
+    .tickSize(0);
+
+  var gy = svg.append('g')
+    .attr('class', 'y axis')
+    .call(yAxis)
+
+  var bars = svg.selectAll('.bar')
+    .data(rankingData)
+    .enter()
+    .append('g')
+
+  //append rects
+  bars.append('rect')
+    .attr('class', 'bar')
+    .attr('y', function (d) {
+      return y(d.key) + barHeight / 2;
+    })
+    .attr('height', barHeight)
+    .attr('x', 1)
+    .attr('width', function (d) {
+      return x(d.value);
+    });
+
+  //add country names
+  bars.append('text')
+    .attr('class', 'name')
+    .attr('x', -3)
+    .attr('y', function(d) { 
+      return y(d.key) + (barHeight+barPadding)/2 + 5; 
+    })
+    .text(function (d) {
+      return truncateString(d.key, 15);
+      //return d.key;
+    })
+    //.call(wrap, 100);
+
+  //add a value label to the right of each bar
+  bars.append('text')
+    .attr('class', 'label')
+    .attr('y', function (d) {
+      return y(d.key) + (barHeight+barPadding)/2 + 5;
+    })
+    .attr('x', function (d) {
+      return x(d.value) + 3;
+    })
+    .text(function (d) {
+      return valueFormat(d.value);
+    });
 }
 

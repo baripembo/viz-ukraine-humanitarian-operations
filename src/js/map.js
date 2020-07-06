@@ -6,7 +6,7 @@ function initMap() {
   map = new mapboxgl.Map({
     container: 'global-map',
     style: 'mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7/',
-    center: [10, 6],
+    center: [-25, 6],
     minZoom: 1,
     zoom: 2,
     attributionControl: false
@@ -154,6 +154,11 @@ function createEvents() {
   //back to global event
   $('.country-menu h2').on('click', function() {
     resetMap();
+  });
+
+  //global figures close button
+  $('.global-figures .close-btn').on('click', function() {
+    console.log('close')
   });
 
   //country panel indicator select event
@@ -477,6 +482,8 @@ function setGlobalLegend(scale) {
 
     markersvg.select('.legendSize')
       .call(legendSize);
+
+    $('.map-legend.global').append('<p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>');
   }
   else {
     updateSource($('.indicator-source'), indicator);
@@ -755,6 +762,8 @@ function createCountryLegend(scale) {
   nodata.append('text')
     .attr('class', 'label')
     .text('No Data');
+
+  $('.map-legend.country').append('<p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>');
 }
 
 function updateCountryLegend(scale) {
@@ -917,7 +926,7 @@ function createMapTooltip(country_code, country_name) {
       if (country[0]['#covid+trend+pct']!=undefined) {
         var pctArray = [];
         covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d.date_epicrv, value: d.weekly_pc_change};
+          var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
           pctArray.push(obj);
         });
         createTrendBarChart(pctArray, '.mapboxgl-popup-content .stat.covid-pct');

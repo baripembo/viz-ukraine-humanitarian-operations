@@ -41,8 +41,8 @@ $( document ).ready(function() {
     });
 
     //set content sizes based on viewport
+    $('.global-figures').height(viewportHeight-40);
     $('.content').height(viewportHeight);
-    $('.global-figures').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.content-right').css('min-width', viewportWidth);
     $('.footnote').width(viewportWidth - $('.global-figures').innerWidth() - 50);
@@ -50,7 +50,7 @@ $( document ).ready(function() {
 
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
-      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/10,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
+      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/-25,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
   
@@ -114,7 +114,7 @@ $( document ).ready(function() {
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_pc_change/100;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_pc_change/100;
         item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
       })
 
