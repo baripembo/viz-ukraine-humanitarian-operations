@@ -1,6 +1,6 @@
 var numFormat = d3.format(',');
 var shortenNumFormat = d3.format('.2s');
-var percentFormat = d3.format('.0%');
+var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
@@ -23,7 +23,7 @@ $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')) ? true : false;
   //console.log(prod);
   
-  var timeseriesPath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS/pub?gid=1253093254&single=true&output=csv';
+  var timeseriesPath = 'https://proxy.hxlstandard.org/api/data-preview.csv?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS%2Fpub%3Fgid%3D1253093254%26single%3Dtrue%26output%3Dcsv';
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
   var minWidth = 1000;
   var viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
@@ -41,6 +41,7 @@ $( document ).ready(function() {
     });
 
     //set content sizes based on viewport
+    $('.global-figures').height(viewportHeight-40);
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.content-right').css('min-width', viewportWidth);
@@ -49,7 +50,7 @@ $( document ).ready(function() {
 
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
-      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/10,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
+      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/-25,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
   
@@ -90,35 +91,32 @@ $( document ).ready(function() {
         .rollup(function(v) { return d3.sum(v, function(d) { return d['#population']; }); })
         .object(subnationalData);
 
+      //init tally counts
+      worldData.numPINCountries = 0;
+      worldData.numCERFCountries = 0;
+      worldData.numCBPFCountries = 0;
+      worldData.numIFICountries = 0;
+
       //parse national data
-      var numCERF = 0;
-      var numCBPF = 0;
-      var numIFI = 0;
-      var numPIN = 0;
       nationalData.forEach(function(item) {
-        //normalize PSE name
+        //normalize counry names
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
+        if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
-       
-        //tally countries with cerf, cbpf, and pin data
-        if (item['#value+cerf+covid+funding+total+usd']!='') numCERF++;
-        if (item['#value+cbpf+covid+funding+total+usd']!='') numCBPF++;
-        if (item['#value+ifi+percap']!='') numIFI++;
-        if (item['#affected+inneed']!='') numPIN++;
+
+        //tally countries with funding and pin data
+        if (isVal(item['#affected+inneed'])) worldData.numPINCountries++;
+        if (isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
+        if (isVal(item['#value+cbpf+covid+funding+total+usd'])) worldData.numCBPFCountries++;
+        if (isVal(item['#value+gdp+ifi+pct'])) worldData.numIFICountries++;
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_pc_change/100 : 0;
-        item['#covid+cases+per+capita'] = (covidByCountry!=undefined) ? covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht : 0;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_pc_change/100;
+        item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
       })
-
-      //inject data to world data
-      worldData.numPINCountries = numPIN;
-      worldData.numCERFCountries = numCERF;
-      worldData.numCBPFCountries = numCBPF;
-      worldData.numIFICountries = numIFI;
 
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()
@@ -133,11 +131,16 @@ $( document ).ready(function() {
       //format dates and set overall status
       vaccinationDataByCountry.forEach(function(country) {
         var postponed = 'On Track';
+        var isPostponed = false;
         country.values.forEach(function(campaign) {
           var d = moment(campaign['#date+start'], ['YYYY-MM','MM/DD/YYYY']);
           var date = new Date(d.year(), d.month(), d.date());
           campaign['#date+start'] = (isNaN(date.getTime())) ? campaign['#date+start'] : getMonth(date.getMonth()) + ' ' + date.getFullYear();
-          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) postponed = 'Postponed / May postpone';
+          if (campaign['#status+name'].toLowerCase().indexOf('unknown')>-1 && !isPostponed) postponed = 'Unknown';
+          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) {
+            isPostponed = true;
+            postponed = 'Postponed / May postpone';
+          }
         });
 
         nationalData.forEach(function(item) {
@@ -188,7 +191,7 @@ $( document ).ready(function() {
 
   function initTracking() {
     //initialize mixpanel
-    let MIXPANEL_TOKEN = window.location.hostname=='data.humdata.org'? '5cbf12bc9984628fb2c55a49daf32e74' : '99035923ee0a67880e6c05ab92b6cbc0';
+    var MIXPANEL_TOKEN = window.location.hostname=='data.humdata.org'? '5cbf12bc9984628fb2c55a49daf32e74' : '99035923ee0a67880e6c05ab92b6cbc0';
     mixpanel.init(MIXPANEL_TOKEN);
     mixpanel.track('page view', {
       'page title': document.title,
@@ -197,6 +200,5 @@ $( document ).ready(function() {
   }
 
   init();
-  //getData();
-  //initTracking();
+  initTracking();
 });
