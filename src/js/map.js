@@ -163,7 +163,7 @@ function createEvents() {
   });
   
   //back to global event
-  $('.country-menu h2').on('click', function() {
+  $('.country-panel h2').on('click', function() {
     resetMap();
   });
 
@@ -239,7 +239,7 @@ function selectCountry(features) {
   var bbox = turf.bbox(turf.featureCollection(features));
   var offset = 50;
   map.fitBounds(bbox, {
-    padding: {left: $('.country-panel').outerWidth()+offset+10, right: $('.map-legend.country').outerWidth()+offset},
+    padding: {left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) + offset, right: $('.map-legend.country').outerWidth()+offset},
     linear: true
   });
 
@@ -390,7 +390,7 @@ function updateGlobalLayer() {
       var id = getCountryIDByName(d['#country+name']);
       color = (id!=undefined) ? foodPricesColor : colorNoData;
     }
-    else if (currentIndicator.id=='#covid+cases+per+capita') {
+    else if (currentIndicator.id=='#covid+cases') {
       color = (val==null) ? colorNoData : colorScale(val);
     }
     else if (currentIndicator.id=='#severity+travel') {
@@ -450,9 +450,14 @@ function getGlobalColorScale() {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
   }
-  // else if (currentIndicator.id=='#covid+cases+per+capita') {
-  //   scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
-  // }
+  else if (currentIndicator.id=='#covid+cases+per+capita') {
+    var data = [];
+    nationalData.forEach(function(d) {
+      if (d[currentIndicator.id]!=null)
+        data.push(d[currentIndicator.id]);
+    })
+    scale = d3.scaleQuantile().domain(data).range(colorRange);
+  }
   else if (currentIndicator.id=='#vaccination-campaigns') {
     scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
   }
@@ -565,6 +570,7 @@ function setGlobalLegend(scale) {
   }
   else {
     var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
+    if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
     legend = d3.legendColor()
       .labelFormat(legendFormat)
       .cells(colorRange.length)
@@ -588,7 +594,7 @@ function initCountryView() {
   $('.content').removeClass('food-prices-view');
   $('.content').removeClass('travel-restrictions-view');
   $('.content').addClass('country-view');
-  $('.country-panel').show().scrollTop(0);
+  $('.country-panel').scrollTop(0);
 
   initCountryPanel();
 }
@@ -861,10 +867,11 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
-      if (val!='No Data') {
-        val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
-      }
-      content += "Weekly number of new cases per 100,000 people" + ':<div class="stat covid-capita">' + val + '</div>';
+      // if (val!='No Data') {
+      //   val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
+      // }
+      content += "Weekly number of new cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+cases']) + '</div>';
+      content += "Weekly number of new deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+deaths']) + '</div>';
       content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
     }
     //PIN layer shows refugees and IDPs
@@ -953,13 +960,21 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
     if (currentIndicator.id=='#covid+cases+per+capita' && val!='No Data') {
-      //per capita sparkline
+      //weekly cases sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {
-        var obj = {date: d.date_epicrv, value: d.weekly_new_cases_per_ht};
+        var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
         sparklineArray.push(obj);
       });
-      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-capita');
+      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-cases');
+
+      //weekly deaths sparkline
+      var sparklineArray = [];
+      covidTrendData[country_code].forEach(function(d) {
+        var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
+        sparklineArray.push(obj);
+      });
+      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-deaths');
       
       //weekly trend bar charts
       if (country[0]['#covid+trend+pct']!=undefined) {
@@ -1013,7 +1028,6 @@ function resetMap() {
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
-  $('.country-panel').fadeOut();
   setSelect('countrySelect', '');
 
   if (currentIndicator.id=='#food-prices') {

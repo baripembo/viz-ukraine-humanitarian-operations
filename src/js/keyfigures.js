@@ -49,20 +49,30 @@ function setGlobalFigures() {
 		var totalCases = d3.sum(nationalData, function(d) { return d['#affected+infected']; });
 		var totalDeaths = d3.sum(nationalData, function(d) { return d['#affected+killed']; });
 		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
-		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', numFormat(totalDeaths));
+		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
 
 		var covidGlobal = covidTrendData.H63;
-		var casesPerCapita = covidGlobal[covidGlobal.length-1].weekly_new_cases_per_ht;
-		
-		//weekly new cases per capita
+		var weeklyCases = covidGlobal[covidGlobal.length-1].weekly_new_cases;
+		var weeklyDeaths = covidGlobal[covidGlobal.length-1].weekly_new_deaths;
 		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_new_cases_pc_change;
-		createKeyFigure('.figures', 'Weekly number of new cases per 100,000 people', 'cases-capita', casesPerCapita.toFixed(0));
+		
+		//weekly new cases
+		createKeyFigure('.figures', 'Weekly number of new cases', 'weekly-cases', shortenNumFormat(weeklyCases));
 		var sparklineArray = [];
 		covidGlobal.forEach(function(d) {
-      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_per_ht};
+      var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
       sparklineArray.push(obj);
     });
-		createSparkline(sparklineArray, '.global-figures .cases-capita');
+		createSparkline(sparklineArray, '.global-figures .weekly-cases');
+
+		//weekly new deaths
+		createKeyFigure('.figures', 'Weekly number of new cases', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
+		var sparklineArray = [];
+		covidGlobal.forEach(function(d) {
+      var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
+      sparklineArray.push(obj);
+    });
+		createSparkline(sparklineArray, '.global-figures .weekly-deaths');
 
 		//weekly trend
 		createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');

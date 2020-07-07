@@ -78,10 +78,6 @@
                 </li>
               </ul>
             </div>
-
-            <div class='country-menu'>
-              <h2><a href="#">< Back to Global View</a></h2>
-            </div>
           </div>
 
           <div class='logos'>
@@ -167,44 +163,6 @@
               </div>
               <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
             </div>
-            
-            <div class='country-panel'>
-              <div class='panel-header'>
-                <div class='panel-title'>
-                  <img src='' class='flag'/>
-                  <h3></h3>
-                </div>
-                <select id='indicatorSelect' class='indicator-select'>
-                  <option value=''>Jump to indicators</option>
-                  <option value='covid'>COVID-19 Cases and Projections</option>
-                  <option value='hrp'>2020 HRP and COVID-19 funding</option>
-                  <option value='inform'>INFORM COVID Index</option>
-                  <option value='schools'>School Closure</option>
-                </select>
-              </div>
-              <div class='covid'>
-                <h5>COVID-19 Cases and Projections</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='panel-inner cases-timeseries'>
-                <div class='country-timeseries-chart'></div>
-              </div>
-              <div class='projections'>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='hrp'>
-                <h5>2020 HRP and COVID-19 funding</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='inform'>
-                <h5>INFORM COVID Index</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='schools'>
-                <h5>School Closure</h5>
-                <div class='panel-inner'></div>
-              </div>
-            </div>
 
           </div>
           <div id="static-map"></div>
@@ -214,8 +172,54 @@
           </div>
         </div>
 
-      </div>
+        <div class='country-panel'>
+          <div class='hdx-logo'>
+            <a href='https://data.humdata.org' target='_blank'>
+              <img width='100' src='assets/logo-hdx.svg'>
+            </a>
+          </div>
 
+          <h1>COVID-19 Map Explorer</h1>
+          <h2><a href='#'>< Back to Global View</a></h2>
+
+          <div class='panel-header'>
+            <div class='panel-title'>
+              <img src='' class='flag'/>
+              <h3></h3>
+            </div>
+            <select id='indicatorSelect' class='indicator-select'>
+              <option value=''>Jump to indicators</option>
+              <option value='covid'>COVID-19 Cases and Projections</option>
+              <option value='hrp'>2020 HRP and COVID-19 funding</option>
+              <option value='inform'>INFORM COVID Index</option>
+              <option value='schools'>School Closure</option>
+            </select>
+          </div>
+          <div class='covid'>
+            <h5>COVID-19 Cases and Projections</h5>
+            <div class='panel-inner'></div>
+          </div>
+          <div class='panel-inner cases-timeseries'>
+            <div class='country-timeseries-chart'></div>
+          </div>
+          <div class='projections'>
+            <div class='panel-inner'></div>
+          </div>
+          <div class='hrp'>
+            <h5>2020 HRP and COVID-19 funding</h5>
+            <div class='panel-inner'></div>
+          </div>
+          <div class='inform'>
+            <h5>INFORM COVID Index</h5>
+            <div class='panel-inner'></div>
+          </div>
+          <div class='schools'>
+            <h5>School Closure</h5>
+            <div class='panel-inner'></div>
+          </div>
+        </div>
+
+      </div>
     </main>
 
     <!-- start Mixpanel -->

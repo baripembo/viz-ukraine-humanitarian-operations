@@ -391,7 +391,7 @@ function createRankingChart() {
   var barPadding = 9;
 
   //determine height available for chart
-  var availSpace = window.innerHeight - $('.ranking-chart').position().top - 40;
+  var availSpace = viewportHeight - $('.ranking-chart').position().top - 40;
   var numRows = Math.floor(availSpace/(rankingBarHeight+barPadding));
   var rankingChartHeight = ((rankingBarHeight+barPadding) * numRows) + 14;
   $('.ranking-chart').css('height', rankingChartHeight);
