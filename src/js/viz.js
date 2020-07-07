@@ -45,7 +45,6 @@ $( document ).ready(function() {
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.content-right').css('min-width', viewportWidth);
-    $('.footnote').width(viewportWidth - $('.global-figures').innerWidth() - 50);
     if (viewportHeight<696) $('.map-legend.country').height(viewportHeight - parseInt($('.map-legend.country').css('top')) - 60);
 
     //load static map -- will only work for screens smaller than 1280

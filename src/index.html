@@ -54,18 +54,12 @@
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
                   <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
                 </li>
-                <!-- <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
-                  <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
-                </li> -->
                 <li data-id='#food-prices' data-legend='Food Market Prices'>
-                  <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
+                  <div class='no-expand'><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
                 </li>
                 <li data-id='#vaccination-campaigns' data-legend='Vaccination Campaign Status'>
-                  <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
+                  <div class='no-expand'><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
                 </li>
-<!--                 <li data-id='#severity+travel' data-legend='Travel Restrictions'>
-                  <div><i class='humanitarianicons-Analysis'></i>Travel Restrictions</div>
-                </li> -->
               </ul>
 
               <h4>Humanitarian Funding and International Financing</h4>
@@ -121,6 +115,13 @@
             <div class='source-container'></div>
             <div class='figures'></div>
             <h6 class='ranking-title'></h6>
+            <div class='ranking-select-container'>
+              <label>Sort by:</label>
+              <select id='rankingSelect' class='ranking-select'>
+                <option value='descending'>Highest to Lowest</option>
+                <option value='ascending'>Lowest to Highest</option>
+              </select>
+            </div>
             <div class='ranking-chart'></div>
           </div>
             
@@ -164,6 +165,7 @@
                   </g>
                 </svg>
               </div>
+              <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
             </div>
             
             <div class='country-panel'>

@@ -355,10 +355,12 @@ function createTrendBarChart(data, div) {
 /*************************/
 /*** RANKING BAR CHART ***/
 /*************************/
+var rankingY, rankingBars, rankingData, rankingBarHeight;
 function createRankingChart() {  
   //set title
   $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
 
+  //use risk index values for INFORM
   var indicator = (currentIndicator.id=='#severity+type') ? '#severity+num' : currentIndicator.id;
 
   //format data
@@ -367,27 +369,36 @@ function createRankingChart() {
     .rollup(function(v) { return v[0][indicator]; })
     .entries(nationalData);
 
-  var rankingData = rankingByCountry.filter(function(item) { 
+  rankingData = rankingByCountry.filter(function(item) { 
     return isVal(item.value) && !isNaN(item.value);
   });
   rankingData.sort(function(a, b){ return d3.descending(+a.value, +b.value); });
 
-  console.log(rankingData);
-
   var valueMax = d3.max(rankingData, function(d) { return +d.value; });
-  
-  var valueFormat;
-  if (indicator.indexOf('pct')>-1) valueFormat = percentFormat;
-  else if (indicator.indexOf('funding')>-1) valueFormat = formatValue;
-  else valueFormat = d3.format(',.2r')
+  var valueFormat = d3.format(',.2r');
+  $('.ranking-select').val('descending');
+  if (indicator.indexOf('funding')>-1 || indicator.indexOf('gdp')>-1) {
+    valueFormat = formatValue;
+    rankingData.reverse();
+    $('.ranking-select').val('ascending');
+  }
+  if (indicator.indexOf('pct')>-1) {
+    valueFormat = percentFormat;
+  }
 
-  //console.log(rankingData);
-
-  var barHeight = 13;
+  //draw chart
+  rankingBarHeight = 13;
   var barPadding = 9;
+
+  //determine height available for chart
+  var availSpace = window.innerHeight - $('.ranking-chart').position().top - 40;
+  var numRows = Math.floor(availSpace/(rankingBarHeight+barPadding));
+  var rankingChartHeight = ((rankingBarHeight+barPadding) * numRows) + 14;
+  $('.ranking-chart').css('height', rankingChartHeight);
+
   var margin = {top: 0, right: 40, bottom: 15, left: 100},
       width = $('.global-figures').width() - margin.left - margin.right,
-      height = (barHeight + barPadding) * rankingData.length;
+      height = (rankingBarHeight + barPadding) * rankingData.length;
 
   var svg = d3.select('.ranking-chart').append('svg')
     .attr('width', width + margin.left + margin.right)
@@ -399,43 +410,38 @@ function createRankingChart() {
     .range([0, width])
     .domain([0, valueMax]);
 
-  var y = d3.scaleBand()
+  rankingY = d3.scaleBand()
     .range([0, height])
     .domain(rankingData.map(function (d) {
       return d.key;
     }));
 
-  var yAxis = d3.axisLeft(y)
+  var yAxis = d3.axisLeft(rankingY)
     .tickSize(0);
 
   var gy = svg.append('g')
     .attr('class', 'y axis')
     .call(yAxis)
 
-  var bars = svg.selectAll('.bar')
+  rankingBars = svg.selectAll('.bar')
     .data(rankingData)
-    .enter()
-    .append('g')
+    .enter().append('g')
+    .attr('class', 'bar-container')
+    .attr('transform', function(d, i) { return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; });
 
   //append rects
-  bars.append('rect')
+  rankingBars.append('rect')
     .attr('class', 'bar')
-    .attr('y', function (d) {
-      return y(d.key) + barHeight / 2;
-    })
-    .attr('height', barHeight)
-    .attr('x', 1)
+    .attr('height', rankingBarHeight)
     .attr('width', function (d) {
       return x(d.value);
     });
 
   //add country names
-  bars.append('text')
+  rankingBars.append('text')
     .attr('class', 'name')
     .attr('x', -3)
-    .attr('y', function(d) { 
-      return y(d.key) + (barHeight+barPadding)/2 + 5; 
-    })
+    .attr('y', 9)
     .text(function (d) {
       return truncateString(d.key, 15);
       //return d.key;
@@ -443,11 +449,9 @@ function createRankingChart() {
     //.call(wrap, 100);
 
   //add a value label to the right of each bar
-  bars.append('text')
+  rankingBars.append('text')
     .attr('class', 'label')
-    .attr('y', function (d) {
-      return y(d.key) + (barHeight+barPadding)/2 + 5;
-    })
+    .attr('y', 9)
     .attr('x', function (d) {
       return x(d.value) + 3;
     })
@@ -456,3 +460,16 @@ function createRankingChart() {
     });
 }
 
+function updateRankingChart(sortMode) {
+  rankingData.sort(function(a, b){
+    if (sortMode=='ascending')
+      return d3.ascending(+a.value, +b.value); 
+    else
+      return d3.descending(+a.value, +b.value);
+  });
+
+  rankingY.domain(rankingData.map(function(d) { return d.key; }));
+  rankingBars.transition()
+    .duration(400)
+    .attr('transform', function(d, i) { return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; });
+}

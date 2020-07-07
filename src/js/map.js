@@ -30,6 +30,10 @@ function displayMap() {
   $('.loader, #static-map').remove();
   $('#global-map, .country-select, .map-legend, .global-figures').css('opacity', 1);
 
+  //set initial indicator
+  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend')};
+
+  //init element events
   createEvents();
 
   //get layers
@@ -125,30 +129,38 @@ function createEvents() {
     $('.menu-indicators li').removeClass('selected');
     $('.menu-indicators li div').removeClass('expand');
     $(this).addClass('selected');
-    $(this).find('div').addClass('expand');
-    currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-
-    //set food prices view
-    if (currentIndicator.id=='#food-prices') {
-      $('.content').addClass('food-prices-view');
+    if (currentIndicator.id==$(this).attr('data-id')) {
+      toggleGlobalFigures(this);
     }
     else {
-      $('.content').removeClass('food-prices-view');
-      closeModal();
-    }
+      currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
+      if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#vaccination-campaigns')
+       toggleGlobalFigures(this);
+      else {
+        toggleGlobalFigures(this, 'open');
+      }
 
-    //set travel restrictions view
-    if (currentIndicator.id=='#severity+travel') {
-      $('.content').addClass('travel-restrictions-view');
-    }
-    else {
-      $('.content').removeClass('travel-restrictions-view');
-    }
+      //set food prices view
+      if (currentIndicator.id=='#food-prices') {
+        $('.content').addClass('food-prices-view');
+      }
+      else {
+        $('.content').removeClass('food-prices-view');
+        closeModal();
+      }
 
-    mpTrack('wrl', $(this).find('div').text());
-    updateGlobalLayer();
+      //set travel restrictions view
+      if (currentIndicator.id=='#severity+travel') {
+        $('.content').addClass('travel-restrictions-view');
+      }
+      else {
+        $('.content').removeClass('travel-restrictions-view');
+      }
+
+      mpTrack('wrl', $(this).find('div').text());
+      updateGlobalLayer();
+    }
   });
-  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend')};
   
   //back to global event
   $('.country-menu h2').on('click', function() {
@@ -157,7 +169,16 @@ function createEvents() {
 
   //global figures close button
   $('.global-figures .close-btn').on('click', function() {
-    console.log('close')
+    var currentBtn = $('[data-id="'+currentIndicator.id+'"]');
+    toggleGlobalFigures(currentBtn);
+  });
+
+  //ranking select event
+  d3.select('.ranking-select').on('change',function(e) {
+    var selected = d3.select('.ranking-select').node().value;
+    if (selected!='') {
+      updateRankingChart(selected);
+    }
   });
 
   //country panel indicator select event
@@ -180,6 +201,25 @@ function createEvents() {
   });
 }
 
+function toggleGlobalFigures(currentBtn, state) {
+  var width = $('.global-figures').outerWidth();
+  var pos = $('.global-figures').position().left;
+  var newPos = (pos<0) ? 0 : -width;
+  if (state=='open') {
+    newPos = 0;
+  }
+  
+  $('.global-figures').animate({
+    left: newPos
+  }, 200, function() {
+    var div = $(currentBtn).find('div');
+    if ($('.global-figures').position().left==0 && !div.hasClass('no-expand'))
+      div.addClass('expand');
+    else
+      div.removeClass('expand');
+  });
+}
+
 function selectCountry(features) {
   //set first country indicator
   $('#foodSecurity').prop('checked', true);
@@ -199,7 +239,7 @@ function selectCountry(features) {
   var bbox = turf.bbox(turf.featureCollection(features));
   var offset = 50;
   map.fitBounds(bbox, {
-    padding: {left: $('.map-legend.country').outerWidth()+offset+10, right: $('.country-panel').outerWidth()+offset},
+    padding: {left: $('.country-panel').outerWidth()+offset+10, right: $('.map-legend.country').outerWidth()+offset},
     linear: true
   });
 
@@ -410,9 +450,9 @@ function getGlobalColorScale() {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
   }
-  else if (currentIndicator.id=='#covid+cases+per+capita') {
-    scale = d3.scaleQuantile().domain([0, max]).range(colorRange);
-  }
+  // else if (currentIndicator.id=='#covid+cases+per+capita') {
+  //   scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+  // }
   else if (currentIndicator.id=='#vaccination-campaigns') {
     scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
   }

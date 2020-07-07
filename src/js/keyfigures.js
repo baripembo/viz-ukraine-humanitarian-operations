@@ -2,9 +2,7 @@ function setGlobalFigures() {
 	var globalFigures = $('.global-figures');
 	var globalFiguresSource = $('.global-figures .source-container');
 	globalFigures.find('.figures, .source-container, .ranking-chart').empty();
-
-	//ranking chart
-	createRankingChart();
+	globalFigures.find('.source-container').show();
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
@@ -12,6 +10,10 @@ function setGlobalFigures() {
 		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', (d3.format('.4s'))(totalPIN));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numPINCountries);
+	}
+	//INFORM
+	else if (currentIndicator.id=='#severity+type') {
+		globalFigures.find('.source-container').hide();
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
@@ -71,6 +73,9 @@ function setGlobalFigures() {
     });
     createTrendBarChart(pctArray, '.global-figures .cases-trend');
 	}
+
+	//ranking chart
+	createRankingChart();
 }
 
 function createKeyFigure(target, title, className, value) {
