@@ -6,9 +6,9 @@ function initMap() {
   map = new mapboxgl.Map({
     container: 'global-map',
     style: 'mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7/',
-    center: [-25, 6],
+    center: [-25, 0],
     minZoom: 1,
-    zoom: 2,
+    zoom: zoomLevel,
     attributionControl: false
   });
 
@@ -83,22 +83,6 @@ function displayMap() {
 
   mapFeatures = map.queryRenderedFeatures();
 
-  //country select event
-  d3.select('.country-select').on('change',function(e) {
-    var selected = d3.select('.country-select').node().value;
-    if (selected=='') {
-      resetMap();
-    }
-    else {        
-      currentCountry.code = selected;
-      currentCountry.name = d3.select('.country-select option:checked').text();
-
-      //find matched features and zoom to country
-      var selectedFeatures = matchMapFeatures(currentCountry.code);
-      selectCountry(selectedFeatures);
-    }
-  });
-
   //init global and country layers
   initGlobalLayer();
   initCountryLayer();
@@ -134,11 +118,7 @@ function createEvents() {
     }
     else {
       currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-      if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#vaccination-campaigns')
-       toggleGlobalFigures(this);
-      else {
-        toggleGlobalFigures(this, 'open');
-      }
+      toggleGlobalFigures(this, 'open');
 
       //set food prices view
       if (currentIndicator.id=='#food-prices') {
@@ -149,22 +129,9 @@ function createEvents() {
         closeModal();
       }
 
-      //set travel restrictions view
-      if (currentIndicator.id=='#severity+travel') {
-        $('.content').addClass('travel-restrictions-view');
-      }
-      else {
-        $('.content').removeClass('travel-restrictions-view');
-      }
-
       mpTrack('wrl', $(this).find('div').text());
       updateGlobalLayer();
     }
-  });
-  
-  //back to global event
-  $('.country-panel h2').on('click', function() {
-    resetMap();
   });
 
   //global figures close button
@@ -181,14 +148,34 @@ function createEvents() {
     }
   });
 
+  //country select event
+  d3.select('.country-select').on('change',function(e) {
+    var selected = d3.select('.country-select').node().value;
+    if (selected=='') {
+      resetMap();
+    }
+    else {        
+      currentCountry.code = selected;
+      currentCountry.name = d3.select('.country-select option:checked').text();
+
+      //find matched features and zoom to country
+      var selectedFeatures = matchMapFeatures(currentCountry.code);
+      selectCountry(selectedFeatures);
+    }
+  });
+  
+  //back to global event
+  $('.country-panel h2').on('click', function() {
+    resetMap();
+  });
+
   //country panel indicator select event
   d3.select('.indicator-select').on('change',function(e) {
     var selected = d3.select('.indicator-select').node().value;
     if (selected!='') {
-      var container = $('.country-panel');
+      var container = $('.panel-content');
       var section = $('.'+selected);
-      var offset = $('.panel-header').innerHeight();
-      container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop() - offset}, 300);
+      container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop()}, 300);
     }
   });
 
@@ -228,6 +215,10 @@ function selectCountry(features) {
     name: $('input[name="countryIndicators"]:checked').parent().text()
   };
 
+  //reset panel
+  $('.panel-content').animate({scrollTop: 0}, 300);
+  $('.indicator-select').val('');
+
   updateCountryLayer();
   map.setLayoutProperty(globalLayer, 'visibility', 'none');
   map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
@@ -236,7 +227,8 @@ function selectCountry(features) {
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
-  var bbox = turf.bbox(turf.featureCollection(features));
+  //fix MMR bug
+  var bbox = (currentCountry.code=='MMR') ? [92.197265625, 9.990490803070287, 101.162109375, 28.555576049185973] : turf.bbox(turf.featureCollection(features));
   var offset = 50;
   map.fitBounds(bbox, {
     padding: {left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) + offset, right: $('.map-legend.country').outerWidth()+offset},
@@ -1017,14 +1009,6 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-  // var id = currentCountry.code.toLowerCase();
-  // if (map.getLayer(id+'-popdensity')) {
-  //   map.removeLayer(id+'-popdensity');
-  // }
-  // if (map.getSource(id+'-pop-tileset')) {
-  //   map.removeSource(id+'-pop-tileset');
-  // }
-  
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
@@ -1033,20 +1017,16 @@ function resetMap() {
   if (currentIndicator.id=='#food-prices') {
     $('.content').addClass('food-prices-view');
   }
-  if (currentIndicator.id=='#severity+travel') {
-    $('.content').addClass('travel-restrictions-view');
-  }
 
   updateGlobalLayer();
 
   map.flyTo({ 
     speed: 2,
-    zoom: 2,
-    center: [10, 6] 
+    zoom: zoomLevel,
+    center: [-25, 0] 
   });
   map.once('moveend', function() {
     map.setLayoutProperty(globalLayer, 'visibility', 'visible');
-    //map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
   });
 }
 

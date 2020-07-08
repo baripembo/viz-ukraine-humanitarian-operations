@@ -12,7 +12,7 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numPINCountries);
 	}
 	//INFORM
-	else if (currentIndicator.id=='#severity+type') {
+	else if (currentIndicator.id=='#severity+type' || currentIndicator.id=='#vaccination-campaigns' || currentIndicator.id=='#food-prices') {
 		globalFigures.find('.source-container').hide();
 	}
 	//humanitarian funding
@@ -66,7 +66,7 @@ function setGlobalFigures() {
 		createSparkline(sparklineArray, '.global-figures .weekly-cases');
 
 		//weekly new deaths
-		createKeyFigure('.figures', 'Weekly number of new cases', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
+		createKeyFigure('.figures', 'Weekly number of new deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
 		var sparklineArray = [];
 		covidGlobal.forEach(function(d) {
       var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
