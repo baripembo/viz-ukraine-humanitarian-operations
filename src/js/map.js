@@ -637,15 +637,6 @@ function updateCountryLayer() {
   var clrRange = (currentCountryIndicator.id.indexOf('vaccinated')>0) ? immunizationColorRange : colorRange;
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
-  //create log scale for circle markers
-  // var healthFacilityMax = d3.max(subnationalData, function(d) {
-  //   if (d['#country+code']==currentCountry.code)
-  //     return +d['#loc+count+health']; 
-  // })
-  // var markerScale = d3.scaleSqrt()
-  //   .domain([1, healthFacilityMax])
-  //   .range([2, 15]);
-
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
   var expressionOpacity = ['match', ['get', 'ADM1_PCODE']];
@@ -656,86 +647,28 @@ function updateCountryLayer() {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || val=='' || isNaN(val)) ? colorNoData : countryColorScale(val);
       layerOpacity = 1;
-
-      //health facility markers
-      // var healthVal = (currentCountryIndicator.id=='#loc+count+health') ? d['#loc+count+health'] : 0;
-      // markerSize = markerScale(healthVal);
     }
     else {
       color = colorDefault;
       layerOpacity = 0;
-      //markerSize = 0;
     }
     
     expression.push(d['#adm1+code'], color);
     expressionOpacity.push(d['#adm1+code'], layerOpacity);
-    //expressionMarkers.push(d['#adm1+code'], markerSize);
   });
   expression.push(colorDefault);
   expressionOpacity.push(0);
-  //expressionMarkers.push(0);
 
   //set properties
   map.setPaintProperty(countryLayer, 'fill-color', expression);
   map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
-  //set health facility markers
-  // map.setPaintProperty(countryMarkerLayer, 'circle-radius', expressionMarkers);
-  // map.setPaintProperty(countryMarkerLayer, 'circle-color', '#007ce1');
-  // map.setPaintProperty(countryMarkerLayer, 'circle-opacity', 0.6);
-  // map.setPaintProperty(countryMarkerLayer, 'circle-translate', [0,-10]);
-
   //hide color scale if no data
   if (max!=undefined && max>0)
     updateCountryLegend(countryColorScale);
   else
     $('.map-legend.country .legend-container').addClass('no-data');
-
-  //load pop density raster
-  // var id = currentCountry.code.toLowerCase();
-  // var raster = '';
-  // switch(id) {
-  //   case 'ukr':
-  //     raster = 'adkwa0bw';
-  //     break;
-  //   case 'bdi':
-  //     raster = '85uxb0dw';
-  //     break;
-  //   case 'col':
-  //     raster = 'awxirkoh';
-  //     break;
-  //   case 'pse':
-  //     raster = '1emy37d7';
-  //     break;
-  //   default:
-  //     //
-  // }
-
-
-  // if (map.getLayer(id+'-popdensity')) {
-  //   map.removeLayer(id+'-popdensity');
-  // }
-  // if (map.getSource(id+'-pop-tileset')) {
-  //   map.removeSource(id+'-pop-tileset');
-  // }
-
-
-  // if (currentCountryIndicator.id=='#population' && raster!='') {
-  //   map.addSource(id+'-pop-tileset', {
-  //     type: 'raster',
-  //     url: 'mapbox://humdata.'+raster
-  //   });
-
-  //   map.addLayer(
-  //     {
-  //       'id': id+'-popdensity',
-  //       'type': 'raster',
-  //       'source': id+'-pop-tileset'
-  //     },
-  //     countryBoundaryLayer
-  //   );
-  // }
 }
 
 function checkIPCData() {
@@ -745,16 +678,15 @@ function checkIPCData() {
   subnationalData.forEach(function(d) {
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
-      if (index==0 && val==' ') {
+      if (index==0 && (!isVal(val) || isNaN(val))) {
         isEmpty = true;
       }
-      if (isEmpty && index==1 && val!=' ') {
+      if (index==1 && isEmpty && isVal(val) && !isNaN(val)) {
         isEmpty = false;
       }
       index++;
     }
   });
-
   if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3+pct';
 }
 

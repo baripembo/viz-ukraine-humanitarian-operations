@@ -360,8 +360,17 @@ function createRankingChart() {
   //set title
   $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
 
-  //use risk index values for INFORM
-  var indicator = (currentIndicator.id=='#severity+type') ? '#severity+num' : currentIndicator.id;
+  var indicator;
+  switch(currentIndicator.id) {
+    case '#severity+type':
+      indicator = '#severity+num';
+      break;
+    case '#vaccination-campaigns':
+      indicator = '#vaccination+num+ratio';
+      break;
+    default:
+      indicator = currentIndicator.id;
+  }
 
   //format data
   var rankingByCountry = d3.nest()
@@ -382,7 +391,7 @@ function createRankingChart() {
     rankingData.reverse();
     $('.ranking-select').val('ascending');
   }
-  if (indicator.indexOf('pct')>-1) {
+  if (indicator.indexOf('pct')>-1 || indicator=='#vaccination+num+ratio') {
     valueFormat = percentFormat;
   }
 
