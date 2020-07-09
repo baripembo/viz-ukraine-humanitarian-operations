@@ -9,7 +9,7 @@ var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1']
 var foodPricesColor = '#007CE1';
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var regionData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
+var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var zoomLevel = 2;
@@ -75,8 +75,10 @@ $( document ).ready(function() {
       var allData = data[0];
       timeseriesData = data[1];
       covidTrendData = data[2];
-      regionData = data[3].features;
+      regionBoundaryData = data[3].features;
+      console.log(allData)
       worldData = allData.world_data[0];
+      regionalData = allData.regional_data;
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
       sourcesData = allData.sources_data;
@@ -168,7 +170,7 @@ $( document ).ready(function() {
     //create regional select
     var countrySelect = d3.select('.region-select')
       .selectAll('option')
-      .data(regionData)
+      .data(regionBoundaryData)
       .enter().append('option')
         .text(function(d) { return d.properties.tbl_regcov_2020_ocha_Field3; })
         .attr('value', function (d) { return d.properties.tbl_regcov_2020_ocha_Field3; });
