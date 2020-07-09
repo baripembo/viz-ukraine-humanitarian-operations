@@ -42,13 +42,6 @@ function displayMap() {
       case 'adm0-fills':
         globalLayer = layer.id;
 
-        // map.setPaintProperty(globalLayer, 'fill-opacity', [
-        //   'case',
-        //   ['boolean', ['feature-state', 'hover'], false],
-        //   1,
-        //   0.5
-        // );
-
         map.setFeatureState(
           { source: 'composite', sourceLayer: adm0SourceLayer, id: globalLayer },
           { hover: false }
@@ -299,24 +292,7 @@ function initGlobalLayer() {
 function handleGlobalEvents(layer) {
   map.on('mouseenter', globalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#severity+travel') {
-      //console.log(e)
-      // if (hoveredStateId) {
-      //   map.setFeatureState(
-      //     { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
-      //     { hover: false }
-      //   );
-      // }
-      // hoveredStateId = e.features[0].id;
-      // //console.log('hoveredStateId', hoveredStateId  )
-      // map.setFeatureState(
-      //   { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
-      //   { hover: true }
-      // );
-    }
-    else {
-      tooltip.addTo(map);
-    }
+    tooltip.addTo(map);
   });
 
   map.on('mousemove', function(e) {
@@ -391,9 +367,6 @@ function updateGlobalLayer() {
     else if (currentIndicator.id=='#severity+type') {
       color = (!isVal(val)) ? colorNoData : colorScale(val);
     }
-    else if (currentIndicator.id=='#vaccination-campaigns') {
-      color = (!isVal(val) || val=='Unknown') ? colorNoData : colorScale(val);
-    }
     else {
       color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
     }
@@ -429,7 +402,7 @@ function updateGlobalLayer() {
 function getGlobalColorScale() {
   var min = d3.min(nationalData, function(d) { return +d[currentIndicator.id]; });
   var max = d3.max(nationalData, function(d) { return +d[currentIndicator.id]; });
-  if (currentIndicator.id.indexOf('pct')>-1) max = 1;
+  if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1 || currentIndicator.id=='#food-prices') max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
   else max = max;
@@ -449,9 +422,6 @@ function getGlobalColorScale() {
         data.push(d[currentIndicator.id]);
     })
     scale = d3.scaleQuantile().domain(data).range(colorRange);
-  }
-  else if (currentIndicator.id=='#vaccination-campaigns') {
-    scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
   }
   else if (currentIndicator.id=='#food-prices') {
     scale = d3.scaleOrdinal().domain(['Data Available', 'No Data']).range([foodPricesColor, colorNoData]);
@@ -540,10 +510,6 @@ function setGlobalLegend(scale) {
     noDataKey.find('.label').text('Other response plans');
     noDataKey.find('rect').css('fill', '#E7E4E6');
   }
-  else if (currentIndicator.id=='#vaccination-campaigns') {
-    noDataKey.find('.label').text('No Data/Unknown');
-    noDataKey.find('rect').css('fill', '#FFF');
-  }
   else {
     noDataKey.find('.label').text('No Data');
     noDataKey.find('rect').css('fill', '#FFF');
@@ -561,7 +527,7 @@ function setGlobalLegend(scale) {
       .scale(scale);
   }
   else {
-    var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
+    var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1 || currentIndicator.id=='#food-prices') ? d3.format('.0%') : shortenNumFormat;
     if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
     legend = d3.legendColor()
       .labelFormat(legendFormat)
@@ -571,11 +537,6 @@ function setGlobalLegend(scale) {
 
   var g = d3.select('.map-legend.global .scale');
   g.call(legend);
-
-  if (currentIndicator.id=='#vaccination-campaigns')
-    $('.legend-container').addClass('vaccination-campaign');
-  else
-    $('.legend-container').removeClass('vaccination-campaign');
 }
 
 
@@ -791,9 +752,6 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
-      // if (val!='No Data') {
-      //   val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
-      // }
       content += "Weekly number of new cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+cases']) + '</div>';
       content += "Weekly number of new deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+deaths']) + '</div>';
       content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
@@ -810,7 +768,7 @@ function createMapTooltip(country_code, country_name) {
       content += '</div>';
     }
     //Vaccination campaigns layer
-    else if (currentIndicator.id=='#vaccination-campaigns') {
+    else if (currentIndicator.id=='#vaccination+num+ratio') {
       var vaccData = [];
       vaccinationDataByCountry.forEach(function(country) {
         if (country.key==country_code) {

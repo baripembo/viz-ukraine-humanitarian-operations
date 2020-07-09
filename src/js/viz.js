@@ -10,7 +10,7 @@ var foodPricesColor = '#007CE1';
 var travelColor = '#F2645A';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
+var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, foodRankingData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var zoomLevel = 2;
@@ -66,7 +66,8 @@ $( document ).ready(function() {
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.csv(timeseriesPath),
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json')
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json'),
+      d3.csv('data/food-ranking.csv')
     ]).then(function(data) {
       console.log('Data loaded')
       $('.loader span').text('Initializing map...');
@@ -75,6 +76,7 @@ $( document ).ready(function() {
       var allData = data[0];
       timeseriesData = data[1];
       covidTrendData = data[2];
+      foodRankingData = data[3];
       worldData = allData.world_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
@@ -100,6 +102,13 @@ $( document ).ready(function() {
       worldData.numCBPFCountries = 0;
       worldData.numIFICountries = 0;
 
+      //temp
+      var foodRankingObject = {};
+      foodRankingData.forEach(function(d) {
+        foodRankingObject[d.Country] = d['Food Price Ratio'];
+      });
+      //
+
       //parse national data
       nationalData.forEach(function(item) {
         //normalize counry names
@@ -114,6 +123,12 @@ $( document ).ready(function() {
         if (isVal(item['#value+cerf+covid+funding+total+usd'])) worldData.numCERFCountries++;
         if (isVal(item['#value+cbpf+covid+funding+total+usd'])) worldData.numCBPFCountries++;
         if (isVal(item['#value+gdp+ifi+pct'])) worldData.numIFICountries++;
+
+        //vacc ratios
+        item['#vaccination+num+ratio'] = 1-item['#vaccination+num+ratio'];
+
+        //food ranking
+        item['#food-prices-ratio'] = foodRankingObject[item['#country+name']];
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];

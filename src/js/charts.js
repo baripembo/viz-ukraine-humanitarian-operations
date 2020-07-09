@@ -368,6 +368,9 @@ function createRankingChart() {
     case '#vaccination-campaigns':
       indicator = '#vaccination+num+ratio';
       break;
+    case '#food-prices':
+      indicator = '#food-prices-ratio';
+      break;
     default:
       indicator = currentIndicator.id;
   }
@@ -391,7 +394,7 @@ function createRankingChart() {
     rankingData.reverse();
     $('.ranking-select').val('ascending');
   }
-  if (indicator.indexOf('pct')>-1 || indicator=='#vaccination+num+ratio') {
+  if (indicator.indexOf('pct')>-1 || indicator.indexOf('ratio')>-1) {
     valueFormat = percentFormat;
   }
 
@@ -405,7 +408,7 @@ function createRankingChart() {
   var rankingChartHeight = ((rankingBarHeight+barPadding) * numRows) + 14;
   $('.ranking-chart').css('height', rankingChartHeight);
 
-  var margin = {top: 0, right: 40, bottom: 15, left: 100},
+  var margin = {top: 0, right: 45, bottom: 15, left: 100},
       width = $('.global-figures').width() - margin.left - margin.right,
       height = (rankingBarHeight + barPadding) * rankingData.length;
 
