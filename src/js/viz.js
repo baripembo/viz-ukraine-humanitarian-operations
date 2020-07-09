@@ -7,10 +7,9 @@ var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var vaccinationColorRange = ['#F2645A','#EEEEEE'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var foodPricesColor = '#007CE1';
-var travelColor = '#F2645A';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
+var regionData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var zoomLevel = 2;
@@ -66,7 +65,8 @@ $( document ).ready(function() {
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.csv(timeseriesPath),
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json')
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json'),
+      d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
       console.log('Data loaded')
       $('.loader span').text('Initializing map...');
@@ -75,6 +75,7 @@ $( document ).ready(function() {
       var allData = data[0];
       timeseriesData = data[1];
       covidTrendData = data[2];
+      regionData = data[3].features;
       worldData = allData.world_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
@@ -164,6 +165,17 @@ $( document ).ready(function() {
   }
 
   function initView() {
+    //create regional select
+    var countrySelect = d3.select('.region-select')
+      .selectAll('option')
+      .data(regionData)
+      .enter().append('option')
+        .text(function(d) { return d.properties.tbl_regcov_2020_ocha_Field3; })
+        .attr('value', function (d) { return d.properties.tbl_regcov_2020_ocha_Field3; });
+    //insert default option    
+    $('.region-select').prepend('<option value="">All Regions</option>');
+    $('.region-select').val($('.region-select option:first').val());
+
     //create country select
     var hrpData = nationalData.filter((row) => countryCodeList.includes(row['#country+code']));
     var countrySelect = d3.select('.country-select')
@@ -172,7 +184,6 @@ $( document ).ready(function() {
       .enter().append('option')
         .text(function(d) { return d['#country+name']; })
         .attr('value', function (d) { return d['#country+code']; });
-
     //insert default option    
     $('.country-select').prepend('<option value="">View Country Page</option>');
     $('.country-select').val($('.country-select option:first').val());

@@ -74,11 +74,6 @@ function roundUp(x, limit) {
   return Math.ceil(x/limit)*limit;
 }
 
-function setSelect(id, valueToSelect) {    
-  let element = document.getElementById(id);
-  element.value = valueToSelect;
-}
-
 function isVal(value) {
   return (value===undefined || value===null || value==='') ? false : true;
 }

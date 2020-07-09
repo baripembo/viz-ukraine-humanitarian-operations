@@ -148,6 +148,17 @@ function createEvents() {
     }
   });
 
+  //region select event
+  d3.select('.region-select').on('change',function(e) {
+    var selected = d3.select('.region-select').node().value;
+    if (selected=='') {
+      resetMap();
+    }
+    else {        
+      selectRegion(selected);
+    }
+  });
+
   //country select event
   d3.select('.country-select').on('change',function(e) {
     var selected = d3.select('.country-select').node().value;
@@ -207,6 +218,16 @@ function toggleGlobalFigures(currentBtn, state) {
   });
 }
 
+
+function selectRegion(region) {
+  var regionFeature = regionData.filter(d => d.properties.tbl_regcov_2020_ocha_Field3 == region);
+  var offset = 50;
+  map.fitBounds(regionFeature[0].bbox, {
+    padding: {top: offset, right: $('.map-legend').outerWidth()+offset, bottom: offset, left: $('.global-figures').outerWidth()+offset},
+    linear: true
+  });
+}
+
 function selectCountry(features) {
   //set first country indicator
   $('#foodSecurity').prop('checked', true);
@@ -237,16 +258,6 @@ function selectCountry(features) {
 
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
-}
-
-function setTravelDescription(country) {
-  var data = dataByCountry[country.code][0];
-  var text = truncateString(data['#severity+travel'], 275);
-  var content = '<h2 class="title">'+ country.name +'</h2>';
-  content += '<span class="small">Published on: '+ data['#severity+date+travel'] +'</span>';
-  content += '<p>Restrictions: '+ text +'</p>';
-  content += '<a href="https://unwfp.maps.arcgis.com/apps/opsdashboard/index.html#/db5b5df309ac4f10bfd36145a6f8880e" target="_blank">Read More&nbsp;&nbsp;<i class="humanitarianicons-Out-of-platform"></i></a>';
-  $('.layer-description .description-content').empty().append(content);
 }
 
 
@@ -299,28 +310,13 @@ function initGlobalLayer() {
 function handleGlobalEvents(layer) {
   map.on('mouseenter', globalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#severity+travel') {
-      //console.log(e)
-      // if (hoveredStateId) {
-      //   map.setFeatureState(
-      //     { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
-      //     { hover: false }
-      //   );
-      // }
-      // hoveredStateId = e.features[0].id;
-      // //console.log('hoveredStateId', hoveredStateId  )
-      // map.setFeatureState(
-      //   { source: 'composite', sourceLayer: adm0SourceLayer, id: hoveredStateId },
-      //   { hover: true }
-      // );
-    }
-    else {
+    if (currentIndicator.id!='#food-prices') {
       tooltip.addTo(map);
     }
   });
 
   map.on('mousemove', function(e) {
-    if (currentIndicator.id!='#food-prices' && currentIndicator.id!='#severity+travel') {
+    if (currentIndicator.id!='#food-prices') {
       var features = map.queryRenderedFeatures(e.point, { layers: [globalLayer, globalLabelLayer, globalMarkerLayer] });
       var target;
       features.forEach(function(feature) {
@@ -356,9 +352,6 @@ function handleGlobalEvents(layer) {
         if (currentIndicator.id=='#food-prices' && getCountryIDByName(currentCountry.name)!=undefined) {
           openModal(currentCountry.name);
         }
-        if (currentIndicator.id=='#severity+travel') {
-          setTravelDescription(currentCountry);
-        }
       }
     }
     
@@ -385,9 +378,6 @@ function updateGlobalLayer() {
     else if (currentIndicator.id=='#covid+cases') {
       color = (val==null) ? colorNoData : colorScale(val);
     }
-    else if (currentIndicator.id=='#severity+travel') {
-      color = travelColor;
-    }
     else if (currentIndicator.id=='#severity+type') {
       color = (!isVal(val)) ? colorNoData : colorScale(val);
     }
@@ -406,19 +396,14 @@ function updateGlobalLayer() {
   map.setPaintProperty(globalLayer, 'fill-color', expression);
   setGlobalLegend(colorScale);
 
-  //food prices and travel restrictions layers
-  if (currentIndicator.id=='#food-prices' || currentIndicator.id=='#severity+travel') {
+  //food prices layer
+  if (currentIndicator.id=='#food-prices') {
     map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
 
     var layer = $('.layer-description');
     layer.find('.description-content, .description-source').empty();    
     createSource($('.layer-description .description-source'), currentIndicator.id);
-    if (currentIndicator.id=='#food-prices') {
-      layer.find('h4').text('Click on a country to explore commodity prices');
-    }
-    if (currentIndicator.id=='#severity+travel') {
-      layer.find('h4').text('Click on a country to view travel restrictions');
-    }
+    layer.find('h4').text('Click on a country to explore commodity prices');
   }
   //all other layers
   else {
@@ -584,7 +569,6 @@ function setGlobalLegend(scale) {
 /*****************************/
 function initCountryView() {
   $('.content').removeClass('food-prices-view');
-  $('.content').removeClass('travel-restrictions-view');
   $('.content').addClass('country-view');
   $('.country-panel').scrollTop(0);
 
@@ -1012,8 +996,8 @@ function resetMap() {
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
-  setSelect('countrySelect', '');
-
+  $('.region-select').val('');
+  $('.country-select').val('');
   if (currentIndicator.id=='#food-prices') {
     $('.content').addClass('food-prices-view');
   }
