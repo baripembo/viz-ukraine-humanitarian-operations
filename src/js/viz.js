@@ -10,9 +10,10 @@ var foodPricesColor = '#007CE1';
 var travelColor = '#F2645A';//'#6EB4ED'
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale = '';
+var worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var mapLoaded = false;
 var dataLoaded = false;
+var zoomLevel = 2;
 
 var currentIndicator = {};
 var currentCountryIndicator = {};
@@ -26,9 +27,9 @@ $( document ).ready(function() {
   var timeseriesPath = 'https://proxy.hxlstandard.org/api/data-preview.csv?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS%2Fpub%3Fgid%3D1253093254%26single%3Dtrue%26output%3Dcsv';
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
   var minWidth = 1000;
-  var viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
-  var viewportHeight = window.innerHeight;
   var tooltip = d3.select('.tooltip');
+  viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
+  viewportHeight = window.innerHeight;
 
 
   function init() {
@@ -44,13 +45,15 @@ $( document ).ready(function() {
     $('.global-figures').height(viewportHeight-40);
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('.content-right').css('min-width', viewportWidth);
-    $('.footnote').width(viewportWidth - $('.global-figures').innerWidth() - 50);
-    if (viewportHeight<696) $('.map-legend.country').height(viewportHeight - parseInt($('.map-legend.country').css('top')) - 60);
+    $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
+    if (viewportHeight<696) {
+      $('.map-legend.country').height(viewportHeight - 250);
+      zoomLevel = 1.4;
+    }
 
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
-      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/-25,6,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
+      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/-25,0,'+zoomLevel+'/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
   
@@ -116,6 +119,8 @@ $( document ).ready(function() {
         var covidByCountry = covidTrendData[item['#country+code']];
         item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_pc_change/100;
         item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
+        item['#covid+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases;
+        item['#covid+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_deaths;
       })
 
       //group national data by country -- drives country panel    
@@ -179,9 +184,7 @@ $( document ).ready(function() {
 
   function initCountryView() {
     $('.content').addClass('country-view');
-    $('.menu h2').html('<a href="#">< Back to Global View</a>');
     $('.country-panel').scrollTop(0);
-    $('.country-panel').show();
     $('#foodSecurity').prop('checked', true);
     currentCountryIndicator = {id: $('input[name="countryIndicators"]:checked').val(), name: $('input[name="countryIndicators"]:checked').parent().text()};
 

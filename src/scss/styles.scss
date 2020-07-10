@@ -98,7 +98,8 @@ h6 {
 
 .stat {
   font-family: 'Gotham-Light', sans-serif;
-  font-size: 42px;//font-size: 52px;
+  font-size: 36px;
+  line-height: 40px;
   margin: 30px 0;
 }
 
@@ -127,40 +128,45 @@ a:visited {
 	display: flex;
 	flex-flow: row;
 	.content-left {
+		background-color: #FFF;
 		display: flex;
 		flex-flow: column;
 		overflow: scroll;
 		padding: 12px 0 12px 12px;
 		min-width: 255px;
 		width: 255px;
+		z-index: 2;
 	}
 	.content-right {
 		background-color: #99DAEA;
 		height: 100%;
 		position: relative;
+		z-index: 1;
 	}
 	&.country-view {
 		.description,
 		.country-label,
 		.map-legend.global,
-		.global-menu,
 		.global-figures,
 		.layer-description {
 			display: none;
 		}
 		.map-legend.country {
-			left: 40px;
+			left: auto;
+			right: 24px;
 			opacity: 1;
 			z-index: 3;
 		}
-		.country-menu {
-			display: block;
+		.country-panel {
+			left: 0;
+			transition: left 0.4s ease-out;
 		}
 	}
-	&.food-prices-view,
-	&.travel-restrictions-view {
+	&.food-prices-view {
 		.map-legend.global,
-		.count-marker
+		.count-marker {
+			display: none;
+		}
 		.layer-description {
 			display: block;
 			svg {
@@ -169,18 +175,13 @@ a:visited {
 			}
 		}
 	}
-	&.travel-restrictions-view {
-		.description-legend {
-			display: none;
-		}
-	}
 }
 
 .layer-description {
 	background-color: #FFF;
 	display: none;
 	bottom: 36px;
-	padding: 15px;
+	padding: 15px 15px 5px;
 	position: absolute;
 	right: 24px;
 	width: 240px;
@@ -205,6 +206,9 @@ a:visited {
 	.description-legend {
 		display: block;
 		margin-top: 10px;
+	}
+	.footnote {
+		padding-top: 10px;
 	}
 }
 
@@ -269,9 +273,6 @@ a:visited {
 	.global-menu {
 		display: block;
 	}
-	.country-menu {
-		display: none;
-	}
 }
 
 .menu-indicators {
@@ -297,6 +298,11 @@ a:visited {
 					content: '\e9e8';
 				}
 			}
+			&.no-expand {
+				&:after {
+					content: '';
+				}
+			}
 		}
 		i {
 			padding-right: 25px;
@@ -314,7 +320,8 @@ a:visited {
 }
 
 .country-select,
-.indicator-select {    
+.indicator-select,
+.ranking-select {    
 	background-color: #FFF;
   border-color: #FFF;
 	border-radius: 8px;
@@ -329,9 +336,20 @@ a:visited {
 	right: 24px;
 	opacity: 0;
 	position: absolute;
-	top: 42px;
+	top: 30px;
 	width: 215px;
 	z-index: 3;
+}
+
+.ranking-select {
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0,0,0,.5);
+	font-size: 14px;
+	font-weight: normal;
+	height: 30px;
+	margin-left: 8px;
+	padding: 0;
+	width: 155px;
 }
 
 .global-figures {
@@ -372,6 +390,14 @@ a:visited {
 			    line-height: 16px;
 			    margin: 10px 0;
 				}
+				.num {
+					position: relative;
+				}
+				svg {
+					bottom: 10px;
+					left: 110px;
+					position: absolute;
+				}
 			}
 			&:nth-child(2),
 			&:nth-child(4) {
@@ -392,8 +418,8 @@ a:visited {
 	.num {
 		color: #000;
 		font-family: 'Gotham-Light', sans-serif;
-		font-size: 42px;
-		line-height: 46px;
+		font-size: 36px;
+		line-height: 40px;
 		padding: 5px 0;
 		span {
 			font-size: 26px;
@@ -403,7 +429,7 @@ a:visited {
 
 .ranking-chart {    
 	margin-top: 20px;
-	max-height: 234px;
+	min-height: 234px;
   overflow: scroll;
 	.bar {
 		fill: #F2645B;
@@ -416,6 +442,10 @@ a:visited {
 			display: none;
 		}
 	}
+}
+
+.ranking-select-container {
+	margin-top: 10px;
 }
 
 .label-header {
@@ -448,7 +478,7 @@ a:visited {
 	opacity: 0;
 	padding: 15px 20px 5px;
 	position: absolute;
-	bottom: 36px;
+	bottom: 30px;
 	width: 215px;
 	z-index: 3;
 	label {    
@@ -520,18 +550,6 @@ a:visited {
 	}
 }
 
-#country-map {
-	left: 0;
-	fill: transparent;
-	opacity: 0;
-	position: absolute;
-	top: 0;
-	transition: opacity 0.5s ease;
-	.map-regions {
-		stroke: #999;
-	}
-}
-
 .country-label,
 .adm1-label,
 .health-label {
@@ -590,7 +608,7 @@ circle.swatch {
 			margin: 15px 0;
 			position: relative;
 			> svg {
-				left: 110px;
+				left: 115px;
 				position: absolute;
 			}
 		}
@@ -599,6 +617,11 @@ circle.swatch {
 			margin-top: 10px;
 		}
 	}
+}
+
+.mapboxgl-ctrl-top-right {
+  top: 84px;
+  right: 16px;
 }
 
 
@@ -629,22 +652,22 @@ table {
 
 .country-panel {
 	background-color: #FFF;
-	bottom: 30px;
-	display: none;
-	overflow: scroll;
-	padding: 0 30px 30px;
+	bottom: 0;
+	overflow: hidden;
+	padding: 12px 30px 30px;
 	position: absolute;
-	top: 30px;
-	right: 30px;
+	top: 0;
+	left: -416px;
 	width: 416px;
-	z-index: 1;
+	z-index: 3;
+	transition: left 0.3s ease-in;
+	.hdx-logo,
+	h1 {
+		padding-left: 0;
+	}
 	.panel-header {    
 		background-color: #FFF;
 		padding: 30px 0 15px;
-		position: sticky;
-		top: 0;
-		width: 356px;
-		z-index: 1000;
 		.panel-title {
    		align-items: center;
 			display: flex;
@@ -655,6 +678,10 @@ table {
 			margin-right: 10px;
 			width: 35px;
 		}
+	}
+	.panel-content {
+		height: 100%;
+		overflow: scroll;
 	}
 	.source {
 		min-height: 28px;
@@ -675,12 +702,6 @@ table {
 				height: 36px;
 			}
 		}
-		// &.cases,
-		// &.deaths {
-		// 	.stat {
-		// 		font-size: 52px;
-		// 	}
-		// }
 		&.risk-class {
 			.stat {
 				font-size: 32px;
@@ -834,18 +855,18 @@ table {
 			overflow: scroll;
 		}
 	}
-	.global-figures {
-		width: 290px;
-		.figures {
-			flex-flow: column;
-			.key-figure {
-				width: 100%;
-				&:first-child {
-					.inner {
-						border-bottom: 0;
-					}
-				}
-			}
-		}
-	}
+	// .global-figures {
+	// 	width: 290px;
+	// 	.figures {
+	// 		flex-flow: column;
+	// 		.key-figure {
+	// 			width: 100%;
+	// 			&:first-child {
+	// 				.inner {
+	// 					border-bottom: 0;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 }

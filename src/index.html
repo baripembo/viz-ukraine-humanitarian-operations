@@ -54,18 +54,12 @@
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
                   <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
                 </li>
-                <!-- <li data-id='#severity+economic+num' data-legend='COVID-19 Economic Exposure Index'>
-                  <div><i class='humanitarianicons-Analysis'></i>COVID-19 Economic Exposure Index</div>
-                </li> -->
-                <li data-id='#food-prices' data-legend='Food Market Prices'>
+                <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
                   <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
                 </li>
-                <li data-id='#vaccination-campaigns' data-legend='Vaccination Campaign Status'>
+                <li data-id='#vaccination+num+ratio' data-legend='Vaccination Campaign Status (% postponed)'>
                   <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
                 </li>
-<!--                 <li data-id='#severity+travel' data-legend='Travel Restrictions'>
-                  <div><i class='humanitarianicons-Analysis'></i>Travel Restrictions</div>
-                </li> -->
               </ul>
 
               <h4>Humanitarian Funding and International Financing</h4>
@@ -83,10 +77,6 @@
                   <div><i class='humanitarianicons-Analysis'></i>IFI Financing for COVID-19 Response</div>
                 </li>
               </ul>
-            </div>
-
-            <div class='country-menu'>
-              <h2><a href="#">< Back to Global View</a></h2>
             </div>
           </div>
 
@@ -121,6 +111,13 @@
             <div class='source-container'></div>
             <div class='figures'></div>
             <h6 class='ranking-title'></h6>
+            <div class='ranking-select-container'>
+              <label>Sort by:</label>
+              <select id='rankingSelect' class='ranking-select'>
+                <option value='descending'>Highest to Lowest</option>
+                <option value='ascending'>Lowest to Highest</option>
+              </select>
+            </div>
             <div class='ranking-chart'></div>
           </div>
             
@@ -164,44 +161,7 @@
                   </g>
                 </svg>
               </div>
-            </div>
-            
-            <div class='country-panel'>
-              <div class='panel-header'>
-                <div class='panel-title'>
-                  <img src='' class='flag'/>
-                  <h3></h3>
-                </div>
-                <select id='indicatorSelect' class='indicator-select'>
-                  <option value=''>Jump to indicators</option>
-                  <option value='covid'>COVID-19 Cases and Projections</option>
-                  <option value='hrp'>2020 HRP and COVID-19 funding</option>
-                  <option value='inform'>INFORM COVID Index</option>
-                  <option value='schools'>School Closure</option>
-                </select>
-              </div>
-              <div class='covid'>
-                <h5>COVID-19 Cases and Projections</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='panel-inner cases-timeseries'>
-                <div class='country-timeseries-chart'></div>
-              </div>
-              <div class='projections'>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='hrp'>
-                <h5>2020 HRP and COVID-19 funding</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='inform'>
-                <h5>INFORM COVID Index</h5>
-                <div class='panel-inner'></div>
-              </div>
-              <div class='schools'>
-                <h5>School Closure</h5>
-                <div class='panel-inner'></div>
-              </div>
+              <p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>
             </div>
 
           </div>
@@ -212,8 +172,56 @@
           </div>
         </div>
 
-      </div>
+        <div class='country-panel'>
+          <div class='hdx-logo'>
+            <a href='https://data.humdata.org' target='_blank'>
+              <img width='100' src='assets/logo-hdx.svg'>
+            </a>
+          </div>
 
+          <h1>COVID-19 Map Explorer</h1>
+          <h2><a href='#'>< Back to Global View</a></h2>
+
+          <div class='panel-header'>
+            <div class='panel-title'>
+              <img src='' class='flag'/>
+              <h3></h3>
+            </div>
+            <select id='indicatorSelect' class='indicator-select'>
+              <option value=''>Jump to indicators</option>
+              <option value='covid'>COVID-19 Cases and Projections</option>
+              <option value='hrp'>2020 HRP and COVID-19 funding</option>
+              <option value='inform'>INFORM COVID Index</option>
+              <option value='schools'>School Closure</option>
+            </select>
+          </div>
+          <div class='panel-content'>
+            <div class='covid'>
+              <h5>COVID-19 Cases and Projections</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='panel-inner cases-timeseries'>
+              <div class='country-timeseries-chart'></div>
+            </div>
+            <div class='projections'>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='hrp'>
+              <h5>2020 HRP and COVID-19 funding</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='inform'>
+              <h5>INFORM COVID Index</h5>
+              <div class='panel-inner'></div>
+            </div>
+            <div class='schools'>
+              <h5>School Closure</h5>
+              <div class='panel-inner'></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </main>
 
     <!-- start Mixpanel -->
