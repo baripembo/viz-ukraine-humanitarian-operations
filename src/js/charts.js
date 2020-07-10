@@ -360,8 +360,20 @@ function createRankingChart() {
   //set title
   $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
 
-  //use risk index values for INFORM
-  var indicator = (currentIndicator.id=='#severity+type') ? '#severity+num' : currentIndicator.id;
+  var indicator;
+  switch(currentIndicator.id) {
+    case '#severity+type':
+      indicator = '#severity+num';
+      break;
+    case '#vaccination-campaigns':
+      indicator = '#vaccination+num+ratio';
+      break;
+    case '#food-prices':
+      indicator = '#value+food+num+ratio';
+      break;
+    default:
+      indicator = currentIndicator.id;
+  }
 
   //format data
   var rankingByCountry = d3.nest()
@@ -382,7 +394,7 @@ function createRankingChart() {
     rankingData.reverse();
     $('.ranking-select').val('ascending');
   }
-  if (indicator.indexOf('pct')>-1) {
+  if (indicator.indexOf('pct')>-1 || indicator.indexOf('ratio')>-1) {
     valueFormat = percentFormat;
   }
 
@@ -396,7 +408,7 @@ function createRankingChart() {
   var rankingChartHeight = ((rankingBarHeight+barPadding) * numRows) + 14;
   $('.ranking-chart').css('height', rankingChartHeight);
 
-  var margin = {top: 0, right: 40, bottom: 15, left: 100},
+  var margin = {top: 0, right: 45, bottom: 15, left: 100},
       width = $('.global-figures').width() - margin.left - margin.right,
       height = (rankingBarHeight + barPadding) * rankingData.length;
 

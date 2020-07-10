@@ -42,13 +42,6 @@ function displayMap() {
       case 'adm0-fills':
         globalLayer = layer.id;
 
-        // map.setPaintProperty(globalLayer, 'fill-opacity', [
-        //   'case',
-        //   ['boolean', ['feature-state', 'hover'], false],
-        //   1,
-        //   0.5
-        // );
-
         map.setFeatureState(
           { source: 'composite', sourceLayer: adm0SourceLayer, id: globalLayer },
           { hover: false }
@@ -121,11 +114,7 @@ function createEvents() {
       toggleGlobalFigures(this, 'open');
 
       //set food prices view
-      if (currentIndicator.id=='#food-prices') {
-        $('.content').addClass('food-prices-view');
-      }
-      else {
-        $('.content').removeClass('food-prices-view');
+      if (currentIndicator.id!='#value+food+num+ratio') {
         closeModal();
       }
 
@@ -310,13 +299,13 @@ function initGlobalLayer() {
 function handleGlobalEvents(layer) {
   map.on('mouseenter', globalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    if (currentIndicator.id!='#food-prices') {
+    if (currentIndicator.id!='#value+food+num+ratio') {
       tooltip.addTo(map);
     }
   });
 
   map.on('mousemove', function(e) {
-    if (currentIndicator.id!='#food-prices') {
+    if (currentIndicator.id!='#value+food+num+ratio') {
       var features = map.queryRenderedFeatures(e.point, { layers: [globalLayer, globalLabelLayer, globalMarkerLayer] });
       var target;
       features.forEach(function(feature) {
@@ -349,7 +338,7 @@ function handleGlobalEvents(layer) {
       currentCountry.name = (target.properties.Terr_Name=='CuraÃ§ao') ? 'Curaçao' : target.properties.Terr_Name;
 
       if (currentCountry.code!=undefined) {
-        if (currentIndicator.id=='#food-prices' && getCountryIDByName(currentCountry.name)!=undefined) {
+        if (currentIndicator.id=='#value+food+num+ratio' && getCountryIDByName(currentCountry.name)!=undefined) {
           openModal(currentCountry.name);
         }
       }
@@ -371,18 +360,15 @@ function updateGlobalLayer() {
     var val = d[currentIndicator.id];
     var color = colorDefault;
     
-    if (currentIndicator.id=='#food-prices') {
-      var id = getCountryIDByName(d['#country+name']);
-      color = (id!=undefined) ? foodPricesColor : colorNoData;
-    }
-    else if (currentIndicator.id=='#covid+cases') {
+    // if (currentIndicator.id=='#food-prices') {
+    //   var id = getCountryIDByName(d['#country+name']);
+    //   color = (id!=undefined) ? foodPricesColor : colorNoData;
+    // }
+    if (currentIndicator.id=='#covid+cases') {
       color = (val==null) ? colorNoData : colorScale(val);
     }
     else if (currentIndicator.id=='#severity+type') {
       color = (!isVal(val)) ? colorNoData : colorScale(val);
-    }
-    else if (currentIndicator.id=='#vaccination-campaigns') {
-      color = (!isVal(val) || val=='Unknown') ? colorNoData : colorScale(val);
     }
     else {
       color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
@@ -394,27 +380,14 @@ function updateGlobalLayer() {
   expression.push(colorDefault);
 
   map.setPaintProperty(globalLayer, 'fill-color', expression);
+  map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
   setGlobalLegend(colorScale);
-
-  //food prices layer
-  if (currentIndicator.id=='#food-prices') {
-    map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
-
-    var layer = $('.layer-description');
-    layer.find('.description-content, .description-source').empty();    
-    createSource($('.layer-description .description-source'), currentIndicator.id);
-    layer.find('h4').text('Click on a country to explore commodity prices');
-  }
-  //all other layers
-  else {
-    map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
-  }
 }
 
 function getGlobalColorScale() {
   var min = d3.min(nationalData, function(d) { return +d[currentIndicator.id]; });
   var max = d3.max(nationalData, function(d) { return +d[currentIndicator.id]; });
-  if (currentIndicator.id.indexOf('pct')>-1) max = 1;
+  if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
   else max = max;
@@ -434,12 +407,6 @@ function getGlobalColorScale() {
         data.push(d[currentIndicator.id]);
     })
     scale = d3.scaleQuantile().domain(data).range(colorRange);
-  }
-  else if (currentIndicator.id=='#vaccination-campaigns') {
-    scale = d3.scaleOrdinal().domain(['Postponed / May postpone', 'On Track']).range(vaccinationColorRange);
-  }
-  else if (currentIndicator.id=='#food-prices') {
-    scale = d3.scaleOrdinal().domain(['Data Available', 'No Data']).range([foodPricesColor, colorNoData]);
   }
   else if (currentIndicator.id=='#value+gdp+ifi+pct') {
     var reverseRange = colorRange.slice().reverse();
@@ -511,7 +478,8 @@ function setGlobalLegend(scale) {
   }
 
   var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
-  $('.map-legend.global .indicator-title').text(legendTitle);
+  if (currentIndicator.id=='#value+food+num+ratio') legendTitle += '<br>Click on a country to explore commodity prices';
+  $('.map-legend.global .indicator-title').html(legendTitle);
 
   var noDataKey = $('.map-legend.global .no-data-key');
   if (currentIndicator.id=='#affected+inneed+pct') {
@@ -524,10 +492,6 @@ function setGlobalLegend(scale) {
   else if (currentIndicator.id=='#value+funding+hrp+pct') {
     noDataKey.find('.label').text('Other response plans');
     noDataKey.find('rect').css('fill', '#E7E4E6');
-  }
-  else if (currentIndicator.id=='#vaccination-campaigns') {
-    noDataKey.find('.label').text('No Data/Unknown');
-    noDataKey.find('rect').css('fill', '#FFF');
   }
   else {
     noDataKey.find('.label').text('No Data');
@@ -546,7 +510,7 @@ function setGlobalLegend(scale) {
       .scale(scale);
   }
   else {
-    var legendFormat = ((currentIndicator.id).indexOf('pct')>-1) ? d3.format('.0%') : shortenNumFormat;
+    var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
     if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
     legend = d3.legendColor()
       .labelFormat(legendFormat)
@@ -556,11 +520,6 @@ function setGlobalLegend(scale) {
 
   var g = d3.select('.map-legend.global .scale');
   g.call(legend);
-
-  if (currentIndicator.id=='#vaccination-campaigns')
-    $('.legend-container').addClass('vaccination-campaign');
-  else
-    $('.legend-container').removeClass('vaccination-campaign');
 }
 
 
@@ -568,7 +527,6 @@ function setGlobalLegend(scale) {
 /*** COUNTRY MAP FUNCTIONS ***/
 /*****************************/
 function initCountryView() {
-  $('.content').removeClass('food-prices-view');
   $('.content').addClass('country-view');
   $('.country-panel').scrollTop(0);
 
@@ -621,105 +579,37 @@ function updateCountryLayer() {
   var clrRange = (currentCountryIndicator.id.indexOf('vaccinated')>0) ? immunizationColorRange : colorRange;
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
-  //create log scale for circle markers
-  // var healthFacilityMax = d3.max(subnationalData, function(d) {
-  //   if (d['#country+code']==currentCountry.code)
-  //     return +d['#loc+count+health']; 
-  // })
-  // var markerScale = d3.scaleSqrt()
-  //   .domain([1, healthFacilityMax])
-  //   .range([2, 15]);
-
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
   var expressionOpacity = ['match', ['get', 'ADM1_PCODE']];
-  //var expressionMarkers = ['match', ['get', 'ADM1_PCODE']];
   subnationalData.forEach(function(d) {
     var color, layerOpacity, markerSize;
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || val=='' || isNaN(val)) ? colorNoData : countryColorScale(val);
       layerOpacity = 1;
-
-      //health facility markers
-      // var healthVal = (currentCountryIndicator.id=='#loc+count+health') ? d['#loc+count+health'] : 0;
-      // markerSize = markerScale(healthVal);
     }
     else {
       color = colorDefault;
       layerOpacity = 0;
-      //markerSize = 0;
     }
     
     expression.push(d['#adm1+code'], color);
     expressionOpacity.push(d['#adm1+code'], layerOpacity);
-    //expressionMarkers.push(d['#adm1+code'], markerSize);
   });
   expression.push(colorDefault);
   expressionOpacity.push(0);
-  //expressionMarkers.push(0);
 
   //set properties
   map.setPaintProperty(countryLayer, 'fill-color', expression);
   map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
-  //set health facility markers
-  // map.setPaintProperty(countryMarkerLayer, 'circle-radius', expressionMarkers);
-  // map.setPaintProperty(countryMarkerLayer, 'circle-color', '#007ce1');
-  // map.setPaintProperty(countryMarkerLayer, 'circle-opacity', 0.6);
-  // map.setPaintProperty(countryMarkerLayer, 'circle-translate', [0,-10]);
-
   //hide color scale if no data
   if (max!=undefined && max>0)
     updateCountryLegend(countryColorScale);
   else
     $('.map-legend.country .legend-container').addClass('no-data');
-
-  //load pop density raster
-  // var id = currentCountry.code.toLowerCase();
-  // var raster = '';
-  // switch(id) {
-  //   case 'ukr':
-  //     raster = 'adkwa0bw';
-  //     break;
-  //   case 'bdi':
-  //     raster = '85uxb0dw';
-  //     break;
-  //   case 'col':
-  //     raster = 'awxirkoh';
-  //     break;
-  //   case 'pse':
-  //     raster = '1emy37d7';
-  //     break;
-  //   default:
-  //     //
-  // }
-
-
-  // if (map.getLayer(id+'-popdensity')) {
-  //   map.removeLayer(id+'-popdensity');
-  // }
-  // if (map.getSource(id+'-pop-tileset')) {
-  //   map.removeSource(id+'-pop-tileset');
-  // }
-
-
-  // if (currentCountryIndicator.id=='#population' && raster!='') {
-  //   map.addSource(id+'-pop-tileset', {
-  //     type: 'raster',
-  //     url: 'mapbox://humdata.'+raster
-  //   });
-
-  //   map.addLayer(
-  //     {
-  //       'id': id+'-popdensity',
-  //       'type': 'raster',
-  //       'source': id+'-pop-tileset'
-  //     },
-  //     countryBoundaryLayer
-  //   );
-  // }
 }
 
 function checkIPCData() {
@@ -729,16 +619,15 @@ function checkIPCData() {
   subnationalData.forEach(function(d) {
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
-      if (index==0 && val==' ') {
+      if (index==0 && (!isVal(val) || isNaN(val))) {
         isEmpty = true;
       }
-      if (isEmpty && index==1 && val!=' ') {
+      if (index==1 && isEmpty && isVal(val) && !isNaN(val)) {
         isEmpty = false;
       }
       index++;
     }
   });
-
   if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3+pct';
 }
 
@@ -843,9 +732,6 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
-      // if (val!='No Data') {
-      //   val = (val.toFixed(0)<1) ? '<1' : val.toFixed(0);
-      // }
       content += "Weekly number of new cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+cases']) + '</div>';
       content += "Weekly number of new deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+deaths']) + '</div>';
       content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
@@ -862,7 +748,7 @@ function createMapTooltip(country_code, country_name) {
       content += '</div>';
     }
     //Vaccination campaigns layer
-    else if (currentIndicator.id=='#vaccination-campaigns') {
+    else if (currentIndicator.id=='#vaccination+num+ratio') {
       var vaccData = [];
       vaccinationDataByCountry.forEach(function(country) {
         if (country.key==country_code) {
@@ -996,12 +882,6 @@ function resetMap() {
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
-  $('.region-select').val('');
-  $('.country-select').val('');
-  if (currentIndicator.id=='#food-prices') {
-    $('.content').addClass('food-prices-view');
-  }
-
   updateGlobalLayer();
 
   map.flyTo({ 

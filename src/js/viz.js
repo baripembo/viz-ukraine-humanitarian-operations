@@ -76,7 +76,6 @@ $( document ).ready(function() {
       timeseriesData = data[1];
       covidTrendData = data[2];
       regionBoundaryData = data[3].features;
-      console.log(allData)
       worldData = allData.world_data[0];
       regionalData = allData.regional_data;
       nationalData = allData.national_data;
