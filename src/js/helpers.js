@@ -78,6 +78,15 @@ function isVal(value) {
   return (value===undefined || value===null || value==='') ? false : true;
 }
 
+//regional id/name list
+const regionalList = [
+  {id: 'ROAP', name: 'Asia and the Pacific'},
+  {id: 'ROCCA', name: 'Eastern Europe'},
+  {id: 'ROLAC', name: 'Latin America and the Caribbean'},
+  {id: 'ROMENA', name: 'Middle East and North Africa'},
+  {id: 'ROSEA', name: 'Southern and Eastern Africa'},
+  {id: 'ROWCA', name: 'West and Central Africa'}
+];
 
 //25 HRP country codes
 const countryCodeList = [

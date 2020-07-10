@@ -139,12 +139,12 @@ function createEvents() {
 
   //region select event
   d3.select('.region-select').on('change',function(e) {
-    var selected = d3.select('.region-select').node().value;
-    if (selected=='') {
+    currentRegion = d3.select('.region-select').node().value;
+    if (currentRegion=='') {
       resetMap();
     }
     else {        
-      selectRegion(selected);
+      selectRegion();
     }
   });
 
@@ -208,13 +208,15 @@ function toggleGlobalFigures(currentBtn, state) {
 }
 
 
-function selectRegion(region) {
-  var regionFeature = regionData.filter(d => d.properties.tbl_regcov_2020_ocha_Field3 == region);
+function selectRegion() {
+  var regionFeature = regionBoundaryData.filter(d => d.properties.tbl_regcov_2020_ocha_Field3 == currentRegion);
   var offset = 50;
   map.fitBounds(regionFeature[0].bbox, {
     padding: {top: offset, right: $('.map-legend').outerWidth()+offset, bottom: offset, left: $('.global-figures').outerWidth()+offset},
     linear: true
   });
+
+  updateGlobalLayer();
 }
 
 function selectCountry(features) {
@@ -357,23 +359,21 @@ function updateGlobalLayer() {
   //data join
   var expression = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
-    var val = d[currentIndicator.id];
-    var color = colorDefault;
-    
-    // if (currentIndicator.id=='#food-prices') {
-    //   var id = getCountryIDByName(d['#country+name']);
-    //   color = (id!=undefined) ? foodPricesColor : colorNoData;
-    // }
-    if (currentIndicator.id=='#covid+cases') {
-      color = (val==null) ? colorNoData : colorScale(val);
+    if (currentRegion=='' || d['#region+name']==currentRegion) {
+      var val = d[currentIndicator.id];
+      var color = colorDefault;
+      
+      if (currentIndicator.id=='#covid+cases') {
+        color = (val==null) ? colorNoData : colorScale(val);
+      }
+      else if (currentIndicator.id=='#severity+type') {
+        color = (!isVal(val)) ? colorNoData : colorScale(val);
+      }
+      else {
+        color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
+      }
+      expression.push(d['#country+code'], color);
     }
-    else if (currentIndicator.id=='#severity+type') {
-      color = (!isVal(val)) ? colorNoData : colorScale(val);
-    }
-    else {
-      color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
-    }
-    expression.push(d['#country+code'], color);
   });
 
   //default value for no data
@@ -882,15 +882,21 @@ function resetMap() {
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
+  $('.country-select').val('');
   updateGlobalLayer();
 
-  map.flyTo({ 
-    speed: 2,
-    zoom: zoomLevel,
-    center: [-25, 0] 
-  });
-  map.once('moveend', function() {
-    map.setLayoutProperty(globalLayer, 'visibility', 'visible');
-  });
+  if (currentRegion!='') {
+    selectRegion();
+  }
+  else {
+    map.flyTo({ 
+      speed: 2,
+      zoom: zoomLevel,
+      center: [-25, 0] 
+    });
+    map.once('moveend', function() {
+      map.setLayoutProperty(globalLayer, 'visibility', 'visible');
+    });
+  }
 }
 

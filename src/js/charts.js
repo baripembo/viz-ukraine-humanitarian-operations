@@ -377,8 +377,12 @@ function createRankingChart() {
 
   //format data
   var rankingByCountry = d3.nest()
-    .key(function(d) { return d['#country+name']; })
-    .rollup(function(v) { return v[0][indicator]; })
+    .key(function(d) {
+      if (currentRegion=='' || d['#region+name']==currentRegion) return d['#country+name']; 
+    })
+    .rollup(function(v) {
+      if (currentRegion=='' || v[0]['#region+name']==currentRegion) return v[0][indicator]; 
+    })
     .entries(nationalData);
 
   rankingData = rankingByCountry.filter(function(item) { 
