@@ -16,24 +16,24 @@ function setGlobalFigures() {
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
 		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
-		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(worldData['#value+funding+required+usd']));
-		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+ghrp+required+usd']));
-		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+pct']));
+		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(worldData['#value+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+hrp+pct']));
 		createKeyFigure('.figures', 'Countries Affected', '', nationalData.length);
 	}
 	//CERF
 	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {
-		createKeyFigure('.figures', 'Total CERF COVID-19 Funding', '', formatValue(worldData['#value+cerf+covid+funding+global+usd']));
+		createKeyFigure('.figures', 'Total CERF COVID-19 Funding', '', formatValue(worldData['#value+cerf+covid+funding+total+usd']));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numCERFCountries);
 	}
 	//CBPF
 	else if (currentIndicator.id=='#value+cbpf+covid+funding+total+usd') {
-		createKeyFigure('.figures', 'Total CBPF COVID-19 Funding', '', formatValue(worldData['#value+cbpf+covid+funding+global+usd']));
+		createKeyFigure('.figures', 'Total CBPF COVID-19 Funding', '', formatValue(worldData['#value+cbpf+covid+funding+total+usd']));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numCBPFCountries);
 	}
 	//IFI
 	else if (currentIndicator.id=='#value+gdp+ifi+pct') {
-		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
+		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+total']));
 		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
 	}
 	//covid figures
