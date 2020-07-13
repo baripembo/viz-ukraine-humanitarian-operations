@@ -350,6 +350,7 @@ function handleGlobalEvents(layer) {
 }
 
 function updateGlobalLayer() {
+  console.log('update layer')
   setGlobalFigures();
 
   //color scales
@@ -385,12 +386,20 @@ function updateGlobalLayer() {
 }
 
 function getGlobalColorScale() {
-  var min = d3.min(nationalData, function(d) { return +d[currentIndicator.id]; });
-  var max = d3.max(nationalData, function(d) { return +d[currentIndicator.id]; });
+  var min = d3.min(nationalData, function(d) { 
+    if (currentRegion=='' || d['#region+name']==currentRegion)
+      return +d[currentIndicator.id]; 
+  });
+  var max = d3.max(nationalData, function(d) { 
+    if (currentRegion=='' || d['#region+name']==currentRegion)
+      return +d[currentIndicator.id];
+  });
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
   else max = max;
+
+  console.log('max', max)
 
   var scale;
   if (currentIndicator.id=='#severity+type') {
