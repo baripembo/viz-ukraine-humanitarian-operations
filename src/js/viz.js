@@ -148,8 +148,7 @@ $( document ).ready(function() {
         });
       });
 
-      console.log(nationalData)
-      console.log(countriesByRegion)
+      //console.log(nationalData)
       //console.log(subnationalData)
 
       dataLoaded = true;

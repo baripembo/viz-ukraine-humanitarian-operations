@@ -345,20 +345,25 @@ function handleGlobalEvents(layer) {
         }
       }
     }
-    
   });
 }
 
 function updateGlobalLayer() {
-  console.log('update layer')
   setGlobalFigures();
 
   //color scales
   colorScale = getGlobalColorScale();
   colorNoData = (currentIndicator.id=='#affected+inneed+pct' || currentIndicator.id=='#value+funding+hrp+pct') ? '#E7E4E6' : '#FFF';
 
+  var maxCases = d3.max(nationalData, function(d) { 
+    if (currentRegion=='' || d['#region+name']==currentRegion)
+      return +d['#affected+infected']; 
+  });
+  markerScale.domain([1, maxCases]);
+
   //data join
   var expression = ['match', ['get', 'ISO_3']];
+  var expressionMarkers = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
     if (currentRegion=='' || d['#region+name']==currentRegion) {
       var val = d[currentIndicator.id];
@@ -374,18 +379,26 @@ function updateGlobalLayer() {
         color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
       }
       expression.push(d['#country+code'], color);
+
+      //covid markers
+      var covidVal = d['#affected+infected'];
+      var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
+      expressionMarkers.push(d['#country+code'], size);
     }
   });
 
   //default value for no data
   expression.push(colorDefault);
+  expressionMarkers.push(0);
 
   map.setPaintProperty(globalLayer, 'fill-color', expression);
   map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
+  map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
   setGlobalLegend(colorScale);
 }
 
 function getGlobalColorScale() {
+  //get min/max
   var min = d3.min(nationalData, function(d) { 
     if (currentRegion=='' || d['#region+name']==currentRegion)
       return +d[currentIndicator.id]; 
@@ -399,8 +412,7 @@ function getGlobalColorScale() {
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
   else max = max;
 
-  console.log('max', max)
-
+  //set scale
   var scale;
   if (currentIndicator.id=='#severity+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
@@ -412,7 +424,7 @@ function getGlobalColorScale() {
   else if (currentIndicator.id=='#covid+cases+per+capita') {
     var data = [];
     nationalData.forEach(function(d) {
-      if (d[currentIndicator.id]!=null)
+      if (d[currentIndicator.id]!=null && (currentRegion=='' || d['#region+name']==currentRegion))
         data.push(d[currentIndicator.id]);
     })
     scale = d3.scaleQuantile().domain(data).range(colorRange);
@@ -427,7 +439,7 @@ function getGlobalColorScale() {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
   }
 
-  return scale;
+  return (max==undefined && currentIndicator.id!='#severity+type') ? null : scale;
 }
 
 function setGlobalLegend(scale) {
@@ -439,6 +451,7 @@ function setGlobalLegend(scale) {
   $('.map-legend.global .source-secondary').empty();
 
   if (d3.select('.map-legend.global .scale').empty()) {
+    //current indicator
     createSource($('.map-legend.global .indicator-source'), indicator);
     svg = div.append('svg')
       .attr('class', 'legend-container');
@@ -462,8 +475,10 @@ function setGlobalLegend(scale) {
     //cases
     $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
     createSource($('.map-legend.global'), '#affected+infected');
+
     var markersvg = div.append('svg')
-      .attr('height', '55px');
+      .attr('height', '55px')
+      .attr('class', 'casesScale');
     markersvg.append('g')
       .attr("transform", "translate(5, 10)")
       .attr('class', 'legendSize');
@@ -490,6 +505,35 @@ function setGlobalLegend(scale) {
   if (currentIndicator.id=='#value+food+num+ratio') legendTitle += '<br>Click on a country to explore commodity prices';
   $('.map-legend.global .indicator-title').html(legendTitle);
 
+  //current indicator
+  if (scale==null) {
+    $('.map-legend.global .legend-container').hide();
+  }
+  else {
+    $('.map-legend.global .legend-container').show();
+    var legend;
+    if (currentIndicator.id=='#value+gdp+ifi+pct') {
+      var legendFormat = d3.format('.0%');
+      legend = d3.legendColor()
+        .labelFormat(legendFormat)
+        .cells(colorRange.length)
+        .labels(d3.legendHelpers.thresholdLabels)
+        .useClass(true)
+        .scale(scale);
+    }
+    else {
+      var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
+      if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
+      legend = d3.legendColor()
+        .labelFormat(legendFormat)
+        .cells(colorRange.length)
+        .scale(scale);
+    }
+    var g = d3.select('.map-legend.global .scale');
+    g.call(legend);
+  }
+
+  //no data
   var noDataKey = $('.map-legend.global .no-data-key');
   if (currentIndicator.id=='#affected+inneed+pct') {
     noDataKey.find('.label').text('Refugee/IDP data only');
@@ -507,28 +551,14 @@ function setGlobalLegend(scale) {
     noDataKey.find('rect').css('fill', '#FFF');
   }
 
+  //cases
+  var maxCases = d3.max(nationalData, function(d) { 
+    if (currentRegion=='' || d['#region+name']==currentRegion)
+      return +d['#affected+infected']; 
+  });
+  markerScale.domain([1, maxCases]);
 
-  var legend;
-  if (currentIndicator.id=='#value+gdp+ifi+pct') {
-    var legendFormat = d3.format('.0%');
-    legend = d3.legendColor()
-      .labelFormat(legendFormat)
-      .cells(colorRange.length)
-      .labels(d3.legendHelpers.thresholdLabels)
-      .useClass(true)
-      .scale(scale);
-  }
-  else {
-    var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
-    if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
-    legend = d3.legendColor()
-      .labelFormat(legendFormat)
-      .cells(colorRange.length)
-      .scale(scale);
-  }
-
-  var g = d3.select('.map-legend.global .scale');
-  g.call(legend);
+  d3.select('.casesScale .cell:nth-child(2) .label').text(numFormat(maxCases));
 }
 
 
