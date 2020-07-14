@@ -356,7 +356,7 @@ function updateGlobalLayer() {
   colorNoData = (currentIndicator.id=='#affected+inneed+pct' || currentIndicator.id=='#value+funding+hrp+pct') ? '#E7E4E6' : '#FFF';
 
   var maxCases = d3.max(nationalData, function(d) { 
-    if (currentRegion=='' || d['#region+name']==currentRegion)
+    if (regionMatch(d['#region+name']))
       return +d['#affected+infected']; 
   });
   markerScale.domain([1, maxCases]);
@@ -365,7 +365,7 @@ function updateGlobalLayer() {
   var expression = ['match', ['get', 'ISO_3']];
   var expressionMarkers = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
-    if (currentRegion=='' || d['#region+name']==currentRegion) {
+    if (regionMatch(d['#region+name'])) {
       var val = d[currentIndicator.id];
       var color = colorDefault;
       
@@ -400,11 +400,11 @@ function updateGlobalLayer() {
 function getGlobalColorScale() {
   //get min/max
   var min = d3.min(nationalData, function(d) { 
-    if (currentRegion=='' || d['#region+name']==currentRegion)
+    if (regionMatch(d['#region+name']))
       return +d[currentIndicator.id]; 
   });
   var max = d3.max(nationalData, function(d) { 
-    if (currentRegion=='' || d['#region+name']==currentRegion)
+    if (regionMatch(d['#region+name']))
       return +d[currentIndicator.id];
   });
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
@@ -424,7 +424,7 @@ function getGlobalColorScale() {
   else if (currentIndicator.id=='#covid+cases+per+capita') {
     var data = [];
     nationalData.forEach(function(d) {
-      if (d[currentIndicator.id]!=null && (currentRegion=='' || d['#region+name']==currentRegion))
+      if (d[currentIndicator.id]!=null && regionMatch(d['#region+name']))
         data.push(d[currentIndicator.id]);
     })
     scale = d3.scaleQuantile().domain(data).range(colorRange);
@@ -553,7 +553,7 @@ function setGlobalLegend(scale) {
 
   //cases
   var maxCases = d3.max(nationalData, function(d) { 
-    if (currentRegion=='' || d['#region+name']==currentRegion)
+    if (regionMatch(d['#region+name']))
       return +d['#affected+infected']; 
   });
   markerScale.domain([1, maxCases]);
