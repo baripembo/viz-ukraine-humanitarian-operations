@@ -263,7 +263,7 @@ function initGlobalLayer() {
     .range([2, 15]);
   
   //color scale
-  colorScale = getGlobalColorScale();
+  colorScale = getGlobalLegendScale();
   setGlobalLegend(colorScale);
 
   //data join
@@ -352,7 +352,7 @@ function updateGlobalLayer() {
   setGlobalFigures();
 
   //color scales
-  colorScale = getGlobalColorScale();
+  colorScale = getGlobalLegendScale();
   colorNoData = (currentIndicator.id=='#affected+inneed+pct' || currentIndicator.id=='#value+funding+hrp+pct') ? '#E7E4E6' : '#FFF';
 
   var maxCases = d3.max(nationalData, function(d) { 
@@ -397,15 +397,13 @@ function updateGlobalLayer() {
   setGlobalLegend(colorScale);
 }
 
-function getGlobalColorScale() {
+function getGlobalLegendScale() {
   //get min/max
   var min = d3.min(nationalData, function(d) { 
-    if (regionMatch(d['#region+name']))
-      return +d[currentIndicator.id]; 
+    if (regionMatch(d['#region+name'])) return +d[currentIndicator.id]; 
   });
   var max = d3.max(nationalData, function(d) { 
-    if (regionMatch(d['#region+name']))
-      return +d[currentIndicator.id];
+    if (regionMatch(d['#region+name'])) return +d[currentIndicator.id];
   });
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
@@ -427,7 +425,10 @@ function getGlobalColorScale() {
       if (d[currentIndicator.id]!=null && regionMatch(d['#region+name']))
         data.push(d[currentIndicator.id]);
     })
-    scale = d3.scaleQuantile().domain(data).range(colorRange);
+    if (data.length==1)
+      scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+    else
+      scale = d3.scaleQuantile().domain(data).range(colorRange);
   }
   else if (currentIndicator.id=='#value+gdp+ifi+pct') {
     var reverseRange = colorRange.slice().reverse();
@@ -445,11 +446,10 @@ function getGlobalColorScale() {
 function setGlobalLegend(scale) {
   var div = d3.select('.map-legend.global');
   var svg;
-
-  //catch PIN pct indicator
   var indicator = (currentIndicator.id=='#affected+inneed+pct') ? '#affected+inneed' : currentIndicator.id;
   $('.map-legend.global .source-secondary').empty();
 
+  //SETUP
   if (d3.select('.map-legend.global .scale').empty()) {
     //current indicator
     createSource($('.map-legend.global .indicator-source'), indicator);
@@ -471,6 +471,29 @@ function setGlobalLegend(scale) {
 
     //secondary source
     $('.map-legend.global').append('<div class="source-secondary"></div>');
+
+    //vacc methodology explanatory text
+    var vaccinationMethodologyText = 'Methodology: Information about interrupted vaccination campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total vaccination campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.';
+    $('.map-legend.global').append('<p class="footnote vacc-methodology small">'+ truncateString(vaccinationMethodologyText, 60) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .vacc-methodology').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(vaccinationMethodologyText, 60) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(vaccinationMethodologyText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
+    //food methodology explanatory text
+    var foodMethodologyText = 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://snap.vam.wfp.org/main/" target="_blank">WFP’s model</a>.';
+    $('.map-legend.global').append('<p class="footnote food-methodology small">'+ truncateString(foodMethodologyText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .food-methodology').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(foodMethodologyText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(foodMethodologyText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
 
     //cases
     $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
@@ -495,12 +518,23 @@ function setGlobalLegend(scale) {
     markersvg.select('.legendSize')
       .call(legendSize);
 
-    $('.map-legend.global').append('<p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>');
+    //boundaries disclaimer
+    var disclaimerText = 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.';
+    $('.map-legend.global').append('<p class="footnote disclaimer small">'+ truncateString(disclaimerText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .disclaimer').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(disclaimerText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(disclaimerText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
   }
   else {
     updateSource($('.indicator-source'), indicator);
   }
 
+  //POPULATE
   var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
   if (currentIndicator.id=='#value+food+num+ratio') legendTitle += '<br>Click on a country to explore commodity prices';
   $('.map-legend.global .indicator-title').html(legendTitle);
@@ -550,6 +584,17 @@ function setGlobalLegend(scale) {
     noDataKey.find('.label').text('No Data');
     noDataKey.find('rect').css('fill', '#FFF');
   }
+
+  //methodology
+  if (currentIndicator.id=='#vaccination+num+ratio')
+    $('.vacc-methodology').show();
+  else
+    $('.vacc-methodology').hide();
+
+  if (currentIndicator.id=='#value+food+num+ratio')
+    $('.food-methodology').show();
+  else
+    $('.food-methodology').hide();
 
   //cases
   var maxCases = d3.max(nationalData, function(d) { 
