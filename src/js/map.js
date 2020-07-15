@@ -340,7 +340,8 @@ function handleGlobalEvents(layer) {
       currentCountry.name = (target.properties.Terr_Name=='CuraÃ§ao') ? 'Curaçao' : target.properties.Terr_Name;
 
       if (currentCountry.code!=undefined) {
-        if (currentIndicator.id=='#value+food+num+ratio' && getCountryIDByName(currentCountry.name)!=undefined) {
+        var country = nationalData.filter(c => c['#country+code'] == currentCountry.code);
+        if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
           openModal(currentCountry.name);
         }
       }
