@@ -305,8 +305,10 @@ a:visited {
 			}
 		}
 		i {
-			flex: 0 0 40px;
+			flex: 0 0 18px;
 			font-size: 18px;
+			margin-right: 22px;
+			text-align: center;
 		}
 		&:hover,
 		&.selected {
@@ -859,22 +861,12 @@ table {
 
 @media only screen and (max-height: 696px) {
 	.map-legend {
+		&.global {
+			max-height: 440px;
+			overflow: auto;
+		}
 		&.country {
 			overflow: scroll;
 		}
 	}
-	// .global-figures {
-	// 	width: 290px;
-	// 	.figures {
-	// 		flex-flow: column;
-	// 		.key-figure {
-	// 			width: 100%;
-	// 			&:first-child {
-	// 				.inner {
-	// 					border-bottom: 0;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
 }
