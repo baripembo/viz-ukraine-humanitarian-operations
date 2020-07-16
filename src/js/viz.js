@@ -16,7 +16,7 @@ var zoomLevel = 1.4;
 
 var currentIndicator = {};
 var currentCountryIndicator = {};
-var popDataByCountry = {};
+//var popDataByCountry = {};
 var currentCountry = {};
 
 $( document ).ready(function() {
@@ -92,10 +92,10 @@ $( document ).ready(function() {
       })
 
       //group population data by country    
-      popDataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .rollup(function(v) { return d3.sum(v, function(d) { return d['#population']; }); })
-        .object(subnationalData);
+      // popDataByCountry = d3.nest()
+      //   .key(function(d) { return d['#country+code']; })
+      //   .rollup(function(v) { return d3.sum(v, function(d) { return d['#population']; }); })
+      //   .object(subnationalData);
 
       //parse national data
       nationalData.forEach(function(item) {
@@ -104,7 +104,7 @@ $( document ).ready(function() {
         if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
         //calculate and inject PIN percentage
-        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
+        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
@@ -149,7 +149,7 @@ $( document ).ready(function() {
         });
       });
 
-      //console.log(nationalData)
+      console.log(covidTrendData)
       //console.log(subnationalData)
 
       dataLoaded = true;

@@ -342,6 +342,7 @@ function handleGlobalEvents(layer) {
       if (currentCountry.code!=undefined) {
         var country = nationalData.filter(c => c['#country+code'] == currentCountry.code);
         if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
+          console.log(currentCountry.name)
           openModal(currentCountry.name);
         }
       }
@@ -413,14 +414,7 @@ function getGlobalLegendScale() {
 
   //set scale
   var scale;
-  if (currentIndicator.id=='#severity+type') {
-    scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
-  }
-  else if (currentIndicator.id.indexOf('funding')>-1) {
-    var reverseRange = colorRange.slice().reverse();
-    scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
-  }
-  else if (currentIndicator.id=='#covid+cases+per+capita') {
+  if (currentIndicator.id=='#covid+cases+per+capita') {
     var data = [];
     nationalData.forEach(function(d) {
       if (d[currentIndicator.id]!=null && regionMatch(d['#region+name']))
@@ -430,6 +424,13 @@ function getGlobalLegendScale() {
       scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
+  }
+  else if (currentIndicator.id=='#severity+type') {
+    scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
+  }
+  else if (currentIndicator.id.indexOf('funding')>-1) {
+    var reverseRange = colorRange.slice().reverse();
+    scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
   }
   else if (currentIndicator.id=='#value+gdp+ifi+pct') {
     var reverseRange = colorRange.slice().reverse();
@@ -552,9 +553,9 @@ function setGlobalLegend(scale) {
       legend = d3.legendColor()
         .labelFormat(legendFormat)
         .cells(colorRange.length)
+        .scale(scale)
         .labels(d3.legendHelpers.thresholdLabels)
-        .useClass(true)
-        .scale(scale);
+        //.useClass(true);
     }
     else {
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
