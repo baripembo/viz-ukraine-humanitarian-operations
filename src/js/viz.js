@@ -186,7 +186,7 @@ $( document ).ready(function() {
   function initCountryView() {
     $('.content').addClass('country-view');
     $('.country-panel').scrollTop(0);
-    $('#foodSecurity').prop('checked', true);
+    $('#population').prop('checked', true);
     currentCountryIndicator = {id: $('input[name="countryIndicators"]:checked').val(), name: $('input[name="countryIndicators"]:checked').parent().text()};
 
     initCountryPanel();
