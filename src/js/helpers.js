@@ -74,15 +74,33 @@ function roundUp(x, limit) {
   return Math.ceil(x/limit)*limit;
 }
 
-function setSelect(id, valueToSelect) {    
-  let element = document.getElementById(id);
-  element.value = valueToSelect;
-}
-
 function isVal(value) {
   return (value===undefined || value===null || value==='') ? false : true;
 }
 
+function regionMatch(region) {
+  var match = false;
+  var regions = region.split('|');
+  for (var region of regions) {
+    if (currentRegion=='' || region==currentRegion) {
+      match = true;
+      break;
+    }
+  }
+  return match;
+}
+
+
+//regional id/name list
+const regionalList = [
+  {id: 'H25', name: '25 HRP Locations'},
+  {id: 'ROAP', name: 'Asia and the Pacific'},
+  {id: 'ROCCA', name: 'Eastern Europe'},
+  {id: 'ROLAC', name: 'Latin America and the Caribbean'},
+  {id: 'ROMENA', name: 'Middle East and North Africa'},
+  {id: 'ROSEA', name: 'Southern and Eastern Africa'},
+  {id: 'ROWCA', name: 'West and Central Africa'}
+];
 
 //25 HRP country codes and raster ids
 const countryCodeList = {

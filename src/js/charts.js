@@ -1,4 +1,7 @@
-function createBarChart(data, type) {
+/*******************************/
+/*** COVID PROJECTIONS CHART ***/
+/*******************************/
+function createProjectionsChart(data, type) {
   data.forEach(function(item, index) {
     if (!isVal(item.min) || !isVal(item.max))
       data.splice(index, 1);
@@ -92,9 +95,11 @@ function createBarChart(data, type) {
       projectionsDiv.find('.source').append(' | '+ d.model +': <a href="'+ source['#meta+url'] +'" class="dataURL" target="_blank">DATA</a>');
     });
   }
-
 }
 
+/****************************************/
+/*** COVID TIMESERIES CHART FUNCTIONS ***/
+/****************************************/
 function initTimeseries(data, div) {
   var timeseriesArray = formatTimeseriesData(data);
   createTimeSeries(timeseriesArray, div);
@@ -194,10 +199,10 @@ function createTimeSeries(array, div) {
       show: false,
       position: 'inset',
       inset: {
-          anchor: 'top-left',
-          x: 10,
-          y: 0,
-          step: 8
+        anchor: 'top-left',
+        x: 10,
+        y: 0,
+        step: 8
       }
     },
 		tooltip: { grouped: false },
@@ -246,6 +251,7 @@ function createTimeseriesLegend(chart, div, country) {
 
 function updateTimeseries(data, selected) {
   if (selected=='Syrian Arab Republic') selected = 'Syria';
+  if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.focus(selected);
   $('.c3-chart-lines .c3-line').css('stroke', '#999');
@@ -256,6 +262,9 @@ function updateTimeseries(data, selected) {
 }
 
 
+/******************/
+/*** SPARKLINES ***/
+/******************/
 function createSparkline(data, div) {
   var width = 75;
   var height = 24;
@@ -289,7 +298,9 @@ function createSparkline(data, div) {
    .attr('d', line);
 }
 
-
+/*****************************/
+/*** COVID TREND BAR CHART ***/
+/*****************************/
 function createTrendBarChart(data, div) {
   var total = data.length;
   var barMargin = 1;
@@ -334,9 +345,147 @@ function createTrendBarChart(data, div) {
       return (d.value>0) ? y(d.value) : y(0);
     })
     .attr('fill', function(d) {
-      return (d.value>0) ? '#BFBFBF' : '#10BDE4';
+      return (d.value>0) ? '#F2645B' : '#BFBFBF';
     })
     .attr('height', function(d) { return Math.abs(y(d.value) - y(0)); })
     .attr('width', barWidth);
 }
 
+
+/*************************/
+/*** RANKING BAR CHART ***/
+/*************************/
+var rankingY, rankingBars, rankingData, rankingBarHeight;
+function createRankingChart() {  
+  //set title
+  $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
+
+  var indicator;
+  switch(currentIndicator.id) {
+    case '#severity+type':
+      indicator = '#severity+num';
+      break;
+    case '#vaccination-campaigns':
+      indicator = '#vaccination+num+ratio';
+      break;
+    case '#food-prices':
+      indicator = '#value+food+num+ratio';
+      break;
+    default:
+      indicator = currentIndicator.id;
+  }
+
+  //format data
+  var rankingByCountry = d3.nest()
+    .key(function(d) {
+      if (regionMatch(d['#region+name'])) return d['#country+name']; 
+    })
+    .rollup(function(v) {
+      if (regionMatch(v[0]['#region+name'])) return v[0][indicator]; 
+    })
+    .entries(nationalData);
+
+  rankingData = rankingByCountry.filter(function(item) { 
+    return isVal(item.value) && !isNaN(item.value);
+  });
+  rankingData.sort(function(a, b){ return d3.descending(+a.value, +b.value); });
+
+  var valueMax = d3.max(rankingData, function(d) { return +d.value; });
+  var valueFormat = d3.format(',.2r');
+  $('.ranking-select').val('descending');
+  if (indicator.indexOf('funding')>-1 || indicator.indexOf('gdp')>-1) {
+    valueFormat = formatValue;
+    rankingData.reverse();
+    $('.ranking-select').val('ascending');
+  }
+  if (indicator.indexOf('pct')>-1 || indicator.indexOf('ratio')>-1) {
+    valueFormat = percentFormat;
+  }
+
+  //draw chart
+  rankingBarHeight = 13;
+  var barPadding = 9;
+
+  //determine height available for chart
+  var availSpace = viewportHeight - $('.ranking-chart').position().top - 40;
+  var numRows = Math.floor(availSpace/(rankingBarHeight+barPadding));
+  var rankingChartHeight = ((rankingBarHeight+barPadding) * numRows) + 14;
+  $('.ranking-chart').css('height', rankingChartHeight);
+
+  var margin = {top: 0, right: 45, bottom: 15, left: 100},
+      width = $('.global-figures').width() - margin.left - margin.right,
+      height = (rankingBarHeight + barPadding) * rankingData.length;
+
+  var svg = d3.select('.ranking-chart').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  var x = d3.scaleLinear()
+    .range([0, width])
+    .domain([0, valueMax]);
+
+  rankingY = d3.scaleBand()
+    .range([0, height])
+    .domain(rankingData.map(function (d) {
+      return d.key;
+    }));
+
+  var yAxis = d3.axisLeft(rankingY)
+    .tickSize(0);
+
+  var gy = svg.append('g')
+    .attr('class', 'y axis')
+    .call(yAxis)
+
+  rankingBars = svg.selectAll('.bar')
+    .data(rankingData)
+    .enter().append('g')
+    .attr('class', 'bar-container')
+    .attr('transform', function(d, i) { return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; });
+
+  //append rects
+  rankingBars.append('rect')
+    .attr('class', 'bar')
+    .attr('height', rankingBarHeight)
+    .attr('width', function (d) {
+      return x(d.value);
+    });
+
+  //add country names
+  rankingBars.append('text')
+    .attr('class', 'name')
+    .attr('x', -3)
+    .attr('y', 9)
+    .text(function (d) {
+      return truncateString(d.key, 15);
+      //return d.key;
+    })
+    //.call(wrap, 100);
+
+  //add a value label to the right of each bar
+  rankingBars.append('text')
+    .attr('class', 'label')
+    .attr('y', 9)
+    .attr('x', function (d) {
+      return x(d.value) + 3;
+    })
+    .text(function (d) {
+      return valueFormat(d.value);
+    });
+}
+
+function updateRankingChart(sortMode) {
+  rankingData.sort(function(a, b){
+    if (sortMode=='ascending')
+      return d3.ascending(+a.value, +b.value); 
+    else
+      return d3.descending(+a.value, +b.value);
+  });
+
+  rankingY.domain(rankingData.map(function(d) { return d.key; }));
+  rankingBars.transition()
+    .duration(400)
+    .attr('transform', function(d, i) { return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; });
+}

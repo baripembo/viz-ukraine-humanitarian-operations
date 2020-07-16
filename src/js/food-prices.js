@@ -3,7 +3,7 @@ var dataDomain = 'https://data.humdata.org';
 
 //const foodPricesCountries = {};
 //getCountryIDs();
-const foodPricesCountries = {1: "Afghanistan",8: "Angola",12: "Argentina",13: "Armenia",23: "Bangladesh",26: "Belarus",29: "Benin",33: "Bolivia",42: "Burkina Faso",43: "Burundi",44: "Cambodia",45: "Cameroon",47: "Cape Verde",49: "Central African Republic",50: "Chad",52: "China",57: "Colombia",59: "Congo",66: "Cote d'Ivoire",68: "Democratic Republic of the Congo",70: "Djibouti",72: "Dominican Republic",73: "Ecuador",75: "El Salvador",79: "Ethiopia",90: "Gambia",94: "Ghana",103: "Guatemala",105: "Guinea-Bissau",106: "Guinea",108: "Haiti",111: "Honduras",115: "Bassas da India",116: "Indonesia",117: "Iran  (Islamic Republic of)",118: "Iraq",126: "Japan",130: "Jordan",132: "Kazakhstan",133: "Kenya",138: "Kyrgyzstan",139: "Lao People's Democratic Republic",141: "Lebanon",142: "Lesotho",144: "Liberia",145: "Libya",152: "Malawi",155: "Mali",159: "Mauritania",162: "Mexico",167: "Mongolia",170: "Mozambique",171: "Myanmar",172: "Namibia",180: "Nicaragua",181: "Niger",182: "Nigeria",188: "Pakistan",191: "Panama",194: "Paraguay",195: "Peru",196: "Philippines",204: "Russian Federation",205: "Rwanda",217: "Senegal",221: "Sierra Leone",226: "Somalia",227: "South Africa",231: "Sri Lanka",235: "Swaziland",238: "Syrian Arab Republic",239: "Tajikistan",240: "Thailand",243: "Togo",249: "Turkey",253: "Uganda",257: "United Republic of Tanzania",269: "Yemen",270: "Zambia",999: "State of Palestine",40764: "Sudan",40765: "Egypt",70001: "South Sudan"};
+const foodPricesCountries = {1: "Afghanistan",8: "Angola",12: "Argentina",13: "Armenia",23: "Bangladesh",26: "Belarus",29: "Benin",33: "Bolivia",42: "Burkina Faso",43: "Burundi",44: "Cambodia",45: "Cameroon",47: "Cape Verde",49: "Central African Republic",50: "Chad",52: "China",57: "Colombia",59: "Congo",66: "Cote d'Ivoire",68: "Democratic Republic of the Congo",70: "Djibouti",72: "Dominican Republic",73: "Ecuador",75: "El Salvador",79: "Ethiopia",90: "Gambia",94: "Ghana",103: "Guatemala",105: "Guinea-Bissau",106: "Guinea",108: "Haiti",111: "Honduras",115: "Bassas da India",116: "Indonesia",117: "Islamic Republic of Iran",118: "Iraq",126: "Japan",130: "Jordan",132: "Kazakhstan",133: "Kenya",138: "Kyrgyzstan",139: "Lao People's Democratic Republic",141: "Lebanon",142: "Lesotho",144: "Liberia",145: "Libya",152: "Malawi",155: "Mali",159: "Mauritania",162: "Mexico",167: "Mongolia",170: "Mozambique",171: "Myanmar",172: "Namibia",180: "Nicaragua",181: "Niger",182: "Nigeria",188: "Pakistan",191: "Panama",194: "Paraguay",195: "Peru",196: "Philippines",204: "Russian Federation",205: "Rwanda",217: "Senegal",221: "Sierra Leone",226: "Somalia",227: "South Africa",231: "Sri Lanka",235: "Swaziland",238: "Syrian Arab Republic",239: "Tajikistan",240: "Thailand",243: "Togo",249: "Turkey",253: "Uganda",257: "United Republic of Tanzania",269: "Yemen",270: "Zambia",999: "Occupied Palestinian Territory",40764: "Sudan",40765: "Egypt",70001: "South Sudan"};
 
 $('.modal-bg-overlay, .modal-close-btn').on('click', closeModal);
 
@@ -58,7 +58,7 @@ function getCountryIDs() {
 }
 
 function getCountryNames(adm0) {
-  var sql = 'SELECT distinct adm0_name FROM "'  +datastoreID + '" where adm0_id=' + adm0;
+  var sql = 'SELECT distinct adm0_name FROM "' + datastoreID + '" where adm0_id=' + adm0;
 
   $.ajax({
     type: 'GET',
@@ -71,8 +71,24 @@ function getCountryNames(adm0) {
 
 function getProductsByCountryID(adm0_code,adm0_name){
   //var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
+  
   var today = new Date();
-  var sql = 'SELECT T1.cm_id,T1.cm_name,T1.um_id,T1.um_name,avg(cast(T1.mp_month as double precision)) AS month_num,T1.mp_year,avg(T1.mp_price) FROM "' + datastoreID + '" AS T1 INNER JOIN (SELECT DISTINCT adm0_id,cm_id,um_id from "' + datastoreID + '" WHERE mp_year='+today.getFullYear()+') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(today.getFullYear()-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
+  var yearnow = today.getFullYear()
+  var monthnow = today.getMonth()
+  var sql = 'SELECT T1.cm_id,T1.cm_name,T1.um_id,T1.um_name,avg(cast(T1.mp_month as double precision)) AS month_num,T1.mp_year,avg(T1.mp_price) FROM "' + datastoreID + '" AS T1 INNER JOIN (SELECT DISTINCT adm0_id,cm_id,um_id from "' + datastoreID + '" WHERE '
+  for (i = 1; i < 7; i++) {
+    var month = monthnow - i;
+    var year = yearnow;
+    if (month <= 0) {
+      month = 12 - month;
+      year -= 1;
+    }
+    sql += '(mp_year='+year+' AND cast(mp_month as int)='+month+') OR ';
+  }
+  sql = sql.substring(0, sql.length - 4);
+  sql += ') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(yearnow-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
+
+  //var sql = 'SELECT T1.cm_id,T1.cm_name,T1.um_id,T1.um_name,avg(cast(T1.mp_month as double precision)) AS month_num,T1.mp_year,avg(T1.mp_price) FROM "' + datastoreID + '" AS T1 INNER JOIN (SELECT DISTINCT adm0_id,cm_id,um_id from "' + datastoreID + '" WHERE mp_year='+today.getFullYear()+') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(today.getFullYear()-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
   var data = encodeURIComponent(JSON.stringify({sql: sql}));
 
   $.ajax({

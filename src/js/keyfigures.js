@@ -1,76 +1,117 @@
 function setGlobalFigures() {
 	var globalFigures = $('.global-figures');
-	globalFigures.find('.figures, .source').empty();
+	var globalFiguresSource = $('.global-figures .source-container');
+	globalFigures.find('.figures, .source-container, .ranking-chart').empty();
+	globalFigures.find('.source-container').show();
+
+	var indicator = (currentIndicator.id=='#affected+inneed+pct') ? '#affected+inneed' : currentIndicator.id;
+	createSource(globalFiguresSource, indicator);
+
+	var data = worldData;
+	if (currentRegion!='') {
+		regionalData.forEach(function(d) {
+			if (d['#region+name']==currentRegion) {
+				data = d;
+			}
+		});
+	}
+
+	var totalCountries = 0;
+	nationalData.forEach(function(d) {
+		if (regionMatch(d['#region+name'])) {
+			var val = d[currentIndicator.id];
+			if (isVal(val) && !isNaN(val)) {
+				totalCountries++;
+			}
+		}
+	});
+
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
-		globalFigures.find('h2').text('People in Need');
-		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
+		var totalPIN = d3.sum(nationalData, function(d) {
+			if (regionMatch(d['#region+name'])) {
+				return +d['#affected+inneed']; 
+			}
+		});
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', (d3.format('.4s'))(totalPIN));
-		createKeyFigure('.figures', 'Number of Countries', '', worldData.numPINCountries);
-		createSource(globalFigures, '#affected+inneed');
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
-		globalFigures.find('h2').text('Humanitarian Funding Overview');
 		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
-		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(worldData['#value+funding+required+usd']));
-		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(worldData['#value+covid+funding+ghrp+required+usd']));
-		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(worldData['#value+funding+pct']));
-		createKeyFigure('.figures', 'Countries Affected', '', nationalData.length);
-		createSource(globalFigures, '#value+funding+required+usd');
+		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(data['#value+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(data['#value+covid+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(data['#value+funding+hrp+pct']));
+		createKeyFigure('.figures', 'Countries Affected', '', totalCountries);
 	}
 	//CERF
 	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {
-		globalFigures.find('h2').text('CERF COVID-19 Allocations Overview');
-		createKeyFigure('.figures', 'Total CERF COVID-19 Funding', '', formatValue(worldData['#value+cerf+covid+funding+global+usd']));
-		createKeyFigure('.figures', 'Number of Countries', '', worldData.numCERFCountries);
-		createSource(globalFigures, '#value+cerf+covid+funding+total+usd');
+		createKeyFigure('.figures', 'Total CERF COVID-19 Funding', '', formatValue(data['#value+cerf+covid+funding+total+usd']));
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//CBPF
 	else if (currentIndicator.id=='#value+cbpf+covid+funding+total+usd') {
-		globalFigures.find('h2').text('CBPF COVID-19 Allocations Overview');
-		createKeyFigure('.figures', 'Total CBPF COVID-19 Funding', '', formatValue(worldData['#value+cbpf+covid+funding+global+usd']));
-		createKeyFigure('.figures', 'Number of Countries', '', worldData.numCBPFCountries);
-		createSource(globalFigures, '#value+cbpf+covid+funding+total+usd');
+		createKeyFigure('.figures', 'Total CBPF COVID-19 Funding', '', formatValue(data['#value+cbpf+covid+funding+total+usd']));
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//IFI
 	else if (currentIndicator.id=='#value+gdp+ifi+pct') {
-		globalFigures.find('h2').text('IFI Financing Overview');
-		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(worldData['#value+ifi+global']));
-		createKeyFigure('.figures', 'Number of Countries', '', worldData.numIFICountries);
-		createSource(globalFigures, '#value+gdp+ifi+pct');
+		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(data['#value+ifi+total']));
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
-	else {	
-		//global figures
-		var totalCases = d3.sum(nationalData, function(d) { return d['#affected+infected']; });
-		var totalDeaths = d3.sum(nationalData, function(d) { return d['#affected+killed']; });
-		globalFigures.find('h2').text('COVID-19 Pandemic in '+ nationalData.length +' GHRP Locations');
+	//covid figures
+	else if (currentIndicator.id=='#covid+cases+per+capita') {
+		var totalCases = d3.sum(nationalData, function(d) { 
+			if (regionMatch(d['#region+name']))
+				return d['#affected+infected']; 
+		});
+		var totalDeaths = d3.sum(nationalData, function(d) { 
+			if (regionMatch(d['#region+name']))
+				return d['#affected+killed']; 
+		});
 		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
-		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', numFormat(totalDeaths));
+		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
 
-		var covidGlobal = covidTrendData.H63;
-		var casesPerCapita = covidGlobal[covidGlobal.length-1].weekly_new_cases_per_ht;
-		var weeklyTrend = covidGlobal[covidGlobal.length-1].weekly_pc_change;
-		createKeyFigure('.figures', 'Weekly number of new cases per 100,000 people', 'cases-capita', casesPerCapita.toFixed(0));
+		var covidGlobal = (currentRegion!='') ? covidTrendData[currentRegion] : covidTrendData.H63;
+		var weeklyCases = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_cases : 0;
+		var weeklyDeaths = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_deaths : 0;
+		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_cases_pc_change : 0;
+		
+		if (covidGlobal!=undefined) {
+			//weekly new cases
+			createKeyFigure('.figures', 'Weekly number of new cases', 'weekly-cases', shortenNumFormat(weeklyCases));
+			var sparklineArray = [];
+			covidGlobal.forEach(function(d) {
+	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
+	      sparklineArray.push(obj);
+	    });
+			createSparkline(sparklineArray, '.global-figures .weekly-cases');
 
-		var sparklineArray = [];
-		covidGlobal.forEach(function(d) {
-      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_per_ht};
-      sparklineArray.push(obj);
-    });
-		createSparkline(sparklineArray, '.global-figures .cases-capita');
+			//weekly new deaths
+			createKeyFigure('.figures', 'Weekly number of new deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
+			var sparklineArray = [];
+			covidGlobal.forEach(function(d) {
+	      var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
+	      sparklineArray.push(obj);
+	    });
+			createSparkline(sparklineArray, '.global-figures .weekly-deaths');
 
-		createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
-
-    var pctArray = [];
-    covidGlobal.forEach(function(d) {
-      var obj = {date: d.date_epicrv, value: d.weekly_pc_change};
-      pctArray.push(obj);
-    });
-    createTrendBarChart(pctArray, '.global-figures .cases-trend');
-
-		createSource(globalFigures, '#affected+infected');
+			//weekly trend
+			createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
+	    var pctArray = [];
+	    covidGlobal.forEach(function(d) {
+	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
+	      pctArray.push(obj);
+	    });
+	    createTrendBarChart(pctArray, '.global-figures .cases-trend');
+		}
 	}
+	else {
+		//no global figures
+	}
+
+	//ranking chart
+	createRankingChart();
 }
 
 function createKeyFigure(target, title, className, value) {
