@@ -661,7 +661,8 @@ function initCountryView() {
 
 function initCountryLayer() {
   //color scale
-  var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
+  var clrRange = (currentCountryIndicator.id=='#population') ? populationColorRange : colorRange;
+  var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(clrRange);
   createCountryLegend(countryColorScale);
 
   //mouse events
@@ -702,7 +703,13 @@ function updateCountryLayer() {
   if (currentCountryIndicator.id=='#org+count+num') max = roundUp(max, 10);
 
   //color scale
-  var clrRange = (currentCountryIndicator.id.indexOf('vaccinated')>0) ? immunizationColorRange : colorRange;
+  var clrRange;
+  if (currentCountryIndicator.id.indexOf('vaccinated')>0)
+    clrRange = immunizationColorRange;
+  else if (currentCountryIndicator.id=='#population')
+    clrRange = populationColorRange;
+  else
+    clrRange = colorRange;
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
   //data join
