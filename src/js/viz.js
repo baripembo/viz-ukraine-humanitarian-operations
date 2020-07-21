@@ -4,9 +4,9 @@ var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
-var vaccinationColorRange = ['#F2645A','#EEEEEE'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
-var foodPricesColor = '#007CE1';
+var populationColorRange = ['#FFE281','#FDB96D','#FA9059','#F27253','#E9554D'];
+var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -16,7 +16,6 @@ var zoomLevel = 1.4;
 
 var currentIndicator = {};
 var currentCountryIndicator = {};
-var popDataByCountry = {};
 var currentCountry = {};
 
 $( document ).ready(function() {
@@ -89,13 +88,7 @@ $( document ).ready(function() {
         var pop = item['#population'];
         if (item['#population']!=undefined) item['#population'] = parseInt(pop.replace(/,/g, ''), 10);
         item['#org+count+num'] = +item['#org+count+num'];
-      })
-
-      //group population data by country    
-      popDataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .rollup(function(v) { return d3.sum(v, function(d) { return d['#population']; }); })
-        .object(subnationalData);
+      });
 
       //parse national data
       nationalData.forEach(function(item) {
@@ -104,7 +97,7 @@ $( document ).ready(function() {
         if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
         //calculate and inject PIN percentage
-        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || popDataByCountry[item['#country+code']]==undefined) ? '' : item['#affected+inneed']/popDataByCountry[item['#country+code']];
+        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
@@ -112,7 +105,13 @@ $( document ).ready(function() {
         item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
         item['#covid+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases;
         item['#covid+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_deaths;
-      })
+
+        //access categories
+        item['#severity+access+category+num'] = (item['#severity+access+category+num']==undefined) ? -1 : +item['#severity+access+category+num'];
+        if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
+        if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
+        if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
+      });
 
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()
@@ -149,7 +148,7 @@ $( document ).ready(function() {
         });
       });
 
-      //console.log(nationalData)
+      console.log(nationalData)
       //console.log(subnationalData)
 
       dataLoaded = true;
@@ -173,7 +172,8 @@ $( document ).ready(function() {
     $('.region-select').val($('.region-select option:first').val());
 
     //create country select
-    var hrpData = nationalData.filter((row) => countryCodeList.includes(row['#country+code']));
+    var countryArray = Object.keys(countryCodeList);
+    var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
     var countrySelect = d3.select('.country-select')
       .selectAll('option')
       .data(hrpData)
@@ -184,7 +184,7 @@ $( document ).ready(function() {
     $('.country-select').prepend('<option value="">View Country Page</option>');
     $('.country-select').val($('.country-select option:first').val());
 
-    //drawGlobalMap();
+    //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');
   }
 
@@ -192,7 +192,7 @@ $( document ).ready(function() {
   function initCountryView() {
     $('.content').addClass('country-view');
     $('.country-panel').scrollTop(0);
-    $('#foodSecurity').prop('checked', true);
+    $('#population').prop('checked', true);
     currentCountryIndicator = {id: $('input[name="countryIndicators"]:checked').val(), name: $('input[name="countryIndicators"]:checked').parent().text()};
 
     initCountryPanel();

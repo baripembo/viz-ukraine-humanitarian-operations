@@ -102,31 +102,32 @@ const regionalList = [
   {id: 'ROWCA', name: 'West and Central Africa'}
 ];
 
-//25 HRP country codes
-const countryCodeList = [
-  'AFG',
-  'BDI',
-  'BFA',
-  'CAF',
-  'CMR',
-  'COD',
-  'COL',
-  'ETH',
-  'HTI',
-  'IRQ',
-  'LBY',
-  'MLI',
-  'MMR',
-  'NER',
-  'NGA',
-  'PSE',
-  'SDN',
-  'SOM',
-  'SSD',
-  'SYR',
-  'TCD',
-  'UKR',
-  'VEN',
-  'YEM',
-  'ZWE'
-];
+//25 HRP country codes and raster ids
+const countryCodeList = {
+  AFG: '8oeer8pw',
+  BDI: '85uxb0dw',
+  BFA: '489tayev',
+  CAF: '6stu6e7d',
+  CMR: '6v09q3l9',
+  COD: '70s1gowk',
+  COL: 'awxirkoh',
+  ETH: '8l382re2',
+  HTI: '4in4ae66',
+  IRQ: '079oa80i',
+  LBY: '0o4l8ysb',
+  MLI: '17y8a20i',
+  MMR: '7wk9p4wu',
+  NER: '9gbs4a2a',
+  NGA: '3ceksugh',
+  PSE: '1emy37d7',
+  SDN: 'a2zw3leb',
+  SOM: '3s7xeitz',
+  SSD: '3556pb27',
+  SYR: '2qt39dhl',
+  TCD: 'd6tya3am',
+  UKR: 'adkwa0bw',
+  VEN: '9vcajdlr',
+  YEM: '3m20d1v8',
+  ZWE: '1ry8x8ul'
+};
+

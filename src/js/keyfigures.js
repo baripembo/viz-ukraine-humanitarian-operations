@@ -142,6 +142,7 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
+	if (indicator=='#severity+access+category') indicator = '#severity+access+category+num';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {

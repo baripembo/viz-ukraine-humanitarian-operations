@@ -50,35 +50,38 @@
               <h4>Vulnerability and Socio-Economic Risk</h4>
               <ul class='menu-indicators'>
                 <li data-id='#covid+cases+per+capita' data-legend='Weekly number of new cases per 100,000 people' class='selected'>
-                  <div class='expand'><i class='humanitarianicons-Analysis'></i>COVID-19 Cases and Deaths</div>
+                  <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
                 </li>
                 <li data-id='#affected+inneed+pct' data-legend='Percentage of People in Need'>
-                  <div><i class='humanitarianicons-Analysis'></i>People in Need 2020</div>
+                  <div><i class='humanitarianicons-People-in-need'></i>People in Need 2020</div>
+                </li>
+                <li data-id='#severity+access+category' data-legend='Access Severity Level'>
+                  <div><i class='humanitarianicons-Humanitarian-access'></i>Access Severity</div>
                 </li>
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
                   <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
                 </li>
                 <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
-                  <div><i class='humanitarianicons-Analysis'></i>Food Market Prices</div>
+                  <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
                 </li>
                 <li data-id='#vaccination+num+ratio' data-legend='Vaccination Campaign Status (% postponed)'>
-                  <div><i class='humanitarianicons-Analysis'></i>Vaccination Campaign Status</div>
+                  <div><i class='humanitarianicons-Vaccine'></i>Vaccination Campaign Status</div>
                 </li>
               </ul>
 
               <h4>Humanitarian Funding and International Financing</h4>
               <ul class='menu-indicators'>
                 <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP/GHRP)'>
-                  <div><i class='humanitarianicons-Analysis'></i>Humanitarian Funding Level</div>
+                  <div><i class='humanitarianicons-Financing'></i>Humanitarian Funding Level</div>
                 </li>
                 <li data-id='#value+cerf+covid+funding+total+usd' data-legend='CERF COVID-19 Allocations'>
-                  <div><i class='humanitarianicons-Analysis'></i>CERF COVID-19 Allocations</div>
+                  <div><i class='humanitarianicons-Fund'></i>CERF COVID-19 Allocations</div>
                 </li>
                 <li data-id='#value+cbpf+covid+funding+total+usd' data-legend='CBPF COVID-19 Allocations'>
-                  <div><i class='humanitarianicons-Analysis'></i>CBPF COVID-19 Allocations</div>
+                  <div><i class='humanitarianicons-Fund'></i>CBPF COVID-19 Allocations</div>
                 </li>
                 <li data-id='#value+gdp+ifi+pct' data-legend='Total IFI Funding (% of GDP)'>
-                  <div><i class='humanitarianicons-Analysis'></i>IFI Financing for COVID-19 Response</div>
+                  <div><i class='humanitarianicons-University'></i>IFI Financing for COVID-19 Response</div>
                 </li>
               </ul>
               
@@ -115,15 +118,17 @@
             <div class='close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
             <div class='source-container'></div>
             <div class='figures'></div>
-            <h6 class='ranking-title'></h6>
-            <div class='ranking-select-container'>
-              <label>Sort by:</label>
-              <select id='rankingSelect' class='ranking-select'>
-                <option value='descending'>Highest to Lowest</option>
-                <option value='ascending'>Lowest to Highest</option>
-              </select>
+            <div class='ranking-container'>
+              <h6 class='ranking-title'></h6>
+              <div class='ranking-select-container'>
+                <label>Sort by:</label>
+                <select id='rankingSelect' class='ranking-select'>
+                  <option value='descending'>Highest to Lowest</option>
+                  <option value='ascending'>Lowest to Highest</option>
+                </select>
+              </div>
+              <div class='ranking-chart'></div>
             </div>
-            <div class='ranking-chart'></div>
           </div>
             
           <div id='global-map'>
@@ -133,10 +138,10 @@
             </div>
             <div class='map-legend country'>
               <h4>MAP DATA LAYER</h4>
-              <label>Acute Food Insecurity<br> (% of population in IPC Phase 3+) <input checked='true' name='countryIndicators' type='radio' value='#affected+food+ipc+p3+pct' id='foodSecurity'></label>
-              <div class='source-container food-security-source'></div>
-              <label>Population Density <input name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <label>Population Density <input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
+              <label>Acute Food Insecurity<br> (% of population in IPC Phase 3+) <input name='countryIndicators' type='radio' value='#affected+food+ipc+p3+pct' id='foodSecurity'></label>
+              <div class='source-container food-security-source'></div>
               <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
               <div class='source-container orgs-source'></div>
               <label>Health facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
