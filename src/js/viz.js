@@ -106,7 +106,8 @@ $( document ).ready(function() {
         item['#covid+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases;
         item['#covid+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_deaths;
 
-        item['#severity+access+category+num'] = +item['#severity+access+category+num'];
+        //access categories
+        item['#severity+access+category+num'] = (item['#severity+access+category+num']==undefined) ? -1 : +item['#severity+access+category+num'];
         if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
         if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
         if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';

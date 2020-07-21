@@ -371,23 +371,29 @@ function createRankingChart() {
       .key(function(d) {
         if (regionMatch(d['#region+name'])) return d['#severity+access+num+score']; 
       })
-      //.sortKeys(d3.descending)
+      .sortKeys((a, b) => d3.descending(+a, +b))
       .entries(nationalData)
-      //.sort(function(a,b) {console.log(a); return d3.descending(+a.key,+b.key);});
+      .sort(function(a, b) { return d3.descending(+a.key, +b.key); });
 
-
-    // var rankingList = [];
-    // rankingByCategory.forEach(function(category) {
-    //   if ()
-    // });
-    //rankingByCategory = [rankingByCategory[1],rankingByCategory[3],rankingByCategory[2]]
-
-    console.log(rankingByCategory)
+    //create category lists
     rankingByCategory.forEach(function(category) {
-      console.log(category)
-      if (category.key!='NaN' && category.key!='undefined') {
-        chart.append('<label class="access-category">'+ category.key +'</label>');
-        var listClass = category.key.toLowerCase() + '-list';
+      if (category.key!='-1' && category.key!='undefined') {
+        var categoryName;
+        switch(category.key) {
+          case '2':
+            categoryName = 'High';
+            break;
+          case '1':
+            categoryName = 'Medium';
+            break;
+          case '0':
+            categoryName = 'Low';
+            break;
+          default:
+            categoryName = '';
+        }
+        chart.append('<label class="access-category">'+ categoryName +'</label>');
+        var listClass = categoryName.toLowerCase() + '-list';
         chart.append('<ul class="'+ listClass +'"></ul>');
         category.values.forEach(function(level) {
           level.values.forEach(function(country) {
