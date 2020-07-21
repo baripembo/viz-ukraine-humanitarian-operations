@@ -1039,8 +1039,10 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-  var id = currentCountry.code.toLowerCase();
-  map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+   if (currentCountry.code!=undefined) {
+    var id = currentCountry.code.toLowerCase()
+    map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+  }
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
