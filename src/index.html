@@ -50,10 +50,13 @@
               <h4>Vulnerability and Socio-Economic Risk</h4>
               <ul class='menu-indicators'>
                 <li data-id='#covid+cases+per+capita' data-legend='Weekly number of new cases per 100,000 people' class='selected'>
-                  <div class='expand'><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
+                  <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
                 </li>
                 <li data-id='#affected+inneed+pct' data-legend='Percentage of People in Need'>
                   <div><i class='humanitarianicons-People-in-need'></i>People in Need 2020</div>
+                </li>
+                <li data-id='#severity+access+category' data-legend='Access Severity Level'>
+                  <div><i class='humanitarianicons-Humanitarian-access'></i>Access Severity</div>
                 </li>
                 <li data-id='#severity+type' data-legend='INFORM COVID-19 Risk Class'>
                   <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
@@ -115,15 +118,17 @@
             <div class='close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
             <div class='source-container'></div>
             <div class='figures'></div>
-            <h6 class='ranking-title'></h6>
-            <div class='ranking-select-container'>
-              <label>Sort by:</label>
-              <select id='rankingSelect' class='ranking-select'>
-                <option value='descending'>Highest to Lowest</option>
-                <option value='ascending'>Lowest to Highest</option>
-              </select>
+            <div class='ranking-container'>
+              <h6 class='ranking-title'></h6>
+              <div class='ranking-select-container'>
+                <label>Sort by:</label>
+                <select id='rankingSelect' class='ranking-select'>
+                  <option value='descending'>Highest to Lowest</option>
+                  <option value='ascending'>Lowest to Highest</option>
+                </select>
+              </div>
+              <div class='ranking-chart'></div>
             </div>
-            <div class='ranking-chart'></div>
           </div>
             
           <div id='global-map'>

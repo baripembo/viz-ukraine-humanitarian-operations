@@ -363,9 +363,7 @@ a:visited {
 
 .global-figures {
 	background-color: rgba(255, 255, 255, 0.9);
-	display: block;
-	left: 0;
-	opacity: 0;
+	left: -255px;
 	overflow: auto;
 	padding: 20px 25px;
 	position: absolute;
@@ -436,25 +434,56 @@ a:visited {
 	}
 }
 
-.ranking-chart {    
-	margin-top: 20px;
-	min-height: 234px;
-  overflow: scroll;
-	.bar {
-		fill: #F2645B;
-	}
-	.name {
-		text-anchor: end;
-	}
-	.y.axis {
-		text {
-			display: none;
+.ranking-container {  
+	.ranking-chart {    
+		margin-top: 20px;
+		min-height: 234px;
+	  overflow: scroll;
+		.bar {
+			fill: #F2645B;
+		}
+		.name {
+			text-anchor: end;
+		}
+		.y.axis {
+			text {
+				display: none;
+			}
 		}
 	}
-}
-
-.ranking-select-container {
-	margin-top: 10px;
+	.ranking-select-container {
+		display: block;
+		margin-top: 10px;
+	}
+	&.access-severity {
+		.ranking-chart {
+			height: auto !important;
+		}
+		.ranking-select-container {
+			display: none;
+		}
+		.access-category {
+			color: #FFF;
+    	display: inline-block;
+			font-family: 'Gotham-Bold', sans-serif;
+			font-size: 12px;
+    	margin-bottom: 5px;
+			padding: 5px 6px 4px;
+			&.high {
+				background-color: #C74B4F;
+			}
+			&.medium {
+				background-color: #F6B98E;
+			}
+			&.low {
+				background-color: #79B89A;
+			}
+		}
+		ul {
+			list-style-type: none;
+			margin: 0 0 10px;
+		}
+	}
 }
 
 .label-header {
@@ -522,6 +551,9 @@ a:visited {
 			height: 83px;
 			&.vaccination-campaign {
 				height: 32px;
+			}
+			&.access-severity {
+				height: 50px;
 			}
 		}
 		.source-secondary {
@@ -625,6 +657,14 @@ circle.swatch {
 		.cases {
 			color: #888;
 			margin-top: 10px;
+		}
+		ul {
+			color: #888;
+			list-style-type: disc;
+			margin-bottom: 10px;
+			li { 
+			 	margin-left: 30px;
+			}
 		}
 	}
 }
