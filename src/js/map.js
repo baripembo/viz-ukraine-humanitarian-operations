@@ -1080,7 +1080,7 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-  if (currentCountry.code!=undefined) {
+   if (currentCountry.code!=undefined) {
     var id = currentCountry.code.toLowerCase()
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
   }
