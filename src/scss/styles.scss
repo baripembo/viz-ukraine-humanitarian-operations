@@ -463,13 +463,21 @@ a:visited {
 			display: none;
 		}
 		.access-category {
-			background-color: #F2645B;
 			color: #FFF;
     	display: inline-block;
 			font-family: 'Gotham-Bold', sans-serif;
 			font-size: 12px;
     	margin-bottom: 5px;
 			padding: 5px 6px 4px;
+			&.high {
+				background-color: #C74B4F;
+			}
+			&.medium {
+				background-color: #F6B98E;
+			}
+			&.low {
+				background-color: #79B89A;
+			}
 		}
 		ul {
 			list-style-type: none;

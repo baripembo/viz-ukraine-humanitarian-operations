@@ -392,7 +392,7 @@ function createRankingChart() {
           default:
             categoryName = '';
         }
-        chart.append('<label class="access-category">'+ categoryName +'</label>');
+        chart.append('<label class="access-category '+ categoryName.toLowerCase() +'">'+ categoryName +'</label>');
         var listClass = categoryName.toLowerCase() + '-list';
         chart.append('<ul class="'+ listClass +'"></ul>');
         category.values.forEach(function(level) {
