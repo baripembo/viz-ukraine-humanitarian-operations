@@ -931,7 +931,7 @@ function createMapTooltip(country_code, country_name) {
     //access layer
     else if (currentIndicator.id=='#severity+access+category') {
       if (val!='No Data') {
-        var accessLabels = ['Top 3 access restrictions into country:', 'Top 3 access restriction within country:', 'Top 3 impacts:'];
+        var accessLabels = ['Top 3 access restrictions into country:', 'Top 3 access restrictions within country:', 'Top 3 impacts:'];
         var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact'];
         accessLabels.forEach(function(label, index) {
           var arr = country[0][accessTags[index]].split('|');
