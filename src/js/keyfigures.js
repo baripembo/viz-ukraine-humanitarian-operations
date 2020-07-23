@@ -20,8 +20,14 @@ function setGlobalFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (isVal(val) && !isNaN(val)) {
-				totalCountries++;
+			if (currentIndicator.id=='#severity+access+category') {
+				if (val!=undefined)
+					totalCountries++;
+			}
+			else {
+				if (isVal(val) && !isNaN(val)) {
+					totalCountries++;
+				}
 			}
 		}
 	});
@@ -34,6 +40,10 @@ function setGlobalFigures() {
 			}
 		});
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', (d3.format('.4s'))(totalPIN));
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+	}
+	//access security
+	else if (currentIndicator.id=='#severity+access+category') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//humanitarian funding
@@ -111,7 +121,13 @@ function setGlobalFigures() {
 	}
 
 	//ranking chart
-	createRankingChart();
+	if (currentIndicator.id!='#severity+access+category') {
+		$('.ranking-container').show();
+		createRankingChart();
+	}
+	else {
+		$('.ranking-container').hide();
+	}
 }
 
 function createKeyFigure(target, title, className, value) {
