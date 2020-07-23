@@ -45,14 +45,39 @@ function setGlobalFigures() {
 	//access security
 	else if (currentIndicator.id=='#severity+access+category') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var accessLabels = ['Top 3 access constraints into country','Top 3 access constraints within country','Top 3 impacts','Countries with existing mitigation measures'];
+		var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact','#access+mitigation'];
+		var content;
+		accessTags.forEach(function(tag, index) {
+			var descArr = (data[tag+'+desc']!=undefined) ? data[tag+'+desc'].split('|') : [];
+			var pctArr = (data[tag+'+pct']!=undefined) ? data[tag+'+pct'].split('|') : [];
+			console.log(tag, pctArr)
+			content = '<h6>'+ accessLabels[index] +'</h6><ul class="access-figures">';
+			pctArr.forEach(function(item, index) {
+				if (tag=='#access+mitigation') {
+					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">Yes</div></li>';
+					content += '<li><div class="pct">'+ Math.round((1-item)*100)+'%' + '</div><div class="desc">No</div></li>';
+				}
+				else {
+					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">' + descArr[index] +'</div></li>';
+				}
+			})
+			content += '</ul>';
+			$('.figures').append(content);
+		});
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
-		var totalPIN = d3.sum(nationalData, function(d) { return +d['#affected+inneed']; });
+		var numCountries = 0;
+		nationalData.forEach(function(d) {
+			if (regionMatch(d['#region+name'])) {
+				numCountries++;
+			}
+		});
 		createKeyFigure('.figures', 'Total Funding Required', '', formatValue(data['#value+funding+hrp+required+usd']));
 		createKeyFigure('.figures', 'GHRP Requirement (COVID-19)', '', formatValue(data['#value+covid+funding+hrp+required+usd']));
 		createKeyFigure('.figures', 'Funding Coverage', '', percentFormat(data['#value+funding+hrp+pct']));
-		createKeyFigure('.figures', 'Countries Affected', '', totalCountries);
+		createKeyFigure('.figures', 'Countries Affected', '', numCountries);
 	}
 	//CERF
 	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {

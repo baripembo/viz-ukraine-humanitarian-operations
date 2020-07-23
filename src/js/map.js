@@ -934,14 +934,19 @@ function createMapTooltip(country_code, country_name) {
         var accessLabels = ['Top 3 access restrictions into country:', 'Top 3 access restrictions within country:', 'Top 3 impacts:', 'Mitigation measures:'];
         var accessTags = ['#access+constraints+into+desc','#access+constraints+within+desc','#access+impact+desc','#access+mitigation+desc'];
         accessLabels.forEach(function(label, index) {
-          var arr = (country[0][accessTags[index]]!=undefined) ? country[0][accessTags[index]].split('|') : [];
-          content += '<label class="access-label">'+ label + '</label>';
-          content += '<ul>';
-          arr.forEach(function(item, index) {
-            if (index<3)
-              content += '<li>'+ item + '</li>';
-          });
-          content += '</ul>';
+          if (accessTags[index]=='#access+mitigation+desc' && country[0][accessTags[index]]!=undefined) {
+            content += '<label class="access-label">'+ label + '</label> '+ country[0][accessTags[index]].toUpperCase();
+          }
+          else {
+            var arr = (country[0][accessTags[index]]!=undefined) ? country[0][accessTags[index]].split('|') : [];
+            content += '<label class="access-label">'+ label + '</label>';
+            content += '<ul>';
+            arr.forEach(function(item, index) {
+              if (index<3)
+                content += '<li>'+ item + '</li>';
+            });
+            content += '</ul>';
+          }
         });
       }
       else {
