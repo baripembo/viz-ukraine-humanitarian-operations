@@ -357,53 +357,53 @@ function createTrendBarChart(data, div) {
 /*************************/
 var rankingY, rankingBars, rankingData, rankingBarHeight;
 function createRankingChart() {
-  if (currentIndicator.id=='#severity+access+category') {
-    var chart = $('.ranking-chart');
-    //set title
-    $('.global-figures .ranking-container').addClass('access-severity');
-    $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend'));
+  // if (currentIndicator.id=='#severity+access+category') {
+  //   var chart = $('.ranking-chart');
+  //   //set title
+  //   $('.global-figures .ranking-container').addClass('access-severity');
+  //   $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend'));
 
-    //format data
-    var rankingByCategory = d3.nest()
-      .key(function(d) {
-        if (regionMatch(d['#region+name'])) return d['#severity+access+category+num']; 
-      })
-      .key(function(d) {
-        if (regionMatch(d['#region+name'])) return d['#severity+access+num+score']; 
-      })
-      .sortKeys((a, b) => d3.descending(+a, +b))
-      .entries(nationalData)
-      .sort(function(a, b) { return d3.descending(+a.key, +b.key); });
+  //   //format data
+  //   var rankingByCategory = d3.nest()
+  //     .key(function(d) {
+  //       if (regionMatch(d['#region+name'])) return d['#severity+access+category+num']; 
+  //     })
+  //     .key(function(d) {
+  //       if (regionMatch(d['#region+name'])) return d['#severity+access+num+score']; 
+  //     })
+  //     .sortKeys((a, b) => d3.descending(+a, +b))
+  //     .entries(nationalData)
+  //     .sort(function(a, b) { return d3.descending(+a.key, +b.key); });
 
-    //create category lists
-    rankingByCategory.forEach(function(category) {
-      if (category.key!='-1' && category.key!='undefined') {
-        var categoryName;
-        switch(category.key) {
-          case '2':
-            categoryName = 'High';
-            break;
-          case '1':
-            categoryName = 'Medium';
-            break;
-          case '0':
-            categoryName = 'Low';
-            break;
-          default:
-            categoryName = '';
-        }
-        chart.append('<label class="access-category '+ categoryName.toLowerCase() +'">'+ categoryName +'</label>');
-        var listClass = categoryName.toLowerCase() + '-list';
-        chart.append('<ul class="'+ listClass +'"></ul>');
-        category.values.forEach(function(level) {
-          level.values.forEach(function(country) {
-            chart.find('.'+listClass).append('<li>'+ country['#country+name'] +'</li>')
-          });
-        });
-      }
-    });
-  }
-  else {
+  //   //create category lists
+  //   rankingByCategory.forEach(function(category) {
+  //     if (category.key!='-1' && category.key!='undefined') {
+  //       var categoryName;
+  //       switch(category.key) {
+  //         case '2':
+  //           categoryName = 'High';
+  //           break;
+  //         case '1':
+  //           categoryName = 'Medium';
+  //           break;
+  //         case '0':
+  //           categoryName = 'Low';
+  //           break;
+  //         default:
+  //           categoryName = '';
+  //       }
+  //       chart.append('<label class="access-category '+ categoryName.toLowerCase() +'">'+ categoryName +'</label>');
+  //       var listClass = categoryName.toLowerCase() + '-list';
+  //       chart.append('<ul class="'+ listClass +'"></ul>');
+  //       category.values.forEach(function(level) {
+  //         level.values.forEach(function(country) {
+  //           chart.find('.'+listClass).append('<li>'+ country['#country+name'] +'</li>')
+  //         });
+  //       });
+  //     }
+  //   });
+  // }
+  // else {
     //set title
     $('.global-figures .ranking-container').removeClass('access-severity');
     $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by country' );
@@ -522,7 +522,7 @@ function createRankingChart() {
       .text(function (d) {
         return valueFormat(d.value);
       });
-  }
+  //}
 }
 
 function updateRankingChart(sortMode) {
