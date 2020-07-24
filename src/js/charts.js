@@ -410,8 +410,8 @@ function createRankingChart() {
 
     var indicator;
     switch(currentIndicator.id) {
-      case '#severity+type':
-        indicator = '#severity+num';
+      case '#severity+inform+type':
+        indicator = '#severity+inform+num';
         break;
       case '#vaccination-campaigns':
         indicator = '#vaccination+num+ratio';
