@@ -20,7 +20,7 @@ function setGlobalFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#severity+access+category') {
+			if (currentIndicator.id=='#severity+access+category' || currentIndicator.id=='#severity+inform+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -51,7 +51,6 @@ function setGlobalFigures() {
 		accessTags.forEach(function(tag, index) {
 			var descArr = (data[tag+'+desc']!=undefined) ? data[tag+'+desc'].split('|') : [];
 			var pctArr = (data[tag+'+pct']!=undefined) ? data[tag+'+pct'].split('|') : [];
-			console.log(tag, pctArr)
 			content = '<h6>'+ accessLabels[index] +'</h6><ul class="access-figures">';
 			pctArr.forEach(function(item, index) {
 				if (tag=='#access+mitigation') {
@@ -143,7 +142,7 @@ function setGlobalFigures() {
 	}
 	else {
 		//no global figures
-		
+
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 
