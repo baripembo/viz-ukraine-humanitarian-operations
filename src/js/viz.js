@@ -173,6 +173,9 @@ $( document ).ready(function() {
     //create country select
     var countryArray = Object.keys(countryCodeList);
     var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
+    hrpData.sort(function(a, b){
+      return d3.ascending(a['#country+name'], b['#country+name']);
+    })
     var countrySelect = d3.select('.country-select')
       .selectAll('option')
       .data(hrpData)

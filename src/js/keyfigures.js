@@ -45,7 +45,7 @@ function setGlobalFigures() {
 	//access security
 	else if (currentIndicator.id=='#severity+access+category') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		var accessLabels = ['Top 3 access constraints into country','Top 3 access constraints within country','Top 3 impacts','Countries with existing mitigation measures'];
+		var accessLabels = ['Top Access Constraints into Country','Top Access Constraints within Country','Top impacts','Countries with Existing Mitigation Measures'];
 		var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact','#access+mitigation'];
 		var content;
 		accessTags.forEach(function(tag, index) {
@@ -113,7 +113,7 @@ function setGlobalFigures() {
 		
 		if (covidGlobal!=undefined) {
 			//weekly new cases
-			createKeyFigure('.figures', 'Weekly number of new cases', 'weekly-cases', shortenNumFormat(weeklyCases));
+			createKeyFigure('.figures', 'Weekly Number of New Cases', 'weekly-cases', shortenNumFormat(weeklyCases));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
 	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
@@ -122,7 +122,7 @@ function setGlobalFigures() {
 			createSparkline(sparklineArray, '.global-figures .weekly-cases');
 
 			//weekly new deaths
-			createKeyFigure('.figures', 'Weekly number of new deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
+			createKeyFigure('.figures', 'Weekly Number of New Deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
 	      var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
@@ -131,7 +131,7 @@ function setGlobalFigures() {
 			createSparkline(sparklineArray, '.global-figures .weekly-deaths');
 
 			//weekly trend
-			createKeyFigure('.figures', 'Weekly trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
+			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 	    var pctArray = [];
 	    covidGlobal.forEach(function(d) {
 	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
@@ -142,7 +142,6 @@ function setGlobalFigures() {
 	}
 	else {
 		//no global figures
-
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 
