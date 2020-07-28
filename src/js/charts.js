@@ -11,7 +11,7 @@ function createProjectionsChart(data, type) {
   var maxVal = d3.max(data, function(d) { return +d.max; })
   var barHeight = 25;
   var barPadding = 20;
-  var margin = {top: 0, right: 40, bottom: 30, left: 50},
+  var margin = {top: 0, right: 50, bottom: 30, left: 50},
       width = 336,
       height = (barHeight + barPadding) * data.length;
   

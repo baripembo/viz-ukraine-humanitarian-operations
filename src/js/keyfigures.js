@@ -45,7 +45,7 @@ function setGlobalFigures() {
 	//access security
 	else if (currentIndicator.id=='#severity+access+category') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		var accessLabels = ['Top Access Constraints into Country','Top Access Constraints within Country','Top impacts','Countries with Existing Mitigation Measures'];
+		var accessLabels = ['Top Access Constraints into Country','Top Access Constraints within Country','Top Impacts','Countries with Existing Mitigation Measures'];
 		var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact','#access+mitigation'];
 		var content;
 		accessTags.forEach(function(tag, index) {

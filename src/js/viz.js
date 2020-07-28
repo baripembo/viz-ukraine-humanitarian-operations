@@ -174,7 +174,7 @@ $( document ).ready(function() {
     var countryArray = Object.keys(countryCodeList);
     var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
     hrpData.sort(function(a, b){
-      return d3.ascending(a['#country+name'], b['#country+name']);
+      return d3.ascending(a['#country+name'].toLowerCase(), b['#country+name'].toLowerCase());
     })
     var countrySelect = d3.select('.country-select')
       .selectAll('option')

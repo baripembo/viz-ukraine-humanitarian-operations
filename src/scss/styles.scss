@@ -735,7 +735,8 @@ table {
 	}
 	.panel-content {
 		height: 100%;
-		overflow: scroll;
+		overflow-x: hidden;
+		overflow-y: scroll;
 	}
 	.source {
 		min-height: 28px;
@@ -814,8 +815,8 @@ table {
   border: 1px solid #CCC;
   left: 43px;
   max-height: 150px;
-  overflow: scroll;
-  padding: 5px 10px 0 0;
+  overflow: hidden;
+  padding: 5px 10px 3px 0;
   position: absolute;
   top: 30px;
   > div {
@@ -903,9 +904,18 @@ table {
 
 @media only screen and (max-width: 767px) {}
 
+@media only screen and (max-height: 850px) {
+	.map-legend {
+		max-height: 595px;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+}
+
 @media only screen and (max-height: 696px) {
 	.map-legend {
 		max-height: 440px;
-		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 }
