@@ -714,11 +714,12 @@ function initCountryLayer() {
 function updateCountryLayer() {
   colorNoData = '#FFF';
   if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
-
   $('.map-legend.country .legend-container').removeClass('no-data');
+
+  //max
   var max = getCountryIndicatorMax();
   if (currentCountryIndicator.id.indexOf('pct')>0 && max>0) max = 1;
-  //if (currentCountryIndicator.id=='#org+count+num') max = roundUp(max, 10);
+  if (currentCountryIndicator.id=='#org+count+num' || currentCountryIndicator.id=='#loc+count+health') max = roundUp(max, 10);
 
   //color scale
   var clrRange;
