@@ -451,7 +451,7 @@ function createRankingChart() {
     .attr('class', 'bar')
     .attr('height', rankingBarHeight)
     .attr('width', function (d) {
-      return x(d.value);
+      return (d.value<0) ? 0 : x(d.value);
     });
 
   //add country names

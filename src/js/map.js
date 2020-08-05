@@ -956,8 +956,9 @@ function createMapTooltip(country_code, country_name) {
     }
     //INFORM layer
     else if (currentIndicator.id=='#severity+inform+type') {
-      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + country[0]['#severity+inform+num'] + '</div>';
-      if (val!='No Data') {
+      var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
+      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + numVal + '</div>';
+      if (numVal!='No Data') {
         if (country[0]['#severity+coping+inform+num']!=undefined) content += 'Lack of Coping Capacity: '+ country[0]['#severity+coping+inform+num']+'<br>';
         if (country[0]['#severity+hazard+inform+num']!=undefined) content += 'COVID-19 Hazard & Exposure: '+ country[0]['#severity+hazard+inform+num']+'<br>';
         if (country[0]['#severity+inform+num+vulnerability']!=undefined) content += 'Vulnerability: '+ country[0]['#severity+inform+num+vulnerability']+'<br>';
