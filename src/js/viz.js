@@ -106,8 +106,7 @@ $( document ).ready(function() {
         item['#covid+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases;
         item['#covid+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_deaths;
 
-        //access categories
-        item['#severity+access+category+num'] = (item['#severity+access+category+num']==undefined) ? -1 : +item['#severity+access+category+num'];
+        //assign access categories
         if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
         if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
         if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
@@ -148,7 +147,7 @@ $( document ).ready(function() {
         });
       });
 
-      console.log(nationalData)
+      //console.log(nationalData)
       //console.log(subnationalData)
 
       dataLoaded = true;
@@ -174,6 +173,9 @@ $( document ).ready(function() {
     //create country select
     var countryArray = Object.keys(countryCodeList);
     var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
+    hrpData.sort(function(a, b){
+      return d3.ascending(a['#country+name'].toLowerCase(), b['#country+name'].toLowerCase());
+    })
     var countrySelect = d3.select('.country-select')
       .selectAll('option')
       .data(hrpData)

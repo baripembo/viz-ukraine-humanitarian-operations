@@ -129,9 +129,10 @@ a:visited {
 	flex-flow: row;
 	.content-left {
 		background-color: #FFF;
+		box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
 		display: flex;
 		flex-flow: column;
-		overflow: scroll;
+		overflow: auto;
 		padding: 12px 0;
 		min-width: 255px;
 		width: 255px;
@@ -358,7 +359,7 @@ a:visited {
 	height: 30px;
 	margin-left: 8px;
 	padding: 0;
-	width: 155px;
+	width: auto;
 }
 
 .global-figures {
@@ -406,17 +407,6 @@ a:visited {
 					position: absolute;
 				}
 			}
-			&:nth-child(2),
-			&:nth-child(4) {
-				flex: 0 0 calc(50%);
-				margin-right: 0;
-			}
-			&:nth-child(3),
-			&:nth-child(4) {
-				.inner {
-					border-top: 0;
-				}
-			}
 		}
 	}
 	.date {
@@ -432,13 +422,27 @@ a:visited {
 			font-size: 26px;
 		}
 	}
+	.access-figures {
+    border-bottom: 1px solid #CCC;
+		margin: 10px 0;
+    padding-bottom: 10px;
+		li {
+			display: flex;
+			font-size: 14px;
+		}
+		.pct {
+			flex: 0 0 40px;
+		}
+
+	}
 }
 
 .ranking-container {  
 	.ranking-chart {    
 		margin-top: 20px;
 		min-height: 234px;
-	  overflow: scroll;
+	  overflow-y: scroll;
+	  overflow-x: hidden;
 		.bar {
 			fill: #F2645B;
 		}
@@ -646,11 +650,11 @@ circle.swatch {
 		}
 		.stat {
 			font-size: 32px;
-			margin: 15px 0;
+			margin: 10px 0;
 			position: relative;
 			> svg {
 				bottom: 8px;
-				left: 115px;
+				left: 125px;
 				position: absolute;
 			}
 		}
@@ -731,7 +735,8 @@ table {
 	}
 	.panel-content {
 		height: 100%;
-		overflow: scroll;
+		overflow-x: hidden;
+		overflow-y: scroll;
 	}
 	.source {
 		min-height: 28px;
@@ -810,8 +815,8 @@ table {
   border: 1px solid #CCC;
   left: 43px;
   max-height: 150px;
-  overflow: scroll;
-  padding: 5px 10px 0 0;
+  overflow: hidden;
+  padding: 5px 10px 3px 0;
   position: absolute;
   top: 30px;
   > div {
@@ -899,14 +904,18 @@ table {
 
 @media only screen and (max-width: 767px) {}
 
+@media only screen and (max-height: 850px) {
+	.map-legend {
+		max-height: 595px;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+}
+
 @media only screen and (max-height: 696px) {
 	.map-legend {
-		&.global {
-			max-height: 440px;
-			overflow: auto;
-		}
-		&.country {
-			overflow: scroll;
-		}
+		max-height: 440px;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 }

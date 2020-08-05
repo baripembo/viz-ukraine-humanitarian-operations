@@ -430,7 +430,7 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#covid+cases') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#severity+type' || currentIndicator.id=='#severity+access+category') {
+      else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#severity+access+category') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
       else {
@@ -466,7 +466,7 @@ function getGlobalLegendScale() {
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id!='#severity+type' || currentIndicator.id!='#severity+access+category') max = 0;
+  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#severity+access+category') max = 0;
   else max = max;
 
   //set scale
@@ -485,7 +485,7 @@ function getGlobalLegendScale() {
   else if (currentIndicator.id=='#severity+access+category') {
     scale = d3.scaleOrdinal().domain(['Low', 'Medium', 'High']).range(accessColorRange);
   }
-  else if (currentIndicator.id=='#severity+type') {
+  else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
   else if (currentIndicator.id.indexOf('funding')>-1) {
@@ -558,7 +558,7 @@ function setGlobalLegend(scale) {
     });
 
     //cases
-    $('.map-legend.global').append('<h4>Number of COVID-19 cases</h4>');
+    $('.map-legend.global').append('<h4>Number of COVID-19 Cases</h4>');
     createSource($('.map-legend.global'), '#affected+infected');
 
     var markersvg = div.append('svg')
@@ -581,16 +581,7 @@ function setGlobalLegend(scale) {
       .call(legendSize);
 
     //boundaries disclaimer
-    var disclaimerText = 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.';
-    $('.map-legend.global').append('<p class="footnote disclaimer small">'+ truncateString(disclaimerText, 65) +' <a href="#" class="expand">MORE</a></p>');
-    $('.map-legend.global .disclaimer').click(function() {
-      if ($(this).find('a').hasClass('collapse')) {
-        $(this).html(truncateString(disclaimerText, 65) + ' <a href="#" class="expand">MORE</a>');
-      }
-      else {
-        $(this).html(disclaimerText + ' <a href="#" class="collapse">LESS</a>');
-      }
-    });
+    boundariesDisclaimer($('.map-legend.global'));
   }
   else {
     updateSource($('.indicator-source'), indicator);
@@ -723,20 +714,25 @@ function initCountryLayer() {
 function updateCountryLayer() {
   colorNoData = '#FFF';
   if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
-
   $('.map-legend.country .legend-container').removeClass('no-data');
+
+  //max
   var max = getCountryIndicatorMax();
   if (currentCountryIndicator.id.indexOf('pct')>0 && max>0) max = 1;
-  if (currentCountryIndicator.id=='#org+count+num') max = roundUp(max, 10);
+  if (currentCountryIndicator.id=='#org+count+num' || currentCountryIndicator.id=='#loc+count+health') max = roundUp(max, 10);
 
   //color scale
   var clrRange;
-  if (currentCountryIndicator.id.indexOf('vaccinated')>0)
-    clrRange = immunizationColorRange;
-  else if (currentCountryIndicator.id=='#population')
-    clrRange = populationColorRange;
-  else
-    clrRange = colorRange;
+  switch(currentCountryIndicator.id) {
+    case '#population':
+      clrRange = populationColorRange;
+      break;
+    case '#vaccination+num+ratio':
+      clrRange = immunizationColorRange;
+      break;
+    default:
+      clrRange = colorRange;
+  }
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
   //data join
@@ -779,9 +775,7 @@ function updateCountryLayer() {
     var id = currentCountry.code.toLowerCase();
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'visible');
   }
-  else {
-    map.setPaintProperty(countryLayer, 'fill-color', expression);
-  }
+  map.setPaintProperty(countryLayer, 'fill-color', expression);
   map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
   map.setPaintProperty(countryBoundaryLayer, 'line-color', expressionBoundary);
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
@@ -854,7 +848,8 @@ function createCountryLegend(scale) {
     .attr('class', 'label')
     .text('No Data');
 
-  $('.map-legend.country').append('<p class="footnote small">The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.</p>');
+  //boundaries disclaimer
+  boundariesDisclaimer($('.map-legend.country'));
 }
 
 function updateCountryLegend(scale) {
@@ -864,20 +859,13 @@ function updateCountryLegend(scale) {
   }
 
   var legendFormat;
-  switch(currentCountryIndicator.id) {
-    case '#affected+food+ipc+p3+pct':
-      legendFormat = percentFormat;
-      break;
-    case '#affected+ch+food+p3+pct':
-      legendFormat = percentFormat;
-      break;
-    case '#population':
-      legendFormat = shortenNumFormat;
-      break;
-    default:
-      legendFormat = d3.format('.0s');
-  }
-  if (currentCountryIndicator.id.indexOf('vaccinated')>-1) legendFormat = percentFormat;
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct' || currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+    legendFormat = d3.format('.0%');
+  else if (currentCountryIndicator.id=='#population')
+    legendFormat = shortenNumFormat;
+  else
+    legendFormat = d3.format('.0f');
+
   var legend = d3.legendColor()
     .labelFormat(legendFormat)
     .cells(colorRange.length)
@@ -885,6 +873,19 @@ function updateCountryLegend(scale) {
 
   var g = d3.select('.map-legend.country .scale');
   g.call(legend);
+}
+
+function boundariesDisclaimer(target) {
+  var disclaimerText = 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.';
+  target.append('<p class="footnote disclaimer small">'+ truncateString(disclaimerText, 65) +' <a href="#" class="expand">MORE</a></p>');
+  target.find('.disclaimer').click(function() {
+    if ($(this).find('a').hasClass('collapse')) {
+      $(this).html(truncateString(disclaimerText, 65) + ' <a href="#" class="expand">MORE</a>');
+    }
+    else {
+      $(this).html(disclaimerText + ' <a href="#" class="collapse">LESS</a>');
+    }
+  });
 }
 
 
@@ -913,9 +914,9 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
-      content += "Weekly number of new cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+cases']) + '</div>';
-      content += "Weekly number of new deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+deaths']) + '</div>';
-      content += "Weekly trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
+      content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+cases']) + '</div>';
+      content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+deaths']) + '</div>';
+      content += "Weekly Trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
     }
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
@@ -931,21 +932,35 @@ function createMapTooltip(country_code, country_name) {
     //access layer
     else if (currentIndicator.id=='#severity+access+category') {
       if (val!='No Data') {
-        var accessLabels = ['Top 3 access restrictions into country:', 'Top 3 access restrictions within country:', 'Top 3 impacts:'];
-        var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact'];
+        var accessLabels = ['Top Access Constraints into Country:', 'Top Access Constraints within Country:', 'Top Impacts:', 'Mitigation Measures:'];
+        var accessTags = ['#access+constraints+into+desc','#access+constraints+within+desc','#access+impact+desc','#access+mitigation+desc'];
         accessLabels.forEach(function(label, index) {
-          var arr = country[0][accessTags[index]].split('|');
-          content += '<label class="access-label">'+ label + '</label>';
-          content += '<ul>';
-          arr.forEach(function(item, index) {
-            if (index<3)
-              content += '<li>'+ item + '</li>';
-          });
-          content += '</ul>';
+          if (accessTags[index]=='#access+mitigation+desc' && country[0][accessTags[index]]!=undefined) {
+            content += '<label class="access-label">'+ label + '</label> '+ country[0][accessTags[index]].toUpperCase();
+          }
+          else {
+            var arr = (country[0][accessTags[index]]!=undefined) ? country[0][accessTags[index]].split('|') : [];
+            content += '<label class="access-label">'+ label + '</label>';
+            content += '<ul>';
+            arr.forEach(function(item, index) {
+              if (index<3)
+                content += '<li>'+ item + '</li>';
+            });
+            content += '</ul>';
+          }
         });
       }
       else {
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+    }
+    //INFORM layer
+    else if (currentIndicator.id=='#severity+inform+type') {
+      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + country[0]['#severity+inform+num'] + '</div>';
+      if (val!='No Data') {
+        if (country[0]['#severity+coping+inform+num']!=undefined) content += 'Lack of Coping Capacity: '+ country[0]['#severity+coping+inform+num']+'<br>';
+        if (country[0]['#severity+hazard+inform+num']!=undefined) content += 'COVID-19 Hazard & Exposure: '+ country[0]['#severity+hazard+inform+num']+'<br>';
+        if (country[0]['#severity+inform+num+vulnerability']!=undefined) content += 'Vulnerability: '+ country[0]['#severity+inform+num+vulnerability']+'<br>';
       }
     }
     //Vaccination campaigns layer
@@ -973,8 +988,8 @@ function createMapTooltip(country_code, country_name) {
     else if (currentIndicator.id=='#value+funding+hrp+pct') {
       if (val!='No Data') {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        if (isVal(country[0]['#value+funding+hrp+required+usd'])) content += 'HRP requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
-        if (isVal(country[0]['#value+covid+funding+hrp+required+usd'])) content += 'COVID-19 GHRP requirement: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
+        if (isVal(country[0]['#value+funding+hrp+required+usd'])) content += 'HRP Requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
+        if (isVal(country[0]['#value+covid+funding+hrp+required+usd'])) content += 'COVID-19 GHRP Requirement: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
       }
       if (isVal(country[0]['#value+funding+other+planname'])) {
         var planArray = country[0]['#value+funding+other+planname'].split('|');
@@ -996,7 +1011,7 @@ function createMapTooltip(country_code, country_name) {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         if (isVal(country[0]['#value+ifi+percap'])) content += 'Total IFI Funding per Capita: '+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'<br/>';
-        if (isVal(country[0]['#value+ifi+total'])) content += 'Total amount combined: '+ formatValue(country[0]['#value+ifi+total']);
+        if (isVal(country[0]['#value+ifi+total'])) content += 'Total Amount Combined: '+ formatValue(country[0]['#value+ifi+total']);
       
         content += '<div class="subtext">Breakdown:<br/>';
         var fundingArray = ['adb','afdb','ec','eib','idb','imf','isdb','unmptf','wb'];
@@ -1084,6 +1099,7 @@ function resetMap() {
     var id = currentCountry.code.toLowerCase()
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
   }
+  map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLayer, 'visibility', 'none');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
   $('.content').removeClass('country-view');
