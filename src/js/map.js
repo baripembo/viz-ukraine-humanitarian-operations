@@ -546,7 +546,7 @@ function setGlobalLegend(scale) {
       }
     });
     //food methodology explanatory text
-    var foodMethodologyText = 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://snap.vam.wfp.org/main/" target="_blank">WFP’s model</a>.';
+    var foodMethodologyText = 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank">WFP’s model</a>.';
     $('.map-legend.global').append('<p class="footnote food-methodology small">'+ truncateString(foodMethodologyText, 65) +' <a href="#" class="expand">MORE</a></p>');
     $('.map-legend.global .food-methodology').click(function() {
       if ($(this).find('a').hasClass('collapse')) {
