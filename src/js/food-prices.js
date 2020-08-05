@@ -70,8 +70,6 @@ function getCountryNames(adm0) {
 }
 
 function getProductsByCountryID(adm0_code,adm0_name){
-  //var sql = 'SELECT cm_id, cm_name, um_id, um_name, avg(cast(mp_month as double precision)) as month_num, mp_year, avg(mp_price) FROM "' + datastoreID + '" where adm0_id=' + adm0_code + ' and mp_year>2009 group by cm_id, cm_name, um_name, um_id, mp_month, mp_year order by cm_id, um_id, mp_year, month_num';
-  
   var today = new Date();
   var yearnow = today.getFullYear()
   var monthnow = today.getMonth()
@@ -88,7 +86,6 @@ function getProductsByCountryID(adm0_code,adm0_name){
   sql = sql.substring(0, sql.length - 4);
   sql += ') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(yearnow-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
 
-  //var sql = 'SELECT T1.cm_id,T1.cm_name,T1.um_id,T1.um_name,avg(cast(T1.mp_month as double precision)) AS month_num,T1.mp_year,avg(T1.mp_price) FROM "' + datastoreID + '" AS T1 INNER JOIN (SELECT DISTINCT adm0_id,cm_id,um_id from "' + datastoreID + '" WHERE mp_year='+today.getFullYear()+') AS T2 ON T1.adm0_id=T2.adm0_id AND T1.cm_id=T2.cm_id AND T1.um_id=T2.um_id WHERE T1.adm0_id=' + adm0_code + ' AND T1.mp_year>'+(today.getFullYear()-11)+' GROUP BY T1.cm_id,T1.cm_name,T1.um_name,T1.um_id,T1.mp_month,T1.mp_year ORDER BY T1.cm_id, T1.um_id, T1.mp_year, month_num';
   var data = encodeURIComponent(JSON.stringify({sql: sql}));
 
   $.ajax({
@@ -97,18 +94,6 @@ function getProductsByCountryID(adm0_code,adm0_name){
     success: function(data) {
     	$('.modal-loader').hide();
     	$('.modal-subnav').empty();
-
-        //remove products from data that dont have 2020 data
-        // var dataByProduct = d3.nest()
-        //     .key(function(d) { return d.cm_name; })
-        //     .entries(data.result.records);
-        // dataByProduct.forEach(function(product) {
-        //     var latestYear = product.values[product.values.length-1].mp_year;
-        //     if (latestYear<2020) {
-        //         data.result.records = data.result.records.filter(function(record) { return record.cm_name!=product.key; })
-        //     }
-        // });
-
         generateSparklines(data.result.records,adm0_code,adm0_name);
     }
   });     
@@ -517,30 +502,6 @@ function generateTimeCharts(data,cf,title){
     focus.append("g")
         .attr("class", "y axis")
         .call(yAxis);
- 
-    // context.append("path")
-    //     .datum(data)
-    //     .attr("class", "area")
-    //     .attr("d", area2);
-
-    // context.append("g")
-    //     .attr("class", "x axis")
-    //     .attr("transform", "translate(0," + height2 + ")")
-    //     .call(xAxis2);
-
-    // context.append("g")
-    //     .attr("class", "x brush")
-    //     //.call(brush.extent(x2.domain()))
-    //     .call(brush)
-    //     .selectAll("rect")
-    //         .attr("y", -6)
-    //         .attr("height", height2+6)
-    //         .style({
-    //             "stroke-width":2,
-    //             "stroke":"#6fbfff",
-    //             "fill-opacity": "0"
-    //         });  
-
   
     main_chart.append("text")
         .attr("class", "y wfplabel ylabel")
@@ -556,29 +517,6 @@ function generateTimeCharts(data,cf,title){
         event.preventDefault();
         downloadData(data,'Date',title);
     });
-    
-    //var dates = d3.event.selection==null ? x2.domain() : d3.event.selection;
-    // var dates = x2.domain();
-    // var dateFormatted = monthNames[dates[0].getMonth()] +" " + dates[0].getFullYear() + " - " +  monthNames[dates[1].getMonth()] +" " + dates[1].getFullYear();
-    
-    //$("#dateextent").html("Average Price for period " + dateFormatted);
-  
-    // function brushed() {
-    // 	var selection = d3.event.selection;
-    //   x.domain(selection===null ? x2.domain() : selection);
-    //   focus.select(".area").attr("d", area);
-    //   focus.select(".x.axis").call(xAxis);
-    //   focus.selectAll(".priceline").attr("d", line); 
-    // }
-    
-    // function setBrushExtent(data,months){
-    //   var domain = d3.extent(data.map(function(d) { return d.key; }));  
-    //   var endDate = domain[1];
-    //   var tempDate = new Date(endDate.getFullYear(), endDate.getMonth()-months, endDate.getDate());
-    //   var begDate = tempDate < domain[0] ? domain[0] : tempDate;
-    //   d3.select(".brush").call(brush.extent([begDate,endDate]));
-    //   brushed();
-    // }
 }
 
 function downloadData(data,name,title){
