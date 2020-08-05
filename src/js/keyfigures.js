@@ -116,7 +116,7 @@ function setGlobalFigures() {
 			createKeyFigure('.figures', 'Weekly Number of New Cases', 'weekly-cases', shortenNumFormat(weeklyCases));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
-	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
+	      var obj = {date: d.Date_reported, value: d.weekly_new_cases};
 	      sparklineArray.push(obj);
 	    });
 			createSparkline(sparklineArray, '.global-figures .weekly-cases');
@@ -125,7 +125,7 @@ function setGlobalFigures() {
 			createKeyFigure('.figures', 'Weekly Number of New Deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
-	      var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
+	      var obj = {date: d.Date_reported, value: d.weekly_new_deaths};
 	      sparklineArray.push(obj);
 	    });
 			createSparkline(sparklineArray, '.global-figures .weekly-deaths');
@@ -134,7 +134,7 @@ function setGlobalFigures() {
 			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 	    var pctArray = [];
 	    covidGlobal.forEach(function(d) {
-	      var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
+	      var obj = {date: d.Date_reported, value: d.weekly_new_cases_pc_change};
 	      pctArray.push(obj);
 	    });
 	    createTrendBarChart(pctArray, '.global-figures .cases-trend');

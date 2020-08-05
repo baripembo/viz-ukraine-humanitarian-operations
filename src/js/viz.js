@@ -65,7 +65,6 @@ $( document ).ready(function() {
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.csv(timeseriesPath),
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/pa-COVID-trend-analysis/master/hrp_covid_weekly_trend.json'),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
       console.log('Data loaded')
@@ -74,13 +73,13 @@ $( document ).ready(function() {
       //parse data
       var allData = data[0];
       timeseriesData = data[1];
-      covidTrendData = data[2];
-      regionBoundaryData = data[3].features;
+      regionBoundaryData = data[2].features;
       worldData = allData.world_data[0];
       regionalData = allData.regional_data;
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
       sourcesData = allData.sources_data;
+      covidTrendData = allData.covid_trend_data;
       vaccinationData = allData.vaccination_campaigns_data;
 
       //format data

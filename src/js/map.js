@@ -1042,7 +1042,7 @@ function createMapTooltip(country_code, country_name) {
       //weekly cases sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {
-        var obj = {date: d.date_epicrv, value: d.weekly_new_cases};
+        var obj = {date: d.Date_reported, value: d.weekly_new_cases};
         sparklineArray.push(obj);
       });
       createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-cases');
@@ -1050,7 +1050,7 @@ function createMapTooltip(country_code, country_name) {
       //weekly deaths sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {
-        var obj = {date: d.date_epicrv, value: d.weekly_new_deaths};
+        var obj = {date: d.Date_reported, value: d.weekly_new_deaths};
         sparklineArray.push(obj);
       });
       createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-deaths');
@@ -1059,7 +1059,7 @@ function createMapTooltip(country_code, country_name) {
       if (country[0]['#covid+trend+pct']!=undefined) {
         var pctArray = [];
         covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d.date_epicrv, value: d.weekly_new_cases_pc_change};
+          var obj = {date: d.Date_reported, value: d.weekly_new_cases_pc_change};
           pctArray.push(obj);
         });
         createTrendBarChart(pctArray, '.mapboxgl-popup-content .stat.covid-pct');
