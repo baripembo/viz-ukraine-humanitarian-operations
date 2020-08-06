@@ -290,16 +290,17 @@ function selectCountry(features) {
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
   //fix hardcoded coords
-  var bbox;
-  if (currentCountry.code=='MMR') 
-    bbox = [92.197265625, 9.990490803070287, 101.162109375, 28.555576049185973]
-  else if (currentCountry.code=='PSE')
-    bbox = [34.292578125, 31.35363694150098, 35.5517578125, 32.509761735919426];
-  else
-    bbox = turf.bbox(turf.featureCollection(features));
+  //var target;
+  // if (currentCountry.code=='MMR') 
+  //   target = [92.197265625, 9.990490803070287, 101.162109375, 28.555576049185973]
+  // else if (currentCountry.code=='PSE')
+  //   target = [34.292578125, 31.35363694150098, 35.5517578125, 32.509761735919426];
+  // else
+  //   target = turf.bbox(turf.featureCollection(features));
+  var target = bbox.default(turfHelpers.featureCollection(features));
 
   var offset = 50;
-  map.fitBounds(bbox, {
+  map.fitBounds(target, {
     padding: {top: offset, right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) + offset},
     linear: true
   });
