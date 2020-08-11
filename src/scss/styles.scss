@@ -360,6 +360,9 @@ a:visited {
 	margin-left: 8px;
 	padding: 0;
 	width: auto;
+	&.covid {
+
+	}
 }
 
 .global-figures {
@@ -455,9 +458,36 @@ a:visited {
 			}
 		}
 	}
+	.ranking-title {
+		display: block;
+	}
 	.ranking-select-container {
 		display: block;
 		margin-top: 10px;
+		.default-select {
+			display: block;
+		}
+		.covid-select {
+			display: none;
+		}
+	}
+	&.covid {
+		.ranking-title {
+			display: none;
+		}
+		.ranking-select-container {
+			.default-select {
+				display: none;
+			}
+			.covid-select {
+				display: block;
+				.ranking-select {
+					height: 50px;
+					white-space: pre-wrap;
+					width: 100%;
+				}
+			}
+		}
 	}
 	&.access-severity {
 		.ranking-chart {
