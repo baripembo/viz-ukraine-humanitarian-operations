@@ -377,9 +377,9 @@ function createRankingChart() {
   }
 
   //switch sort dropdown if on covid layer
-  if (currentIndicator.id=='#covid+weekly+cases+per+capita') {
+  if (currentIndicator.id=='#covid+cases+per+capita') {
     $('.ranking-container').addClass('covid');
-    $('.ranking-select').val('#covid+weekly+cases+per+capita');
+    $('.ranking-select').val('#covid+cases+per+capita');
   }
   else {
     $('.ranking-container').removeClass('covid');
