@@ -377,9 +377,9 @@ function createRankingChart() {
   }
 
   //switch sort dropdown if on covid layer
-  if (currentIndicator.id=='#covid+weekly+cases+per+capita') {
+  if (currentIndicator.id=='#covid+cases+per+capita') {
     $('.ranking-container').addClass('covid');
-    $('.ranking-select').val('#covid+weekly+cases+per+capita');
+    $('.ranking-select').val('#covid+cases+per+capita');
   }
   else {
     $('.ranking-container').removeClass('covid');
@@ -500,7 +500,7 @@ function updateRankingChart(sortMode) {
       else
         return d3.descending(+a.value, +b.value);
     });
-
+    rankingY.domain(rankingData.map(function (d) { return d.key; }));
     rankingBars.transition()
       .duration(400)
       .attr('transform', function(d, i) { return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; });
@@ -508,8 +508,9 @@ function updateRankingChart(sortMode) {
   else {
     rankingData = formatRankingData(sortMode);
     rankingData.sort(function(a, b){
-      return d3.descending(+a.value, +b.value);
+       return d3.descending(+a.value, +b.value);
     });
+
     var valueMax = d3.max(rankingData, function(d) { return +d.value; });
     rankingX.domain([0, valueMax]);
     rankingY.domain(rankingData.map(function (d) { return d.key; }));
