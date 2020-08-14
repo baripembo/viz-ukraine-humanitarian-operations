@@ -1027,6 +1027,8 @@ function createMapTooltip(country_code, country_name) {
     //all other layers
     else {
       content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      //hardcode value for CBPF Turkey
+      if (currentIndicator.id=='#value+cbpf+covid+funding+total+usd' && country_code=='TUR') content+='<span>(Syria Cross Border HF)</span>';
     }
 
     //covid cases and deaths
