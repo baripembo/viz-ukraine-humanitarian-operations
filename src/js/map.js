@@ -289,16 +289,7 @@ function selectCountry(features) {
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
-  //fix hardcoded coords
-  //var target;
-  // if (currentCountry.code=='MMR') 
-  //   target = [92.197265625, 9.990490803070287, 101.162109375, 28.555576049185973]
-  // else if (currentCountry.code=='PSE')
-  //   target = [34.292578125, 31.35363694150098, 35.5517578125, 32.509761735919426];
-  // else
-  //   target = turf.bbox(turf.featureCollection(features));
   var target = bbox.default(turfHelpers.featureCollection(features));
-
   var offset = 50;
   map.fitBounds(target, {
     padding: {top: offset, right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) + offset},
@@ -915,6 +906,7 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
+      content += "Weekly Number of New Cases per 100,000 People" + ':<div class="stat covid-cases-per-capita">' + d3.format('.1f')(country[0]['#covid+cases+per+capita']) + '</div>';
       content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+weekly+cases']) + '</div>';
       content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+weekly+deaths']) + '</div>';
       content += "Weekly Trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
@@ -1034,14 +1026,22 @@ function createMapTooltip(country_code, country_name) {
     //covid cases and deaths
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    content += '<div class="cases">COVID-19 Cases: ' + numCases + '<br/>';
-    content += 'COVID-19 Deaths: ' + numDeaths + '</div>';
+    content += '<div class="cases">Total COVID-19 Cases: ' + numCases + '<br/>';
+    content += 'Total COVID-19 Deaths: ' + numDeaths + '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
     if (currentIndicator.id=='#covid+cases+per+capita' && val!='No Data') {
+      //weekly cases per capita sparkline
+      var sparklineArray = [];
+      covidTrendData[country_code].forEach(function(d) {
+        var obj = {date: d.Date_reported, value: d.weekly_new_cases_per_ht};
+        sparklineArray.push(obj);
+      });
+      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-cases-per-capita');
+
       //weekly cases sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {
