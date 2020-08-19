@@ -134,6 +134,22 @@ function displayMap() {
     closeOnClick: false,
     className: 'map-tooltip'
   });
+
+
+  //deeplink to country if parameter exists
+  var location = window.location.search;
+  if (location!='') {
+    var countryCode = location.split('=')[1].toUpperCase();
+    if ($('.country-select option[value='+ countryCode +']').length > 0) {    
+      $('.country-select').val(countryCode);
+      currentCountry.code = countryCode;
+      currentCountry.name = d3.select('.country-select option:checked').text();
+
+      //find matched features and zoom to country
+      var selectedFeatures = matchMapFeatures(currentCountry.code);
+      selectCountry(selectedFeatures);
+    }
+  }
 }
 
 
@@ -215,6 +231,7 @@ function createEvents() {
   //back to global event
   $('.country-panel h2').on('click', function() {
     resetMap();
+    window.history.replaceState(null, null, '/');
   });
 
   //country panel indicator select event
@@ -289,16 +306,7 @@ function selectCountry(features) {
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
-  //fix hardcoded coords
-  //var target;
-  // if (currentCountry.code=='MMR') 
-  //   target = [92.197265625, 9.990490803070287, 101.162109375, 28.555576049185973]
-  // else if (currentCountry.code=='PSE')
-  //   target = [34.292578125, 31.35363694150098, 35.5517578125, 32.509761735919426];
-  // else
-  //   target = turf.bbox(turf.featureCollection(features));
   var target = bbox.default(turfHelpers.featureCollection(features));
-
   var offset = 50;
   map.fitBounds(target, {
     padding: {top: offset, right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) + offset},
@@ -307,6 +315,9 @@ function selectCountry(features) {
 
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
+
+  //append country code to url
+  window.history.replaceState(null, null, '?c='+currentCountry.code);
 }
 
 
@@ -915,6 +926,7 @@ function createMapTooltip(country_code, country_name) {
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
+      content += "Weekly Number of New Cases per 100,000 People" + ':<div class="stat covid-cases-per-capita">' + d3.format('.1f')(country[0]['#covid+cases+per+capita']) + '</div>';
       content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+weekly+cases']) + '</div>';
       content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+weekly+deaths']) + '</div>';
       content += "Weekly Trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
@@ -1027,19 +1039,29 @@ function createMapTooltip(country_code, country_name) {
     //all other layers
     else {
       content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      //hardcode value for CBPF Turkey
+      if (currentIndicator.id=='#value+cbpf+covid+funding+total+usd' && country_code=='TUR') content+='<span>(Syria Cross Border HF)</span>';
     }
 
     //covid cases and deaths
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    content += '<div class="cases">COVID-19 Cases: ' + numCases + '<br/>';
-    content += 'COVID-19 Deaths: ' + numDeaths + '</div>';
+    content += '<div class="cases">Total COVID-19 Cases: ' + numCases + '<br/>';
+    content += 'Total COVID-19 Deaths: ' + numDeaths + '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
     if (currentIndicator.id=='#covid+cases+per+capita' && val!='No Data') {
+      //weekly cases per capita sparkline
+      var sparklineArray = [];
+      covidTrendData[country_code].forEach(function(d) {
+        var obj = {date: d.Date_reported, value: d.weekly_new_cases_per_ht};
+        sparklineArray.push(obj);
+      });
+      createSparkline(sparklineArray, '.mapboxgl-popup-content .stat.covid-cases-per-capita');
+
       //weekly cases sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {
@@ -1097,7 +1119,7 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-   if (currentCountry.code!=undefined) {
+  if (currentCountry.code!=undefined) {
     var id = currentCountry.code.toLowerCase()
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
   }

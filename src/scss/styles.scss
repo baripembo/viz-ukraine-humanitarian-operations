@@ -444,8 +444,8 @@ a:visited {
 	.ranking-chart {    
 		margin-top: 20px;
 		min-height: 234px;
-	  overflow-y: scroll;
-	  overflow-x: hidden;
+	  overflow: scroll;
+	  //overflow-x: hidden;
 		.bar {
 			fill: #F2645B;
 		}
@@ -687,6 +687,10 @@ circle.swatch {
 				left: 125px;
 				position: absolute;
 			}
+		}
+		.stat + span {
+			display: block;
+			margin-top: -10px;
 		}
 		.cases {
 			color: #888;
