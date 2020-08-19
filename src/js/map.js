@@ -134,6 +134,22 @@ function displayMap() {
     closeOnClick: false,
     className: 'map-tooltip'
   });
+
+
+  //deeplink to country if parameter exists
+  var location = window.location.search;
+  if (location!='') {
+    var countryCode = location.split('=')[1].toUpperCase();
+    if ($('.country-select option[value='+ countryCode +']').length > 0) {    
+      $('.country-select').val(countryCode);
+      currentCountry.code = countryCode;
+      currentCountry.name = d3.select('.country-select option:checked').text();
+
+      //find matched features and zoom to country
+      var selectedFeatures = matchMapFeatures(currentCountry.code);
+      selectCountry(selectedFeatures);
+    }
+  }
 }
 
 
@@ -215,6 +231,7 @@ function createEvents() {
   //back to global event
   $('.country-panel h2').on('click', function() {
     resetMap();
+    window.history.replaceState(null, null, '/');
   });
 
   //country panel indicator select event
@@ -298,6 +315,9 @@ function selectCountry(features) {
 
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
+
+  //append country code to url
+  window.history.replaceState(null, null, '?c='+currentCountry.code);
 }
 
 
@@ -1099,7 +1119,7 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-   if (currentCountry.code!=undefined) {
+  if (currentCountry.code!=undefined) {
     var id = currentCountry.code.toLowerCase()
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
   }
