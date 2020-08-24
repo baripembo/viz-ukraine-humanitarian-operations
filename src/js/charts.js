@@ -86,7 +86,7 @@ function createProjectionsChart(data, type) {
     var date = new Date();
     projectionsDiv.append('<p class="small source"></p>');
     data.forEach(function(d) {
-      var source = getSource('#affected+deaths+'+ d.model.toLowerCase() +'+min');
+      var source = getSource('#affected+killed+min+'+ d.model.toLowerCase());
       var sourceDate = new Date(source['#date']);
       if (sourceDate.getTime()!=date.getTime()) {
         date = sourceDate;
