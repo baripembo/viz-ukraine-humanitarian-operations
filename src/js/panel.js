@@ -16,7 +16,6 @@ function initCountryPanel() {
   covidDiv.children().remove();  
   createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormat(data['#affected+infected']), indicator: '#affected+infected'});
   createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
-
   var covidData = covidTrendData[currentCountry.code];
   var weeklyCases = covidData[covidData.length-1].weekly_new_cases;
   var weeklyDeaths = covidData[covidData.length-1].weekly_new_deaths;
