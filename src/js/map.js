@@ -97,12 +97,23 @@ function displayMap() {
 
       map.addLayer(
         {
-          'id': id+'-popdensity',
-          'type': 'raster',
-          'source': id+'-pop-tileset'
+          id: id+'-popdensity',
+          type: 'raster',
+          source: {
+            type: 'raster',
+            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA'],
+          }
         },
         countryBoundaryLayer
       );
+      // map.addLayer(
+      //   {
+      //     'id': id+'-popdensity',
+      //     'type': 'raster',
+      //     'source': id+'-pop-tileset'
+      //   },
+      //   countryBoundaryLayer
+      // );
 
       map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
     }
@@ -135,12 +146,15 @@ function displayMap() {
     className: 'map-tooltip'
   });
 
-
   //deeplink to country if parameter exists
+  if (viewInitialized==true) deepLinkCountryView();
+}
+
+function deepLinkCountryView() {
   var location = window.location.search;
-  if (location!='') {
+  if (location.indexOf('?c=')>-1) {
     var countryCode = location.split('=')[1].toUpperCase();
-    if ($('.country-select option[value='+ countryCode +']').length > 0) {    
+    if (countryCodeList.hasOwnProperty(countryCode)) {    
       $('.country-select').val(countryCode);
       currentCountry.code = countryCode;
       currentCountry.name = d3.select('.country-select option:checked').text();
@@ -231,7 +245,7 @@ function createEvents() {
   //back to global event
   $('.country-panel h2').on('click', function() {
     resetMap();
-    window.history.replaceState(null, null, '/');
+    window.history.replaceState(null, null, window.location.pathname);
   });
 
   //country panel indicator select event

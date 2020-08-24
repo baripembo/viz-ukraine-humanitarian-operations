@@ -27,13 +27,13 @@ function initCountryPanel() {
   var projectionsDiv = $('.country-panel .projections .panel-inner');
   projectionsDiv.children().remove();  
   projectionsDiv.append('<h6>COVID-19 Projections</h6><div class="bar-chart projections-cases"><p class="chart-title">Cases</p></div>');
-  var cases = [{model: 'Imperial', min: data['#affected+cases+infected+imperial+min'], max: data['#affected+cases+infected+imperial+max']},
-               {model: 'LSHTM', min: data['#affected+cases+infected+lshtm+min'], max: data['#affected+cases+infected+lshtm+max']}];
+  var cases = [{model: 'Imperial', min: data['#affected+infected+min+imperial'], max: data['#affected+infected+max+imperial']},
+               {model: 'LSHTM', min: data['#affected+infected+min+lshtm'], max: data['#affected+infected+max+lshtm']}];
   createProjectionsChart(cases, 'Cases');
   
   projectionsDiv.append('<div class="bar-chart projections-deaths"><p class="chart-title">Deaths</p></div>');
-  var deaths = [{model: 'Imperial', min: data['#affected+deaths+imperial+min'], max: data['#affected+deaths+imperial+max']},
-                {model: 'LSHTM', min: data['#affected+deaths+lshtm+min'], max: data['#affected+deaths+lshtm+max']}];
+  var deaths = [{model: 'Imperial', min: data['#affected+killed+min+imperial'], max: data['#affected+killed+max+imperial']},
+                {model: 'LSHTM', min: data['#affected+killed+min+lshtm'], max: data['#affected+killed+max+lshtm']}];
   createProjectionsChart(deaths, 'Deaths');
 
   //hrp

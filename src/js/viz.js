@@ -12,6 +12,7 @@ var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
 var mapLoaded = false;
 var dataLoaded = false;
+var viewInitialized = false;
 var zoomLevel = 1.4;
 
 var currentIndicator = {};
@@ -67,7 +68,7 @@ $( document ).ready(function() {
       d3.csv(timeseriesPath),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
-      console.log('Data loaded')
+      console.log('Data loaded');
       $('.loader span').text('Initializing map...');
 
       //parse data
@@ -155,7 +156,6 @@ $( document ).ready(function() {
 
       dataLoaded = true;
       if (mapLoaded==true) displayMap();
-
       initView();
     });
   }
@@ -191,6 +191,12 @@ $( document ).ready(function() {
 
     //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');
+
+    //check map loaded status
+    if (mapLoaded==true && viewInitialized==false)
+      deepLinkCountryView();
+
+    viewInitialized = true;
   }
 
 
