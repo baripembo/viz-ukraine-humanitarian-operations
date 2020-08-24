@@ -572,6 +572,21 @@ function setGlobalLegend(scale) {
     markersvg.select('.legendSize')
       .call(legendSize);
 
+
+    //gender disaggregation explanatory text
+    var genderDataText = '*Gender breakdown explanation goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    $('.map-legend.global').append('<h4>(On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
+    createSource($('.map-legend.global'), '#affected+killed+m+pct');
+    $('.map-legend.global').append('<p class="footnote gender-data small">'+ truncateString(genderDataText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .gender-data').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(genderDataText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(genderDataText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
+
     //boundaries disclaimer
     boundariesDisclaimer($('.map-legend.global'));
   }
@@ -1026,8 +1041,14 @@ function createMapTooltip(country_code, country_name) {
     //covid cases and deaths
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    content += '<div class="cases">Total COVID-19 Cases: ' + numCases + '<br/>';
-    content += 'Total COVID-19 Deaths: ' + numDeaths + '</div>';
+    var genderCases = (country[0]['#affected+infected+m+pct']==undefined || country[0]['#affected+f+infected+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female';
+    var genderDeaths = (country[0]['#affected+killed+m+pct']==undefined || country[0]['#affected+f+killed+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female';
+    content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
+    content += '<span>(*' + genderCases + ')</span>';
+    content += '</div>';
+    content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
+    content += '<span>(*' + genderDeaths + ')</span>';
+    content += '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
