@@ -92,7 +92,7 @@ function createProjectionsChart(data, type) {
         date = sourceDate;
         projectionsDiv.find('.source').append(' <span class="date">'+ dateFormat(date) +'</span>');
       }
-      projectionsDiv.find('.source').append(' | '+ d.model +': <a href="'+ source['#meta+url'] +'" class="dataURL" target="_blank">DATA</a>');
+      projectionsDiv.find('.source').append(' | '+ d.model +': <a href="'+ source['#meta+url'] +'" class="dataURL" target="_blank" rel="noopener">DATA</a>');
     });
   }
 }
@@ -215,7 +215,7 @@ function createTimeSeries(array, div) {
 
   if (div=='.country-timeseries-chart') {
     countryTimeseriesChart = chart;
-    $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">WHO</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank">DATA</a></p>');
+    $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">WHO</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
   }
   createTimeseriesLegend(chart, div);
 }

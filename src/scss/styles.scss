@@ -122,6 +122,9 @@ a:visited {
   font-style: italic;
   line-height: 12px;
   padding-bottom: 10px;
+  &.gender-data {
+  	margin-top: 10px;
+  }
 }
 
 .content {
@@ -692,9 +695,16 @@ circle.swatch {
 			display: block;
 			margin-top: -10px;
 		}
-		.cases {
-			color: #888;
-			margin-top: 10px;
+		.cases-total,
+		.deaths-total {
+			color: #333;
+			font-size: 14px;
+			line-height: 15px;
+			margin-top: 8px;
+			span {
+				color: #888;
+				font-size: 12px;
+			}
 		}
 		ul {
 			color: #888;
@@ -934,6 +944,18 @@ table {
     right: 10px;
     top: 10px;
   }
+}
+
+//accessibility helper class
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 @media only screen and (max-width: 767px) {}

@@ -97,12 +97,23 @@ function displayMap() {
 
       map.addLayer(
         {
-          'id': id+'-popdensity',
-          'type': 'raster',
-          'source': id+'-pop-tileset'
+          id: id+'-popdensity',
+          type: 'raster',
+          source: {
+            type: 'raster',
+            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA'],
+          }
         },
         countryBoundaryLayer
       );
+      // map.addLayer(
+      //   {
+      //     'id': id+'-popdensity',
+      //     'type': 'raster',
+      //     'source': id+'-pop-tileset'
+      //   },
+      //   countryBoundaryLayer
+      // );
 
       map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
     }
@@ -134,6 +145,25 @@ function displayMap() {
     closeOnClick: false,
     className: 'map-tooltip'
   });
+
+  //deeplink to country if parameter exists
+  if (viewInitialized==true) deepLinkCountryView();
+}
+
+function deepLinkCountryView() {
+  var location = window.location.search;
+  if (location.indexOf('?c=')>-1) {
+    var countryCode = location.split('=')[1].toUpperCase();
+    if (countryCodeList.hasOwnProperty(countryCode)) {    
+      $('.country-select').val(countryCode);
+      currentCountry.code = countryCode;
+      currentCountry.name = d3.select('.country-select option:checked').text();
+
+      //find matched features and zoom to country
+      var selectedFeatures = matchMapFeatures(currentCountry.code);
+      selectCountry(selectedFeatures);
+    }
+  }
 }
 
 
@@ -215,6 +245,7 @@ function createEvents() {
   //back to global event
   $('.country-panel h2').on('click', function() {
     resetMap();
+    window.history.replaceState(null, null, window.location.pathname);
   });
 
   //country panel indicator select event
@@ -298,6 +329,9 @@ function selectCountry(features) {
 
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
+
+  //append country code to url
+  window.history.replaceState(null, null, '?c='+currentCountry.code);
 }
 
 
@@ -538,7 +572,7 @@ function setGlobalLegend(scale) {
       }
     });
     //food methodology explanatory text
-    var foodMethodologyText = 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank">WFP’s model</a>.';
+    var foodMethodologyText = 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.';
     $('.map-legend.global').append('<p class="footnote food-methodology small">'+ truncateString(foodMethodologyText, 65) +' <a href="#" class="expand">MORE</a></p>');
     $('.map-legend.global .food-methodology').click(function() {
       if ($(this).find('a').hasClass('collapse')) {
@@ -571,6 +605,20 @@ function setGlobalLegend(scale) {
 
     markersvg.select('.legendSize')
       .call(legendSize);
+
+    //gender disaggregation explanatory text
+    var genderDataText = '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country. ';
+    $('.map-legend.global').append('<h4>(On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
+    createSource($('.map-legend.global'), '#affected+killed+m+pct');
+    $('.map-legend.global').append('<p class="footnote gender-data small">'+ truncateString(genderDataText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .gender-data').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(genderDataText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(genderDataText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
 
     //boundaries disclaimer
     boundariesDisclaimer($('.map-legend.global'));
@@ -1026,8 +1074,14 @@ function createMapTooltip(country_code, country_name) {
     //covid cases and deaths
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    content += '<div class="cases">Total COVID-19 Cases: ' + numCases + '<br/>';
-    content += 'Total COVID-19 Deaths: ' + numDeaths + '</div>';
+    var genderCases = (country[0]['#affected+infected+m+pct']==undefined || country[0]['#affected+f+infected+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female';
+    var genderDeaths = (country[0]['#affected+killed+m+pct']==undefined || country[0]['#affected+f+killed+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female';
+    content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
+    content += '<span>(*' + genderCases + ')</span>';
+    content += '</div>';
+    content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
+    content += '<span>(*' + genderDeaths + ')</span>';
+    content += '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
@@ -1099,7 +1153,7 @@ function createCountryMapTooltip(adm1_name) {
 
 
 function resetMap() {
-   if (currentCountry.code!=undefined) {
+  if (currentCountry.code!=undefined) {
     var id = currentCountry.code.toLowerCase()
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
   }
