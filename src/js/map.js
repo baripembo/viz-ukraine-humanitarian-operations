@@ -1031,7 +1031,8 @@ function createMapTooltip(country_code, country_name) {
       if (val!='No Data') {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
         if (isVal(country[0]['#value+funding+hrp+required+usd'])) content += 'HRP Requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
-        if (isVal(country[0]['#value+covid+funding+hrp+required+usd'])) content += 'COVID-19 GHRP Requirement: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
+        if (isVal(country[0]['#value+covid+funding+hrp+pct'])) content += 'HRP Funding Level for COVID-19 GHRP: '+ percentFormat(country[0]['#value+covid+funding+hrp+pct']) +'<br/>';
+        if (isVal(country[0]['#value+covid+funding+hrp+required+usd'])) content += 'HRP Requirement for COVID-19 GHRP: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
       }
       if (isVal(country[0]['#value+funding+other+planname'])) {
         var planArray = country[0]['#value+funding+other+planname'].split('|');
