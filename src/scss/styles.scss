@@ -400,9 +400,9 @@ a:visited {
 				padding-bottom: 10px;
 				h3 {
 					color: #000;
-			    font-size: 14px;
-			    line-height: 16px;
-			    margin: 10px 0;
+			    	font-size: 14px;
+			    	line-height: 16px;
+			    	margin: 10px 0;
 				}
 				.num {
 					position: relative;
@@ -411,6 +411,9 @@ a:visited {
 					bottom: 10px;
 					left: 125px;
 					position: absolute;
+				}
+				.small + .small {
+					margin-top: 6px;
 				}
 			}
 		}
@@ -672,7 +675,7 @@ circle.swatch {
 	z-index: 4;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
-	  box-shadow: 0 0 8px rgba(0,0,0,.3);
+	  	box-shadow: 0 0 8px rgba(0,0,0,.3);
 		font-family: 'Source Sans Pro', sans-serif;
 		font-size: 14px;
 		font-weight: normal;
@@ -683,7 +686,7 @@ circle.swatch {
 		}
 		.stat {
 			font-size: 32px;
-			margin: 10px 0;
+			margin: 8px 0;
 			position: relative;
 			> svg {
 				bottom: 8px;
@@ -712,6 +715,12 @@ circle.swatch {
 			margin-bottom: 10px;
 			li { 
 			 	margin-left: 30px;
+			}
+		}
+		.gam {
+			margin-bottom: 15px;
+			&.small-pad {
+				margin-bottom: 6px;
 			}
 		}
 	}
