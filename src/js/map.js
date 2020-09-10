@@ -983,7 +983,13 @@ function createMapTooltip(country_code, country_name) {
       }
       content += '<div class="pins">';
       if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
-      if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
+      
+      if (isVal(country[0]['#affected+refugees'])) {
+        //hardcode label for Colombia
+        content += (country_code=='COL') ? 'Refugees & Migrants: ' : 'Refugees: ';
+        content += numFormat(country[0]['#affected+refugees']) +'<br/>';
+      }
+      
       if (isVal(country[0]['#affected+displaced'])) content += 'IDPs: '+ numFormat(country[0]['#affected+displaced']) +'<br/>';
       content += '</div>';
     }
