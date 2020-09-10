@@ -1072,6 +1072,9 @@ function createMapTooltip(country_code, country_name) {
       if (val!='No Data') {
         if (country[0]['#value+cerf+covid+funding+total+usd'] > 0) {
           var gmText = '**Gender age marker: ';
+          gmText += '[NA]: ';
+          gmText += (country[0]['#value+cerf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(country[0]['#value+cerf+covid+funding+gmempty+total+usd'] / country[0]['#value+cerf+covid+funding+total+usd']) : '0%';
+          gmText += ', ';
           for (var i=0;i<5;i++) {
             var pct = (country[0]['#value+cerf+covid+funding+gm'+i+'+total+usd']!=undefined) ? percentFormat(country[0]['#value+cerf+covid+funding+gm'+i+'+total+usd'] / country[0]['#value+cerf+covid+funding+total+usd']) : '0%';
             gmText += '['+i+']: ' + pct;
@@ -1091,6 +1094,10 @@ function createMapTooltip(country_code, country_name) {
         //gam
         if (country[0]['#value+cbpf+covid+funding+total+usd'] > 0) {
           var gmText = '**Gender age marker: ';
+          gmText += '[NA]: ';
+          gmText += (country[0]['#value+cbpf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(country[0]['#value+cbpf+covid+funding+gmempty+total+usd'] / country[0]['#value+cbpf+covid+funding+total+usd']) : '0%';
+          gmText += ', ';
+
           for (var i=0;i<5;i++) {
             var pct = (country[0]['#value+cbpf+covid+funding+gm'+i+'+total+usd']!=undefined) ? percentFormat(country[0]['#value+cbpf+covid+funding+gm'+i+'+total+usd'] / country[0]['#value+cbpf+covid+funding+total+usd']) : '0%';
             gmText += '['+i+']: ' + pct;
