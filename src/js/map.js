@@ -608,7 +608,7 @@ function setGlobalLegend(scale) {
 
     //gender disaggregation explanatory text
     var genderDataText = '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country. ';
-    $('.map-legend.global').append('<h4>(On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
+    $('.map-legend.global').append('<h4><i class="humanitarianicons-User"></i> (On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
     createSource($('.map-legend.global'), '#affected+killed+m+pct');
     $('.map-legend.global').append('<p class="footnote gender-data small">'+ truncateString(genderDataText, 65) +' <a href="#" class="expand">MORE</a></p>');
     $('.map-legend.global .gender-data').click(function() {
@@ -967,7 +967,9 @@ function createMapTooltip(country_code, country_name) {
     }
 
     //format content for display
-    var content = '<h2>' + country_name + '</h2>';
+    var content = '<h2>' + country_name;
+    if (hasGamData(country[0])) content += ' <i class="humanitarianicons-User"></i>';
+    content += '</h2>';
 
     //COVID trend layer shows sparklines
     if (currentIndicator.id=='#covid+cases+per+capita') {
@@ -983,7 +985,13 @@ function createMapTooltip(country_code, country_name) {
       }
       content += '<div class="pins">';
       if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
-      if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
+      
+      //hardcode label for Colombia
+      if (country_code=='COL') 
+        content += 'Refugees & Migrants: 1,700,000' +'<br/>';
+      else
+        if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
+
       if (isVal(country[0]['#affected+displaced'])) content += 'IDPs: '+ numFormat(country[0]['#affected+displaced']) +'<br/>';
       content += '</div>';
     }
@@ -1071,15 +1079,8 @@ function createMapTooltip(country_code, country_name) {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         if (country[0]['#value+cerf+covid+funding+total+usd'] > 0) {
-          var gmText = '**Gender age marker: ';
-          for (var i=0;i<5;i++) {
-            var pct = (country[0]['#value+cerf+covid+funding+gm'+i+'+total+usd']!=undefined) ? percentFormat(country[0]['#value+cerf+covid+funding+gm'+i+'+total+usd'] / country[0]['#value+cerf+covid+funding+total+usd']) : '0%';
-            gmText += '['+i+']: ' + pct;
-            gmText += ', ';
-          }
-          gmText += '[NA]: ';
-          gmText += (country[0]['#value+cerf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(country[0]['#value+cerf+covid+funding+gmempty+total+usd'] / country[0]['#value+cerf+covid+funding+total+usd']) : '0%';
-          content += '<div class="gam small">'+ gmText +'</div>';
+          var gmText = getGamText(country[0], 'cerf');
+          content += '<div class="gam">'+ gmText +'</div>';
         }
       }
     }
@@ -1092,25 +1093,14 @@ function createMapTooltip(country_code, country_name) {
       if (val!='No Data') {
         //gam
         if (country[0]['#value+cbpf+covid+funding+total+usd'] > 0) {
-          var gmText = '**Gender age marker: ';
-          for (var i=0;i<5;i++) {
-            var pct = (country[0]['#value+cbpf+covid+funding+gm'+i+'+total+usd']!=undefined) ? percentFormat(country[0]['#value+cbpf+covid+funding+gm'+i+'+total+usd'] / country[0]['#value+cbpf+covid+funding+total+usd']) : '0%';
-            gmText += '['+i+']: ' + pct;
-            gmText += ', ';
-          }
-          gmText += '[NA]: ';
-          gmText += (country[0]['#value+cbpf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(country[0]['#value+cbpf+covid+funding+gmempty+total+usd'] / country[0]['#value+cbpf+covid+funding+total+usd']) : '0%';
-          content += '<div class="gam small-pad small">'+ gmText +'</div>';
+          var gmText = getGamText(country[0], 'cbpf');
+          content += '<div class="gam small-pad">'+ gmText +'</div>';
         }
 
         //beneficieries
         if (country[0]['#affected+cbpf+covid+funding+total'] > 0) {
-          var beneficiaryText = 'Beneficiary breakdown: ';
-          beneficiaryText += (country[0]['#affected+cbpf+covid+funding+men']!=undefined) ? percentFormat(country[0]['#affected+cbpf+covid+funding+men'] / country[0]['#affected+cbpf+covid+funding+total']) + ' Male, ' : '0% Male, ';
-          beneficiaryText += (country[0]['#affected+cbpf+covid+funding+women']!=undefined) ? percentFormat(country[0]['#affected+cbpf+covid+funding+women'] / country[0]['#affected+cbpf+covid+funding+total']) + ' Female, ' : '0% Female, ';
-          beneficiaryText += (country[0]['#affected+boys+cbpf+covid+funding']!=undefined) ? percentFormat(country[0]['#affected+boys+cbpf+covid+funding'] / country[0]['#affected+cbpf+covid+funding+total']) + ' Boys, ' : '0% Boys, ';
-          beneficiaryText += (country[0]['#affected+cbpf+covid+funding+girls']!=undefined) ? percentFormat(country[0]['#affected+cbpf+covid+funding+girls'] / country[0]['#affected+cbpf+covid+funding+total']) + ' Girls' : '0% Girls';
-          content += '<div class="gam small">'+ beneficiaryText +'</div>';
+          var beneficiaryText = getBeneficiaryText(country[0]);
+          content += '<div class="gam">'+ beneficiaryText +'</div>';
         }
       }
     }
@@ -1138,14 +1128,17 @@ function createMapTooltip(country_code, country_name) {
     //covid cases and deaths
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    var genderCases = (country[0]['#affected+infected+m+pct']==undefined || country[0]['#affected+f+infected+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female';
-    var genderDeaths = (country[0]['#affected+killed+m+pct']==undefined || country[0]['#affected+f+killed+pct']==undefined) ? 'Sex-disaggregation not reported' : percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female';
+    var genderCases = (hasGamData(country[0], 'cases')) 
+      ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female)'
+      : '(*Sex-disaggregation not reported)';
+    var genderDeaths = (hasGamData(country[0], 'deaths')) 
+      ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)'
+      : '(*Sex-disaggregation not reported)';
+
     content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
-    content += '<span>(*' + genderCases + ')</span>';
-    content += '</div>';
+    content += '<span>' + genderCases + '</span></div>';
     content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
-    content += '<span>(*' + genderDeaths + ')</span>';
-    content += '</div>';
+    content += '<span>' + genderDeaths + '</span></div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
