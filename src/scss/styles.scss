@@ -600,6 +600,11 @@ a:visited {
 			margin-bottom: 10px;
 			margin-top: -8px;
 		}
+		h4 {
+			i {
+				font-size: 10px;
+			}
+		}
 	}
 	&.country {
 		height: auto;
@@ -675,7 +680,7 @@ circle.swatch {
 	z-index: 4;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
-	  	box-shadow: 0 0 8px rgba(0,0,0,.3);
+	  box-shadow: 0 0 8px rgba(0,0,0,.3);
 		font-family: 'Source Sans Pro', sans-serif;
 		font-size: 14px;
 		font-weight: normal;
@@ -683,6 +688,10 @@ circle.swatch {
 		padding: 15px;
 		h2 {
 			margin-bottom: 10px;
+			i {
+				font-size: 12px;
+				vertical-align: 1px;
+			}
 		}
 		.stat {
 			font-size: 32px;
@@ -697,6 +706,7 @@ circle.swatch {
 		.stat + span {
 			display: block;
 			margin-top: -10px;
+			margin-bottom: 10px;
 		}
 		.cases-total,
 		.deaths-total {
@@ -706,7 +716,9 @@ circle.swatch {
 			margin-top: 8px;
 			span {
 				color: #888;
-				font-size: 12px;
+				i {
+					font-size: 10px;
+				}
 			}
 		}
 		ul {
@@ -718,6 +730,8 @@ circle.swatch {
 			}
 		}
 		.gam {
+			color: #888;
+			line-height: 16px;
 			margin-bottom: 15px;
 			&.small-pad {
 				margin-bottom: 6px;
