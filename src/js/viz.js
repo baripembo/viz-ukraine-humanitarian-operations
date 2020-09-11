@@ -64,7 +64,7 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
+      d3.json('data/out.json'),//https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json
       d3.csv(timeseriesPath),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
@@ -73,7 +73,9 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
-      timeseriesData = data[1];
+      timeseriesData = allData.covid_series_data;//data[1]
+      console.log(data[1])
+      console.log(allData.covid_series_data)
       regionBoundaryData = data[2].features;
       worldData = allData.world_data[0];
       regionalData = allData.regional_data;
@@ -104,10 +106,10 @@ $( document ).ready(function() {
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_pc_change/100;
-        item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases_per_ht;
-        item['#covid+weekly+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_cases;
-        item['#covid+weekly+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1].weekly_new_deaths;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+pct+weekly']/100;
+        item['#covid+cases+per+capita'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+per100000+weekly'];
+        item['#covid+weekly+cases'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
+        item['#covid+weekly+deaths'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
 
         //assign access categories
