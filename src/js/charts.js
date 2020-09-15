@@ -106,42 +106,28 @@ function initTimeseries(data, div) {
 }
 
 function formatTimeseriesData(data) {
-  //group the data by country
-  var groupByCountry = d3.nest()
-    .key(function(d){ return d['Country']; })
-    .key(function(d) { return d['Date']; })
-    .entries(data);
-  groupByCountry.sort(compare);
-
-  //group the data by date
-  var groupByDate = d3.nest()
-    .key(function(d){ return d['Date']; })
-    .entries(data);
+  var dateSet = new Set();
+  var timeseriesArray = [];
+  var dataArray = Object.entries(data);
+  dataArray.forEach(function(d) {
+    var countryArray = [];
+    countryArray.push(d[0])
+    var valueArray = d[1].reverse();
+    valueArray.forEach(function(val) {
+      dateSet.add(val['#date+reported']);
+      countryArray.push(val['#affected+infected'])
+    });
+    timeseriesArray.push(countryArray);
+  });
 
   var dateArray = ['x'];
-  groupByDate.forEach(function(d) {
-    var date = new Date(d.key);
+  dateSet.forEach(function(d) {
+    var date = new Date(d);
     var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
     dateArray.push(utcDate);
   });
 
-  var timeseriesArray = [];
-  timeseriesArray.push(dateArray);
-
-  groupByCountry.forEach(function(country, index) {
-    var arr = [country.key];
-    var val = 0;
-    groupByDate.forEach(function(d) {
-      country.values.forEach(function(e) {
-        if (d.key == e.key) {
-          val = e.values[0]['confirmed cases'];
-        }
-      });
-      if (val!=undefined) arr.push(val);
-    });
-    timeseriesArray.push(arr);
-  });
-
+  timeseriesArray.unshift(dateArray)
   return timeseriesArray;
 }
 
@@ -209,14 +195,11 @@ function createTimeSeries(array, div) {
     transition: { duration: 300 }
 	});
 
-  var lastUpdated = new Date(Math.max.apply(null, timeseriesData.map(function(e) {
-    return new Date(e.Date);
-  })));
-
   if (div=='.country-timeseries-chart') {
     countryTimeseriesChart = chart;
-    $('.cases-timeseries').append('<p class="small"><span class="date">'+ dateFormat(lastUpdated) +'</span> | <span class="source-name">WHO</span> | <a href="https://data.humdata.org/dataset/coronavirus-covid-19-cases-and-deaths" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+    createSource($('.cases-timeseries'), '#affected+infected');
   }
+
   createTimeseriesLegend(chart, div);
 }
 
@@ -249,7 +232,7 @@ function createTimeseriesLegend(chart, div, country) {
     });
 }
 
-function updateTimeseries(data, selected) {
+function updateTimeseries(selected) {
   if (selected=='Syrian Arab Republic') selected = 'Syria';
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 

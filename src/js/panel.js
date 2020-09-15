@@ -5,7 +5,7 @@ function initCountryPanel() {
   var data = dataByCountry[currentCountry.code][0];
 
   //timeseries
-  updateTimeseries(timeseriesData, data['#country+name']);
+  updateTimeseries(data['#country+name']);
 
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');

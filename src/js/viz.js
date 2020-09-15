@@ -23,7 +23,6 @@ $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')) ? true : false;
   //console.log(prod);
   
-  var timeseriesPath = 'https://proxy.hxlstandard.org/api/data-preview.csv?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vS23DBKc8c39Aq55zekL0GCu4I6IVnK4axkd05N6jUBmeJe9wA69s3CmMUiIvAmPdGtZPBd-cLS9YwS%2Fpub%3Fgid%3D1253093254%26single%3Dtrue%26output%3Dcsv';
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
@@ -65,7 +64,6 @@ $( document ).ready(function() {
     console.log('Loading data...')
     Promise.all([
       d3.json('data/out.json'),//https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json
-      d3.csv(timeseriesPath),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
@@ -73,11 +71,9 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
-      timeseriesData = allData.covid_series_data;//data[1]
-      console.log(data[1])
-      console.log(allData.covid_series_data)
-      regionBoundaryData = data[2].features;
       worldData = allData.world_data[0];
+      regionBoundaryData = data[1].features;
+      timeseriesData = allData.covid_series_data;
       regionalData = allData.regional_data;
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
