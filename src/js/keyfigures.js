@@ -126,16 +126,16 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
 
 		var covidGlobal = (currentRegion!='') ? covidTrendData[currentRegion] : covidTrendData.H63;
-		var weeklyCases = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_cases : 0;
-		var weeklyDeaths = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_deaths : 0;
-		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1].weekly_new_cases_pc_change : 0;
+		var weeklyCases = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+weekly'] : 0;
+		var weeklyDeaths = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+killed+new+weekly'] : 0;
+		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+pct+weekly'] : 0;
 		
 		if (covidGlobal!=undefined) {
 			//weekly new cases
 			createKeyFigure('.figures', 'Weekly Number of New Cases', 'weekly-cases', shortenNumFormat(weeklyCases));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
-	      	var obj = {date: d.Date_reported, value: d.weekly_new_cases};
+	      	var obj = {date: d['#date+reported'], value: d['#affected+infected+new+weekly']};
 	     	sparklineArray.push(obj);
 	    });
 			createSparkline(sparklineArray, '.global-figures .weekly-cases');
@@ -144,7 +144,7 @@ function setGlobalFigures() {
 			createKeyFigure('.figures', 'Weekly Number of New Deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
 			var sparklineArray = [];
 			covidGlobal.forEach(function(d) {
-	      var obj = {date: d.Date_reported, value: d.weekly_new_deaths};
+	      var obj = {date: d['#date+reported'], value: d['#affected+killed+new+weekly']};
 	      sparklineArray.push(obj);
 	    });
 			createSparkline(sparklineArray, '.global-figures .weekly-deaths');
@@ -153,7 +153,7 @@ function setGlobalFigures() {
 			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 	    var pctArray = [];
 	    covidGlobal.forEach(function(d) {
-	      var obj = {date: d.Date_reported, value: d.weekly_new_cases_pc_change};
+	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
 	      pctArray.push(obj);
 	    });
 	    createTrendBarChart(pctArray, '.global-figures .cases-trend');
