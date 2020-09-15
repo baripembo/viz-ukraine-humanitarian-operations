@@ -83,14 +83,7 @@ function setGlobalFigures() {
 	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {
 		createKeyFigure('.figures', 'Total CERF COVID-19 Funding', '', formatValue(data['#value+cerf+covid+funding+total+usd']));
 		if (data['#value+cerf+covid+funding+total+usd'] > 0) {
-			var gmText = '**Gender age marker: ';
-			for (var i=0;i<5;i++) {
-				var pct = (data['#value+cerf+covid+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+cerf+covid+funding+gm'+ i +'+total+usd'] / data['#value+cerf+covid+funding+total+usd']) : '0%';
-				gmText += '['+i+']: ' + pct;
-				gmText += ', ';
-			}
-			gmText += '[NA]: ';
-			gmText += (data['#value+cerf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(data['#value+cerf+covid+funding+gmempty+total+usd'] / data['#value+cerf+covid+funding+total+usd']) : '0%';
+			var gmText = getGamText(data, 'cerf');
 			$('.figures .key-figure .inner').append('<div class="small">'+ gmText +'</div>');
 		}
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
@@ -101,24 +94,13 @@ function setGlobalFigures() {
 		
 		//gam
 		if (data['#value+cbpf+covid+funding+total+usd'] > 0) {
-			var gmText = '**Gender age marker: ';
-			for (var i=0;i<5;i++) {
-				var pct = (data['#value+cbpf+covid+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+cbpf+covid+funding+gm'+ i +'+total+usd'] / data['#value+cbpf+covid+funding+total+usd']) : '0%';
-				gmText += '['+i+']: ' + pct;
-				gmText += ', ';
-			}
-			gmText += '[NA]: ';
-	    gmText += (data['#value+cbpf+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(data['#value+cbpf+covid+funding+gmempty+total+usd'] / data['#value+cbpf+covid+funding+total+usd']) : '0%';
+			var gmText = getGamText(data, 'cbpf');
 			$('.figures .key-figure .inner').append('<div class="small">'+ gmText +'</div>');
 		}
 
 		//beneficieries
 		if (data['#affected+cbpf+covid+funding+total'] > 0) {
-			var beneficiaryText = 'Beneficiary breakdown: ';
-			beneficiaryText += (data['#affected+cbpf+covid+funding+men']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+men'] / data['#affected+cbpf+covid+funding+total']) + ' Male, ' : '0% Male, ';
-			beneficiaryText += (data['#affected+cbpf+covid+funding+women']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+women'] / data['#affected+cbpf+covid+funding+total']) + ' Female, ' : '0% Female, ';
-			beneficiaryText += (data['#affected+boys+cbpf+covid+funding']!=undefined) ? percentFormat(data['#affected+boys+cbpf+covid+funding'] / data['#affected+cbpf+covid+funding+total']) + ' Boys, ' : '0% Boys, ';
-			beneficiaryText += (data['#affected+cbpf+covid+funding+girls']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+girls'] / data['#affected+cbpf+covid+funding+total']) + ' Girls' : '0% Girls';
+			var beneficiaryText = getBeneficiaryText(data);
 			$('.figures .key-figure .inner').append('<div class="small">'+ beneficiaryText +'</div>');
 		}
 
