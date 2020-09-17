@@ -453,7 +453,7 @@ function updateGlobalLayer() {
       var val = d[currentIndicator.id];
       var color = colorDefault;
       
-      if (currentIndicator.id=='#covid+weekly+cases') {
+      if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
       else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#severity+access+category') {
@@ -497,7 +497,7 @@ function getGlobalLegendScale() {
 
   //set scale
   var scale;
-  if (currentIndicator.id=='#covid+cases+per+capita') {
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
     var data = [];
     nationalData.forEach(function(d) {
       if (d[currentIndicator.id]!=null && regionMatch(d['#region+name']))
@@ -669,7 +669,7 @@ function setGlobalLegend(scale) {
     else {
       $('.legend-container').removeClass('access-severity');
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
-      if (currentIndicator.id=='#covid+cases+per+capita') legendFormat = d3.format('.1f');
+      if (currentIndicator.id=='#affected+infected+new+per100000+weekly') legendFormat = d3.format('.1f');
       legend = d3.legendColor()
         .labelFormat(legendFormat)
         .cells(colorRange.length)
@@ -972,10 +972,10 @@ function createMapTooltip(country_code, country_name) {
     content += '</h2>';
 
     //COVID trend layer shows sparklines
-    if (currentIndicator.id=='#covid+cases+per+capita') {
-      content += "Weekly Number of New Cases per 100,000 People" + ':<div class="stat covid-cases-per-capita">' + d3.format('.1f')(country[0]['#covid+cases+per+capita']) + '</div>';
-      content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#covid+weekly+cases']) + '</div>';
-      content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#covid+weekly+deaths']) + '</div>';
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+      content += "Weekly Number of New Cases per 100,000 People" + ':<div class="stat covid-cases-per-capita">' + d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) + '</div>';
+      content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#affected+infected+new+weekly']) + '</div>';
+      content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div>';
       content += "Weekly Trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
     }
     //PIN layer shows refugees and IDPs
@@ -1144,7 +1144,7 @@ function createMapTooltip(country_code, country_name) {
     tooltip.setHTML(content);
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
-    if (currentIndicator.id=='#covid+cases+per+capita' && val!='No Data') {
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' && val!='No Data') {
       //weekly cases per capita sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {

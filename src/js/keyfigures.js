@@ -113,7 +113,7 @@ function setGlobalFigures() {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//covid figures
-	else if (currentIndicator.id=='#covid+cases+per+capita') {
+	else if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
 		var totalCases = d3.sum(nationalData, function(d) { 
 			if (regionMatch(d['#region+name']))
 				return d['#affected+infected']; 

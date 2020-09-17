@@ -111,6 +111,8 @@ function formatTimeseriesData(data) {
   var dataArray = Object.entries(data);
   dataArray.forEach(function(d) {
     var countryArray = [];
+    if (d[0]=='Syrian Arab Republic') d[0] = 'Syria';
+    if (d[0]=='Venezuela (Bolivarian Republic of)') d[0] = 'Venezuela';
     countryArray.push(d[0])
     var valueArray = d[1].reverse();
     valueArray.forEach(function(val) {
@@ -360,9 +362,9 @@ function createRankingChart() {
   }
 
   //switch sort dropdown if on covid layer
-  if (currentIndicator.id=='#covid+cases+per+capita') {
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
     $('.ranking-container').addClass('covid');
-    $('.ranking-select').val('#covid+cases+per+capita');
+    $('.ranking-select').val('#affected+infected+new+per100000+weekly');
   }
   else {
     $('.ranking-container').removeClass('covid');
