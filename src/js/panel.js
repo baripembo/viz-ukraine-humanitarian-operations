@@ -5,7 +5,7 @@ function initCountryPanel() {
   var data = dataByCountry[currentCountry.code][0];
 
   //timeseries
-  updateTimeseries(timeseriesData, data['#country+name']);
+  updateTimeseries(data['#country+name']);
 
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
@@ -17,8 +17,8 @@ function initCountryPanel() {
   createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormat(data['#affected+infected']), indicator: '#affected+infected'});
   createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   var covidData = covidTrendData[currentCountry.code];
-  var weeklyCases = covidData[covidData.length-1].weekly_new_cases;
-  var weeklyDeaths = covidData[covidData.length-1].weekly_new_deaths;
+  var weeklyCases = covidData[covidData.length-1]['#affected+infected+new+weekly'];
+  var weeklyDeaths = covidData[covidData.length-1]['#affected+killed+new+weekly'];
   createFigure(covidDiv, {className: 'weekly-cases', title: 'Weekly Number of New Cases', stat: numFormat(weeklyCases), indicator: '#affected+killed'});
   createFigure(covidDiv, {className: 'weekly-deaths', title: 'Weekly Number of New Deaths', stat: numFormat(weeklyDeaths), indicator: '#affected+killed'});
 
