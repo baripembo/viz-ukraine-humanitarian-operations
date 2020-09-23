@@ -297,6 +297,7 @@ function selectRegion() {
     linear: true
   });
 
+  mpTrack(currentRegion, currentIndicator.name);
   updateGlobalLayer();
 }
 

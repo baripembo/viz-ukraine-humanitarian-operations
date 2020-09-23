@@ -117,7 +117,8 @@ function formatTimeseriesData(data) {
     var valueArray = d[1].reverse();
     valueArray.forEach(function(val) {
       dateSet.add(val['#date+reported']);
-      countryArray.push(val['#affected+infected'])
+      var value = val['#affected+infected'];
+      countryArray.push(value)
     });
     timeseriesArray.push(countryArray);
   });
@@ -129,7 +130,7 @@ function formatTimeseriesData(data) {
     dateArray.push(utcDate);
   });
 
-  timeseriesArray.unshift(dateArray)
+  timeseriesArray.unshift(dateArray);
   return timeseriesArray;
 }
 
