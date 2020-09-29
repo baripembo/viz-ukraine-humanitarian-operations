@@ -252,7 +252,7 @@ function updateTimeseries(selected) {
 /*** SPARKLINES ***/
 /******************/
 function createSparkline(data, div) {
-  var width = 75;
+  var width = $(div).width() - 130;//130 is svg left position + margin
   var height = 24;
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
@@ -290,7 +290,8 @@ function createSparkline(data, div) {
 function createTrendBarChart(data, div) {
   var total = data.length;
   var barMargin = 1;
-  var barWidth = ($(div).width() - 125) / total - barMargin;
+  var barWidth = ($(div).width() - 130) / total - barMargin;//130 is svg left position + margin
+  console.log(div, $(div).width(), barWidth)
   var width = (barWidth+barMargin) * data.length;
   var height = 24;
   var parseDate = d3.timeParse("%Y-%m-%d");
