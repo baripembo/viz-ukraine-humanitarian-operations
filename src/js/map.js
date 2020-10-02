@@ -33,7 +33,7 @@ function displayMap() {
   //position global figures
   if (window.innerWidth>=1440) {
     $('.menu-indicators li:first-child div').addClass('expand');
-    $('.global-figures').animate({
+    $('.secondary-panel').animate({
       left: 0
     }, 200);
   }
@@ -185,11 +185,11 @@ function createEvents() {
     $('.menu-indicators li div').removeClass('expand');
     $(this).addClass('selected');
     if (currentIndicator.id==$(this).attr('data-id')) {
-      toggleGlobalFigures(this);
+      toggleSecondaryPanel(this);
     }
     else {
       currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-      toggleGlobalFigures(this, 'open');
+      toggleSecondaryPanel(this, 'open');
 
       //set food prices view
       if (currentIndicator.id!='#value+food+num+ratio') {
@@ -202,9 +202,9 @@ function createEvents() {
   });
 
   //global figures close button
-  $('.global-figures .close-btn').on('click', function() {
+  $('.secondary-panel .close-btn').on('click', function() {
     var currentBtn = $('[data-id="'+currentIndicator.id+'"]');
-    toggleGlobalFigures(currentBtn);
+    toggleSecondaryPanel(currentBtn);
   });
 
   //ranking select event
@@ -267,19 +267,19 @@ function createEvents() {
   });
 }
 
-function toggleGlobalFigures(currentBtn, state) {
-  var width = $('.global-figures').outerWidth();
-  var pos = $('.global-figures').position().left;
+function toggleSecondaryPanel(currentBtn, state) {
+  var width = $('.secondary-panel').outerWidth();
+  var pos = $('.secondary-panel').position().left;
   var newPos = (pos<0) ? 0 : -width;
   if (state=='open') {
     newPos = 0;
   }
   
-  $('.global-figures').animate({
+  $('.secondary-panel').animate({
     left: newPos
   }, 200, function() {
     var div = $(currentBtn).find('div');
-    if ($('.global-figures').position().left==0) {
+    if ($('.secondary-panel').position().left==0) {
       div.addClass('expand');
     }
     else{
@@ -293,7 +293,7 @@ function selectRegion() {
   var regionFeature = regionBoundaryData.filter(d => d.properties.tbl_regcov_2020_ocha_Field3 == currentRegion);
   var offset = 50;
   map.fitBounds(regionFeature[0].bbox, {
-    padding: {top: offset, right: $('.map-legend').outerWidth()+offset, bottom: offset, left: $('.global-figures').outerWidth()+offset},
+    padding: {top: offset, right: $('.map-legend').outerWidth()+offset, bottom: offset, left: $('.secondary-panel').outerWidth()+offset},
     linear: true
   });
 
@@ -379,7 +379,7 @@ function initGlobalLayer() {
   handleGlobalEvents();
 
   //global figures
-  setGlobalFigures();
+  setKeyFigures();
 }
 
 function handleGlobalEvents(layer) {
@@ -434,7 +434,7 @@ function handleGlobalEvents(layer) {
 }
 
 function updateGlobalLayer() {
-  setGlobalFigures();
+  setKeyFigures();
 
   //color scales
   colorScale = getGlobalLegendScale();
@@ -1136,6 +1136,7 @@ function createMapTooltip(country_code, country_name) {
       ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)'
       : '(*Sex-disaggregation not reported)';
 
+    if (isVal(country[0]['#affected+tested+per1000'])) content += 'New Daily Tests per 1,000 People:<div class="stat covid-test-per-capita">'+ Math.round(country[0]['#affected+tested+per1000']) +'</div>';
     content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
     content += '<span>' + genderCases + '</span></div>';
     content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
@@ -1179,7 +1180,6 @@ function createMapTooltip(country_code, country_name) {
         });
         createTrendBarChart(pctArray, '.mapboxgl-popup-content .stat.covid-pct');
       }
-      
     }
   }
   lastHovered = country_code;

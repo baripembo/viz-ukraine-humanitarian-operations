@@ -1,11 +1,16 @@
-function setGlobalFigures() {
-	var globalFigures = $('.global-figures');
-	var globalFiguresSource = $('.global-figures .source-container');
-	globalFigures.find('.figures, .source-container, .ranking-chart').empty();
-	globalFigures.find('.source-container').show();
+function setKeyFigures() {
+	var secondaryPanel = $('.secondary-panel');
+	var secondaryPanelSource = $('.secondary-panel .source-container');
+	secondaryPanel.find('.figures, .source-container, .ranking-chart').empty();
+	secondaryPanel.find('.source-container').show();
 
+	//source
 	var indicator = (currentIndicator.id=='#affected+inneed+pct') ? '#affected+inneed' : currentIndicator.id;
-	createSource(globalFiguresSource, indicator);
+	createSource(secondaryPanelSource, indicator);
+
+	//global stats
+	var globalData = regionalData.filter(function(region) { return region['#region+name']=='global'; });
+	secondaryPanel.find('.global-figures').html('Global Figures:<br>'+ numFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ numFormat(globalData[0]['#affected+killed']) +' total confirmed deaths');
 
 	var data = worldData;
 	if (currentRegion!='') {
@@ -138,7 +143,7 @@ function setGlobalFigures() {
 	      	var obj = {date: d['#date+reported'], value: d['#affected+infected+new+weekly']};
 	     	sparklineArray.push(obj);
 	    });
-			createSparkline(sparklineArray, '.global-figures .weekly-cases');
+			createSparkline(sparklineArray, '.secondary-panel .weekly-cases');
 
 			//weekly new deaths
 			createKeyFigure('.figures', 'Weekly Number of New Deaths', 'weekly-deaths', shortenNumFormat(weeklyDeaths));
@@ -147,7 +152,7 @@ function setGlobalFigures() {
 	      var obj = {date: d['#date+reported'], value: d['#affected+killed+new+weekly']};
 	      sparklineArray.push(obj);
 	    });
-			createSparkline(sparklineArray, '.global-figures .weekly-deaths');
+			createSparkline(sparklineArray, '.secondary-panel .weekly-deaths');
 
 			//weekly trend
 			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
@@ -156,7 +161,7 @@ function setGlobalFigures() {
 	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
 	      pctArray.push(obj);
 	    });
-	    createTrendBarChart(pctArray, '.global-figures .cases-trend');
+	    createTrendBarChart(pctArray, '.secondary-panel .cases-trend');
 		}
 	}
 	else {
