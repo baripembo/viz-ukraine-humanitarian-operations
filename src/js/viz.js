@@ -40,7 +40,7 @@ $( document ).ready(function() {
     });
 
     //set content sizes based on viewport
-    $('.global-figures').height(viewportHeight-40);
+    $('.secondary-panel').height(viewportHeight-40);
     $('.content').width(viewportWidth + $('.content-left').innerWidth());
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);

@@ -117,7 +117,8 @@ function formatTimeseriesData(data) {
     var valueArray = d[1].reverse();
     valueArray.forEach(function(val) {
       dateSet.add(val['#date+reported']);
-      countryArray.push(val['#affected+infected'])
+      var value = val['#affected+infected'];
+      countryArray.push(value)
     });
     timeseriesArray.push(countryArray);
   });
@@ -129,7 +130,7 @@ function formatTimeseriesData(data) {
     dateArray.push(utcDate);
   });
 
-  timeseriesArray.unshift(dateArray)
+  timeseriesArray.unshift(dateArray);
   return timeseriesArray;
 }
 
@@ -251,7 +252,7 @@ function updateTimeseries(selected) {
 /*** SPARKLINES ***/
 /******************/
 function createSparkline(data, div) {
-  var width = 75;
+  var width = $(div).width() - 130;//130 is svg left position + margin
   var height = 24;
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
@@ -289,7 +290,7 @@ function createSparkline(data, div) {
 function createTrendBarChart(data, div) {
   var total = data.length;
   var barMargin = 1;
-  var barWidth = 3;//width/total - barMargin;
+  var barWidth = ($(div).width() - 130) / total - barMargin;//130 is svg left position + margin
   var width = (barWidth+barMargin) * data.length;
   var height = 24;
   var parseDate = d3.timeParse("%Y-%m-%d");
@@ -343,8 +344,8 @@ function createTrendBarChart(data, div) {
 var rankingX, rankingY, rankingBars, rankingData, rankingBarHeight, valueFormat;
 function createRankingChart() {
   //set title
-  $('.global-figures .ranking-container').removeClass('access-severity');
-  $('.global-figures .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country' );
+  $('.secondary-panel .ranking-container').removeClass('access-severity');
+  $('.secondary-panel .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country' );
 
   var indicator;
   switch(currentIndicator.id) {
@@ -399,7 +400,7 @@ function createRankingChart() {
   $('.ranking-chart').css('height', rankingChartHeight);
 
   var margin = {top: 0, right: 70, bottom: 15, left: 100},
-      width = $('.global-figures').width() - margin.left - margin.right,
+      width = $('.secondary-panel').width() - margin.left - margin.right,
       height = (rankingBarHeight + barPadding) * rankingData.length;
 
   var svg = d3.select('.ranking-chart').append('svg')
