@@ -1136,7 +1136,7 @@ function createMapTooltip(country_code, country_name) {
       ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)'
       : '(*Sex-disaggregation not reported)';
 
-    if (isVal(country[0]['#affected+tested+per1000'])) content += 'Daily Tests per 100,000 People<div class="stat covid-test-per-capita">'+ country[0]['#affected+tested+per1000'] +'</div>';
+    if (isVal(country[0]['#affected+tested+per1000'])) content += 'New Daily Tests per 1,000 People:<div class="stat covid-test-per-capita">'+ Math.round(country[0]['#affected+tested+per1000']) +'</div>';
     content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
     content += '<span>' + genderCases + '</span></div>';
     content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
