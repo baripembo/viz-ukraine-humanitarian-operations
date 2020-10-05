@@ -512,6 +512,9 @@ function getGlobalLegendScale() {
   else if (currentIndicator.id=='#severity+access+category') {
     scale = d3.scaleOrdinal().domain(['Low', 'Medium', 'High']).range(accessColorRange);
   }
+  else if (currentIndicator.id=='#severity+stringency+num') {
+    scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
+  }
   else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
@@ -978,7 +981,14 @@ function createMapTooltip(country_code, country_name) {
       content += "Weekly Number of New Cases" + ':<div class="stat covid-cases">' + numFormat(country[0]['#affected+infected+new+weekly']) + '</div>';
       content += "Weekly Number of New Deaths" + ':<div class="stat covid-deaths">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div>';
       content += "Weekly Trend (new cases past week / prior week)" + ':<div class="stat covid-pct">' + percentFormat(country[0]['#covid+trend+pct']) + '</div>';
+
+      //testing data
+      if (country[0]['#affected+tested+per1000']!=undefined) {
+        var testingVal = Math.round(country[0]['#affected+tested+per1000']);
+        content += 'New Daily Tests per 1,000 People:<div class="stat covid-test-per-capita">'+ testingVal +'</div>';
+      }
     }
+
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
@@ -1136,7 +1146,6 @@ function createMapTooltip(country_code, country_name) {
       ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)'
       : '(*Sex-disaggregation not reported)';
 
-    if (isVal(country[0]['#affected+tested+per1000'])) content += 'New Daily Tests per 1,000 People:<div class="stat covid-test-per-capita">'+ Math.round(country[0]['#affected+tested+per1000']) +'</div>';
     content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
     content += '<span>' + genderCases + '</span></div>';
     content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
