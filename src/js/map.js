@@ -774,7 +774,7 @@ function initCountryLayer() {
 
 function updateCountryLayer() {
   colorNoData = '#FFF';
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') checkIPCData();
   $('.map-legend.country .legend-container').removeClass('no-data');
 
   //max
@@ -864,7 +864,7 @@ function checkIPCData() {
       index++;
     }
   });
-  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3+pct';
+  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3plus+pct';
 }
 
 function getCountryIndicatorMax() {
@@ -878,7 +878,7 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
-  createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3+pct');
+  createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .immunization-source'), '#population+ipv1+pct+vaccinated');
@@ -914,13 +914,13 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  if (currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3+pct') {
+  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
     $('.map-legend.country .food-security-source').empty();
     createSource($('.map-legend.country .food-security-source'), currentCountryIndicator.id);
   }
 
   var legendFormat;
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct' || currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
   else if (currentCountryIndicator.id=='#population')
     legendFormat = shortenNumFormat;
