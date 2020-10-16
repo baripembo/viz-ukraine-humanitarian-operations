@@ -401,7 +401,7 @@ function handleGlobalEvents(layer) {
       if (target!=undefined) {
         tooltip.setLngLat(e.lngLat);
         if (target.properties.Terr_Name=='CuraÃ§ao') target.properties.Terr_Name = 'Curaçao';
-        createMapTooltip(target.properties.ISO_3, target.properties.Terr_Name)
+        createMapTooltip(target.properties.ISO_3, target.properties.Terr_Name, e.point);
       }
     }
   });
@@ -774,7 +774,7 @@ function initCountryLayer() {
 
 function updateCountryLayer() {
   colorNoData = '#FFF';
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct') checkIPCData();
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') checkIPCData();
   $('.map-legend.country .legend-container').removeClass('no-data');
 
   //max
@@ -864,7 +864,7 @@ function checkIPCData() {
       index++;
     }
   });
-  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3+pct';
+  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3plus+pct';
 }
 
 function getCountryIndicatorMax() {
@@ -878,7 +878,7 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
-  createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3+pct');
+  createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .immunization-source'), '#population+ipv1+pct+vaccinated');
@@ -914,13 +914,13 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  if (currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3+pct') {
+  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
     $('.map-legend.country .food-security-source').empty();
     createSource($('.map-legend.country .food-security-source'), currentCountryIndicator.id);
   }
 
   var legendFormat;
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3+pct' || currentCountryIndicator.id=='#affected+ch+food+p3+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
   else if (currentCountryIndicator.id=='#population')
     legendFormat = shortenNumFormat;
@@ -954,7 +954,7 @@ function boundariesDisclaimer(target) {
 /*** TOOLTIP FUNCTIONS ***/
 /*************************/
 var lastHovered = '';
-function createMapTooltip(country_code, country_name) {
+function createMapTooltip(country_code, country_name, point) {
   var country = nationalData.filter(c => c['#country+code'] == country_code);
   var val = country[0][currentIndicator.id];
 
@@ -1192,6 +1192,36 @@ function createMapTooltip(country_code, country_name) {
     }
   }
   lastHovered = country_code;
+
+  setTooltipPosition(point);
+}
+
+function setTooltipPosition(point) {
+  var tooltipWidth = $('.map-tooltip').width();
+  var tooltipHeight = $('.map-tooltip').height();
+  var anchorDirection = (point.x + tooltipWidth > viewportWidth) ? 'right' : 'left';
+  var yOffset = 0;
+  if (point.y + tooltipHeight/2 > viewportHeight) yOffset = viewportHeight - (point.y + tooltipHeight/2);
+  if (point.y - tooltipHeight/2 < 0) yOffset = tooltipHeight/2 - point.y;
+  var popupOffsets = {
+    'right': [0, yOffset],
+    'left': [0, yOffset]
+  };
+  tooltip.options.offset = popupOffsets;
+  tooltip.options.anchor = anchorDirection;
+
+  if (yOffset>0) {
+    $('.mapboxgl-popup-tip').css('align-self', 'unset');
+    $('.mapboxgl-popup-tip').css('margin-top', point.y);
+  }
+  else if (yOffset<0)  {
+    $('.mapboxgl-popup-tip').css('align-self', 'center');
+    $('.mapboxgl-popup-tip').css('margin-top', -yOffset);
+  }
+  else {
+    $('.mapboxgl-popup-tip').css('align-self', 'center');
+    $('.mapboxgl-popup-tip').css('margin-top', 0);
+  }
 }
 
 
