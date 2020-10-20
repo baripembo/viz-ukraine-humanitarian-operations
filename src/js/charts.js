@@ -252,7 +252,7 @@ function updateTimeseries(selected) {
 /*** SPARKLINES ***/
 /******************/
 function createSparkline(data, div, size) {
-  var width = $(div).width() - 6;
+  var width = (div.indexOf('secondary')>-1) ? $(div).width() - 130 : $(div).width() - 6;
   var height = (size=='large') ? 25 : 15;
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);

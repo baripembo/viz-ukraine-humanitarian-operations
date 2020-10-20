@@ -161,7 +161,8 @@ function setKeyFigures() {
 	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
 	      pctArray.push(obj);
 	    });
-	    createTrendBarChart(pctArray, '.secondary-panel .cases-trend');
+			createSparkline(pctArray, '.secondary-panel .cases-trend');
+	    //createTrendBarChart(pctArray, '.secondary-panel .cases-trend');
 		}
 	}
 	else {
