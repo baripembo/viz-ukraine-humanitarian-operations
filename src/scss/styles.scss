@@ -680,7 +680,7 @@ circle.swatch {
 }
 
 .mapboxgl-popup.map-tooltip {
-	max-width: 250px !important;
+	max-width: 330px !important;
 	z-index: 4;
 	.mapboxgl-popup-content {
 		border-radius: 8px;
@@ -697,10 +697,43 @@ circle.swatch {
 				vertical-align: 1px;
 			}
 		}
-		.stat {
-			font-size: 32px;
+		.stat-container {
+			border-bottom: 1px solid #cdcdcd;
 			margin: 8px 0;
 			position: relative;
+			.stat {
+				display: inline-block;
+				width: 70%;
+			}
+			.sparkline-container {
+				display: inline-block;
+				width: 30%;
+			}
+			&.condensed-stat {
+				align-items: center;
+				display: flex;
+				flex-flow: row;
+				padding-bottom: 8px;
+				.stat-title {
+					line-height: 16px;
+					width: 70%;
+				}
+				.stat {
+					font-family: 'Source Sans Pro', sans-serif;
+					font-size: 14px;
+					line-height: 14px;
+					margin: 0;   
+    			text-align: right; 
+					width: 15%;
+				}
+				.sparkline-container {
+					width: 15%;
+				}
+			}
+		}
+		.stat {
+			font-size: 32px;
+			margin: 5px 0;
 			> svg {
 				bottom: 8px;
 				left: 125px;
