@@ -1187,7 +1187,8 @@ function createMapTooltip(country_code, country_name, point) {
           var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
           pctArray.push(obj);
         });
-        createTrendBarChart(pctArray, '.mapboxgl-popup-content .covid-pct .sparkline-container');
+        createSparkline(pctArray, '.mapboxgl-popup-content .covid-pct .sparkline-container');
+        //createTrendBarChart(pctArray, '.mapboxgl-popup-content .covid-pct .sparkline-container');
       }
     }
   }
@@ -1216,7 +1217,7 @@ function setTooltipPosition(point) {
   }
   else if (yOffset<0)  {
     $('.mapboxgl-popup-tip').css('align-self', 'flex-end');
-    $('.mapboxgl-popup-tip').css('margin-bottom', viewportHeight-point.y);
+    $('.mapboxgl-popup-tip').css('margin-bottom', viewportHeight-point.y-10);
   }
   else {
     $('.mapboxgl-popup-tip').css('align-self', 'center');
