@@ -12,7 +12,7 @@ function initMap() {
     attributionControl: false
   });
 
-  map.addControl(new mapboxgl.NavigationControl())
+  map.addControl(new mapboxgl.NavigationControl({showCompass: false}))
      .addControl(new mapboxgl.AttributionControl(), 'bottom-right');
 
   map.on('load', function() {
