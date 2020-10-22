@@ -290,7 +290,7 @@ function createSparkline(data, div, size) {
 function createTrendBarChart(data, div) {
   var total = data.length;
   var barMargin = 1;
-  var barWidth = ($(div).width() - 6) / total - barMargin;
+  var barWidth = ($(div).width() - 130) / total - barMargin;
   var width = (barWidth+barMargin) * data.length;
   var height = 20;
   var parseDate = d3.timeParse("%Y-%m-%d");

@@ -12,7 +12,7 @@ function initMap() {
     attributionControl: false
   });
 
-  map.addControl(new mapboxgl.NavigationControl())
+  map.addControl(new mapboxgl.NavigationControl({showCompass: false}))
      .addControl(new mapboxgl.AttributionControl(), 'bottom-right');
 
   map.on('load', function() {
@@ -638,6 +638,11 @@ function setGlobalLegend(scale) {
 
     //boundaries disclaimer
     boundariesDisclaimer($('.map-legend.global'));
+
+    //expand/collapse functionality
+    $('.map-legend.global .toggle-icon, .map-legend.global .collapsed-title').on('click', function() {
+      $(this).parent().toggleClass('collapsed');
+    });
   }
   else {
     updateSource($('.indicator-source'), indicator);
@@ -911,6 +916,11 @@ function createCountryLegend(scale) {
 
   //boundaries disclaimer
   boundariesDisclaimer($('.map-legend.country'));
+
+  //expand/collapse functionality
+  $('.map-legend.country .toggle-icon, .map-legend.country .collapsed-title').on('click', function() {
+    $(this).parent().toggleClass('collapsed');
+  });
 }
 
 function updateCountryLegend(scale) {
