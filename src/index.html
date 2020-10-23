@@ -164,6 +164,10 @@
           </div>
             
           <div id='global-map'>
+            <div class='tab-menubar'>
+              <div class='tab-button active' data-id='map-view'>Map View</div>
+              <div class='tab-button' data-id='chart-view'>Chart View</div>
+            </div>
             <div class='map-legend global'>
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
@@ -208,9 +212,14 @@
                 </svg>
               </div>
             </div>
-
           </div>
           <div id="static-map"></div>
+
+          <div id='chart-view'>
+            <div class='source-container'></div>
+            <div class='global-timeseries-chart'></div>
+          </div>
+
           <div class='loader'>
             <div class="sp sp-circle"></div>
             <span>Loading data...</span>

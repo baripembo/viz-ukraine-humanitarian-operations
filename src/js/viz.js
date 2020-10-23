@@ -45,9 +45,10 @@ $( document ).ready(function() {
     $('.content').width(viewportWidth + $('.content-left').innerWidth());
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
+    $('#chart-view').height(viewportHeight - $('.tab-menubar').height());
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
     if (viewportHeight<696) {
-      $('.map-legend.country').height(viewportHeight - 250);
+      $('.map-legend.country').height(viewportHeight - 300);
       zoomLevel = 1.4;
     }
 
@@ -187,6 +188,22 @@ $( document ).ready(function() {
     //insert default option    
     $('.country-select').prepend('<option value="">View Country Page</option>');
     $('.country-select').val($('.country-select option:first').val());
+
+    //create tab events
+    $('.tab-menubar .tab-button').on('click', function() {
+      $('.tab-button').removeClass('active');
+      $(this).addClass('active');
+      if ($(this).data('id')=='chart-view') {
+        $('#chart-view').show();
+      }
+      else {
+        $('#chart-view').hide();
+      }
+    });
+
+    //load timeseries for global view 
+    createSource($('#chart-view .source-container'), '#affected+infected');
+    initTimeseries(timeseriesData, '.global-timeseries-chart');
 
     //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');

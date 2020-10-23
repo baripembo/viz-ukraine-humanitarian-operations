@@ -28,7 +28,7 @@ function displayMap() {
 
   //remove loader and show vis
   $('.loader, #static-map').remove();
-  $('#global-map, .country-select, .map-legend').css('opacity', 1);
+  $('#global-map, .country-select, .map-legend, .tab-menubar').css('opacity', 1);
 
   //position global figures
   if (window.innerWidth>=1440) {
@@ -281,9 +281,11 @@ function toggleSecondaryPanel(currentBtn, state) {
     var div = $(currentBtn).find('div');
     if ($('.secondary-panel').position().left==0) {
       div.addClass('expand');
+      $('.tab-menubar, #chart-view').addClass('panel-expand');
     }
     else{
       div.removeClass('expand');
+      $('.tab-menubar, #chart-view').removeClass('panel-expand');
     }
   });
 }

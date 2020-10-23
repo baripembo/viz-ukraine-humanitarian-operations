@@ -126,8 +126,13 @@ function formatTimeseriesData(data) {
   var dateArray = ['x'];
   dateSet.forEach(function(d) {
     var date = new Date(d);
+    var startDate = new Date(2020,2,1);
     var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-    dateArray.push(utcDate);
+    
+    //start chart at march 1
+    if (utcDate>=startDate) {
+      dateArray.push(utcDate);
+    }
   });
 
   timeseriesArray.unshift(dateArray);
@@ -136,10 +141,19 @@ function formatTimeseriesData(data) {
 
 var countryTimeseriesChart;
 function createTimeSeries(array, div) {
+  console.log('createTimeSeries', div)
+
+  var chartWidth = (div.indexOf('global')>-1) ? $(div).parent().width() : 336;
+  var chartHeight = (div.indexOf('global')>-1) ? $(div).parent().height()-200 : 240;
+  var tickCount = (div.indexOf('global')>-1) ? 10 : 5;
+  var colorArray = (div.indexOf('global')>-1) ? 
+    ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
+    ['#999'];
+
 	var chart = c3.generate({
     size: {
-      width: 336,
-      height: 240
+      width: chartWidth,
+      height: chartHeight
     },
     padding: {
       bottom: 0,
@@ -156,10 +170,13 @@ function createTimeSeries(array, div) {
 			x: 'x',
 			columns: array,
       type: 'spline',
-      color: function() {
-        return '#999';
-      }
-		},
+      // color: function() {
+      //   return '#999';
+      // }
+		},    
+    color: {
+      pattern: colorArray
+    },
     spline: {
       interpolation: {
         type: 'basis'
@@ -170,7 +187,7 @@ function createTimeSeries(array, div) {
 			x: {
 				type: 'timeseries',
 				tick: {
-          count: 5,
+          count: tickCount,
           format: '%b %d, %Y',
           outer: false
 				}
@@ -210,7 +227,7 @@ function createTimeSeries(array, div) {
 function createTimeseriesLegend(chart, div, country) {
   var names = [];
   chart.data.shown().forEach(function(d) {
-    if (d.id==country)
+    if (d.id==country || country==undefined)
       names.push(d.id)
   });
 
