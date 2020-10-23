@@ -46,8 +46,8 @@ $( document ).ready(function() {
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
+    $('.map-legend.global, .map-legend.country').css('max-height', viewportHeight - 200);
     if (viewportHeight<696) {
-      $('.map-legend.country').height(viewportHeight - 250);
       zoomLevel = 1.4;
     }
 
