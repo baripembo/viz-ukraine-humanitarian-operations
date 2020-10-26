@@ -141,12 +141,11 @@ function formatTimeseriesData(data) {
 
 var countryTimeseriesChart;
 function createTimeSeries(array, div) {
-  console.log('createTimeSeries', div)
-
-  var chartWidth = (div.indexOf('global')>-1) ? $(div).parent().width() : 336;
-  var chartHeight = (div.indexOf('global')>-1) ? $(div).parent().height()-200 : 240;
-  var tickCount = (div.indexOf('global')>-1) ? 10 : 5;
-  var colorArray = (div.indexOf('global')>-1) ? 
+  var isGlobal = (div.indexOf('global')>-1) ? true : false;
+  var chartWidth = (isGlobal) ? $(div).parent().width() : 336;
+  var chartHeight = (isGlobal) ? $(div).parent().height()-200 : 240;
+  var tickCount = (isGlobal) ? 15 : 5;
+  var colorArray = (isGlobal) ? 
     ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
     ['#999'];
 
@@ -215,16 +214,26 @@ function createTimeSeries(array, div) {
     transition: { duration: 300 }
 	});
 
-  if (div=='.country-timeseries-chart') {
+  if (!isGlobal) {
     countryTimeseriesChart = chart;
     createSource($('.cases-timeseries'), '#affected+infected');
   }
 
   createTimeseriesLegend(chart, div);
+
+  //set max height for global legend
+  if (isGlobal) {
+    var itemHeight = 18;
+    var numItems = Math.round((chartHeight-160)/itemHeight);
+    var availSpace = itemHeight*numItems;
+    console.log(chartHeight, numItems, availSpace)
+    $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
+  }
 }
 
 
 function createTimeseriesLegend(chart, div, country) {
+  var isGlobal = (div.indexOf('global')>-1) ? true : false;
   var names = [];
   chart.data.shown().forEach(function(d) {
     if (d.id==country || country==undefined)
@@ -242,14 +251,16 @@ function createTimeseriesLegend(chart, div, country) {
       return '<span></span>'+id;
     })
     .each(function(id) {
-      d3.select(this).select('span').style('background-color', '#007CE1');
+      var color = (isGlobal) ? chart.color(id) : '#007CE1';
+      d3.select(this).select('span').style('background-color', color);
     })
     .on('mouseover', function(id) {
-      chart.focus(id);
+      if (isGlobal) chart.focus(id);
     })
     .on('mouseout', function(id) {
-      //chart.revert();
+      if (isGlobal) chart.revert();
     });
+
 }
 
 function updateTimeseries(selected) {
@@ -257,8 +268,8 @@ function updateTimeseries(selected) {
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.focus(selected);
-  $('.c3-chart-lines .c3-line').css('stroke', '#999');
-  $('.c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
+  $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
+  $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
 
   $('.country-timeseries-chart .timeseries-legend').remove();
   createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);

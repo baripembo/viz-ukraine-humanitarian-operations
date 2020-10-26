@@ -984,25 +984,33 @@ table {
 	}
 }
 
-.timeseries-legend {
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid #CCC;
-  left: 43px;
-  max-height: 150px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 5px 10px 3px 0;
-  position: absolute;
-  top: 30px;
-  > div {
-    cursor: pointer;
-  }
-  span {
-    display: inline-block;
-    margin-left: 7px;
-    margin-right: 7px;
-    padding: 5px;
-  }
+.global-timeseries-chart,
+.country-timeseries-chart {
+	.timeseries-legend {
+	  background-color: rgba(255, 255, 255, 0.5);
+	  border: 1px solid #CCC;
+	  left: 43px;
+	  overflow-x: hidden;
+	  overflow-y: scroll;
+	  padding: 5px 10px 3px 0;
+	  position: absolute;
+	  top: 30px;
+	  > div {
+	    cursor: pointer;
+	  }
+	  span {
+	    display: inline-block;
+	    margin-left: 7px;
+	    margin-right: 7px;
+	    padding: 5px;
+	  }
+	}
+}
+
+.country-timeseries-chart {
+	.timeseries-legend {
+		max-height: 150px;
+	}
 }
 
 .c3-title,
@@ -1046,7 +1054,7 @@ table {
 }
 
 .c3-focused .c3-lines .c3-line {
-	stroke: #007CE1 !important;
+	//stroke: #007CE1 !important;
 }
 
 .sparkline {
