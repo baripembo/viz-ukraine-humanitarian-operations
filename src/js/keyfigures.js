@@ -10,7 +10,7 @@ function setKeyFigures() {
 
 	//global stats
 	var globalData = regionalData.filter(function(region) { return region['#region+name']=='global'; });
-	secondaryPanel.find('.global-figures').html('Global Figures:<br>'+ numFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ numFormat(globalData[0]['#affected+killed']) +' total confirmed deaths');
+	secondaryPanel.find('.global-figures').html('<b>Global Figures:</b><br>'+ shortenNumFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths');
 
 	var data = worldData;
 	if (currentRegion!='') {
@@ -39,12 +39,12 @@ function setKeyFigures() {
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
-		var totalPIN = d3.sum(nationalData, function(d) {
-			if (regionMatch(d['#region+name'])) {
-				return +d['#affected+inneed']; 
-			}
-		});
-		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', (d3.format('.4s'))(totalPIN));
+		// var totalPIN = d3.sum(nationalData, function(d) {
+		// 	if (regionMatch(d['#region+name'])) {
+		// 		return +d['#affected+inneed']; 
+		// 	}
+		// });
+		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', '431M');//(d3.format('.4s'))(totalPIN)
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//access security
