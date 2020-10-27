@@ -11,6 +11,7 @@ var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
+var globalTimeseriesChart, countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var viewInitialized = false;

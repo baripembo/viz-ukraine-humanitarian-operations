@@ -357,49 +357,6 @@ function selectCountry(features) {
 /****************************/
 /*** GLOBAL MAP FUNCTIONS ***/
 /****************************/
-function initGlobalLayer() {
-  //create log scale for circle markers
-  var maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
-  markerScale = d3.scaleSqrt()
-    .domain([1, maxCases])
-    .range([2, 15]);
-  
-  //color scale
-  colorScale = getGlobalLegendScale();
-  setGlobalLegend(colorScale);
-
-  //data join
-  var expression = ['match', ['get', 'ISO_3']];
-  var expressionMarkers = ['match', ['get', 'ISO_3']];
-  nationalData.forEach(function(d) {
-    var val = d[currentIndicator.id];
-    var color = (val==null) ? colorNoData : colorScale(val);
-    expression.push(d['#country+code'], color);
-
-    //covid markers
-    var covidVal = d['#affected+infected'];
-    var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
-    expressionMarkers.push(d['#country+code'], size);
-  });
-
-  //default value for no data
-  expression.push(colorDefault);
-  expressionMarkers.push(0);
-  
-  //set properties
-  map.setPaintProperty(globalLayer, 'fill-color', expression);
-  map.setPaintProperty(globalMarkerLayer, 'circle-stroke-opacity', 1);
-  map.setPaintProperty(globalMarkerLayer, 'circle-opacity', 1);
-  map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
-  map.setPaintProperty(globalMarkerLayer, 'circle-translate', [0,-7]);
-
-  //define mouse events
-  handleGlobalEvents();
-
-  //global figures
-  setKeyFigures();
-}
-
 function handleGlobalEvents(layer) {
   map.on('mouseenter', globalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
@@ -451,6 +408,50 @@ function handleGlobalEvents(layer) {
   });
 }
 
+
+function initGlobalLayer() {
+  //create log scale for circle markers
+  var maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
+  markerScale = d3.scaleSqrt()
+    .domain([1, maxCases])
+    .range([2, 15]);
+  
+  //color scale
+  colorScale = getGlobalLegendScale();
+  setGlobalLegend(colorScale);
+
+  //data join
+  var expression = ['match', ['get', 'ISO_3']];
+  var expressionMarkers = ['match', ['get', 'ISO_3']];
+  nationalData.forEach(function(d) {
+    var val = d[currentIndicator.id];
+    var color = (val==null) ? colorNoData : colorScale(val);
+    expression.push(d['#country+code'], color);
+
+    //covid markers
+    var covidVal = d['#affected+infected'];
+    var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
+    expressionMarkers.push(d['#country+code'], size);
+  });
+
+  //default value for no data
+  expression.push(colorDefault);
+  expressionMarkers.push(0);
+  
+  //set properties
+  map.setPaintProperty(globalLayer, 'fill-color', expression);
+  map.setPaintProperty(globalMarkerLayer, 'circle-stroke-opacity', 1);
+  map.setPaintProperty(globalMarkerLayer, 'circle-opacity', 1);
+  map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
+  map.setPaintProperty(globalMarkerLayer, 'circle-translate', [0,-7]);
+
+  //define mouse events
+  handleGlobalEvents();
+
+  //global figures
+  setKeyFigures();
+}
+
 function updateGlobalLayer() {
   setKeyFigures();
 
@@ -465,6 +466,7 @@ function updateGlobalLayer() {
   markerScale.domain([1, maxCases]);
 
   //data join
+  var countryList = [];
   var expression = ['match', ['get', 'ISO_3']];
   var expressionMarkers = ['match', ['get', 'ISO_3']];
   nationalData.forEach(function(d) {
@@ -487,6 +489,9 @@ function updateGlobalLayer() {
       var covidVal = d['#affected+infected'];
       var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
       expressionMarkers.push(d['#country+code'], size);
+
+      //create country list for global timeseries chart
+      countryList.push(d['#country+name']);
     }
   });
 
@@ -498,6 +503,12 @@ function updateGlobalLayer() {
   map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
   map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
   setGlobalLegend(colorScale);
+
+  //update global timeseries chart
+  console.log(countryList, globalTimeseriesChart);
+  globalTimeseriesChart.hide();
+  globalTimeseriesChart.show(countryList);
+  createTimeseriesLegend(globalTimeseriesChart, '.global-timeseries-chart');
 }
 
 function getGlobalLegendScale() {

@@ -139,15 +139,23 @@ function formatTimeseriesData(data) {
   return timeseriesArray;
 }
 
-var countryTimeseriesChart;
+
 function createTimeSeries(array, div) {
   var isGlobal = (div.indexOf('global')>-1) ? true : false;
   var chartWidth = (isGlobal) ? viewportWidth - $('.secondary-panel').width() - 75 : 336;
   var chartHeight = (isGlobal) ? $(div).parent().height()-200 : 240;
-  var tickCount = (isGlobal) ? 15 : 5;
   var colorArray = (isGlobal) ? 
     ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
     ['#999'];
+
+  //get date values for x axis labels
+  var dateSet = new Set();
+  array[0].forEach(function(d, i) {
+    if (i>0 && d.getDate()==1) {
+      dateSet.add(d);
+    }
+  });
+  var dateArray = [...dateSet];
 
 	var chart = c3.generate({
     size: {
@@ -168,10 +176,7 @@ function createTimeSeries(array, div) {
 		data: {
 			x: 'x',
 			columns: array,
-      type: 'spline',
-      // color: function() {
-      //   return '#999';
-      // }
+      type: 'spline'
 		},    
     color: {
       pattern: colorArray
@@ -186,9 +191,11 @@ function createTimeSeries(array, div) {
 			x: {
 				type: 'timeseries',
 				tick: {
-          count: tickCount,
-          format: '%b %d, %Y',
-          outer: false
+          outer: false,
+          values: dateArray,
+          format: function(d) {
+            return d.getMonth()+1 + '/' + d.getDate() + '/' + d.getFullYear().toString().substr(-2);
+          }
 				}
 			},
 			y: {
@@ -214,25 +221,21 @@ function createTimeSeries(array, div) {
     transition: { duration: 300 }
 	});
 
-  if (!isGlobal) {
+  createTimeseriesLegend(chart, div, chartHeight);
+
+  if (isGlobal) {
+    globalTimeseriesChart = chart;
+  }
+  else {
     countryTimeseriesChart = chart;
     createSource($('.cases-timeseries'), '#affected+infected');
-  }
-
-  createTimeseriesLegend(chart, div);
-
-  //set max height for global legend
-  if (isGlobal) {
-    var itemHeight = 18;
-    var numItems = Math.round((chartHeight-160)/itemHeight);
-    var availSpace = itemHeight*numItems;
-    $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
   }
 }
 
 
-function createTimeseriesLegend(chart, div, country) {
+function createTimeseriesLegend(chart, div, chartHeight, country) {
   var isGlobal = (div.indexOf('global')>-1) ? true : false;
+  if (isGlobal && $('.timeseries-legend').length>0) $('.global-timeseries-chart .timeseries-legend').remove();
   var names = [];
   chart.data.shown().forEach(function(d) {
     if (d.id==country || country==undefined)
@@ -260,18 +263,27 @@ function createTimeseriesLegend(chart, div, country) {
       if (isGlobal) chart.revert();
     });
 
+    //set max height for legend
+    if (isGlobal) {
+      var itemHeight = 18;
+      var numItems = Math.round((chartHeight-160)/itemHeight);
+      var availSpace = itemHeight*numItems;
+      $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
+    }
 }
 
 function updateTimeseries(selected) {
+  var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
   if (selected=='Syrian Arab Republic') selected = 'Syria';
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
+  countryTimeseriesChart.axis.max(maxValue*2);
   countryTimeseriesChart.focus(selected);
   $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
 
   $('.country-timeseries-chart .timeseries-legend').remove();
-  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);
+  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', '', selected);
 }
 
 
