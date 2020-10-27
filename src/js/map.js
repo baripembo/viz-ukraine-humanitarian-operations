@@ -564,6 +564,17 @@ function setGlobalLegend(scale) {
     //secondary source
     $('.map-legend.global').append('<div class="source-secondary"></div>');
 
+    //covid positive testing explanatory text
+    var covidTestText = 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the epidemic is under control in a country.';
+    $('.map-legend.global').append('<p class="footnote test-methodology small">'+ truncateString(covidTestText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .test-methodology').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(covidTestText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(covidTestText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
     //vacc methodology explanatory text
     var vaccinationMethodologyText = 'Methodology: Information about interrupted vaccination campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total vaccination campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.';
     $('.map-legend.global').append('<p class="footnote vacc-methodology small">'+ truncateString(vaccinationMethodologyText, 60) +' <a href="#" class="expand">MORE</a></p>');
@@ -707,6 +718,11 @@ function setGlobalLegend(scale) {
   }
 
   //methodology
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly')
+    $('.test-methodology').show();
+  else
+    $('.test-methodology').hide();
+  
   if (currentIndicator.id=='#vaccination+num+ratio')
     $('.vacc-methodology').show();
   else
@@ -992,17 +1008,21 @@ function createMapTooltip(country_code, country_name, point) {
       content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
       content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
-      //testing data
-      if (country[0]['#affected+tested+per1000']!=undefined) {
-        var testingVal = Number(country[0]['#affected+tested+per1000']).toFixed(2);
-        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">New Daily Tests per 1,000 People:</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
+      //testing data #affected+tested+positive+pct
+      // if (country[0]['#affected+tested+per1000']!=undefined) {
+      //   var testingVal = Number(country[0]['#affected+tested+per1000']).toFixed(2);
+      //   content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">New Daily Tests per 1,000 People:</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
+      // }
+      if (country[0]['#affected+tested+positive+pct']!=undefined) {
+        var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
+        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
       }
     }
 
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+        content +=  currentIndicator.name + ' (of total population):<div class="stat">' + val + '</div>';
       }
       content += '<div class="pins">';
       if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
