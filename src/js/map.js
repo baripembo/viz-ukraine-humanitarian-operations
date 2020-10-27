@@ -564,6 +564,17 @@ function setGlobalLegend(scale) {
     //secondary source
     $('.map-legend.global').append('<div class="source-secondary"></div>');
 
+    //covid positive testing explanatory text
+    var covidTestText = 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the epidemic is under control in a country.';
+    $('.map-legend.global').append('<p class="footnote test-methodology small">'+ truncateString(covidTestText, 65) +' <a href="#" class="expand">MORE</a></p>');
+    $('.map-legend.global .test-methodology').click(function() {
+      if ($(this).find('a').hasClass('collapse')) {
+        $(this).html(truncateString(covidTestText, 65) + ' <a href="#" class="expand">MORE</a>');
+      }
+      else {
+        $(this).html(covidTestText + ' <a href="#" class="collapse">LESS</a>');
+      }
+    });
     //vacc methodology explanatory text
     var vaccinationMethodologyText = 'Methodology: Information about interrupted vaccination campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total vaccination campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.';
     $('.map-legend.global').append('<p class="footnote vacc-methodology small">'+ truncateString(vaccinationMethodologyText, 60) +' <a href="#" class="expand">MORE</a></p>');
@@ -707,6 +718,11 @@ function setGlobalLegend(scale) {
   }
 
   //methodology
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly')
+    $('.test-methodology').show();
+  else
+    $('.test-methodology').hide();
+  
   if (currentIndicator.id=='#vaccination+num+ratio')
     $('.vacc-methodology').show();
   else

@@ -39,12 +39,12 @@ function setKeyFigures() {
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
-		var totalPIN = d3.sum(nationalData, function(d) {
-			if (regionMatch(d['#region+name'])) {
-				return +d['#affected+inneed']; 
-			}
-		});
-		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', (d3.format('.4s'))(totalPIN));
+		// var totalPIN = d3.sum(nationalData, function(d) {
+		// 	if (regionMatch(d['#region+name'])) {
+		// 		return +d['#affected+inneed']; 
+		// 	}
+		// });
+		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', '431M');//(d3.format('.4s'))(totalPIN)
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//access security
