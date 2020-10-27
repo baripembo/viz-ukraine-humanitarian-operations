@@ -407,13 +407,14 @@ a:visited {
 
 .secondary-panel {
 	background-color: rgba(255, 255, 255, 0.9);
+	box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
 	left: -255px;
 	overflow: auto;
 	padding: 20px 25px;
 	position: absolute;
 	top: 0;
 	width: 255px;
-	z-index: 3;
+	z-index: 4;
 	.close-btn {
 		cursor: pointer;
 		color: #888;

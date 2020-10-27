@@ -33,6 +33,7 @@ function displayMap() {
   //position global figures
   if (window.innerWidth>=1440) {
     $('.menu-indicators li:first-child div').addClass('expand');
+    $('.tab-menubar, #chart-view').addClass('panel-expand');
     $('.secondary-panel').animate({
       left: 0
     }, 200);
@@ -198,6 +199,21 @@ function createEvents() {
 
       mpTrack('wrl', $(this).find('div').text());
       updateGlobalLayer();
+    }
+
+    //handle tab views
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+      $('.tab-menubar .tab-button').removeClass('active');
+      $('.tab-menubar .tab-button:first-child').addClass('active')
+      $('.tab-menubar').show();
+      $('#countrySelect').css('top', '80px');
+      $('.mapboxgl-ctrl-top-right').css('top', '134px');
+    }
+    else {
+      $('.tab-menubar').hide();
+      $('#chart-view').hide();
+      $('#countrySelect').css('top', '30px');
+      $('.mapboxgl-ctrl-top-right').css('top', '84px');
     }
   });
 
@@ -995,16 +1011,16 @@ function createMapTooltip(country_code, country_name, point) {
       content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
       //testing data
-      if (country[0]['#affected+tested+per1000']!=undefined) {
-        var testingVal = Number(country[0]['#affected+tested+per1000']).toFixed(2);
-        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">New Daily Tests per 1,000 People:</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
+      if (country[0]['#affected+tested+positive+pct']!=undefined) {
+        var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
+        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
       }
     }
 
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
+        content +=  currentIndicator.name + ' (of total population):<div class="stat">' + val + '</div>';
       }
       content += '<div class="pins">';
       if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';

@@ -142,7 +142,7 @@ function formatTimeseriesData(data) {
 var countryTimeseriesChart;
 function createTimeSeries(array, div) {
   var isGlobal = (div.indexOf('global')>-1) ? true : false;
-  var chartWidth = (isGlobal) ? $(div).parent().width() : 336;
+  var chartWidth = (isGlobal) ? viewportWidth - $('.secondary-panel').width() - 75 : 336;
   var chartHeight = (isGlobal) ? $(div).parent().height()-200 : 240;
   var tickCount = (isGlobal) ? 15 : 5;
   var colorArray = (isGlobal) ? 
@@ -226,7 +226,6 @@ function createTimeSeries(array, div) {
     var itemHeight = 18;
     var numItems = Math.round((chartHeight-160)/itemHeight);
     var availSpace = itemHeight*numItems;
-    console.log(chartHeight, numItems, availSpace)
     $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
   }
 }
