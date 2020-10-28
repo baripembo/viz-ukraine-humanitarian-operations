@@ -115,7 +115,7 @@ function setKeyFigures() {
 	}
 	//IFI
 	else if (currentIndicator.id=='#value+gdp+ifi+pct') {
-		createKeyFigure('.figures', 'Total Funding (IMF/World Bank)', '', formatValue(data['#value+ifi+total']));
+		createKeyFigure('.figures', 'Total Funding', '', formatValue(data['#value+ifi+total']));
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//covid figures

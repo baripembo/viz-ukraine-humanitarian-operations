@@ -17,6 +17,7 @@ var dataLoaded = false;
 var viewInitialized = false;
 var zoomLevel = 1.4;
 
+var hrpData = [];
 var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
@@ -176,7 +177,7 @@ $( document ).ready(function() {
 
     //create country select
     var countryArray = Object.keys(countryCodeList);
-    var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
+    hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
     hrpData.sort(function(a, b){
       return d3.ascending(a['#country+name'].toLowerCase(), b['#country+name'].toLowerCase());
     })

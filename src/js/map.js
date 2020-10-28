@@ -33,7 +33,7 @@ function displayMap() {
   //position global figures
   if (window.innerWidth>=1440) {
     $('.menu-indicators li:first-child div').addClass('expand');
-    $('.tab-menubar, #chart-view').addClass('panel-expand');
+    $('.tab-menubar, #chart-view').css('left', $('.secondary-panel').outerWidth());
     $('.secondary-panel').animate({
       left: 0
     }, 200);
@@ -203,8 +203,8 @@ function createEvents() {
 
     //handle tab views
     if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-      $('.tab-menubar .tab-button').removeClass('active');
-      $('.tab-menubar .tab-button:first-child').addClass('active')
+      // $('.tab-menubar .tab-button').removeClass('active');
+      // $('.tab-menubar .tab-button:first-child').addClass('active')
       $('.tab-menubar').show();
       $('#countrySelect').css('top', '80px');
       $('.mapboxgl-ctrl-top-right').css('top', '134px');
@@ -287,9 +287,8 @@ function toggleSecondaryPanel(currentBtn, state) {
   var width = $('.secondary-panel').outerWidth();
   var pos = $('.secondary-panel').position().left;
   var newPos = (pos<0) ? 0 : -width;
-  if (state=='open') {
-    newPos = 0;
-  }
+  if (state=='open') { newPos = 0; }
+  var newTabPos = (newPos==0) ? width : 0;
   
   $('.secondary-panel').animate({
     left: newPos
@@ -297,13 +296,15 @@ function toggleSecondaryPanel(currentBtn, state) {
     var div = $(currentBtn).find('div');
     if ($('.secondary-panel').position().left==0) {
       div.addClass('expand');
-      $('.tab-menubar, #chart-view').addClass('panel-expand');
     }
-    else{
+    else {
       div.removeClass('expand');
-      $('.tab-menubar, #chart-view').removeClass('panel-expand');
     }
   });
+
+  $('.tab-menubar, #chart-view').animate({
+    left: newTabPos
+  }, 200);
 }
 
 
@@ -505,7 +506,6 @@ function updateGlobalLayer() {
   setGlobalLegend(colorScale);
 
   //update global timeseries chart
-  console.log(countryList, globalTimeseriesChart);
   globalTimeseriesChart.hide();
   globalTimeseriesChart.show(countryList);
   createTimeseriesLegend(globalTimeseriesChart, '.global-timeseries-chart');

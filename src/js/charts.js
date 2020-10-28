@@ -148,6 +148,17 @@ function createTimeSeries(array, div) {
     ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
     ['#999'];
 
+  //filter HRP countries for countrytimeseries
+  if (!isGlobal) {
+    var hrpList = [];
+    hrpData.forEach(function(d) {
+      hrpList.push(d['#country+name']);
+    });
+    var hrpArray = array.filter((row) => hrpList.includes(row[0]));
+    hrpArray.unshift(array[0]);
+    array = hrpArray;
+  }
+
   //get date values for x axis labels
   var dateSet = new Set();
   array[0].forEach(function(d, i) {
@@ -177,7 +188,7 @@ function createTimeSeries(array, div) {
 			x: 'x',
 			columns: array,
       type: 'spline'
-		},    
+		},
     color: {
       pattern: colorArray
     },
@@ -199,6 +210,7 @@ function createTimeSeries(array, div) {
 				}
 			},
 			y: {
+        //type: 'log',
 				min: 0,
 				padding: { top:0, bottom:0 },
         tick: { 

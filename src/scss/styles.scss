@@ -216,9 +216,6 @@ a:visited {
 			color: #F05449;
 		}
 	}
-	&.panel-expand {
-		padding-left: 285px;
-	}
 }
 
 .layer-description {
@@ -418,8 +415,8 @@ a:visited {
 	.close-btn {
 		cursor: pointer;
 		color: #888;
-		right: 20px;
 		position: absolute;
+		right: 20px;
 		top: 20px;
 	}
 	.source-container {
@@ -1098,9 +1095,6 @@ table {
   top: 50px;
   width: 100%;
   z-index: 3;
-  &.panel-expand {
-  	left: 255px;
-  }
   .source-container {
   	margin-bottom: 40px;
   }
