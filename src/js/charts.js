@@ -233,7 +233,7 @@ function createTimeSeries(array, div) {
     transition: { duration: 300 }
 	});
 
-  createTimeseriesLegend(chart, div, chartHeight);
+  createTimeseriesLegend(chart, div);
 
   if (isGlobal) {
     globalTimeseriesChart = chart;
@@ -245,9 +245,11 @@ function createTimeSeries(array, div) {
 }
 
 
-function createTimeseriesLegend(chart, div, chartHeight, country) {
+function createTimeseriesLegend(chart, div, country) {
   var isGlobal = (div.indexOf('global')>-1) ? true : false;
-  if (isGlobal && $('.timeseries-legend').length>0) $('.global-timeseries-chart .timeseries-legend').remove();
+  if (isGlobal && $('.timeseries-legend').length>0) {
+    $('.global-timeseries-chart .timeseries-legend').remove();
+  }
   var names = [];
   chart.data.shown().forEach(function(d) {
     if (d.id==country || country==undefined)
@@ -275,13 +277,14 @@ function createTimeseriesLegend(chart, div, chartHeight, country) {
       if (isGlobal) chart.revert();
     });
 
-    //set max height for legend
-    if (isGlobal) {
-      var itemHeight = 18;
-      var numItems = Math.round((chartHeight-160)/itemHeight);
-      var availSpace = itemHeight*numItems;
-      $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
-    }
+  //set max height for legend
+  if (isGlobal) {
+    var chartHeight = $(div).parent().height()-200;
+    var itemHeight = 18;
+    var numItems = Math.round((chartHeight-160)/itemHeight);
+    var availSpace = itemHeight*numItems;
+    $('.global-timeseries-chart .timeseries-legend').css('max-height', availSpace);
+  }
 }
 
 function updateTimeseries(selected) {
