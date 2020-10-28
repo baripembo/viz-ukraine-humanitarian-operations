@@ -102,7 +102,7 @@ function hasGamData(data, indicator) {
 }
 
 function getGamText(data, indicator) {
-  var gmText = '**Gender age marker: ';
+  var gmText = '**Gender-Age Marker: ';
   for (var i=0;i<5;i++) {
     var pct = (data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd'] / data['#value+'+ indicator + '+covid+funding+total+usd']) : '0%';
     gmText += '['+i+']: ' + pct;
