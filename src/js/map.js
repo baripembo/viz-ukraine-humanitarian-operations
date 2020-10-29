@@ -1077,6 +1077,18 @@ function createMapTooltip(country_code, country_name, point) {
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
     }
+    //IPC layer
+    else if (currentIndicator.id=='#affected+ch+food+p3plus+pct') {
+      content += 'Total % Population in IPC Phase 3+:<div class="stat">' + val + '</div>';
+      if (val!='No Data') {
+        content += '<span>('+ percentFormat(country[0]['#affected+ch+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
+        content += '<div class="subtext">Breakdown:<br/>';
+        if (country[0]['#affected+ch+food+p3+pct']!=undefined) content += 'IPC Phase 3 (Critical): '+ percentFormat(country[0]['#affected+ch+food+p3+pct']) +'<br>';
+        if (country[0]['#affected+ch+food+p4+pct']!=undefined) content += 'IPC Phase 4 (Emergency): '+ percentFormat(country[0]['#affected+ch+food+p4+pct']) +'<br>';
+        if (country[0]['#affected+ch+food+p5+pct']!=undefined) content += 'IPC Phase 5 (Famine): '+ percentFormat(country[0]['#affected+ch+food+p5+pct']) +'<br>';
+        content += '</div>';
+      }
+    }
     //INFORM layer
     else if (currentIndicator.id=='#severity+inform+type') {
       var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
