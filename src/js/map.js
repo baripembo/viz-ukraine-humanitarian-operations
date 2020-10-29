@@ -627,7 +627,7 @@ function setGlobalLegend(scale) {
       }
     });
     //oxford methodology text
-    var oxfordMethodologyText = 'Methodology: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)';
+    var oxfordMethodologyText = 'Note: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)';
     $('.map-legend.global').append('<p class="footnote oxford-methodology small">'+ truncateString(oxfordMethodologyText, 65) +' <a href="#" class="expand">MORE</a></p>');
     $('.map-legend.global .oxford-methodology').click(function() {
       if ($(this).find('a').hasClass('collapse')) {
@@ -1099,6 +1099,18 @@ function createMapTooltip(country_code, country_name, point) {
       }
       else {
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+    }
+    //IPC layer
+    else if (currentIndicator.id=='#affected+ch+food+p3plus+pct') {
+      content += 'Total % Population in IPC Phase 3+:<div class="stat">' + val + '</div>';
+      if (val!='No Data') {
+        content += '<span>('+ percentFormat(country[0]['#affected+ch+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
+        content += '<div class="subtext">Breakdown:<br/>';
+        if (country[0]['#affected+ch+food+p3+pct']!=undefined) content += 'IPC Phase 3 (Critical): '+ percentFormat(country[0]['#affected+ch+food+p3+pct']) +'<br>';
+        if (country[0]['#affected+ch+food+p4+pct']!=undefined) content += 'IPC Phase 4 (Emergency): '+ percentFormat(country[0]['#affected+ch+food+p4+pct']) +'<br>';
+        if (country[0]['#affected+ch+food+p5+pct']!=undefined) content += 'IPC Phase 5 (Famine): '+ percentFormat(country[0]['#affected+ch+food+p5+pct']) +'<br>';
+        content += '</div>';
       }
     }
     //INFORM layer
