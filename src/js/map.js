@@ -598,7 +598,7 @@ function setGlobalLegend(scale) {
       }
     });
     //oxford methodology text
-    var oxfordMethodologyText = 'Methodology: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)';
+    var oxfordMethodologyText = 'Note: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)';
     $('.map-legend.global').append('<p class="footnote oxford-methodology small">'+ truncateString(oxfordMethodologyText, 65) +' <a href="#" class="expand">MORE</a></p>');
     $('.map-legend.global .oxford-methodology').click(function() {
       if ($(this).find('a').hasClass('collapse')) {
