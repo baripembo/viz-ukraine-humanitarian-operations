@@ -32,6 +32,8 @@ h1 {
 	font-weight: normal;
 	line-height: 18px;
 	padding: 15px 5px 15px 20px;
+	//margin-bottom: 0;
+	//padding: 15px 5px 0 20px;
 }
 
 h2 {
@@ -302,17 +304,33 @@ a:visited {
 }
 
 .menu {
-	h2 {
-		padding-left: 20px;
-	}
 	h4 {
-		font-size: 11px;
-		line-height: 12px;
-		padding: 15px 0 10px 20px;
+		padding: 10px 20px 6px;
 		text-transform: uppercase;
+	}
+	.download-link {
+		padding: 0 20px;
+		a {
+			display: flex;
+			line-height: 16px;    
+			margin-bottom: 15px;
+			text-decoration: none;
+			width: 100%;
+		}
+		i {
+			font-size: 16px;
+			margin-left: auto;
+			padding-top: 3px;
+		}
 	}
 	.global-menu {
 		display: block;
+		h4 {
+			font-size: 11px;
+			line-height: 12px;
+			padding: 15px 0 10px 20px;
+			text-transform: uppercase;
+		}
 	}
 }
 
@@ -894,6 +912,9 @@ table {
 	.hdx-logo,
 	h1 {
 		padding-left: 0;
+	}
+	h2 {
+		margin-top: 25px;
 	}
 	.panel-header {    
 		background-color: #FFF;
