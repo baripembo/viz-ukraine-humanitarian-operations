@@ -84,7 +84,7 @@ $( document ).ready(function() {
       sourcesData = allData.sources_data;
       covidTrendData = allData.who_covid_data;
       vaccinationData = allData.vaccination_campaigns_data;
-
+      
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
@@ -116,6 +116,23 @@ $( document ).ready(function() {
         if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
         if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
         if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
+
+        //consolidate IPC data
+        if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
+          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+        }
+        if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
+          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+        }
+        if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
+          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
+        }
+        if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
+          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+        }
+        if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
+          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+        }
       });
 
       //group national data by country -- drives country panel    
