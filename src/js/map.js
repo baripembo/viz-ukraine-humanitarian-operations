@@ -1024,11 +1024,7 @@ function createMapTooltip(country_code, country_name, point) {
       content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
       content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
-      //testing data #affected+tested+positive+pct
-      // if (country[0]['#affected+tested+per1000']!=undefined) {
-      //   var testingVal = Number(country[0]['#affected+tested+per1000']).toFixed(2);
-      //   content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">New Daily Tests per 1,000 People:</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
-      // }
+      //testing data
       if (country[0]['#affected+tested+positive+pct']!=undefined) {
         var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
         content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
@@ -1038,32 +1034,37 @@ function createMapTooltip(country_code, country_name, point) {
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        content +=  currentIndicator.name + ' (of total population):<div class="stat">' + val + '</div>';
+        content +=  currentIndicator.name + '<br>(of total population):<div class="stat">' + val + '</div>';
       }
-      content += '<div class="pins">';
-      if (isVal(country[0]['#affected+inneed'])) content += 'People in Need: '+ numFormat(country[0]['#affected+inneed']) +'<br/>';
-      
-      //hardcode label for Colombia
-      if (country_code=='COL') 
-        content += 'Refugees & Migrants: 1,700,000' +'<br/>';
-      else
-        if (isVal(country[0]['#affected+refugees'])) content += 'Refugees: '+ numFormat(country[0]['#affected+refugees']) +'<br/>';
 
-      if (isVal(country[0]['#affected+displaced'])) content += 'IDPs: '+ numFormat(country[0]['#affected+displaced']) +'<br/>';
+      var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
+                        {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
+                        {label: 'IDPs', value: country[0]['#affected+displaced']}];
+      content += '<div class="table-display">';
+      tableArray.forEach(function(row) {
+        if (row.value!=undefined) {
+          if (country_code=='COL') 
+            content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
+          else
+            content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
+        }
+      });
       content += '</div>';
     }
-    //access layer
+    //Access layer
     else if (currentIndicator.id=='#severity+access+category') {
       if (val!='No Data') {
-        var accessLabels = ['Top Access Constraints into Country:', 'Top Access Constraints within Country:', 'Top Impacts:', 'Mitigation Measures:'];
-        var accessTags = ['#access+constraints+into+desc','#access+constraints+within+desc','#access+impact+desc','#access+mitigation+desc'];
-        accessLabels.forEach(function(label, index) {
-          if (accessTags[index]=='#access+mitigation+desc' && country[0][accessTags[index]]!=undefined) {
-            content += '<label class="access-label">'+ label + '</label> '+ country[0][accessTags[index]].toUpperCase();
+        var accessArray = [{label: 'Top Access Constraints into Country', value: country[0]['#access+constraints+into+desc']},
+                           {label: 'Top Access Constraints within Country', value: country[0]['#access+constraints+within+desc']},
+                           {label: 'Top Impacts', value: country[0]['#access+impact+desc']},
+                           {label: 'Mitigation Measures', value: country[0]['#access+mitigation+desc']}];
+        accessArray.forEach(function(row) {
+          if (row.label=='Mitigation Measures' && row.value!=undefined) {
+            content += '<label class="access-label">'+ row.label + ':</label> '+ row.value.toUpperCase();
           }
           else {
-            var arr = (country[0][accessTags[index]]!=undefined) ? country[0][accessTags[index]].split('|') : [];
-            content += '<label class="access-label">'+ label + '</label>';
+            var arr = (row.value!=undefined) ? row.value.split('|') : [];
+            content += '<label class="access-label">'+ row.label + ':</label>';
             content += '<ul>';
             arr.forEach(function(item, index) {
               if (index<3)
@@ -1078,25 +1079,18 @@ function createMapTooltip(country_code, country_name, point) {
       }
     }
     //IPC layer
-    else if (currentIndicator.id=='#affected+ch+food+p3plus+pct') {
+    else if (currentIndicator.id=='#affected+food+p3plus+pct') {
       content += 'Total % Population in IPC Phase 3+:<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        content += '<span>('+ percentFormat(country[0]['#affected+ch+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
-        content += '<div class="subtext">Breakdown:<br/>';
-        if (country[0]['#affected+ch+food+p3+pct']!=undefined) content += 'IPC Phase 3 (Critical): '+ percentFormat(country[0]['#affected+ch+food+p3+pct']) +'<br>';
-        if (country[0]['#affected+ch+food+p4+pct']!=undefined) content += 'IPC Phase 4 (Emergency): '+ percentFormat(country[0]['#affected+ch+food+p4+pct']) +'<br>';
-        if (country[0]['#affected+ch+food+p5+pct']!=undefined) content += 'IPC Phase 5 (Famine): '+ percentFormat(country[0]['#affected+ch+food+p5+pct']) +'<br>';
+        content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
+        var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
+                          {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
+                          {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
+        content += '<div class="table-display">Breakdown:';
+        tableArray.forEach(function(row) {
+          if (row.value!=undefined) content += '<div class="table-row">'+ row.label +':<span>'+ percentFormat(row.value) +'</span></div>';
+        });
         content += '</div>';
-      }
-    }
-    //INFORM layer
-    else if (currentIndicator.id=='#severity+inform+type') {
-      var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
-      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + numVal + '</div>';
-      if (numVal!='No Data') {
-        if (country[0]['#severity+coping+inform+num']!=undefined) content += 'Lack of Coping Capacity: '+ country[0]['#severity+coping+inform+num']+'<br>';
-        if (country[0]['#severity+hazard+inform+num']!=undefined) content += 'COVID-19 Hazard & Exposure: '+ country[0]['#severity+hazard+inform+num']+'<br>';
-        if (country[0]['#severity+inform+num+vulnerability']!=undefined) content += 'Vulnerability: '+ country[0]['#severity+inform+num+vulnerability']+'<br>';
       }
     }
     //Vaccination campaigns layer
@@ -1120,13 +1114,36 @@ function createMapTooltip(country_code, country_name, point) {
         content += '</table>';
       }
     }
+    //INFORM layer
+    else if (currentIndicator.id=='#severity+inform+type') {
+      var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
+      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + numVal + '</div>';
+      if (numVal!='No Data') {
+        var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
+                          {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},
+                          {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
+        content += '<div class="table-display">';
+        tableArray.forEach(function(row) {
+          if (row.value!=undefined) content += '<div class="table-row">'+ row.label +': <span>'+ row.value +'</span></div>';
+        });
+        content += '</div>';
+      }
+    }
     //Humanitarian Funding Level layer
     else if (currentIndicator.id=='#value+funding+hrp+pct') {
       if (val!='No Data') {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        if (isVal(country[0]['#value+funding+hrp+required+usd'])) content += 'HRP Requirement: '+ formatValue(country[0]['#value+funding+hrp+required+usd']) +'<br/>';
-        if (isVal(country[0]['#value+covid+funding+hrp+pct'])) content += 'HRP Funding Level for COVID-19 GHRP: '+ percentFormat(country[0]['#value+covid+funding+hrp+pct']) +'<br/>';
-        if (isVal(country[0]['#value+covid+funding+hrp+required+usd'])) content += 'HRP Requirement for COVID-19 GHRP: '+ formatValue(country[0]['#value+covid+funding+hrp+required+usd']) +'<br/>';
+        var tableArray = [{label: 'HRP Requirement', value: country[0]['#value+funding+hrp+required+usd']},
+                          {label: 'HRP Funding Level for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+pct']},
+                          {label: 'HRP Requirement for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+required+usd']}];
+        content += '<div class="table-display">';
+        tableArray.forEach(function(row) {
+          if (isVal(row.value)) {
+            var value = (row.label=='HRP Funding Level for COVID-19 GHRP') ? percentFormat(row.value) : formatValue(row.value);
+            content += '<div class="table-row">'+ row.label +': <span>'+ value +'</span></div>';
+          }
+        });
+        content += '</div>';
       }
       if (isVal(country[0]['#value+funding+other+planname'])) {
         var planArray = country[0]['#value+funding+other+planname'].split('|');
@@ -1134,11 +1151,13 @@ function createMapTooltip(country_code, country_name, point) {
         var planRequiredArray = (isVal(country[0]['#value+funding+other+required+usd'])) ? country[0]['#value+funding+other+required+usd'].split('|') : [0];
         var planTotalArray = (isVal(country[0]['#value+funding+other+total+usd'])) ? country[0]['#value+funding+other+total+usd'].split('|') : [0];
 
-        if (val!='No Data') content += '<br/>';
+        if (val!='No Data') content += '<br/>'
         planArray.forEach(function(plan, index) {
-          content +=  plan + ' Funding Level:<div class="stat">' + percentFormat(planPctArray[index]) + '</div>';
-          content += 'Requirement: '+ formatValue(planRequiredArray[index]) +'<br/>';
-          content += 'Total: '+ formatValue(planTotalArray[index]) +'<br/>';
+          content +=  plan +' Funding Level:<div class="stat">' + percentFormat(planPctArray[index]) + '</div>';
+          content += '<div class="table-display">';
+          content += '<div class="table-row">Requirement: <span>'+ formatValue(planRequiredArray[index]) +'</span></div>';
+          content += '<div class="table-row">Total: <span>'+ formatValue(planTotalArray[index]) +'</span></div>';
+          content += '</div>';
           if (index==0 && planArray.length>1) content += '<br/>';
         });
       }
@@ -1177,14 +1196,16 @@ function createMapTooltip(country_code, country_name, point) {
     else if (currentIndicator.id=='#value+gdp+ifi+pct') {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        if (isVal(country[0]['#value+ifi+percap'])) content += 'Total IFI Funding per Capita: '+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'<br/>';
-        if (isVal(country[0]['#value+ifi+total'])) content += 'Total Amount Combined: '+ formatValue(country[0]['#value+ifi+total']);
-      
-        content += '<div class="subtext">Breakdown:<br/>';
+        content += '<div class="table-display">';
+        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row">Total IFI Funding per Capita: <span>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</span></div>';
+        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row">Total Amount Combined: <span>'+ formatValue(country[0]['#value+ifi+total']) +'</span></div>';
+        content += '</div>';
+
+        content += '<div class="table-display subtext">Breakdown:';
         var fundingArray = ['adb','afdb','ec','eib','idb','imf','isdb','unmptf','wb'];
         fundingArray.forEach(function(fund) {
-          var fundName = (fund=='wb') ?  'World Bank' : fund.toUpperCase(); 
-          if (isVal(country[0]['#value+'+fund+'+total'])) content += fundName +': '+ formatValue(country[0]['#value+'+fund+'+total']) +'<br/>';
+          var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
+          if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
         });
         content += '</div>';
       }
