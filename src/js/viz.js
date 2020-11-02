@@ -11,11 +11,13 @@ var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, vaccinationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
+var globalTimeseriesChart, countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var viewInitialized = false;
 var zoomLevel = 1.4;
 
+var hrpData = [];
 var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
@@ -45,6 +47,7 @@ $( document ).ready(function() {
     $('.content').width(viewportWidth + $('.content-left').innerWidth());
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
+    $('#chart-view').height(viewportHeight - $('.tab-menubar').height());
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
     $('.map-legend.global, .map-legend.country').css('max-height', viewportHeight - 200);
     if (viewportHeight<696) {
@@ -81,7 +84,7 @@ $( document ).ready(function() {
       sourcesData = allData.sources_data;
       covidTrendData = allData.who_covid_data;
       vaccinationData = allData.vaccination_campaigns_data;
-
+      
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
@@ -113,6 +116,23 @@ $( document ).ready(function() {
         if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
         if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
         if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
+
+        //consolidate IPC data
+        if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
+          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+        }
+        if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
+          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+        }
+        if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
+          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
+        }
+        if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
+          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+        }
+        if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
+          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+        }
       });
 
       //group national data by country -- drives country panel    
@@ -174,7 +194,7 @@ $( document ).ready(function() {
 
     //create country select
     var countryArray = Object.keys(countryCodeList);
-    var hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
+    hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
     hrpData.sort(function(a, b){
       return d3.ascending(a['#country+name'].toLowerCase(), b['#country+name'].toLowerCase());
     })
@@ -187,6 +207,22 @@ $( document ).ready(function() {
     //insert default option    
     $('.country-select').prepend('<option value="">View Country Page</option>');
     $('.country-select').val($('.country-select option:first').val());
+
+    //create tab events
+    $('.tab-menubar .tab-button').on('click', function() {
+      $('.tab-button').removeClass('active');
+      $(this).addClass('active');
+      if ($(this).data('id')=='chart-view') {
+        $('#chart-view').show();
+      }
+      else {
+        $('#chart-view').hide();
+      }
+    });
+
+    //load timeseries for global view 
+    createSource($('#chart-view .source-container'), '#affected+infected');
+    initTimeseries(timeseriesData, '.global-timeseries-chart');
 
     //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');

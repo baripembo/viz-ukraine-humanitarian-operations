@@ -54,7 +54,10 @@
             </div>
 
             <h1>COVID-19 Data Explorer:<br>63 GHRP Locations</h1>
-
+<!--             <h4>Download:</h4>
+            <div class='download-link'>
+              <a href='#'><span><b>DAILY SNAPSHOT</b><br>SEP 28, 2020 (192kb, pdf)</span><i class='humanitarianicons-Download'></i></a>
+            </div> -->
 
             <div class='global-menu'>
               <label for="regionSelect" class="visuallyhidden">Select a region: </label>
@@ -73,6 +76,9 @@
                 <li data-id='#severity+access+category' data-legend='Access Severity Level'>
                   <div><i class='humanitarianicons-Humanitarian-access'></i>Access Severity</div>
                 </li>
+                <!-- <li data-id='#affected+food+p3plus+pct' data-legend='IPC Acute Food Insecurity (% of population in IPC Phase 3+)'>
+                  <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
+                </li> -->
                 <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
                   <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
                 </li>
@@ -164,6 +170,10 @@
           </div>
             
           <div id='global-map'>
+            <div class='tab-menubar'>
+              <div class='tab-button active' data-id='map-view'>Map View</div>
+              <div class='tab-button' data-id='chart-view'>Chart View</div>
+            </div>
             <div class='map-legend global'>
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
@@ -208,9 +218,14 @@
                 </svg>
               </div>
             </div>
-
           </div>
           <div id="static-map"></div>
+
+          <div id='chart-view'>
+            <div class='source-container'></div>
+            <div class='global-timeseries-chart'></div>
+          </div>
+
           <div class='loader'>
             <div class="sp sp-circle"></div>
             <span>Loading data...</span>
