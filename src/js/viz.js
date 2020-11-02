@@ -218,6 +218,7 @@ $( document ).ready(function() {
       else {
         $('#chart-view').hide();
       }
+      mpTrack($(this).data('id'), currentIndicator.name);
     });
 
     //load timeseries for global view 
