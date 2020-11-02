@@ -1053,10 +1053,8 @@ function createMapTooltip(country_code, country_name, point) {
       content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
       content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
-<<<<<<< HEAD
-=======
+
       //testing data
->>>>>>> ipc-layer
       if (country[0]['#affected+tested+positive+pct']!=undefined) {
         var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
         content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';

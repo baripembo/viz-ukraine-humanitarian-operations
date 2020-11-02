@@ -203,9 +203,15 @@ function createTimeSeries(array, div) {
 				type: 'timeseries',
 				tick: {
           outer: false,
+          count: 5,
           values: dateArray,
           format: function(d) {
-            return d.getMonth()+1 + '/' + d.getDate() + '/' + d.getFullYear().toString().substr(-2);
+            var date = dateFormat(d);
+            if (!isGlobal) {
+              //display every other month for country view
+              date = (d.getMonth()%2==0) ? date : '';
+            }
+            return date;
           }
 				}
 			},
@@ -298,7 +304,7 @@ function updateTimeseries(selected) {
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
 
   $('.country-timeseries-chart .timeseries-legend').remove();
-  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', '', selected);
+  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);
 }
 
 
