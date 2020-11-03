@@ -119,19 +119,19 @@ $( document ).ready(function() {
 
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
-          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+          item['#affected+food+analysed+pct'] = (item['#affected+ch+food+analysed+pct']) ? item['#affected+ch+food+analysed+pct'] : item['#affected+food+ipc+analysed+pct'];
         }
         if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
-          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+          item['#affected+food+p3+pct'] = (item['#affected+ch+food+p3+pct']) ? item['#affected+ch+food+p3+pct'] : item['#affected+food+ipc+p3+pct'];
         }
         if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
-          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
+          item['#affected+food+p3plus+pct'] = (item['#affected+ch+food+p3plus+pct']) ? item['#affected+ch+food+p3plus+pct'] : item['#affected+food+ipc+p3plus+pct'];
         }
         if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
-          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+          item['#affected+food+p4+pct'] = (item['#affected+ch+food+p4+pct']) ? item['#affected+ch+food+p4+pct'] : item['#affected+food+ipc+p4+pct'];
         }
         if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
-          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+          item['#affected+food+p5+pct'] = (item['#affected+ch+food+p5+pct']) ? item['#affected+ch+food+p5+pct'] : item['#affected+food+ipc+p5+pct'];
         }
       });
 
