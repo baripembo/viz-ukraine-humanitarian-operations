@@ -124,7 +124,7 @@ function getBeneficiaryText(data) {
 
 //regional id/name list
 const regionalList = [
-  {id: 'H25', name: '25 HRP Locations'},
+  {id: 'H25', name: 'Humanitarian Response Plan Countries'},
   {id: 'ROAP', name: 'Asia and the Pacific'},
   {id: 'ROCCA', name: 'Eastern Europe'},
   {id: 'ROLAC', name: 'Latin America and the Caribbean'},
