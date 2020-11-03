@@ -203,17 +203,13 @@ function createEvents() {
 
     //handle tab views
     if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-      // $('.tab-menubar .tab-button').removeClass('active');
-      // $('.tab-menubar .tab-button:first-child').addClass('active')
+      $('.content').addClass('tab-view');
       $('.tab-menubar').show();
-      $('#countrySelect').css('top', '80px');
-      $('.mapboxgl-ctrl-top-right').css('top', '134px');
     }
     else {
+      $('.content').removeClass('tab-view');
       $('.tab-menubar').hide();
       $('#chart-view').hide();
-      $('#countrySelect').css('top', '30px');
-      $('.mapboxgl-ctrl-top-right').css('top', '84px');
     }
   });
 
@@ -259,7 +255,7 @@ function createEvents() {
   });
   
   //back to global event
-  $('.country-panel h2').on('click', function() {
+  $('.backtoGlobal').on('click', function() {
     resetMap();
     window.history.replaceState(null, null, window.location.pathname);
   });
@@ -508,7 +504,7 @@ function updateGlobalLayer() {
   //update global timeseries chart
   globalTimeseriesChart.hide();
   globalTimeseriesChart.show(countryList);
-  createTimeseriesLegend(globalTimeseriesChart, '.global-timeseries-chart');
+  createTimeseriesLegend(globalTimeseriesChart);
 }
 
 function getGlobalLegendScale() {
@@ -798,7 +794,7 @@ function setGlobalLegend(scale) {
 /*** COUNTRY MAP FUNCTIONS ***/
 /*****************************/
 function initCountryView() {
-  $('.content').addClass('country-view');
+  $('.content').removeClass('tab-view').addClass('country-view');
   $('.country-panel').scrollTop(0);
 
   initCountryPanel();
@@ -1371,6 +1367,7 @@ function resetMap() {
   $('.content').removeClass('country-view');
   $('.country-select').val('');
 
+  //reset region
   if (currentRegion!='') {
     selectRegion();
     map.setLayoutProperty(globalLayer, 'visibility', 'visible');
@@ -1386,6 +1383,11 @@ function resetMap() {
     map.once('moveend', function() {
       map.setLayoutProperty(globalLayer, 'visibility', 'visible');
     });
+  }
+
+  //reset tab view
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+    $('.content').addClass('tab-view');
   }
 }
 

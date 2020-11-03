@@ -239,7 +239,7 @@ function createTimeSeries(array, div) {
     transition: { duration: 300 }
 	});
 
-  createTimeseriesLegend(chart, div);
+  createTimeseriesLegend(chart);
 
   if (isGlobal) {
     globalTimeseriesChart = chart;
@@ -251,8 +251,9 @@ function createTimeSeries(array, div) {
 }
 
 
-function createTimeseriesLegend(chart, div, country) {
-  var isGlobal = (div.indexOf('global')>-1) ? true : false;
+function createTimeseriesLegend(chart, country) {
+  var element = $(chart.element).attr('class');
+  var isGlobal = (element.indexOf('global')>-1) ? true : false;
   if (isGlobal && $('.timeseries-legend').length>0) {
     $('.global-timeseries-chart .timeseries-legend').remove();
   }
@@ -263,7 +264,7 @@ function createTimeseriesLegend(chart, div, country) {
   });
 
   //custom legend
-  d3.select(div).insert('div').attr('class', 'timeseries-legend').selectAll('div')
+  d3.select(chart.element).insert('div').attr('class', 'timeseries-legend').selectAll('div')
     .data(names)
     .enter().append('div')
     .attr('data-id', function(id) {
@@ -285,7 +286,7 @@ function createTimeseriesLegend(chart, div, country) {
 
   //set max height for legend
   if (isGlobal) {
-    var chartHeight = $(div).parent().height()-200;
+    var chartHeight = $(chart.element).parent().height()-200;
     var itemHeight = 18;
     var numItems = Math.round((chartHeight-160)/itemHeight);
     var availSpace = itemHeight*numItems;
@@ -304,7 +305,7 @@ function updateTimeseries(selected) {
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
 
   $('.country-timeseries-chart .timeseries-legend').remove();
-  createTimeseriesLegend(countryTimeseriesChart, '.country-timeseries-chart', selected);
+  createTimeseriesLegend(countryTimeseriesChart, selected);
 }
 
 
