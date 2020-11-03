@@ -132,9 +132,12 @@ a:visited {
 }
 
 .footnote {
+	color: #888;
+	font-family: 'Source Sans Pro', sans-serif;
   font-size: 10px;
   font-style: italic;
   line-height: 12px;
+  margin: 0;
   padding-bottom: 10px;
   &.gender-data {
   	margin-top: 10px;
@@ -319,6 +322,9 @@ a:visited {
 	padding: 20px 0;
 	img {
 		margin-top: 12px;
+	}
+	.footnote {
+		padding: 10px 20px;
 	}
 }
 

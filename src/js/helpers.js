@@ -122,9 +122,24 @@ function getBeneficiaryText(data) {
   return beneficiaryText;
 }
 
+function createFootnote(target, text, indicator) {
+  var className = (indicator==undefined) ? 'footnote' : 'footnote footnote-indicator';
+  var indicatorName = (indicator==undefined) ? '' : indicator;
+  var footnote = $('<p class="'+ className +'" data-indicator="'+ indicatorName +'">'+ truncateString(text, 65) +' <a href="#" class="expand">MORE</a></p>');
+  $(target).append(footnote);
+  footnote.click(function() {
+    if ($(this).find('a').hasClass('collapse')) {
+      $(this).html(truncateString(text, 65) + ' <a href="#" class="expand">MORE</a>');
+    }
+    else {
+      $(this).html(text + ' <a href="#" class="collapse">LESS</a>');
+    }
+  });
+}
+
 //regional id/name list
 const regionalList = [
-  {id: 'H25', name: '25 HRP Locations'},
+  {id: 'H25', name: 'Humanitarian Response Plan Countries'},
   {id: 'ROAP', name: 'Asia and the Pacific'},
   {id: 'ROCCA', name: 'Eastern Europe'},
   {id: 'ROLAC', name: 'Latin America and the Caribbean'},
