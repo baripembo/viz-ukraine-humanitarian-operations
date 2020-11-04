@@ -48,28 +48,14 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', '431M');//(d3.format('.4s'))(totalPIN)
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
-	//access security
+	//access severity
 	else if (currentIndicator.id=='#severity+access+category') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		var accessLabels = ['Top Access Constraints into Country','Top Access Constraints within Country','Top Impacts','Countries with Existing Mitigation Measures'];
-		var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact','#access+mitigation'];
-		var content;
-		accessTags.forEach(function(tag, index) {
-			var descArr = (data[tag+'+desc']!=undefined) ? data[tag+'+desc'].split('|') : [];
-			var pctArr = (data[tag+'+pct']!=undefined) ? data[tag+'+pct'].split('|') : [];
-			content = '<h6>'+ accessLabels[index] +'</h6><ul class="access-figures">';
-			pctArr.forEach(function(item, index) {
-				if (tag=='#access+mitigation') {
-					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">Yes</div></li>';
-					content += '<li><div class="pct">'+ Math.round((1-item)*100)+'%' + '</div><div class="desc">No</div></li>';
-				}
-				else {
-					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">' + descArr[index] +'</div></li>';
-				}
-			})
-			content += '</ul>';
-			$('.figures').append(content);
-		});
+		createKeyFigure('.figures', 'Average of all countries visas pending', '', 'XX');
+		createKeyFigure('.figures', 'Average of all countries travel authorizations', '', 'XX');
+		createKeyFigure('.figures', 'Total incidents in 2020', '', 'XX');
+		createKeyFigure('.figures', 'Average of CERF projects affected', '', 'XX');
+		createKeyFigure('.figures', 'Average of CBPF projects affected', '', 'XX');
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {

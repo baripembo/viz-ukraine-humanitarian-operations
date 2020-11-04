@@ -971,47 +971,34 @@ function createMapTooltip(country_code, country_name, point) {
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
         content +=  currentIndicator.name + '<br>(of total population):<div class="stat">' + val + '</div>';
+        var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
+                          {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
+                          {label: 'IDPs', value: country[0]['#affected+displaced']}];
+        content += '<div class="table-display">';
+        tableArray.forEach(function(row) {
+          if (row.value!=undefined) {
+            if (country_code=='COL') 
+              content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
+            else
+              content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
+          }
+        });
+        content += '</div>';
       }
-
-      var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
-                        {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
-                        {label: 'IDPs', value: country[0]['#affected+displaced']}];
-      content += '<div class="table-display">';
-      tableArray.forEach(function(row) {
-        if (row.value!=undefined) {
-          if (country_code=='COL') 
-            content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
-          else
-            content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
-        }
-      });
-      content += '</div>';
     }
     //Access layer
     else if (currentIndicator.id=='#severity+access+category') {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        var accessArray = [{label: 'Top Access Constraints into Country', value: country[0]['#access+constraints+into+desc']},
-                           {label: 'Top Access Constraints within Country', value: country[0]['#access+constraints+within+desc']},
-                           {label: 'Top Impacts', value: country[0]['#access+impact+desc']},
-                           {label: 'Mitigation Measures', value: country[0]['#access+mitigation+desc']}];
-        accessArray.forEach(function(row) {
-          if (row.label=='Mitigation Measures' && row.value!=undefined) {
-            content += '<label class="access-label">'+ row.label + ':</label> '+ row.value.toUpperCase();
-          }
-          else {
-            var arr = (row.value!=undefined) ? row.value.split('|') : [];
-            content += '<label class="access-label">'+ row.label + ':</label>';
-            content += '<ul>';
-            arr.forEach(function(item, index) {
-              if (index<3)
-                content += '<li>'+ item + '</li>';
-            });
-            content += '</ul>';
-          }
+        var tableArray = [{label: 'Percentage of travel authorizations denied', value: 0},
+                           {label: 'Number of security incidents', value: 0},
+                           {label: 'Percentage of CERF/CBPF projects affected by insecurity', value: 0},
+                           {label: 'Status of schools and students affected', value: 'Partially Closed'}];
+        content += '<div class="table-display">';
+        tableArray.forEach(function(row) {
+          if (row.value!=undefined) content += '<div class="table-row row-separator">'+ row.label +':<span>'+ row.value +'</span></div>';
         });
-      }
-      else {
-        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+        content += '</div>';
       }
     }
     //IPC layer

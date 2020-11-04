@@ -101,11 +101,20 @@ h6 {
 
 .table-display {
 	.table-row {
+		align-items: center;
 		display: flex;
 		justify-content: space-between;
 		span {
 			display: block;
 			padding-left: 5px;
+			text-align: right;
+		}
+		&.row-separator {
+			border-bottom: 1px solid #CCC;
+			padding: 8px 0;
+			&:first-child {
+				border-top: 1px solid #CCC;
+			}
 		}
 	}
 }
