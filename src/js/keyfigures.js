@@ -210,6 +210,7 @@ function updateSource(div, indicator) {
 
 function getSource(indicator) {
 	if (indicator=='#severity+access+category') indicator = '#severity+access+category+num';
+	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
