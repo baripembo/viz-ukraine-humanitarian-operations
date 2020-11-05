@@ -31,9 +31,7 @@ h1 {
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 18px;
-	padding: 15px 5px 15px 20px;
-	//margin-bottom: 0;
-	//padding: 15px 5px 0 20px;
+	padding: 15px 5px 10px 20px;
 }
 
 h2 {
@@ -142,6 +140,9 @@ a:visited {
   &.gender-data {
   	margin-top: 10px;
   }
+}
+.source + .footnote {
+	padding-top: 10px;
 }
 
 .content {
@@ -330,11 +331,12 @@ a:visited {
 
 .menu {
 	h4 {
-		padding: 10px 20px 6px;
+		padding: 0 20px 6px;
 		text-transform: uppercase;
 	}
 	.download-link {
 		padding: 0 20px;
+		text-transform: uppercase;
 		a {
 			display: flex;
 			line-height: 16px;    
@@ -350,6 +352,7 @@ a:visited {
 	}
 	.global-menu {
 		display: block;
+		margin-top: 10px;
 		h4 {
 			font-size: 11px;
 			line-height: 12px;
