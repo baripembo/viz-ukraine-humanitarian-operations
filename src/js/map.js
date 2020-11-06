@@ -1008,11 +1008,12 @@ function createMapTooltip(country_code, country_name, point) {
     else if (currentIndicator.id=='#access+visas+pct') {
       //content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       //if (val!='No Data') {
-        var tableArray = [{label: 'Percentage of visas pending or denied', value: country[0]['#access+visas+pct']},
-                          {label: 'Percentage of travel authorizations denied', value: country[0]['#access+travel+pct']},
-                          {label: 'Number of security incidents', value: country[0]['#event+year+todate+num']},
-                          {label: 'Percentage of CERF projects affected by insecurity', value: country[0]['#activity+cerf+project+insecurity+pct']},
-                          {label: 'Percentage of CBPF projects affected by insecurity', value: country[0]['#activity+cbpf+project+insecurity+pct']},
+        var tableArray = [{label: '% of visas pending or denied', value: country[0]['#access+visas+pct']},
+                          {label: '% of travel authorizations denied', value: country[0]['#access+travel+pct']},
+                          {label: 'Number of security incidents in 2020', value: country[0]['#event+year+todate+num']},
+                          {label: '% of CERF projects affected by insecurity', value: country[0]['#activity+cerf+project+insecurity+pct']},
+                          {label: '% of CBPF projects affected by insecurity', value: country[0]['#activity+cbpf+project+insecurity+pct']},
+                          {label: 'Status of vaccination campaigns', value: country[0]['#status+name']},
                           {label: 'Status of schools', value: country[0]['#impact+type']}];
         content += '<div class="table-display">';
         tableArray.forEach(function(row) {
