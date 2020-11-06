@@ -111,7 +111,6 @@ function formatTimeseriesData(data) {
   var dataArray = Object.entries(data);
   dataArray.forEach(function(d) {
     var countryArray = [];
-    if (d[0]=='Syrian Arab Republic') d[0] = 'Syria';
     if (d[0]=='Venezuela (Bolivarian Republic of)') d[0] = 'Venezuela';
     countryArray.push(d[0])
     var valueArray = d[1].reverse();
@@ -148,7 +147,7 @@ function createTimeSeries(array, div) {
     ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
     ['#999'];
 
-  //filter HRP countries for countrytimeseries
+  //filter HRP countries for country timeseries
   if (!isGlobal) {
     var hrpList = [];
     hrpData.forEach(function(d) {
@@ -296,7 +295,6 @@ function createTimeseriesLegend(chart, country) {
 
 function updateTimeseries(selected) {
   var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
-  if (selected=='Syrian Arab Republic') selected = 'Syria';
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.axis.max(maxValue*2);

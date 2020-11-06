@@ -346,6 +346,16 @@ function selectCountry(features) {
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
 
+  //special case for IPC source date in legend
+  var data = dataByCountry[currentCountry.code][0];
+  if (data['#date+ipc+start']!=undefined && data['#date+ipc+end']!=undefined) {
+    var startDate = new Date(data['#date+ipc+start']);
+    var endDate = new Date(data['#date+ipc+end']);
+    startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);// +' - '+ data['#date+ipc+period'];
+    $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
+  }
+
   //append country code to url
   window.history.replaceState(null, null, '?c='+currentCountry.code);
 }
@@ -1027,7 +1037,8 @@ function createMapTooltip(country_code, country_name, point) {
       if (country[0]['#date+ipc+start']!=undefined) {
         var startDate = new Date(country[0]['#date+ipc+start']);
         var endDate = new Date(country[0]['#date+ipc+end']);
-        var dateSpan = '<span class="subtext">('+ d3.utcFormat('%b')(startDate) +'-'+ d3.utcFormat('%b %Y')(endDate) +' - '+ country[0]['#date+ipc+period'] +')</span>';
+        startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+        var dateSpan = '<span class="subtext">('+ startDate +'-'+ d3.utcFormat('%b %Y')(endDate) +' - '+ country[0]['#date+ipc+period'] +')</span>';
       }
       content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
