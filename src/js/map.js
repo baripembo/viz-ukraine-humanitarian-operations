@@ -974,21 +974,24 @@ function createMapTooltip(country_code, country_name, point) {
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        content +=  currentIndicator.name + '<br>(of total population):<div class="stat">' + val + '</div>';
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
 
-      var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
-                        {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
-                        {label: 'IDPs', value: country[0]['#affected+displaced']}];
       content += '<div class="table-display">';
-      tableArray.forEach(function(row) {
-        if (row.value!=undefined) {
-          if (country_code=='COL') 
-            content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
-          else
+      if (country_code=='COL') {
+        //hardcode PIN for COL
+        content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
+      }
+      else {
+        var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
+                          {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
+                          {label: 'IDPs', value: country[0]['#affected+displaced']}];
+        tableArray.forEach(function(row, index) {
+          if (row.value!=undefined) {
             content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
-        }
-      });
+          }
+        });
+      }
       content += '</div>';
     }
     //Access layer
