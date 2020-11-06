@@ -59,7 +59,12 @@ $( document ).ready(function() {
       var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckb843tjb46fy1ilaw49redy7/static/-25,0,'+zoomLevel+'/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
-  
+
+    //set daily download date
+    var today = new Date();
+    $('.download-link .today-date').text(dateFormat(today));
+
+
     getData();
     initMap();
   }
@@ -114,25 +119,25 @@ $( document ).ready(function() {
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
 
         //assign access categories
-        if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
-        if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
-        if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
+        if (item['#access+visas+pct+num']==0) item['#access+visas+pct'] = 'Low';
+        if (item['#access+visas+pct+num']==1) item['#access+visas+pct'] = 'Medium';
+        if (item['#access+visas+pct+num']==2) item['#access+visas+pct'] = 'High';
 
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
-          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+          item['#affected+food+analysed+pct'] = (item['#affected+ch+food+analysed+pct']) ? item['#affected+ch+food+analysed+pct'] : item['#affected+food+ipc+analysed+pct'];
         }
         if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
-          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+          item['#affected+food+p3+pct'] = (item['#affected+ch+food+p3+pct']) ? item['#affected+ch+food+p3+pct'] : item['#affected+food+ipc+p3+pct'];
         }
         if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
-          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
+          item['#affected+food+p3plus+pct'] = (item['#affected+ch+food+p3plus+pct']) ? item['#affected+ch+food+p3plus+pct'] : item['#affected+food+ipc+p3plus+pct'];
         }
         if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
-          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+          item['#affected+food+p4+pct'] = (item['#affected+ch+food+p4+pct']) ? item['#affected+ch+food+p4+pct'] : item['#affected+food+ipc+p4+pct'];
         }
         if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
-          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+          item['#affected+food+p5+pct'] = (item['#affected+ch+food+p5+pct']) ? item['#affected+ch+food+p5+pct'] : item['#affected+food+ipc+p5+pct'];
         }
       });
 
@@ -171,7 +176,8 @@ $( document ).ready(function() {
         });
       });
 
-      //console.log(nationalData)
+      // console.log(nationalData)
+      // console.log(regionalData)
       //console.log(subnationalData)
 
       dataLoaded = true;

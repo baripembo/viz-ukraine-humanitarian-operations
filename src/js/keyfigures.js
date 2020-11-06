@@ -25,7 +25,7 @@ function setKeyFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#severity+access+category' || currentIndicator.id=='#severity+inform+type') {
+			if (currentIndicator.id=='#access+visas+pct' || currentIndicator.id=='#severity+inform+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -49,7 +49,7 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//access severity
-	else if (currentIndicator.id=='#severity+access+category') {
+	else if (currentIndicator.id=='#access+visas+pct') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Average of all countries visas pending', '', 'XX');
 		createKeyFigure('.figures', 'Average of all countries travel authorizations', '', 'XX');
@@ -158,7 +158,7 @@ function setKeyFigures() {
 	}
 
 	//ranking chart
-	if (currentIndicator.id!='#severity+access+category') {
+	if (currentIndicator.id!='#access+visas+pct') {
 		$('.ranking-container').show();
 		createRankingChart();
 	}
@@ -195,7 +195,8 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	if (indicator=='#severity+access+category') indicator = '#severity+access+category+num';
+	if (indicator=='#access+visas+pct') indicator = '#access+visas+pct+num';
+	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
