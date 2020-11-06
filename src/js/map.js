@@ -622,14 +622,15 @@ function setGlobalLegend(scale) {
     markersvg.select('.legendSize')
       .call(legendSize);
 
-    //gender disaggregation explanatory text
+    //gender disaggregation footnote
     $('.map-legend.global').append('<h4><i class="humanitarianicons-User"></i> (On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
     createSource($('.map-legend.global'), '#affected+killed+m+pct');
     createFootnote('.map-legend.global', '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country.');
 
     //GAM footnote
-    createFootnote('.map-legend.global', '**Gender-Age Marker: 0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups', '#value+cerf+covid+funding+total+usd');
-    createFootnote('.map-legend.global', '**Gender-Age Marker: 0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups', '#value+cbpf+covid+funding+total+usd');
+    var gamText = '**Gender-Age Marker: 0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups';
+    createFootnote('.map-legend.global', gamText, '#value+cerf+covid+funding+total+usd');
+    createFootnote('.map-legend.global', gamText, '#value+cbpf+covid+funding+total+usd');
 
     //boundaries disclaimer
     createFootnote('.map-legend.global', 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.');
@@ -973,21 +974,24 @@ function createMapTooltip(country_code, country_name, point) {
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        content +=  currentIndicator.name + '<br>(of total population):<div class="stat">' + val + '</div>';
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
 
-      var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
-                        {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
-                        {label: 'IDPs', value: country[0]['#affected+displaced']}];
       content += '<div class="table-display">';
-      tableArray.forEach(function(row) {
-        if (row.value!=undefined) {
-          if (country_code=='COL') 
-            content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
-          else
+      if (country_code=='COL') {
+        //hardcode PIN for COL
+        content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
+      }
+      else {
+        var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
+                          {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
+                          {label: 'IDPs', value: country[0]['#affected+displaced']}];
+        tableArray.forEach(function(row, index) {
+          if (row.value!=undefined) {
             content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
-        }
-      });
+          }
+        });
+      }
       content += '</div>';
     }
     //Access layer

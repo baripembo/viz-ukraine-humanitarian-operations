@@ -175,7 +175,7 @@ $( document ).ready(function() {
         });
       });
 
-      console.log(nationalData)
+      //console.log(nationalData)
       //console.log(subnationalData)
 
       dataLoaded = true;
