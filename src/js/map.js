@@ -346,16 +346,6 @@ function selectCountry(features) {
   map.once('moveend', initCountryView);
   mpTrack(currentCountry.code, currentCountryIndicator.name);
 
-  //special case for IPC source date in legend
-  var data = dataByCountry[currentCountry.code][0];
-  if (data['#date+ipc+start']!=undefined && data['#date+ipc+end']!=undefined) {
-    var startDate = new Date(data['#date+ipc+start']);
-    var endDate = new Date(data['#date+ipc+end']);
-    startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
-    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);// +' - '+ data['#date+ipc+period'];
-    $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
-  }
-
   //append country code to url
   window.history.replaceState(null, null, '?c='+currentCountry.code);
 }
@@ -908,13 +898,29 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
-    $('.map-legend.country .food-security-source').empty();
-    createSource($('.map-legend.country .food-security-source'), currentCountryIndicator.id);
+  //if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
+    //$('.map-legend.country .food-security-source').empty();
+    //createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
+  //}
+  
+  //special case for IPC source date in legend
+  var data = dataByCountry[currentCountry.code][0];
+  console.log('--',data)
+  if (data['#date+ipc+start']!=undefined && data['#date+ipc+end']!=undefined) {
+    var startDate = new Date(data['#date+ipc+start']);
+    var endDate = new Date(data['#date+ipc+end']);
+    startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);// +' - '+ data['#date+ipc+period'];
+    $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
+  }
+  else {
+    var sourceObj = getSource('#affected+ch+food+p3plus+pct');
+    var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
+    $('.map-legend.country').find('.food-security-source .source .date').text(date);
   }
 
   var legendFormat;
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
   else if (currentCountryIndicator.id=='#population')
     legendFormat = shortenNumFormat;
@@ -996,21 +1002,21 @@ function createMapTooltip(country_code, country_name, point) {
     }
     //Access layer
     else if (currentIndicator.id=='#access+visas+pct') {
-      //content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-      //if (val!='No Data') {
-        var tableArray = [{label: '% of visas pending or denied', value: country[0]['#access+visas+pct']},
-                          {label: '% of travel authorizations denied', value: country[0]['#access+travel+pct']},
-                          {label: 'Number of security incidents in 2020', value: country[0]['#event+year+todate+num']},
-                          {label: '% of CERF projects affected by insecurity', value: country[0]['#activity+cerf+project+insecurity+pct']},
-                          {label: '% of CBPF projects affected by insecurity', value: country[0]['#activity+cbpf+project+insecurity+pct']},
-                          {label: 'Status of vaccination campaigns', value: country[0]['#status+name']},
-                          {label: 'Status of schools', value: country[0]['#impact+type']}];
-        content += '<div class="table-display">';
-        tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row row-separator">'+ row.label +':<span>'+ row.value +'</span></div>';
-        });
-        content += '</div>';
-      //}
+      var tableArray = [{label: '% of visas pending or denied', value: (country[0]['#access+visas+pct'])},
+                        {label: '% of travel authorizations denied', value: (country[0]['#access+travel+pct'])},
+                        {label: 'Number of security incidents in 2020', value: country[0]['#event+year+previous+todate+num']},
+                        {label: '% of CERF projects affected by insecurity', value: (country[0]['#activity+cerf+project+insecurity+pct'])},
+                        {label: '% of CBPF projects affected by insecurity', value: (country[0]['#activity+cbpf+project+insecurity+pct'])},
+                        {label: 'Status of vaccination campaigns', value: country[0]['#status+name']},
+                        {label: 'Status of schools', value: country[0]['#impact+type']}];
+      content += '<div class="table-display">';
+      tableArray.forEach(function(row) {
+        if (row.value!=undefined) {
+          var val = (row.label.indexOf('%')>-1) ? percentFormat(row.value) : row.value;
+          content += '<div class="table-row row-separator">'+ row.label +':<span>'+ val +'</span></div>';
+        }
+      });
+      content += '</div>';
     }
     //IPC layer
     else if (currentIndicator.id=='#affected+food+p3plus+pct') {

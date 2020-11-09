@@ -25,7 +25,7 @@ function setKeyFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#access+visas+pct' || currentIndicator.id=='#severity+inform+type') {
+			if (currentIndicator.id=='#severity+inform+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -51,11 +51,11 @@ function setKeyFigures() {
 	//access severity
 	else if (currentIndicator.id=='#access+visas+pct') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		createKeyFigure('.figures', 'Average of all countries visas pending', '', 'XX');
-		createKeyFigure('.figures', 'Average of all countries travel authorizations', '', 'XX');
-		createKeyFigure('.figures', 'Total incidents in 2020', '', 'XX');
-		createKeyFigure('.figures', 'Average of CERF projects affected', '', 'XX');
-		createKeyFigure('.figures', 'Average of CBPF projects affected', '', 'XX');
+		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of all countries visas pending', '', percentFormat(data['#access+visas+pct']));
+		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of all countries travel authorizations', '', percentFormat(data['#access+travel+pct']));
+		if (data['#event+year+previous+todate+num']!=undefined) createKeyFigure('.figures', 'Total incidents in 2020', '', data['#event+year+previous+todate+num']);
+		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF projects affected', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
+		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF projects affected', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
