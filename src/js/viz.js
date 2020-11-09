@@ -72,7 +72,7 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/access/out.json'),
+      d3.json('https://github.com/OCHA-DAP/hdx-scraper-covid-viz/raw/access/out.json'),
       //d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
@@ -117,11 +117,6 @@ $( document ).ready(function() {
         item['#affected+infected+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
-
-        //assign access categories
-        if (item['#access+visas+pct+num']==0) item['#access+visas+pct'] = 'Low';
-        if (item['#access+visas+pct+num']==1) item['#access+visas+pct'] = 'Medium';
-        if (item['#access+visas+pct+num']==2) item['#access+visas+pct'] = 'High';
 
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
@@ -176,7 +171,7 @@ $( document ).ready(function() {
         });
       });
 
-      // console.log(nationalData)
+      console.log(nationalData)
       // console.log(regionalData)
       //console.log(subnationalData)
 

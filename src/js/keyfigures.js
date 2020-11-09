@@ -195,7 +195,6 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	if (indicator=='#access+visas+pct') indicator = '#access+visas+pct+num';
 	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
   var obj = {};
   sourcesData.forEach(function(item) {

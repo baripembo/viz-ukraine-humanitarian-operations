@@ -484,7 +484,7 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#access+visas+pct') {
+      else if (currentIndicator.id=='#severity+inform+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
       else {
@@ -528,7 +528,7 @@ function getGlobalLegendScale() {
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#access+visas+pct') max = 0;
+  else if (currentIndicator.id=='#severity+inform+type') max = 0;
   else max = max;
 
   //set scale
@@ -543,9 +543,6 @@ function getGlobalLegendScale() {
       scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
-  }
-  else if (currentIndicator.id=='#access+visas+pct') {
-    scale = d3.scaleOrdinal().domain(['Low', 'Medium', 'High']).range(accessColorRange);
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -675,14 +672,7 @@ function setGlobalLegend(scale) {
         .labels(d3.legendHelpers.thresholdLabels)
         //.useClass(true);
     }
-    else if (currentIndicator.id=='#access+visas+pct') {
-      $('.legend-container').addClass('access-severity');
-      legend = d3.legendColor()
-        .cells(3)
-        .scale(scale);
-    }
     else {
-      $('.legend-container').removeClass('access-severity');
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
       if (currentIndicator.id=='#affected+infected+new+per100000+weekly') legendFormat = d3.format('.1f');
       legend = d3.legendColor()
