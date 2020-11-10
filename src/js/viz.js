@@ -99,7 +99,7 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
-        //normalize counry names
+        //normalize country names
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
         if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
@@ -117,6 +117,9 @@ $( document ).ready(function() {
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
 
+        //create cases by gender indicator
+        item['#affected+infected+gender+new+per100000+weekly'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
+        
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
           item['#affected+food+analysed+pct'] = (item['#affected+ch+food+analysed+pct']) ? item['#affected+ch+food+analysed+pct'] : item['#affected+food+ipc+analysed+pct'];
@@ -171,7 +174,6 @@ $( document ).ready(function() {
       });
 
       //console.log(nationalData)
-      // console.log(regionalData)
       //console.log(subnationalData)
 
       dataLoaded = true;

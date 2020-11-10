@@ -877,12 +877,13 @@ circle.swatch {
 			color: #333;
 			font-size: 14px;
 			line-height: 15px;
+			margin-top: 2px;
+		}
+		.cases-total {
 			margin-top: 8px;
-			span {
-				color: #888;
-				i {
-					font-size: 10px;
-				}
+			.subtext {
+				display: block;
+				margin-bottom: 8px;
 			}
 		}
 		ul {
