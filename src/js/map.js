@@ -1001,19 +1001,21 @@ function createMapTooltip(country_code, country_name, point) {
       content += '</div>';
     }
     //Access layer
-    else if (currentIndicator.id=='#access+visas+pct') {
-      var tableArray = [{label: '% of visas pending or denied', value: (country[0]['#access+visas+pct'])},
-                        {label: '% of travel authorizations denied', value: (country[0]['#access+travel+pct'])},
-                        {label: 'Security incidents affecting humanitarian workers since Jan 2019', value: country[0]['#event+year+previous+todate+num']},
-                        {label: '% of CERF projects affected by access constraints', value: (country[0]['#activity+cerf+project+insecurity+pct'])},
-                        {label: '% of CBPF projects affected by access constraints', value: (country[0]['#activity+cbpf+project+insecurity+pct'])},
-                        {label: 'Status of vaccination campaigns', value: country[0]['#status+name']},
-                        {label: 'Status of schools', value: country[0]['#impact+type']}];
+    else if (currentIndicator.id=='#event+year+todate+num') {
+      var tableArray = [{label: 'Security incidents affecting humanitarian workers since Jan 2020', value: '#event+year+todate+num'},
+                        {label: '% of visas pending or denied', value: '#access+visas+pct'},
+                        {label: '% of travel authorizations denied', value: '#access+travel+pct'},
+                        {label: '% of CERF projects affected by access constraints', value: '#activity+cerf+project+insecurity+pct'},
+                        {label: '% of CBPF projects affected by access constraints', value: '#activity+cbpf+project+insecurity+pct'},
+                        {label: 'Status of vaccination campaigns', value: '#status+name'},
+                        {label: 'Status of schools', value: '#impact+type'}];
       content += '<div class="table-display">';
       tableArray.forEach(function(row) {
-        if (row.value!=undefined) {
-          var val = (row.label.indexOf('%')>-1) ? percentFormat(row.value) : row.value;
-          content += '<div class="table-row row-separator">'+ row.label +':<span>'+ val +'</span></div>';
+        var data = country[0][row.value];
+        if (data!=undefined) {
+          var val = (row.label.indexOf('%')>-1 && !isNaN(data)) ? percentFormat(data) : data;
+          var sourceObj = getSource(row.value);
+          content += '<div class="table-row row-separator"><div>'+ row.label +':<br><span class="subtext">'+ sourceObj['#meta+source'] +'</span></div><div>'+ val +'</div></div>';
         }
       });
       content += '</div>';
@@ -1148,13 +1150,15 @@ function createMapTooltip(country_code, country_name, point) {
         if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row">Total Amount Combined: <span>'+ formatValue(country[0]['#value+ifi+total']) +'</span></div>';
         content += '</div>';
 
-        content += '<div class="table-display subtext">Breakdown:';
-        var fundingArray = ['adb','afdb','ec','eib','idb','imf','isdb','unmptf','wb'];
-        fundingArray.forEach(function(fund) {
-          var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
-          if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
-        });
-        content += '</div>';
+        if (parseFloat(val)>0) {
+          content += '<div class="table-display subtext">Breakdown:';
+          var fundingArray = ['adb','afdb','eib','idb','ifc','imf','isdb','unmptf','wb'];
+          fundingArray.forEach(function(fund) {
+            var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
+            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
+          });
+          content += '</div>';
+        }
       }
     }
     //all other layers
