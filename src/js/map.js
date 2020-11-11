@@ -994,7 +994,7 @@ function createMapTooltip(country_code, country_name, point) {
                           {label: 'IDPs', value: country[0]['#affected+displaced']}];
         tableArray.forEach(function(row, index) {
           if (row.value!=undefined) {
-            content += '<div class="table-row">'+ row.label +':<span>'+ numFormat(row.value) +'</span></div>';
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ numFormat(row.value) +'</div></div>';
           }
         });
       }
@@ -1037,7 +1037,7 @@ function createMapTooltip(country_code, country_name, point) {
                           {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
         content += '<div class="table-display">Breakdown:';
         tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row">'+ row.label +':<span>'+ percentFormat(row.value) +'</span></div>';
+          if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ percentFormat(row.value) +'</div></div>';
         });
         content += '</div>';
       }
@@ -1073,7 +1073,7 @@ function createMapTooltip(country_code, country_name, point) {
                           {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
         content += '<div class="table-display">';
         tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row">'+ row.label +': <span>'+ row.value +'</span></div>';
+          if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
         });
         content += '</div>';
       }
@@ -1089,7 +1089,7 @@ function createMapTooltip(country_code, country_name, point) {
         tableArray.forEach(function(row) {
           if (isVal(row.value)) {
             var value = (row.label=='HRP Funding Level for COVID-19 GHRP') ? percentFormat(row.value) : formatValue(row.value);
-            content += '<div class="table-row">'+ row.label +': <span>'+ value +'</span></div>';
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ value +'</div></div>';
           }
         });
         content += '</div>';
@@ -1104,8 +1104,8 @@ function createMapTooltip(country_code, country_name, point) {
         planArray.forEach(function(plan, index) {
           content +=  plan +' Funding Level:<div class="stat">' + percentFormat(planPctArray[index]) + '</div>';
           content += '<div class="table-display">';
-          content += '<div class="table-row">Requirement: <span>'+ formatValue(planRequiredArray[index]) +'</span></div>';
-          content += '<div class="table-row">Total: <span>'+ formatValue(planTotalArray[index]) +'</span></div>';
+          content += '<div class="table-row"><div>Requirement:</div><div>'+ formatValue(planRequiredArray[index]) +'</div>';
+          content += '<div class="table-row"><div>Total:</div><div>'+ formatValue(planTotalArray[index]) +'</div>';
           content += '</div>';
           if (index==0 && planArray.length>1) content += '<br/>';
         });
@@ -1146,8 +1146,8 @@ function createMapTooltip(country_code, country_name, point) {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         content += '<div class="table-display">';
-        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row">Total IFI Funding per Capita: <span>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</span></div>';
-        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row">Total Amount Combined: <span>'+ formatValue(country[0]['#value+ifi+total']) +'</span></div>';
+        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row"><div>Total IFI Funding per Capita:</div><div>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</div></div>';
+        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row"><div>Total Amount Combined:</div><div>'+ formatValue(country[0]['#value+ifi+total']) +'</div></div>';
         content += '</div>';
 
         if (parseFloat(val)>0) {
@@ -1155,7 +1155,7 @@ function createMapTooltip(country_code, country_name, point) {
           var fundingArray = ['adb','afdb','eib','idb','ifc','imf','isdb','unmptf','wb'];
           fundingArray.forEach(function(fund) {
             var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
-            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
+            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
           });
           content += '</div>';
         }
