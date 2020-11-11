@@ -1004,9 +1004,9 @@ function createMapTooltip(country_code, country_name, point) {
     else if (currentIndicator.id=='#access+visas+pct') {
       var tableArray = [{label: '% of visas pending or denied', value: (country[0]['#access+visas+pct'])},
                         {label: '% of travel authorizations denied', value: (country[0]['#access+travel+pct'])},
-                        {label: 'Number of security incidents in 2020', value: country[0]['#event+year+previous+todate+num']},
-                        {label: '% of CERF projects affected by insecurity', value: (country[0]['#activity+cerf+project+insecurity+pct'])},
-                        {label: '% of CBPF projects affected by insecurity', value: (country[0]['#activity+cbpf+project+insecurity+pct'])},
+                        {label: 'Security incidents affecting humanitarian workers since Jan 2019', value: country[0]['#event+year+previous+todate+num']},
+                        {label: '% of CERF projects affected by access constraints', value: (country[0]['#activity+cerf+project+insecurity+pct'])},
+                        {label: '% of CBPF projects affected by access constraints', value: (country[0]['#activity+cbpf+project+insecurity+pct'])},
                         {label: 'Status of vaccination campaigns', value: country[0]['#status+name']},
                         {label: 'Status of schools', value: country[0]['#impact+type']}];
       content += '<div class="table-display">';

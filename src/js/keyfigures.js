@@ -50,9 +50,6 @@ function setKeyFigures() {
 	}
 	//access severity
 	else if (currentIndicator.id=='#access+visas+pct') {
-		//special case for access -- get world data from regional H63
-		if (currentRegion=='') data = regionalData[0];
-
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of all countries visas pending', '', percentFormat(data['#access+visas+pct']));
 		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of all countries travel authorizations', '', percentFormat(data['#access+travel+pct']));
@@ -117,6 +114,7 @@ function setKeyFigures() {
 			if (regionMatch(d['#region+name']))
 				return d['#affected+killed']; 
 		});
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
 		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
 
