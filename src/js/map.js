@@ -1144,13 +1144,15 @@ function createMapTooltip(country_code, country_name, point) {
         if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row">Total Amount Combined: <span>'+ formatValue(country[0]['#value+ifi+total']) +'</span></div>';
         content += '</div>';
 
-        content += '<div class="table-display subtext">Breakdown:';
-        var fundingArray = ['adb','afdb','ec','eib','idb','imf','isdb','unmptf','wb'];
-        fundingArray.forEach(function(fund) {
-          var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
-          if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
-        });
-        content += '</div>';
+        if (val!='0.0%') {
+          content += '<div class="table-display subtext">Breakdown:';
+          var fundingArray = ['adb','afdb','eib','idb','ifc','imf','isdb','unmptf','wb'];
+          fundingArray.forEach(function(fund) {
+            var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
+            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row">'+ fundName +': <span>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</span></div>';
+          });
+          content += '</div>';
+        }
       }
     }
     //all other layers

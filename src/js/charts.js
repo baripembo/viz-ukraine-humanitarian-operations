@@ -111,7 +111,6 @@ function formatTimeseriesData(data) {
   var dataArray = Object.entries(data);
   dataArray.forEach(function(d) {
     var countryArray = [];
-    if (d[0]=='Syrian Arab Republic') d[0] = 'Syria';
     if (d[0]=='Venezuela (Bolivarian Republic of)') d[0] = 'Venezuela';
     countryArray.push(d[0])
     var valueArray = d[1].reverse();
@@ -296,7 +295,6 @@ function createTimeseriesLegend(chart, country) {
 
 function updateTimeseries(selected) {
   var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
-  if (selected=='Syrian Arab Republic') selected = 'Syria';
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.axis.max(maxValue*2);
