@@ -99,7 +99,7 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
-        //normalize counry names
+        //normalize country names
         if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
         if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
 
@@ -117,26 +117,24 @@ $( document ).ready(function() {
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
 
-        //assign access categories
-        if (item['#severity+access+category+num']==0) item['#severity+access+category'] = 'Low';
-        if (item['#severity+access+category+num']==1) item['#severity+access+category'] = 'Medium';
-        if (item['#severity+access+category+num']==2) item['#severity+access+category'] = 'High';
-
+        //create cases by gender indicator
+        item['#affected+infected+gender+new+per100000+weekly'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
+        
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
-          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+          item['#affected+food+analysed+pct'] = (item['#affected+ch+food+analysed+pct']) ? item['#affected+ch+food+analysed+pct'] : item['#affected+food+ipc+analysed+pct'];
         }
         if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
-          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+          item['#affected+food+p3+pct'] = (item['#affected+ch+food+p3+pct']) ? item['#affected+ch+food+p3+pct'] : item['#affected+food+ipc+p3+pct'];
         }
         if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
-          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
+          item['#affected+food+p3plus+pct'] = (item['#affected+ch+food+p3plus+pct']) ? item['#affected+ch+food+p3plus+pct'] : item['#affected+food+ipc+p3plus+pct'];
         }
         if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
-          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+          item['#affected+food+p4+pct'] = (item['#affected+ch+food+p4+pct']) ? item['#affected+ch+food+p4+pct'] : item['#affected+food+ipc+p4+pct'];
         }
         if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
-          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+          item['#affected+food+p5+pct'] = (item['#affected+ch+food+p5+pct']) ? item['#affected+ch+food+p5+pct'] : item['#affected+food+ipc+p5+pct'];
         }
       });
 

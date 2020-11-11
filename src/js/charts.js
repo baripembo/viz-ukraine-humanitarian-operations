@@ -147,7 +147,7 @@ function createTimeSeries(array, div) {
     ['#1ebfb3', '#f2645a', '#007ce1', '#9c27b0', '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'] :
     ['#999'];
 
-  //filter HRP countries for countrytimeseries
+  //filter HRP countries for country timeseries
   if (!isGlobal) {
     var hrpList = [];
     hrpData.forEach(function(d) {

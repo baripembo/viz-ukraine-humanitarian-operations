@@ -474,7 +474,7 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#severity+access+category') {
+      else if (currentIndicator.id=='#severity+inform+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
       else {
@@ -518,12 +518,12 @@ function getGlobalLegendScale() {
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   else if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#severity+access+category') max = 0;
+  else if (currentIndicator.id=='#severity+inform+type') max = 0;
   else max = max;
 
   //set scale
   var scale;
-  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
     var data = [];
     nationalData.forEach(function(d) {
       if (d[currentIndicator.id]!=null && regionMatch(d['#region+name']))
@@ -533,9 +533,6 @@ function getGlobalLegendScale() {
       scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
-  }
-  else if (currentIndicator.id=='#severity+access+category') {
-    scale = d3.scaleOrdinal().domain(['Low', 'Medium', 'High']).range(accessColorRange);
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -623,9 +620,9 @@ function setGlobalLegend(scale) {
       .call(legendSize);
 
     //gender disaggregation footnote
-    $('.map-legend.global').append('<h4><i class="humanitarianicons-User"></i> (On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
-    createSource($('.map-legend.global'), '#affected+killed+m+pct');
-    createFootnote('.map-legend.global', '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country.');
+    // $('.map-legend.global').append('<h4><i class="humanitarianicons-User"></i> (On hover) COVID-19 Sex-Disaggregated Data Tracker</h4>');
+    // createSource($('.map-legend.global'), '#affected+killed+m+pct');
+    createFootnote('.map-legend.global', '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country.', '#affected+infected+gender+new+per100000+weekly');
 
     //GAM footnote
     var gamText = '**Gender-Age Marker: 0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups';
@@ -665,16 +662,9 @@ function setGlobalLegend(scale) {
         .labels(d3.legendHelpers.thresholdLabels)
         //.useClass(true);
     }
-    else if (currentIndicator.id=='#severity+access+category') {
-      $('.legend-container').addClass('access-severity');
-      legend = d3.legendColor()
-        .cells(3)
-        .scale(scale);
-    }
     else {
-      $('.legend-container').removeClass('access-severity');
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
-      if (currentIndicator.id=='#affected+infected+new+per100000+weekly') legendFormat = d3.format('.1f');
+      if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') legendFormat = d3.format('.1f');
       legend = d3.legendColor()
         .labelFormat(legendFormat)
         .cells(colorRange.length)
@@ -908,13 +898,28 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
-    $('.map-legend.country .food-security-source').empty();
-    createSource($('.map-legend.country .food-security-source'), currentCountryIndicator.id);
+  //if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
+    //$('.map-legend.country .food-security-source').empty();
+    //createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
+  //}
+  
+  //special case for IPC source date in legend
+  var data = dataByCountry[currentCountry.code][0];
+  if (data['#date+ipc+start']!=undefined && data['#date+ipc+end']!=undefined) {
+    var startDate = new Date(data['#date+ipc+start']);
+    var endDate = new Date(data['#date+ipc+end']);
+    startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);// +' - '+ data['#date+ipc+period'];
+    $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
+  }
+  else {
+    var sourceObj = getSource('#affected+food+ipc+p3plus+pct');
+    var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
+    $('.map-legend.country').find('.food-security-source .source .date').text(date);
   }
 
   var legendFormat;
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
   else if (currentCountryIndicator.id=='#population')
     legendFormat = shortenNumFormat;
@@ -952,25 +957,26 @@ function createMapTooltip(country_code, country_name, point) {
     }
 
     //format content for display
-    var content = '<h2>' + country_name;
-    if (hasGamData(country[0])) content += ' <i class="humanitarianicons-User"></i>';
-    content += '</h2>';
+    var content = '<h2>'+ country_name +'</h2>';
 
     //COVID trend layer shows sparklines
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-      content += '<div class="stat-container covid-cases-per-capita"><div class="stat-title">Weekly Number of New Cases per 100,000 People:</div><div class="stat">' + d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) + '</div><div class="sparkline-container"></div></div>';
-      content += '<div class="stat-container condensed-stat covid-cases"><div class="stat-title">Weekly Number of New Cases:</div><div class="stat">' + numFormat(country[0]['#affected+infected+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
-      content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
-      content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
+      if (val!='No Data') {
+        content += '<div class="stat-container covid-cases-per-capita"><div class="stat-title">'+ currentIndicator.name +':</div><div class="stat">' + d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) + '</div><div class="sparkline-container"></div></div>';
+        content += '<div class="stat-container condensed-stat covid-cases"><div class="stat-title">Weekly Number of New Cases:</div><div class="stat">' + numFormat(country[0]['#affected+infected+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
+        content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
+        content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
-
-      //testing data
-      if (country[0]['#affected+tested+positive+pct']!=undefined) {
-        var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
-        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
+        //testing data
+        if (country[0]['#affected+tested+positive+pct']!=undefined) {
+          var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
+          content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
+        }
+      }
+      else {
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
     }
-
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
@@ -995,35 +1001,35 @@ function createMapTooltip(country_code, country_name, point) {
       content += '</div>';
     }
     //Access layer
-    else if (currentIndicator.id=='#severity+access+category') {
-      if (val!='No Data') {
-        var accessArray = [{label: 'Top Access Constraints into Country', value: country[0]['#access+constraints+into+desc']},
-                           {label: 'Top Access Constraints within Country', value: country[0]['#access+constraints+within+desc']},
-                           {label: 'Top Impacts', value: country[0]['#access+impact+desc']},
-                           {label: 'Mitigation Measures', value: country[0]['#access+mitigation+desc']}];
-        accessArray.forEach(function(row) {
-          if (row.label=='Mitigation Measures' && row.value!=undefined) {
-            content += '<label class="access-label">'+ row.label + ':</label> '+ row.value.toUpperCase();
-          }
-          else {
-            var arr = (row.value!=undefined) ? row.value.split('|') : [];
-            content += '<label class="access-label">'+ row.label + ':</label>';
-            content += '<ul>';
-            arr.forEach(function(item, index) {
-              if (index<3)
-                content += '<li>'+ item + '</li>';
-            });
-            content += '</ul>';
-          }
-        });
-      }
-      else {
-        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-      }
+    else if (currentIndicator.id=='#event+year+todate+num') {
+      var tableArray = [{label: 'Security incidents affecting humanitarian workers since Jan 2020', value: '#event+year+todate+num'},
+                        {label: '% of visas pending or denied', value: '#access+visas+pct'},
+                        {label: '% of travel authorizations denied', value: '#access+travel+pct'},
+                        {label: '% of CERF projects affected by access constraints', value: '#activity+cerf+project+insecurity+pct'},
+                        {label: '% of CBPF projects affected by access constraints', value: '#activity+cbpf+project+insecurity+pct'},
+                        {label: 'Status of vaccination campaigns', value: '#status+name'},
+                        {label: 'Status of schools', value: '#impact+type'}];
+      content += '<div class="table-display">';
+      tableArray.forEach(function(row) {
+        var data = country[0][row.value];
+        if (data!=undefined) {
+          var val = (row.label.indexOf('%')>-1 && !isNaN(data)) ? percentFormat(data) : data;
+          var sourceObj = getSource(row.value);
+          content += '<div class="table-row row-separator"><div>'+ row.label +':<br><span class="subtext">'+ sourceObj['#meta+source'] +'</span></div><div>'+ val +'</div></div>';
+        }
+      });
+      content += '</div>';
     }
     //IPC layer
     else if (currentIndicator.id=='#affected+food+p3plus+pct') {
-      content += 'Total % Population in IPC Phase 3+:<div class="stat">' + val + '</div>';
+      var dateSpan = '';
+      if (country[0]['#date+ipc+start']!=undefined) {
+        var startDate = new Date(country[0]['#date+ipc+start']);
+        var endDate = new Date(country[0]['#date+ipc+end']);
+        startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+        var dateSpan = '<span class="subtext">('+ startDate +'-'+ d3.utcFormat('%b %Y')(endDate) +' - '+ country[0]['#date+ipc+period'] +')</span>';
+      }
+      content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
         var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
@@ -1144,7 +1150,7 @@ function createMapTooltip(country_code, country_name, point) {
         if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row">Total Amount Combined: <span>'+ formatValue(country[0]['#value+ifi+total']) +'</span></div>';
         content += '</div>';
 
-        if (val!='0.0%') {
+        if (parseFloat(val)>0) {
           content += '<div class="table-display subtext">Breakdown:';
           var fundingArray = ['adb','afdb','eib','idb','ifc','imf','isdb','unmptf','wb'];
           fundingArray.forEach(function(fund) {
@@ -1164,22 +1170,23 @@ function createMapTooltip(country_code, country_name, point) {
     var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
     var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
     var genderCases = (hasGamData(country[0], 'cases')) 
-      ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female)'
-      : '(*Sex-disaggregation not reported)';
+      ? '<span class="subtext">(*' + percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female)</span>'
+      : '';//(*Sex-disaggregation not reported)
     var genderDeaths = (hasGamData(country[0], 'deaths')) 
-      ? '<i class="humanitarianicons-User"></i> (*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)'
-      : '(*Sex-disaggregation not reported)';
+      ? '<span class="subtext">(*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)</span>'
+      : '';
 
     content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
-    content += '<span>' + genderCases + '</span></div>';
-    content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
-    content += '<span>' + genderDeaths + '</span></div>';
+    if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') content += genderCases + '</div>';
+    content += '</div><div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
+    if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') content += genderDeaths + '</div>';
+    content += '</div>';
 
     //set content for tooltip
     tooltip.setHTML(content);
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' && val!='No Data') {
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+gender+new+per100000+weekly' && val!='No Data') {
       //weekly cases per capita sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {

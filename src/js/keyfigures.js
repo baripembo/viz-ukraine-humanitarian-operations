@@ -5,7 +5,9 @@ function setKeyFigures() {
 	secondaryPanel.find('.source-container').show();
 
 	//source
-	var indicator = (currentIndicator.id=='#affected+inneed+pct') ? '#affected+inneed' : currentIndicator.id;
+	var indicator = currentIndicator.id;
+	if (indicator=='#affected+inneed+pct') indicator = '#affected+inneed';
+	if (indicator=='#event+year+todate+num') indicator = '#access+source';
 	createSource(secondaryPanelSource, indicator);
 
 	//global stats
@@ -25,7 +27,7 @@ function setKeyFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#severity+access+category' || currentIndicator.id=='#severity+inform+type') {
+			if (currentIndicator.id=='#severity+inform+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -48,28 +50,14 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', '431M');//(d3.format('.4s'))(totalPIN)
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
-	//access security
-	else if (currentIndicator.id=='#severity+access+category') {
+	//access severity
+	else if (currentIndicator.id=='#event+year+todate+num') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		var accessLabels = ['Top Access Constraints into Country','Top Access Constraints within Country','Top Impacts','Countries with Existing Mitigation Measures'];
-		var accessTags = ['#access+constraints+into','#access+constraints+within','#access+impact','#access+mitigation'];
-		var content;
-		accessTags.forEach(function(tag, index) {
-			var descArr = (data[tag+'+desc']!=undefined) ? data[tag+'+desc'].split('|') : [];
-			var pctArr = (data[tag+'+pct']!=undefined) ? data[tag+'+pct'].split('|') : [];
-			content = '<h6>'+ accessLabels[index] +'</h6><ul class="access-figures">';
-			pctArr.forEach(function(item, index) {
-				if (tag=='#access+mitigation') {
-					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">Yes</div></li>';
-					content += '<li><div class="pct">'+ Math.round((1-item)*100)+'%' + '</div><div class="desc">No</div></li>';
-				}
-				else {
-					content += '<li><div class="pct">'+ Math.round(item*100)+'%' + '</div><div class="desc">' + descArr[index] +'</div></li>';
-				}
-			})
-			content += '</ul>';
-			$('.figures').append(content);
-		});
+		if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total security incidents affecting humanitarian workers since Jan 2020', '', data['#event+year+todate+num']);
+		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of visas pending or denied', '', percentFormat(data['#access+visas+pct']));
+		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of travel authorizations denied', '', percentFormat(data['#access+travel+pct']));
+		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF projects affected by access constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
+		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF projects affected by access constraints', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
@@ -128,6 +116,7 @@ function setKeyFigures() {
 			if (regionMatch(d['#region+name']))
 				return d['#affected+killed']; 
 		});
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
 		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
 
@@ -166,19 +155,34 @@ function setKeyFigures() {
 	    //createTrendBarChart(pctArray, '.secondary-panel .cases-trend');
 		}
 	}
+	else if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
+		//num countries
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+
+		var totalCases = d3.sum(nationalData, function(d) { 
+			if (regionMatch(d['#region+name']) && d['#affected+infected+gender+new+per100000+weekly']!=null)
+				return d['#affected+infected']; 
+		});
+		var totalDeaths = d3.sum(nationalData, function(d) { 
+			if (regionMatch(d['#region+name']) && d['#affected+infected+gender+new+per100000+weekly']!=null)
+				return d['#affected+killed']; 
+		});
+		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
+		createKeyFigure('.figures', 'Total Confirmed Deaths', 'deaths', shortenNumFormat(totalDeaths));
+	}
 	else {
 		//no global figures
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 
 	//ranking chart
-	if (currentIndicator.id!='#severity+access+category') {
+	//if (currentIndicator.id!='#event+year+todate+num') {
 		$('.ranking-container').show();
 		createRankingChart();
-	}
-	else {
-		$('.ranking-container').hide();
-	}
+	// }
+	// else {
+	// 	$('.ranking-container').hide();
+	// }
 }
 
 function createKeyFigure(target, title, className, value) {
@@ -209,7 +213,8 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	if (indicator=='#severity+access+category') indicator = '#severity+access+category+num';
+	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
+	if (indicator=='#affected+infected+gender+new+per100000+weekly') indicator = '#affected+infected+new+per100000+weekly';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
