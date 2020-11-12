@@ -948,7 +948,12 @@ function createMapTooltip(country_code, country_name, point) {
   if (lastHovered!=country_code) {
     //set formats for value
     if (isVal(val)) {
-      if (currentIndicator.id.indexOf('pct')>-1) val = (isNaN(val)) ? 'No Data' : percentFormat(val);
+      if (currentIndicator.id.indexOf('pct')>-1) {
+        if (currentIndicator.id=='#value+gdp+ifi+pct')
+          val = (isNaN(val)) ? 'No Data' : d3.format('.2%')(val);
+        else
+          val = (isNaN(val)) ? 'No Data' : percentFormat(val);
+      }
       if (currentIndicator.id=='#severity+economic+num') val = shortenNumFormat(val);
       if (currentIndicator.id.indexOf('funding+total')>-1) val = formatValue(val);
     }
@@ -959,10 +964,11 @@ function createMapTooltip(country_code, country_name, point) {
     //format content for display
     var content = '<h2>'+ country_name +'</h2>';
 
-    //COVID trend layer shows sparklines
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
+    //COVID layer
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
       if (val!='No Data') {
         content += '<div class="stat-container covid-cases-per-capita"><div class="stat-title">'+ currentIndicator.name +':</div><div class="stat">' + d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) + '</div><div class="sparkline-container"></div></div>';
+
         content += '<div class="stat-container condensed-stat covid-cases"><div class="stat-title">Weekly Number of New Cases:</div><div class="stat">' + numFormat(country[0]['#affected+infected+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
         content += '<div class="stat-container condensed-stat covid-deaths"><div class="stat-title">Weekly Number of New Deaths:</div><div class="stat">' + numFormat(country[0]['#affected+killed+new+weekly']) + '</div><div class="sparkline-container"></div></div>';
         content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
@@ -972,6 +978,34 @@ function createMapTooltip(country_code, country_name, point) {
           var testingVal = percentFormat(country[0]['#affected+tested+positive+pct']);
           content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div><div class="sparkline-container"></div></div>';
         }
+      }
+      else {
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+    }
+    //COVID by gender layer
+    else if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
+      if (val!='No Data') {
+        content += '<div class="table-display">';
+        content += '<div class="table-row"><div>'+ currentIndicator.name +':</div><div>'+ d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) +'</div></div>';
+        content += '</div>';
+
+        //covid cases and deaths
+        var numCases = (isVal(country[0]['#affected+infected'])) ? country[0]['#affected+infected'] : 'NA';
+        var numDeaths = (isVal(country[0]['#affected+killed'])) ? country[0]['#affected+killed'] : 'NA';
+        var casesMale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+infected+m+pct']) : 'NA';
+        var casesFemale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+f+infected+pct']) : 'NA';
+        var deathsMale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+killed+m+pct']) : 'NA';
+        var deathsFemale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+f+killed+pct']) : 'NA';
+        
+        content += '<div class="table-display">';
+        content += '<br><div class="table-row"><div>Total COVID-19 Cases:</div><div>' + numFormat(numCases) + '</div></div>';
+        content += '<div class="table-row"><div>Female</div><div>'+ casesFemale + '</div></div>';
+        content += '<div class="table-row"><div>Male</div><div>'+ casesMale + '</div></div>';
+        content += '<br><div class="table-row"><div>Total COVID-19 Deaths:</div><div>' + numFormat(numDeaths) + '</div></div>';
+        content += '<div class="table-row"><div>Female</div><div>'+ deathsFemale + '</div></div>';
+        content += '<div class="table-row"><div>Male</div><div>'+ deathsMale + '</div></div>';
+        content += '</div>';
       }
       else {
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
@@ -1007,7 +1041,7 @@ function createMapTooltip(country_code, country_name, point) {
                         {label: '% of travel authorizations denied', value: '#access+travel+pct'},
                         {label: '% of CERF projects affected by access constraints', value: '#activity+cerf+project+insecurity+pct'},
                         {label: '% of CBPF projects affected by access constraints', value: '#activity+cbpf+project+insecurity+pct'},
-                        {label: 'Status of vaccination campaigns', value: '#status+name'},
+                        {label: 'Status of Polio vaccination', value: '#status+name'},
                         {label: 'Status of schools', value: '#impact+type'}];
       content += '<div class="table-display">';
       tableArray.forEach(function(row) {
@@ -1167,20 +1201,12 @@ function createMapTooltip(country_code, country_name, point) {
     }
 
     //covid cases and deaths
-    var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
-    var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
-    var genderCases = (hasGamData(country[0], 'cases')) 
-      ? '<span class="subtext">(*' + percentFormat(country[0]['#affected+infected+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+infected+pct']) + ' Female)</span>'
-      : '';//(*Sex-disaggregation not reported)
-    var genderDeaths = (hasGamData(country[0], 'deaths')) 
-      ? '<span class="subtext">(*' + percentFormat(country[0]['#affected+killed+m+pct']) + ' Male, ' + percentFormat(country[0]['#affected+f+killed+pct']) + ' Female)</span>'
-      : '';
-
-    content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '<br/>';
-    if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') content += genderCases + '</div>';
-    content += '</div><div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '<br/>';
-    if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') content += genderDeaths + '</div>';
-    content += '</div>';
+    if (currentIndicator.id!='#affected+infected+gender+new+per100000+weekly') {
+      var numCases = (isVal(country[0]['#affected+infected'])) ? numFormat(country[0]['#affected+infected']) : 'NA';
+      var numDeaths = (isVal(country[0]['#affected+killed'])) ? numFormat(country[0]['#affected+killed']) : 'NA';
+      content += '<div class="cases-total">Total COVID-19 Cases: ' + numCases + '</div>';
+      content += '<div class="deaths-total">Total COVID-19 Deaths: ' + numDeaths + '</div>';
+    }
 
     //set content for tooltip
     tooltip.setHTML(content);

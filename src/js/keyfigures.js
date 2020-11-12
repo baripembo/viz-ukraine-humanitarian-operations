@@ -157,7 +157,7 @@ function setKeyFigures() {
 	}
 	else if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
 		//num countries
-		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		createKeyFigure('.figures', 'Number of Countries with sex-disaggregated data', '', totalCountries);
 
 		var totalCases = d3.sum(nationalData, function(d) { 
 			if (regionMatch(d['#region+name']) && d['#affected+infected+gender+new+per100000+weekly']!=null)
@@ -176,13 +176,8 @@ function setKeyFigures() {
 	}
 
 	//ranking chart
-	//if (currentIndicator.id!='#event+year+todate+num') {
-		$('.ranking-container').show();
-		createRankingChart();
-	// }
-	// else {
-	// 	$('.ranking-container').hide();
-	// }
+	$('.ranking-container').show();
+	createRankingChart();
 }
 
 function createKeyFigure(target, title, className, value) {

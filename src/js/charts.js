@@ -442,7 +442,7 @@ function createRankingChart() {
     $('.ranking-select').val('ascending');
   }
   if (indicator.indexOf('pct')>-1 || indicator.indexOf('ratio')>-1) {
-    valueFormat = percentFormat;
+    valueFormat = (currentIndicator.id=='#value+gdp+ifi+pct') ? d3.format('.2%') : percentFormat;
   }
   if (indicator=='#severity+inform+num') {
     valueFormat = d3.format(',.2r');;
