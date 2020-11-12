@@ -1104,8 +1104,8 @@ function createMapTooltip(country_code, country_name, point) {
         planArray.forEach(function(plan, index) {
           content +=  plan +' Funding Level:<div class="stat">' + percentFormat(planPctArray[index]) + '</div>';
           content += '<div class="table-display">';
-          content += '<div class="table-row"><div>Requirement:</div><div>'+ formatValue(planRequiredArray[index]) +'</div>';
-          content += '<div class="table-row"><div>Total:</div><div>'+ formatValue(planTotalArray[index]) +'</div>';
+          content += '<div class="table-row"><div>Requirement:</div><div>'+ formatValue(planRequiredArray[index]) +'</div></div>';
+          content += '<div class="table-row"><div>Total:</div><div>'+ formatValue(planTotalArray[index]) +'</div></div>';
           content += '</div>';
           if (index==0 && planArray.length>1) content += '<br/>';
         });
