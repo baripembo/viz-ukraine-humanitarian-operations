@@ -53,11 +53,11 @@ function setKeyFigures() {
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total security incidents affecting humanitarian workers since Jan 2020', '', data['#event+year+todate+num']);
-		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of visas pending or denied', '', percentFormat(data['#access+visas+pct']));
-		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of travel authorizations denied', '', percentFormat(data['#access+travel+pct']));
-		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF projects affected by access constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
-		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF projects affected by access constraints', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
+		if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total Violent Security Incidents Against Humanitarian Workers since Jan 2020', '', data['#event+year+todate+num']);
+		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of Visas Pending or Denied', '', percentFormat(data['#access+visas+pct']));
+		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of Travel Authorizations Denied', '', percentFormat(data['#access+travel+pct']));
+		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
+		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
@@ -155,16 +155,16 @@ function setKeyFigures() {
 	    //createTrendBarChart(pctArray, '.secondary-panel .cases-trend');
 		}
 	}
-	else if (currentIndicator.id=='#affected+infected+gender+new+per100000+weekly') {
+	else if (currentIndicator.id=='#affected+infected+sex+new+avg+per100000') {
 		//num countries
-		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		createKeyFigure('.figures', 'Number of Countries with Sex-disaggregated data', '', totalCountries);
 
 		var totalCases = d3.sum(nationalData, function(d) { 
-			if (regionMatch(d['#region+name']) && d['#affected+infected+gender+new+per100000+weekly']!=null)
+			if (regionMatch(d['#region+name']) && d['#affected+infected+sex+new+avg+per100000']!=null)
 				return d['#affected+infected']; 
 		});
 		var totalDeaths = d3.sum(nationalData, function(d) { 
-			if (regionMatch(d['#region+name']) && d['#affected+infected+gender+new+per100000+weekly']!=null)
+			if (regionMatch(d['#region+name']) && d['#affected+infected+sex+new+avg+per100000']!=null)
 				return d['#affected+killed']; 
 		});
 		createKeyFigure('.figures', 'Total Confirmed Cases', 'cases', shortenNumFormat(totalCases));
@@ -176,13 +176,8 @@ function setKeyFigures() {
 	}
 
 	//ranking chart
-	//if (currentIndicator.id!='#event+year+todate+num') {
-		$('.ranking-container').show();
-		createRankingChart();
-	// }
-	// else {
-	// 	$('.ranking-container').hide();
-	// }
+	$('.ranking-container').show();
+	createRankingChart();
 }
 
 function createKeyFigure(target, title, className, value) {
@@ -214,7 +209,6 @@ function updateSource(div, indicator) {
 
 function getSource(indicator) {
 	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
-	if (indicator=='#affected+infected+gender+new+per100000+weekly') indicator = '#affected+infected+m+pct';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
