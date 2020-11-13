@@ -102,7 +102,7 @@ function hasGamData(data, indicator) {
 }
 
 function getGamText(data, indicator) {
-  var gmText = '**Gender-Age Marker: ';
+  var gmText = '**Gender-Age Marker:<br>';
   for (var i=0;i<5;i++) {
     var pct = (data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd'] / data['#value+'+ indicator + '+covid+funding+total+usd']) : '0%';
     gmText += '['+i+']: ' + pct;
@@ -114,7 +114,7 @@ function getGamText(data, indicator) {
 }
 
 function getBeneficiaryText(data) {
-  var beneficiaryText = 'Beneficiary breakdown: ';
+  var beneficiaryText = 'Beneficiary breakdown:<br>';
   beneficiaryText += (data['#affected+cbpf+covid+funding+men']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+men'] / data['#affected+cbpf+covid+funding+total']) + ' Male, ' : '0% Male, ';
   beneficiaryText += (data['#affected+cbpf+covid+funding+women']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+women'] / data['#affected+cbpf+covid+funding+total']) + ' Female, ' : '0% Female, ';
   beneficiaryText += (data['#affected+boys+cbpf+covid+funding']!=undefined) ? percentFormat(data['#affected+boys+cbpf+covid+funding'] / data['#affected+cbpf+covid+funding+total']) + ' Boys, ' : '0% Boys, ';
