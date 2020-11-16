@@ -1037,7 +1037,7 @@ function createMapTooltip(country_code, country_name, point) {
     }
     //Access layer
     else if (currentIndicator.id=='#event+year+todate+num') {
-      var tableArray = [{label: 'Violent Security Incidents Against Humanitarian Workers since Jan 2020', value: '#event+year+todate+num'},
+      var tableArray = [{label: 'Violent Security Incidents Against Aid Workers since Jan 2020', value: '#event+year+todate+num'},
                         {label: '% of Visas Pending or Denied', value: '#access+visas+pct'},
                         {label: '% of Travel Authorizations Denied', value: '#access+travel+pct'},
                         {label: '% of CERF Projects Affected by Access Constraints', value: '#activity+cerf+project+insecurity+pct'},
@@ -1064,7 +1064,7 @@ function createMapTooltip(country_code, country_name, point) {
       }
       content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of Total Country Population Analysed)</span>';
+        content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of total country population analysed)</span>';
         var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
                           {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
                           {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];

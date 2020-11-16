@@ -53,7 +53,7 @@ function setKeyFigures() {
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total Violent Security Incidents Against Humanitarian Workers since Jan 2020', '', data['#event+year+todate+num']);
+		if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total Violent Security Incidents Against Aid Workers since Jan 2020', '', data['#event+year+todate+num']);
 		if (data['#access+visas+pct']!=undefined) createKeyFigure('.figures', 'Average of Visas Pending or Denied', '', percentFormat(data['#access+visas+pct']));
 		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of Travel Authorizations Denied', '', percentFormat(data['#access+travel+pct']));
 		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
