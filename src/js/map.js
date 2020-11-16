@@ -1015,7 +1015,6 @@ function createMapTooltip(country_code, country_name, point) {
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
       if (val!='No Data') {
-        if (parseFloat(val)>100) val = '100.0%';
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
       }
 
@@ -1050,7 +1049,7 @@ function createMapTooltip(country_code, country_name, point) {
         var data = (country[0][row.value]==undefined) ? 'N/A' : country[0][row.value];
         var val = (row.label.indexOf('%')>-1 && !isNaN(data)) ? percentFormat(data) : data;
         var sourceObj = getSource(row.value);
-        content += '<div class="table-row row-separator"><div>'+ row.label +':<br><span class="subtext">'+ sourceObj['#meta+source'] +'</span></div><div>'+ val +'</div></div>';
+        content += '<div class="table-row row-separator"><div>'+ row.label +':<div class="small">'+ sourceObj['#meta+source'] +'</div></div><div class="val">'+ val +'</div></div>';
       });
       content += '</div>';
     }

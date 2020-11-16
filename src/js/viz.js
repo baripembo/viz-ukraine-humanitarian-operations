@@ -25,7 +25,7 @@ var currentCountry = {};
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
   //console.log(prod);
-  
+
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2hnbWs5NzkxMXh2MnNvcmF6dXIxMWE0In0.0GfmJoEJyWFQ5UzNxl2WgA';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
@@ -108,6 +108,7 @@ $( document ).ready(function() {
 
         //calculate and inject PIN percentage
         item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
+        if (item['#affected+inneed+pct']>1) item['#affected+inneed+pct'] = 1; //limit value to 100%
 
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
@@ -174,7 +175,7 @@ $( document ).ready(function() {
       });
 
       //console.log(nationalData)
-      //console.log(subnationalData)
+      //console.log(covidTrendData)
 
       dataLoaded = true;
       if (mapLoaded==true) displayMap();
