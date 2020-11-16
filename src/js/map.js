@@ -594,7 +594,9 @@ function setGlobalLegend(scale) {
     createFootnote('.map-legend.global', 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.', '#value+food+num+ratio');
     //oxford footnote
     createFootnote('.map-legend.global', 'Note: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)', '#severity+stringency+num');
-    
+    //access footnote
+    createFootnote('.map-legend.global', '1. Access data is collected by OCHA and is based on information provided by humanitarian partners. 2. CERF and CBPF access data is collected by OCHA at country level and includes all projects affected by security incidents, access constraints or other bureaucratic impediments. 3. In order to ensure coherence and consistency in the analysis of security incidents, a single source of information has been used (AWSD). OCHA acknowledges that other sources of information are available at country level to complement the security analysis.', '#event+year+todate+num');
+
 
     //cases
     $('.map-legend.global').append('<h4>Number of COVID-19 Cases</h4>');
@@ -1216,7 +1218,7 @@ function createMapTooltip(country_code, country_name, point) {
     tooltip.setHTML(content);
 
     //COVID cases layer charts -- inject this after divs are created in tooltip
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+sex+new+avg+per100000' && val!='No Data') {
+    if ((currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+sex+new+avg+per100000') && val!='No Data' && val>0) {
       //weekly cases per capita sparkline
       var sparklineArray = [];
       covidTrendData[country_code].forEach(function(d) {

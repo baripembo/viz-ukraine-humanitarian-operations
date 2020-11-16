@@ -118,6 +118,11 @@ $( document ).ready(function() {
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
 
+        //hardcode DPRK covid trend data
+        if (item['#country+code']=='PRK') {
+          item['#affected+infected+new+per100000+weekly'] = 0;
+        }
+
         //create cases by gender indicator
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
         
