@@ -60,11 +60,6 @@ $( document ).ready(function() {
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
 
-    //set daily download date
-    var today = new Date();
-    $('.download-link .today-date').text(dateFormat(today));
-
-
     getData();
     initMap();
   }
@@ -117,11 +112,6 @@ $( document ).ready(function() {
         item['#affected+infected+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
         item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
-
-        //hardcode DPRK covid trend data
-        if (item['#country+code']=='PRK') {
-          item['#affected+infected+new+per100000+weekly'] = 0;
-        }
 
         //create cases by gender indicator
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
@@ -228,6 +218,28 @@ $( document ).ready(function() {
         $('#chart-view').hide();
       }
       mpTrack($(this).data('id'), currentIndicator.name);
+    });
+
+    //set daily download date
+    var today = new Date();
+    $('.download-link .today-date').text(dateFormat(today));
+    $('.download-daily').on('click', function() {  
+      mixpanel.track('link click', {
+        'embedded in': window.location.href,
+        'destination url': $(this).attr('href'),
+        'link type': 'download report',
+        'page title': document.title
+      });
+    });
+
+    //track monthly pdf download
+    $('.download-monthly').on('click', function() {  
+      mixpanel.track('link click', {
+        'embedded in': window.location.href,
+        'destination url': $(this).attr('href'),
+        'link type': 'download report',
+        'page title': document.title
+      });
     });
 
     //load timeseries for global view 
