@@ -1057,6 +1057,7 @@ function createMapTooltip(country_code, country_name, point) {
     }
     //IPC layer
     else if (currentIndicator.id=='#affected+food+p3plus+pct') {
+      console.log(country[0]['#affected+food+analysed+pct'])
       var dateSpan = '';
       if (country[0]['#date+ipc+start']!=undefined) {
         var startDate = new Date(country[0]['#date+ipc+start']);
@@ -1066,7 +1067,8 @@ function createMapTooltip(country_code, country_name, point) {
       }
       content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of total country population analysed)</span>';
+        var percentAnalysed = (country[0]['#affected+food+analysed+pct']==undefined) ? 'N/A' : percentFormat(country[0]['#affected+food+analysed+pct']);
+        content += '<span>('+ percentAnalysed +' of total country population analysed)</span>';
         var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
                           {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
                           {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
