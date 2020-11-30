@@ -1057,7 +1057,6 @@ function createMapTooltip(country_code, country_name, point) {
     }
     //IPC layer
     else if (currentIndicator.id=='#affected+food+p3plus+pct') {
-      console.log(country[0]['#affected+food+analysed+pct'])
       var dateSpan = '';
       if (country[0]['#date+ipc+start']!=undefined) {
         var startDate = new Date(country[0]['#date+ipc+start']);
