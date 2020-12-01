@@ -1066,8 +1066,7 @@ function createMapTooltip(country_code, country_name, point) {
       }
       content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        var percentAnalysed = (country[0]['#affected+food+analysed+pct']==undefined) ? 'N/A' : percentFormat(country[0]['#affected+food+analysed+pct']);
-        content += '<span>('+ percentAnalysed +' of total country population analysed)</span>';
+        if (country[0]['#affected+food+analysed+pct']!=undefined) content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of total country population analysed)</span>';
         var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
                           {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
                           {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
