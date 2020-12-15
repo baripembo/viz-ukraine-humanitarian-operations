@@ -1192,7 +1192,7 @@ function createMapTooltip(country_code, country_name, point) {
 
         if (parseFloat(val)>0) {
           content += '<div class="table-display subtext">Breakdown:';
-          var fundingArray = ['adb','afdb','eib','idb','ifc','imf','isdb','unmptf','wb'];
+          var fundingArray = ['adb','afdb','eib', 'ebrd', 'idb','ifc','imf','isdb','unmptf','wb'];
           fundingArray.forEach(function(fund) {
             var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
             if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
