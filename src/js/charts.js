@@ -202,12 +202,16 @@ function createTimeSeries(array, div) {
 				type: 'timeseries',
 				tick: {
           outer: false,
-          count: 5,
           values: dateArray,
-          format: function(d) {
+          format: function(d, i) {
+            console.log(i)
             var date = dateFormat(d);
             if (!isGlobal) {
-              //display every other month for country view
+              //display every third month for country view
+              date = (d.getMonth()%3==0) ? date : '';
+            }
+            else {
+              //display every other month for global view
               date = (d.getMonth()%2==0) ? date : '';
             }
             return date;
