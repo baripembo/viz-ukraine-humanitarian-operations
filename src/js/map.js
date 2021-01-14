@@ -1101,7 +1101,7 @@ function createMapTooltip(country_code, country_name, point) {
     //INFORM layer
     else if (currentIndicator.id=='#severity+inform+type') {
       var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
-      content += 'INFORM COVID-19 Risk Index:<div class="stat">' + numVal + '</div>';
+      content += 'INFORM Severity Index:<div class="stat">' + numVal + '</div>';
       if (numVal!='No Data') {
         var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
                           {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},

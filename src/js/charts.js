@@ -204,7 +204,6 @@ function createTimeSeries(array, div) {
           outer: false,
           values: dateArray,
           format: function(d, i) {
-            console.log(i)
             var date = dateFormat(d);
             if (!isGlobal) {
               //display every third month for country view
