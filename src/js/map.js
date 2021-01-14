@@ -588,6 +588,8 @@ function setGlobalLegend(scale) {
 
     //covid positive testing footnote
     createFootnote('.map-legend.global', 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the pandemic may be under control in a country.', '#affected+infected+new+per100000+weekly');
+    //pin footnote
+    createFootnote('.map-legend.global', 'Population percentages greater than 100% include refugees, migrants, and/or asylum seekers.', '#affected+inneed+pct');
     //vacc footnote
     createFootnote('.map-legend.global', 'Methodology: Information about interrupted vaccination campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total vaccination campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.', '#vaccination+num+ratio');
     //food prices footnote
@@ -627,7 +629,7 @@ function setGlobalLegend(scale) {
     createFootnote('.map-legend.global', '*Distribution of COVID19 cases and deaths by gender are taken from Global Health 50/50 COVID-19 <a href="https://data.humdata.org/organization/global-health-50-50" target="_blank" rel="noopener">Sex-disaggregated Data Tracker</a>. Figures refer to the last date where sex-disaggregated data was available and in some cases the gender distribution may only refer to a portion of total cases or deaths. These proportions are intended to be used to understand the breakdown of cases and deaths by gender and not to monitor overall numbers per country. Definitions of COVID-19 cases and deaths recorded may vary by country.', '#affected+infected+sex+new+avg+per100000');
 
     //GAM footnote
-    var gamText = '**Gender-Age Marker: 0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups';
+    var gamText = '**Gender-Age Marker:<br>0- Does not systematically link programming actions<br>1- Unlikely to contribute to gender equality (no gender equality measure and no age consideration)<br>2- Unlikely to contribute to gender equality (no gender equality measure but includes age consideration)<br>3- Likely to contribute to gender equality, but without attention to age groups<br>4- Likely to contribute to gender equality, including across age groups';
     createFootnote('.map-legend.global', gamText, '#value+cerf+covid+funding+total+usd');
     createFootnote('.map-legend.global', gamText, '#value+cbpf+covid+funding+total+usd');
 
@@ -1003,11 +1005,9 @@ function createMapTooltip(country_code, country_name, point) {
         content += '<br><div class="table-row"><div>Total COVID-19 Cases:</div><div>' + numFormat(numCases) + '</div></div>';
         content += '<div class="table-row"><div>Female</div><div>'+ casesFemale + '</div></div>';
         content += '<div class="table-row"><div>Male</div><div>'+ casesMale + '</div></div>';
-        content += '<div class="table-row"><div>Intersex</div><div>No Data</div></div>';
         content += '<br><div class="table-row"><div>Total COVID-19 Deaths:</div><div>' + numFormat(numDeaths) + '</div></div>';
         content += '<div class="table-row"><div>Female</div><div>'+ deathsFemale + '</div></div>';
         content += '<div class="table-row"><div>Male</div><div>'+ deathsMale + '</div></div>';
-        content += '<div class="table-row"><div>Intersex</div><div>No Data</div></div>';
         content += '</div>';
       // }
       // else {
@@ -1143,7 +1143,7 @@ function createMapTooltip(country_code, country_name, point) {
             content += '<div class="table-row"><div>Requirement:</div><div>'+ formatValue(planRequiredArray[index]) +'</div></div>';
             content += '<div class="table-row"><div>Total:</div><div>'+ formatValue(planTotalArray[index]) +'</div></div>';
             content += '</div>';
-            if (index==0 && planArray.length>1) content += '<br/>';
+            if (planArray.length>1) content += '<br/>';
           });
         }
         else {
