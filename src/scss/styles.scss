@@ -103,7 +103,8 @@ h6 {
 		display: flex;
 		justify-content: space-between;
 		.val {
-			padding-left: 5px;
+			min-width: 58px;
+			padding-left: 7px;
 			text-align: right;
 		}
 		&.row-separator {

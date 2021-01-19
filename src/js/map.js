@@ -978,6 +978,8 @@ function createMapTooltip(country_code, country_name, point) {
         content += '<div class="stat-container condensed-stat covid-pct"><div class="stat-title">Weekly Trend (new cases past week / prior week):</div><div class="stat">' + percentFormat(country[0]['#covid+trend+pct']) + '</div><div class="sparkline-container"></div></div>';
 
         //testing data
+        var testingValPerCapita = (country[0]['#affected+tested+avg+per1000']==undefined) ? 'No Data' : parseFloat(country[0]['#affected+tested+avg+per1000']).toFixed(2);
+        content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Daily Tests Per Thousand (7-day avg):</div><div class="stat">'+ testingValPerCapita +'</div></div>';
         var testingVal = (country[0]['#affected+tested+positive+pct']==undefined) ? 'No Data' : percentFormat(country[0]['#affected+tested+positive+pct']);
         content += '<div class="stat-container condensed-stat covid-test-per-capita"><div class="stat-title">Positive Test Rate (rolling 7-day avg):</div><div class="stat">'+ testingVal +'</div></div>';
 
@@ -1048,7 +1050,7 @@ function createMapTooltip(country_code, country_name, point) {
                         {label: 'Status of Schools', value: '#impact+type'}];
       content += '<div class="table-display">';
       tableArray.forEach(function(row) {
-        var data = (country[0][row.value]==undefined) ? 'N/A' : country[0][row.value];
+        var data = (country[0][row.value]==undefined || country[0][row.value]=='N/A') ? 'No Data' : country[0][row.value];
         var val = (row.label.indexOf('%')>-1 && !isNaN(data)) ? percentFormat(data) : data;
         var sourceObj = getSource(row.value);
         content += '<div class="table-row row-separator"><div>'+ row.label +':<div class="small">'+ sourceObj['#meta+source'] +'</div></div><div class="val">'+ val +'</div></div>';
@@ -1066,7 +1068,7 @@ function createMapTooltip(country_code, country_name, point) {
       }
       content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
-        if (country[0]['#affected+food+analysed+pct']!=undefined) content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' of total country population analysed)</span>';
+        if (country[0]['#affected+food+analysed+pct']!=undefined) content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' or '+ shortenNumFormat(country[0]['#affected+food+analysed+num']) +' of total country population analysed)</span>';
         var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
                           {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
                           {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
@@ -1124,7 +1126,7 @@ function createMapTooltip(country_code, country_name, point) {
         tableArray.forEach(function(row) {
           if (isVal(row.value)) {
             var value = (row.label=='HRP Funding Level for COVID-19 GHRP') ? percentFormat(row.value) : formatValue(row.value);
-            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ value +'</div></div>';
+            content += '<div class="table-row"><div>'+ row.label +':</div><div class="val">'+ value +'</div></div>';
           }
         });
         content += '</div>';

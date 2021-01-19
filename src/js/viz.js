@@ -131,6 +131,9 @@ $( document ).ready(function() {
         if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
           item['#affected+food+p5+pct'] = (item['#affected+ch+food+p5+pct']) ? item['#affected+ch+food+p5+pct'] : item['#affected+food+ipc+p5+pct'];
         }
+        if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
+          item['#affected+food+analysed+num'] = (item['#affected+ch+food+analysed+num']) ? item['#affected+ch+food+analysed+num'] : item['#affected+food+ipc+analysed+num'];
+        }
       });
 
       //group national data by country -- drives country panel    
