@@ -1079,6 +1079,11 @@ function createMapTooltip(country_code, country_name, point) {
         content += '</div>';
       }
     }
+    //SAM layer
+    else if (currentIndicator.id=='#affected+children+sam') {
+      val = (val!='No Data') ? numFormat(val) : val;
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+    }
     //Vaccination campaigns layer
     else if (currentIndicator.id=='#vaccination+num+ratio') {
       var vaccData = [];
