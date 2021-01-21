@@ -540,6 +540,9 @@ function getGlobalLegendScale() {
   else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
+  // else if (currentIndicator.id=='#affected+children+sam') {
+  //   scale = d3.scaleQuantize().domain([1, max]).range(colorRange);
+  // }
   else if (currentIndicator.id.indexOf('funding')>-1) {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
