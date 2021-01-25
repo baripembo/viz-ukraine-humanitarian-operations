@@ -540,9 +540,6 @@ function getGlobalLegendScale() {
   else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
-  // else if (currentIndicator.id=='#affected+children+sam') {
-  //   scale = d3.scaleQuantize().domain([1, max]).range(colorRange);
-  // }
   else if (currentIndicator.id.indexOf('funding')>-1) {
     var reverseRange = colorRange.slice().reverse();
     scale = d3.scaleQuantize().domain([0, max]).range(reverseRange);
@@ -864,6 +861,7 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
+  createSource($('.map-legend.country .idps-source'), '#affected+idps+ind');
   createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
@@ -928,7 +926,7 @@ function updateCountryLegend(scale) {
   var legendFormat;
   if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
-  else if (currentCountryIndicator.id=='#population')
+  else if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+idps+ind')
     legendFormat = shortenNumFormat;
   else
     legendFormat = d3.format('.0f');
@@ -1313,6 +1311,7 @@ function createCountryMapTooltip(adm1_name) {
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
+      if (currentCountryIndicator.id=='#affected+idps+ind') val = numFormat(val);
     }
     else {
       val = 'No Data';
