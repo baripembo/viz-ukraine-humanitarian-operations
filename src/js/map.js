@@ -136,6 +136,9 @@ function displayMap() {
     }
   });
 
+  //deeplink to country if parameter exists
+  if (viewInitialized==true) deepLinkCountryView();
+
   //init global and country layers
   initGlobalLayer();
   initCountryLayer();
@@ -146,9 +149,6 @@ function displayMap() {
     closeOnClick: false,
     className: 'map-tooltip'
   });
-
-  //deeplink to country if parameter exists
-  if (viewInitialized==true) deepLinkCountryView();
 }
 
 function deepLinkCountryView() {
@@ -757,7 +757,7 @@ function initCountryLayer() {
 
 function updateCountryLayer() {
   colorNoData = '#FFF';
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') checkIPCData();
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') currentCountryIndicator.id = getIPCDataSource();
   $('.map-legend.country .legend-container').removeClass('no-data');
 
   //max
@@ -831,23 +831,14 @@ function updateCountryLayer() {
     $('.map-legend.country .legend-container').addClass('no-data');
 }
 
-function checkIPCData() {
-  //swap food security data source if empty
-  var index = 0;
-  var isEmpty = false;
-  subnationalData.forEach(function(d) {
-    if (d['#country+code']==currentCountry.code) {
-      var val = +d[currentCountryIndicator.id];
-      if (index==0 && (!isVal(val) || isNaN(val))) {
-        isEmpty = true;
-      }
-      if (index==1 && isEmpty && isVal(val) && !isNaN(val)) {
-        isEmpty = false;
-      }
-      index++;
+function getIPCDataSource() {
+  var source = '';
+  subnationalDataByCountry.forEach(function(d) {
+    if (d.key==currentCountry.code) {
+      source = d['#ipc+source'];
     }
   });
-  if (isEmpty) currentCountryIndicator.id = '#affected+ch+food+p3plus+pct';
+  return source;
 }
 
 function getCountryIndicatorMax() {
@@ -862,7 +853,7 @@ function getCountryIndicatorMax() {
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
   createSource($('.map-legend.country .idps-source'), '#affected+idps+ind');
-  createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
+  createSource($('.map-legend.country .food-security-source'), getIPCDataSource());
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .immunization-source'), '#population+ipv1+pct+vaccinated');
@@ -903,10 +894,8 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  //if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') {
-    //$('.map-legend.country .food-security-source').empty();
-    //createSource($('.map-legend.country .food-security-source'), '#affected+food+ipc+p3plus+pct');
-  //}
+  //update IPC source based on current country
+  updateSource($('.map-legend.country .food-security-source'), getIPCDataSource());
   
   //special case for IPC source date in legend
   var data = dataByCountry[currentCountry.code][0];
