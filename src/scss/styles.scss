@@ -347,22 +347,6 @@ a:visited {
 		padding: 0 20px 6px;
 		text-transform: uppercase;
 	}
-	.download-link {
-		padding: 0 20px;
-		text-transform: uppercase;
-		a {
-			display: flex;
-			line-height: 16px;    
-			margin-bottom: 15px;
-			text-decoration: none;
-			width: 100%;
-		}
-		i {
-			font-size: 16px;
-			margin-left: auto;
-			padding-top: 3px;
-		}
-	}
 	.global-menu {
 		display: block;
 		margin-top: 10px;
@@ -372,6 +356,24 @@ a:visited {
 			padding: 15px 0 10px 20px;
 			text-transform: uppercase;
 		}
+	}
+}
+
+
+.download-link {
+	padding: 0 20px;
+	text-transform: uppercase;
+	a {
+		display: flex;
+		line-height: 16px;    
+		margin-bottom: 15px;
+		text-decoration: none;
+		width: 100%;
+	}
+	i {
+		font-size: 16px;
+		margin-left: auto;
+		padding-top: 3px;
 	}
 }
 
@@ -962,7 +964,7 @@ table {
 		background-color: #FFF;
 		padding: 30px 0 15px;
 		.panel-title {
-   		align-items: center;
+   			align-items: center;
 			display: flex;
 			margin-bottom: 20px;
 		}
@@ -970,6 +972,13 @@ table {
 			height: 35px;
 			margin-right: 10px;
 			width: 35px;
+		}
+		.download-link {
+			padding: 0;
+		}
+		h4 {
+			padding: 0 0 6px;
+    		text-transform: uppercase;
 		}
 	}
 	.panel-content {
