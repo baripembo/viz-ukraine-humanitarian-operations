@@ -369,7 +369,7 @@ function handleGlobalEvents(layer) {
       features.forEach(function(feature) {
         if (feature.sourceLayer==adm0SourceLayer)
           target = feature;
-      });
+      });      
       if (target!=undefined) {
         tooltip.setLngLat(e.lngLat);
         if (target.properties.Terr_Name=='CuraÃ§ao') target.properties.Terr_Name = 'Curaçao';
