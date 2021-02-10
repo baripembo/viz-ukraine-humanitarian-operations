@@ -139,7 +139,7 @@ function createFootnote(target, text, indicator) {
 
 //regional id/name list
 const regionalList = [
-  {id: 'H25', name: 'Humanitarian Response Plan Countries'},
+  {id: 'HRPs', name: 'Humanitarian Response Plan Countries'},
   {id: 'ROAP', name: 'Asia and the Pacific'},
   {id: 'ROCCA', name: 'Eastern Europe'},
   {id: 'ROLAC', name: 'Latin America and the Caribbean'},

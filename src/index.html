@@ -48,18 +48,19 @@
         <div class='content-left'>
           <div class='menu'>
             <div class='org-logo'>
+              <a href='https://www.unocha.org' target='_blank' rel='noopener'>
+                <img width='100' src='assets/logo-ocha-blue.png' alt='OCHA logo'>
+              </a>
               <a href='https://data.humdata.org' target='_blank' rel='noopener'>
                 <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
-              </a>
-               <a href='https://www.unocha.org' target='_blank' rel='noopener'>
-                <img width='100' src='assets/logo-ocha-blue.png' alt='OCHA logo'>
               </a>
             </div>
 
             <h1>COVID-19 Data Explorer:<br>Global Humanitarian Operations</h1>
             <h4>Download:</h4>
             <div class='download-link'>
-              <a href='https://tools.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fsimonbjohnson.github.io%2Fhdx-covid-1pager%2F' target='_blank' rel='noopener'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
+              <a href='https://tools.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
+              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br>(pdf)</span><i class='humanitarianicons-Download'></i></a>
             </div>
 
             <div class='global-menu'>
@@ -74,16 +75,19 @@
                   <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
                 </li>
                 <li data-id='#affected+infected+sex+new+avg+per100000' data-legend='Weekly Number of New Cases per 100,000 People'>
-                  <div><i class='humanitarianicons-Covid-19'></i>Covid-19 Cases and Deaths (Disaggregated by Sex)</div>
+                  <div><i class='humanitarianicons-Covid-19'></i>Covid-19 Cases and Deaths (Sex Disaggregated)</div>
                 </li>
-                <li data-id='#affected+inneed+pct' data-legend='People in Need (% of total population)'>
-                  <div><i class='humanitarianicons-People-in-need'></i>People in Need 2020</div>
+                <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)'>
+                  <div><i class='humanitarianicons-People-in-need'></i>People in Need 2021</div>
                 </li>
-                <li data-id='#event+year+todate+num' data-legend='Security incidents affecting humanitarian workers since Jan 2020'>
-                  <div><i class='humanitarianicons-Humanitarian-access'></i>Access Severity</div>
+                <li data-id='#event+year+todate+num' data-legend='Violent Security Incidents Against Aid Workers since Jan 2020'>
+                  <div><i class='humanitarianicons-Humanitarian-access'></i>Humanitarian Access</div>
                 </li>
                 <li data-id='#affected+food+p3plus+pct' data-legend='IPC Acute Food Insecurity (% of population in IPC Phase 3+)'>
                   <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
+                </li>
+                <li data-id='#affected+children+sam' data-legend='Number of Children 6-59 Months Admitted for Treatment of Severe Acute Malnutrition (SAM)'>
+                  <div><i class='humanitarianicons-Nutrition'></i>Severe Acute Malnutrition</div>
                 </li>
                 <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
                   <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
@@ -94,8 +98,8 @@
                 <li data-id='#severity+stringency+num' data-legend='Oxford COVID-19 Government Stringency Index'>
                   <div><i class='humanitarianicons-Analysis'></i>Oxford COVID-19 Government Stringency Index</div>
                 </li>
-                <li data-id='#severity+inform+type' data-legend='INFORM COVID-19 Risk Class'>
-                  <div><i class='humanitarianicons-Analysis'></i>INFORM COVID-19 Risk Index</div>
+                <li data-id='#severity+inform+type' data-legend='INFORM Severity Class'>
+                  <div><i class='humanitarianicons-Analysis'></i>INFORM Severity Index</div>
                 </li>
               </ul>
 
@@ -119,7 +123,7 @@
           </div>
 
           <div class='logos'>
-            <a href='mailto:hdx@un.org?subject=Feedback on COVID-19 Map Explorer'>Send us feedback</a>
+            <a href='mailto:hdx@un.org?subject=Feedback on COVID-19 Data Explorer'>Send us feedback</a>
             <p class='footnote small'>The countries represented here have inter-agency plans that address the humanitarian needs of the most vulnerable, including refugees and migrants.</p>
             <a href='https://centre.humdata.org' target='_blank' rel='noopener'>
               <img src='assets/logo-centre-gray.png' alt='Centre for Humanitarian Data logo'>
@@ -193,6 +197,8 @@
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
               <label>Population <input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
+              <label>IDPs (IOM-DTM) <input checked='true' name='countryIndicators' type='radio' value='#affected+idps+ind' id='idps'></label>
+              <div class='source-container idps-source'></div>
               <label>Acute Food Insecurity<br> (% of population in IPC Phase 3+) <input name='countryIndicators' type='radio' value='#affected+food+ipc+p3plus+pct' id='foodSecurity'></label>
               <div class='source-container food-security-source'></div>
               <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
@@ -249,7 +255,7 @@
             </a>
           </div>
 
-          <h1>COVID-19 Map Explorer</h1>
+          <h1>COVID-19 Data Explorer</h1>
           <h2 class='backtoGlobal'><a href='#'>< Back to Global View</a></h2>
 
           <div class='panel-header'>
@@ -257,12 +263,18 @@
               <img src='' class='flag' alt='country flag' />
               <h3></h3>
             </div>
+            
+            <h4>Download:</h4>
+            <div class='download-link'>
+              <a href='https://drive.google.com/drive/folders/1UoKAFCqESzeZiODAsZv7-INc8hpwAig_?usp=sharing' target='_blank' rel='noopener'><span><b>Humanitarian Access Snapshots</b><br>(pdf)</span><i class='humanitarianicons-Download'></i></a>
+            </div>
+
             <label for='indicatorSelect' class='visuallyhidden'>Select an indicator: </label>
             <select id='indicatorSelect' class='indicator-select'>
               <option value=''>Jump to Indicators</option>
               <option value='covid'>COVID-19 Cases and Projections</option>
               <option value='hrp'>2020 HRP and COVID-19 Funding</option>
-              <option value='inform'>INFORM COVID Index</option>
+              <option value='inform'>INFORM Severity Index</option>
               <option value='schools'>School Closure</option>
             </select>
           </div>
@@ -278,11 +290,11 @@
               <div class='panel-inner'></div>
             </div>
             <div class='hrp'>
-              <h5>2020 HRP and COVID-19 funding</h5>
+              <h5>2020 HRP and COVID-19 Funding</h5>
               <div class='panel-inner'></div>
             </div>
             <div class='inform'>
-              <h5>INFORM COVID Index</h5>
+              <h5>INFORM Severity Index</h5>
               <div class='panel-inner'></div>
             </div>
             <div class='schools'>
@@ -302,5 +314,6 @@
     </script>
     <!-- End Mixpanel -->
     <script type='text/javascript' src='js/bundle.min.js'></script>
+    <script type="text/javascript" src="https://apiv2.popupsmart.com/api/Bundle/361624" async></script>
   </body>
 </html>

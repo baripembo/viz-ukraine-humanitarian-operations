@@ -24,7 +24,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-  "author": "Erika Wei",
+  "author": "Centre for Humanitarian Data",
   "license": "ISC",
   "dependencies": {
     "@turf/bbox": "^6.0.1",
