@@ -83,6 +83,21 @@ h6 {
   margin: 0;
 }
 
+label {
+	&.label-small {
+		background-color: #F2645A;
+		color: #FFF;
+  	font-family: 'Gotham-Bold', sans-serif;
+		font-weight: 400;
+		font-size: 9px;
+		letter-spacing: 0.01em;
+		line-height: 16px;
+		margin-right: 5px;
+		padding: 3px 5px;
+		margin-bottom: 3px;
+	}
+}
+
 .small {
 	color: #888;
 	font-family: 'Source Sans Pro', sans-serif;
