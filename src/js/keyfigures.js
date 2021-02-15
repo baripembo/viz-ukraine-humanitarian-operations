@@ -67,11 +67,8 @@ function setKeyFigures() {
 				numCountries++;
 			}
 		});
-		createKeyFigure('.figures', 'Total Funding Required (including COVID-19 GHRP)', '', formatValue(data['#value+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'Total Funding Required (GHO 2021)', '', formatValue(data['#value+funding+hrp+required+usd']));
 		createKeyFigure('.figures', 'Total Funding Level', '', percentFormat(data['#value+funding+hrp+pct']));
-		createKeyFigure('.figures', 'COVID-19 GHRP Requirement', '', formatValue(data['#value+covid+funding+hrp+required+usd']));
-		var ghrpFundingLevel = (isVal(data['#value+covid+funding+hrp+pct'])) ? percentFormat(data['#value+covid+funding+hrp+pct']) : 'N/A';
-		createKeyFigure('.figures', 'COVID-19 GHRP Funding Level', '', ghrpFundingLevel);
 		createKeyFigure('.figures', 'Number of Countries', '', numCountries);
 	}
 	//CERF
