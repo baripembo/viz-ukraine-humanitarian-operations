@@ -113,6 +113,7 @@ label {
 }
 
 .table-display {
+	margin: 5px 0 20px;
 	.table-row {
 		align-items: center;
 		display: flex;
@@ -587,7 +588,8 @@ a:visited {
 		.default-select {
 			display: block;
 		}
-		.covid-select {
+		.covid-select,
+		.vaccine-select {
 			display: none;
 		}
 	}
@@ -609,33 +611,22 @@ a:visited {
 			}
 		}
 	}
-	&.access-severity {
-		.ranking-chart {
-			height: auto !important;
-		}
-		.ranking-select-container {
+	&.ranking-vaccine {
+		.ranking-title {
 			display: none;
 		}
-		.access-category {
-			color: #FFF;
-    	display: inline-block;
-			font-family: 'Gotham-Bold', sans-serif;
-			font-size: 12px;
-    	margin-bottom: 5px;
-			padding: 5px 6px 4px;
-			&.high {
-				background-color: #C74B4F;
+		.ranking-select-container {
+			.default-select {
+				display: none;
 			}
-			&.medium {
-				background-color: #F6B98E;
+			.vaccine-select {
+				display: block;
+				.ranking-select {
+					height: 30px;
+					white-space: pre-wrap;
+					width: 100%;
+				}
 			}
-			&.low {
-				background-color: #79B89A;
-			}
-		}
-		ul {
-			list-style-type: none;
-			margin: 0 0 10px;
 		}
 	}
 }
@@ -726,7 +717,7 @@ a:visited {
 		display: block;
 		.legend-container {
 			height: 83px;
-			&.vaccination-campaign {
+			&.immunization-campaign {
 				height: 32px;
 			}
 			&.access-severity {

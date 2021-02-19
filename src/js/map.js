@@ -515,10 +515,13 @@ function getGlobalLegendScale() {
   var max = d3.max(nationalData, function(d) { 
     if (regionMatch(d['#region+name'])) return +d[currentIndicator.id];
   });
+
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
-  else if (currentIndicator.id=='#severity+economic+num') max = 10;
+  
+  if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
   else if (currentIndicator.id=='#severity+inform+type') max = 0;
+  else if (currentIndicator.id=='#targeted+doses+delivered+pct') max = 0.2;
   else max = max;
 
   //set scale
@@ -549,6 +552,13 @@ function getGlobalLegendScale() {
     scale = d3.scaleThreshold()
       .domain([ .01, .02, .03, .05, .05 ])
       .range(reverseRange);
+  }
+  else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
+    var reverseRange = colorRange.slice().reverse();
+    scale = d3.scaleThreshold()
+      .domain([ 0.03, 0.05, 0.1, 0.15, 0.20 ])
+      .range(reverseRange);
+      //0- 3%; 3-5%; 5-10%; 10-15%; 15-20%"
   }
   else {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
@@ -588,10 +598,12 @@ function setGlobalLegend(scale) {
 
     //covid positive testing footnote
     createFootnote('.map-legend.global', 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the pandemic may be under control in a country.', '#affected+infected+new+per100000+weekly');
+    //vaccine footnote
+    createFootnote('.map-legend.global', 'Note: Data refers to doses delivered to country not administered to people.', '#targeted+doses+delivered+pct');
     //pin footnote
     createFootnote('.map-legend.global', 'Population percentages greater than 100% include refugees, migrants, and/or asylum seekers.', '#affected+inneed+pct');
     //vacc footnote
-    createFootnote('.map-legend.global', 'Methodology: Information about interrupted vaccination campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total vaccination campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.', '#vaccination+num+ratio');
+    createFootnote('.map-legend.global', 'Methodology: Information about interrupted immunization campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total immunization campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.', '#vaccination+num+ratio');
     //food prices footnote
     createFootnote('.map-legend.global', 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.', '#value+food+num+ratio');
     //oxford footnote
@@ -657,7 +669,7 @@ function setGlobalLegend(scale) {
   else {
     $('.map-legend.global .legend-container').show();
     var legend;
-    if (currentIndicator.id=='#value+gdp+ifi+pct') {
+    if (currentIndicator.id=='#value+gdp+ifi+pct' || currentIndicator.id=='#targeted+doses+delivered+pct') {
       var legendFormat = d3.format('.0%');
       legend = d3.legendColor()
         .labelFormat(legendFormat)
@@ -943,7 +955,7 @@ function createMapTooltip(country_code, country_name, point) {
     //set formats for value
     if (isVal(val)) {
       if (currentIndicator.id.indexOf('pct')>-1) {
-        if (currentIndicator.id=='#value+gdp+ifi+pct')
+        if (currentIndicator.id=='#value+gdp+ifi+pct' || currentIndicator.id=='#targeted+doses+delivered+pct')
           val = (isNaN(val)) ? 'No Data' : d3.format('.2%')(val);
         else
           val = (isNaN(val)) ? 'No Data' : percentFormat(val);
@@ -980,31 +992,45 @@ function createMapTooltip(country_code, country_name, point) {
     }
     //COVID by gender layer
     else if (currentIndicator.id=='#affected+infected+sex+new+avg+per100000') {
-      //if (val!='No Data') {
-        content += '<div class="table-display">';
-        content += '<div class="table-row"><div>'+ currentIndicator.name +':</div><div>'+ d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) +'</div></div>';
-        content += '</div>';
+      content += '<div class="table-display">';
+      content += '<div class="table-row"><div>'+ currentIndicator.name +':</div><div>'+ d3.format('.1f')(country[0]['#affected+infected+new+per100000+weekly']) +'</div></div>';
+      content += '</div>';
 
-        //covid cases and deaths
-        var numCases = (isVal(country[0]['#affected+infected'])) ? country[0]['#affected+infected'] : 'NA';
-        var numDeaths = (isVal(country[0]['#affected+killed'])) ? country[0]['#affected+killed'] : 'NA';
-        var casesMale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+infected+m+pct']) : 'No Data';
-        var casesFemale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+f+infected+pct']) : 'No Data';
-        var deathsMale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+killed+m+pct']) : 'No Data';
-        var deathsFemale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+f+killed+pct']) : 'No Data';
-        
-        content += '<div class="table-display">';
-        content += '<br><div class="table-row"><div>Total COVID-19 Cases:</div><div>' + numFormat(numCases) + '</div></div>';
-        content += '<div class="table-row"><div>Female</div><div>'+ casesFemale + '</div></div>';
-        content += '<div class="table-row"><div>Male</div><div>'+ casesMale + '</div></div>';
-        content += '<br><div class="table-row"><div>Total COVID-19 Deaths:</div><div>' + numFormat(numDeaths) + '</div></div>';
-        content += '<div class="table-row"><div>Female</div><div>'+ deathsFemale + '</div></div>';
-        content += '<div class="table-row"><div>Male</div><div>'+ deathsMale + '</div></div>';
+      //covid cases and deaths
+      var numCases = (isVal(country[0]['#affected+infected'])) ? country[0]['#affected+infected'] : 'NA';
+      var numDeaths = (isVal(country[0]['#affected+killed'])) ? country[0]['#affected+killed'] : 'NA';
+      var casesMale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+infected+m+pct']) : 'No Data';
+      var casesFemale = (hasGamData(country[0], 'cases')) ? percentFormat(country[0]['#affected+f+infected+pct']) : 'No Data';
+      var deathsMale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+killed+m+pct']) : 'No Data';
+      var deathsFemale = (hasGamData(country[0], 'deaths')) ? percentFormat(country[0]['#affected+f+killed+pct']) : 'No Data';
+      
+      content += '<div class="table-display">';
+      content += '<br><div class="table-row"><div>Total COVID-19 Cases:</div><div>' + numFormat(numCases) + '</div></div>';
+      content += '<div class="table-row"><div>Female</div><div>'+ casesFemale + '</div></div>';
+      content += '<div class="table-row"><div>Male</div><div>'+ casesMale + '</div></div>';
+      content += '<br><div class="table-row"><div>Total COVID-19 Deaths:</div><div>' + numFormat(numDeaths) + '</div></div>';
+      content += '<div class="table-row"><div>Female</div><div>'+ deathsFemale + '</div></div>';
+      content += '<div class="table-row"><div>Male</div><div>'+ deathsMale + '</div></div>';
+      content += '</div>';
+    }
+    //vaccine layer
+    else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      if (val!='No Data') {
+        var tableArray = [{label: 'COVAX - Pfizer/BioNTech', value: country[0]['#capacity+doses+covax+pfizerbiontech']},
+                          {label: 'COVAX - AstraZeneca', value: country[0]['#capacity+doses+covax+astrazeneca']},
+                          //{label: 'COVAX - AstraZeneca/SKII', value: country[0]['#capacity+doses+covax+astrazenecaskii']},
+                          {label: 'Other - Source Country', value: country[0]['#capacity+doses+delivered+others']}];
+
+        content += 'Breakdown (doses):<div class="table-display">';
+        tableArray.forEach(function(row, index) {
+          if (row.value!=undefined) {
+            var otherSource = (row.label=='Other - Source Country' && country[0]['#meta+source+doses+country+name']!=undefined) ? '<div class="small">'+ country[0]['#meta+source+doses+country+name'] +'</div>' : '';
+            content += '<div class="table-row row-separator"><div>'+ row.label +':'+ otherSource +'</div><div>'+ numFormat(row.value) +'</div></div>';
+          }
+        });
         content += '</div>';
-      // }
-      // else {
-      //   content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-      // }
+      }
     }
     //PIN layer shows refugees and IDPs
     else if (currentIndicator.id=='#affected+inneed+pct') {
@@ -1074,10 +1100,10 @@ function createMapTooltip(country_code, country_name, point) {
       val = (val!='No Data') ? numFormat(val) : val;
       content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
     }
-    //Vaccination campaigns layer
+    //Immunization campaigns layer
     else if (currentIndicator.id=='#vaccination+num+ratio') {
       var vaccData = [];
-      vaccinationDataByCountry.forEach(function(country) {
+      immunizationDataByCountry.forEach(function(country) {
         if (country.key==country_code) {
           vaccData = country.values;
         }
@@ -1087,7 +1113,7 @@ function createMapTooltip(country_code, country_name, point) {
       }
       else {
         var content = '<h2>' + country_name + '</h2>';
-        content += '<table><tr><th>Campaign Vaccine:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
+        content += '<table><tr><th>Campaign Immunization:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
         vaccData.forEach(function(row) {
           var className = (row['#status+name'].indexOf('Postpone')>-1) ? 'covid-postpone' : '';
           content += '<tr class="'+className+'"><td>'+row['#service+name']+'</td><td>'+row['#date+start']+'</td><td>'+row['#status+name']+'</td></tr>';
