@@ -10,7 +10,7 @@ var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, vaccinationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
+var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
 var globalTimeseriesChart, countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
@@ -67,11 +67,13 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
+      d3.json('data/data.json'),
+      //d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
+
 
       //parse data
       var allData = data[0];
@@ -83,8 +85,10 @@ $( document ).ready(function() {
       subnationalData = allData.subnational_data;
       sourcesData = allData.sources_data;
       covidTrendData = allData.who_covid_data;
-      vaccinationData = allData.vaccination_campaigns_data;
+      immunizationData = allData.vaccination_campaigns_data;
       
+      console.log(allData)
+
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
@@ -167,13 +171,13 @@ $( document ).ready(function() {
         .key(function(d) { return d['#region+name']; })
         .object(nationalData);
 
-      //group vaccination data by country    
-      vaccinationDataByCountry = d3.nest()
+      //group immunization data by country    
+      immunizationDataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
-        .entries(vaccinationData);
+        .entries(immunizationData);
 
       //format dates and set overall status
-      vaccinationDataByCountry.forEach(function(country) {
+      immunizationDataByCountry.forEach(function(country) {
         var postponed = 'On Track';
         var isPostponed = false;
         country.values.forEach(function(campaign) {
@@ -188,7 +192,7 @@ $( document ).ready(function() {
         });
 
         nationalData.forEach(function(item) {
-          if (item['#country+code'] == country.key) item['#vaccination-campaigns'] = postponed;
+          if (item['#country+code'] == country.key) item['#immunization-campaigns'] = postponed;
         });
       });
 

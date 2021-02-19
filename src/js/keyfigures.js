@@ -50,6 +50,14 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', '431M');//(d3.format('.4s'))(totalPIN)
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
+	//vaccine rollout
+	else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
+		createKeyFigure('.figures', 'COVAX Interim Forecast (Number of Doses)', '', data['#capacity+doses+forecast+covax']==undefined ? 'NA' : data['#capacity+doses+forecast+covax']);
+		createKeyFigure('.figures', 'COVAX Delivered (Number of Doses)', '', data['#capacity+doses+delivered+covax']==undefined ? 'NA' : data['#capacity+doses+delivered+covax']);
+		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : data['#capacity+doses+delivered+others']);
+		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : data['#capacity+doses+delivered+total']);
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+	}
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
@@ -67,11 +75,8 @@ function setKeyFigures() {
 				numCountries++;
 			}
 		});
-		createKeyFigure('.figures', 'Total Funding Required (including COVID-19 GHRP)', '', formatValue(data['#value+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'Total Funding Required (GHO 2021)', '', formatValue(data['#value+funding+hrp+required+usd']));
 		createKeyFigure('.figures', 'Total Funding Level', '', percentFormat(data['#value+funding+hrp+pct']));
-		createKeyFigure('.figures', 'COVID-19 GHRP Requirement', '', formatValue(data['#value+covid+funding+hrp+required+usd']));
-		var ghrpFundingLevel = (isVal(data['#value+covid+funding+hrp+pct'])) ? percentFormat(data['#value+covid+funding+hrp+pct']) : 'N/A';
-		createKeyFigure('.figures', 'COVID-19 GHRP Funding Level', '', ghrpFundingLevel);
 		createKeyFigure('.figures', 'Number of Countries', '', numCountries);
 	}
 	//CERF

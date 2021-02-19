@@ -60,7 +60,7 @@
             <h4>Download:</h4>
             <div class='download-link'>
               <a href='https://tools.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
-              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br>(pdf)</span><i class='humanitarianicons-Download'></i></a>
+              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br>(pdf)</span><i class='humanitarianicons-Download'></i></a><!-- <label class="label-small">NEW</label> -->
             </div>
 
             <div class='global-menu'>
@@ -75,7 +75,10 @@
                   <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
                 </li>
                 <li data-id='#affected+infected+sex+new+avg+per100000' data-legend='Weekly Number of New Cases per 100,000 People'>
-                  <div><i class='humanitarianicons-Covid-19'></i>Covid-19 Cases and Deaths (Sex Disaggregated)</div>
+                  <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths (Sex Disaggregated)</div>
+                </li>
+                <li data-id='#targeted+doses+delivered+pct' data-legend='Population Coverage by Number of Delivered doses (COVAX + Other)'>
+                  <div><i class='humanitarianicons-Vaccine'></i>COVID-19 Vaccine Roll-out</div>
                 </li>
                 <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)'>
                   <div><i class='humanitarianicons-People-in-need'></i>People in Need 2021</div>
@@ -92,8 +95,8 @@
                 <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
                   <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
                 </li>
-                <li data-id='#vaccination+num+ratio' data-legend='Vaccination Campaign Status (% postponed)'>
-                  <div><i class='humanitarianicons-Vaccine'></i>Vaccination Campaign Status</div>
+                <li data-id='#vaccination+num+ratio' data-legend='Routine Immunization campaign status (% postponed)'>
+                  <div><i class='humanitarianicons-Vaccine'></i>Routine Immunization campaign status</div>
                 </li>
                 <li data-id='#severity+stringency+num' data-legend='Oxford COVID-19 Government Stringency Index'>
                   <div><i class='humanitarianicons-Analysis'></i>Oxford COVID-19 Government Stringency Index</div>
@@ -173,6 +176,15 @@
                     <option value='#covid+total+cases+per+capita'>Total number of cases per 100,000 people</option>
                     <option value='#affected+infected'>Total number of confirmed cases</option>
                     <option value='#affected+killed'>Total number of confirmed deaths</option>
+                  </select>
+                </div>
+                <div class='vaccine-select'>
+                  <label for='vaccineRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
+                  <select id='vaccineRankingSelect' class='ranking-select'>
+                    <option value='#capacity+doses+forecast+covax'>COVAX Interim Forecast</option>
+                    <option value='#capacity+doses+delivered+covax'>COVAX delivered</option>
+                    <option value='#capacity+doses+delivered+others'>Other Delivered</option>
+                    <option value='#capacity+doses+delivered+total'>Total Delivered</option>
                   </select>
                 </div>
               </div>
