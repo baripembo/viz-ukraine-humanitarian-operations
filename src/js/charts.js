@@ -573,6 +573,12 @@ function updateRankingChart(sortMode) {
     rankingData.sort(function(a, b){
        return d3.descending(+a.value, +b.value);
     });
+    console.log(rankingData)
+
+    if (rankingData.length<1) {
+      $('.ranking-chart').append('<p>No Data</p>');
+      $('.ranking-chart > p').css('text-align', 'center');
+    }
 
     var valueMax = d3.max(rankingData, function(d) { return +d.value; });
     valueFormat = d3.format(',.0f');
