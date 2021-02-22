@@ -52,10 +52,12 @@ function setKeyFigures() {
 	}
 	//vaccine rollout
 	else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
-		createKeyFigure('.figures', 'COVAX Interim Forecast (Number of Doses)', '', data['#capacity+doses+forecast+covax']==undefined ? 'NA' : data['#capacity+doses+forecast+covax']);
-		createKeyFigure('.figures', 'COVAX Delivered (Number of Doses)', '', data['#capacity+doses+delivered+covax']==undefined ? 'NA' : data['#capacity+doses+delivered+covax']);
-		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : data['#capacity+doses+delivered+others']);
-		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : data['#capacity+doses+delivered+total']);
+		createKeyFigure('.figures', 'COVAX Interim Forecast (Number of Doses)', '', data['#capacity+doses+forecast+covax']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+forecast+covax']));
+		var covaxDelivered = data['#capacity+doses+delivered+covax'];
+		covaxDelivered = (covaxDelivered > 0) ? shortenNumFormat(covaxDelivered) : covaxDelivered;
+		createKeyFigure('.figures', 'COVAX Delivered (Number of Doses)', '', covaxDelivered);
+		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+others']));
+		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+total']));
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 	}
 	//access severity

@@ -624,6 +624,8 @@ function updateRankingChart(sortMode) {
     rankingBars.append('rect')
       .attr('class', 'bar')
       .attr('height', rankingBarHeight)
+      .transition()
+        .duration(400)
       .attr('width', function (d) {
         return (d.value<0) ? 0 : rankingX(d.value);
       });
@@ -647,34 +649,5 @@ function updateRankingChart(sortMode) {
       .text(function (d) {
         return valueFormat(d.value);
       });
-
-    // var height = (rankingBarHeight + 9) * rankingData.length;
-    // rankingY = d3.scaleBand()
-    //   .range([0, height])
-    //   .domain(rankingData.map(function (d) {
-    //     return d.key;
-    //   }));
-
-    // var valueMax = d3.max(rankingData, function(d) { return +d.value; });
-    // rankingX.domain([0, valueMax]);
-    // rankingY.domain(rankingData.map(function (d) { return d.key; }));
-    // rankingBars.data(rankingData);
-
-    // rankingBars.transition()
-    //   .duration(400)
-    //   .attr('transform', function(d, i) { 
-    //     return 'translate(1,' + (rankingY(d.key) + rankingBarHeight/2) + ')'; 
-    //   });
-
-    // rankingBars.select('.bar').transition()
-    //   .duration(400)
-    //   .attr('width', function (d) { return (d.value<0) ? 0 : rankingX(d.value); });
-
-    // rankingBars.select('.name')
-    //   .text(function (d) { return truncateString(d.key, 15); })
-
-    // rankingBars.select('.label')
-    //   .attr('x', function (d) { return rankingX(d.value) + 3; })
-    //   .text(function (d) { return d3.format(',.0f')(d.value); });
   }
 }
