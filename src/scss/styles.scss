@@ -704,7 +704,8 @@ a:visited {
 		cursor: pointer;
 		display: none;
 	}
-	.no-data-key {
+	.no-data-key,
+	.special-key {
 		height: 20px;
 		rect {
 			fill: #FFF;
@@ -714,6 +715,10 @@ a:visited {
 			transform: translate(25px, 12.5px);
 		}
 	}
+	.special-key {
+		display: none;
+	}
+
 	&.global {
 		display: block;
 		.legend-container {
