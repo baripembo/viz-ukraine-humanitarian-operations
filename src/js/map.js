@@ -480,7 +480,7 @@ function updateGlobalLayer() {
       else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
         if (isVal(val)) {
-          color = (val==0) ? '#E7E4E6' : colorScale(val);
+          color = (val==0) ? '#DDD' : colorScale(val);
         }
         else {
           color = colorNoData;
@@ -716,6 +716,7 @@ function setGlobalLegend(scale) {
   //no data
   var noDataKey = $('.map-legend.global .no-data-key');
   var specialKey = $('.map-legend.global .special-key');
+  specialKey.hide();
   if (currentIndicator.id=='#affected+inneed+pct') {
     noDataKey.find('.label').text('Refugee/IDP data only');
     noDataKey.find('rect').css('fill', '#E7E4E6');
@@ -733,12 +734,11 @@ function setGlobalLegend(scale) {
 
     specialKey.css('display', 'block');
     specialKey.find('.label').text('Forecast Only');
-    specialKey.find('rect').css('fill', '#E7E4E6');
+    specialKey.find('rect').css('fill', '#DDD');
   }
   else {
     noDataKey.find('.label').text('No Data');
     noDataKey.find('rect').css('fill', '#FFF');
-    specialKey.hide();
   }
 
   //show/hide footnotes
@@ -1182,9 +1182,7 @@ function createMapTooltip(country_code, country_name, point) {
     else if (currentIndicator.id=='#value+funding+hrp+pct') {
       if (val!='No Data') {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        var tableArray = [{label: 'HRP Requirement', value: country[0]['#value+funding+hrp+required+usd']},
-                          {label: 'HRP Funding Level for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+pct']},
-                          {label: 'HRP Requirement for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+required+usd']}];
+        var tableArray = [{label: 'HRP Requirement', value: country[0]['#value+funding+hrp+required+usd']}];
         content += '<div class="table-display">';
         tableArray.forEach(function(row) {
           if (isVal(row.value)) {
