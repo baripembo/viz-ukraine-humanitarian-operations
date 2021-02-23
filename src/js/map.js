@@ -622,7 +622,7 @@ function setGlobalLegend(scale) {
     //covid positive testing footnote
     createFootnote('.map-legend.global', 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the pandemic may be under control in a country.', '#affected+infected+new+per100000+weekly');
     //vaccine footnote
-    createFootnote('.map-legend.global', 'Note: Data refers to doses delivered to country not administered to people.', '#targeted+doses+delivered+pct');
+    createFootnote('.map-legend.global', 'Note: Data refers to doses delivered to country not administered to people. Only countries with a Humanitarian Response Plan are included', '#targeted+doses+delivered+pct');
     //pin footnote
     createFootnote('.map-legend.global', 'Population percentages greater than 100% include refugees, migrants, and/or asylum seekers.', '#affected+inneed+pct');
     //vacc footnote
