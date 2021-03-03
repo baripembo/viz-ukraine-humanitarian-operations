@@ -1056,6 +1056,7 @@ function createMapTooltip(country_code, country_name, point) {
         var tableArray = [{label: 'COVAX - Pfizer/BioNTech', value: country[0]['#capacity+doses+covax+pfizerbiontech']},
                           {label: 'COVAX - AstraZeneca/SII', value: country[0]['#capacity+doses+covax+astrazenecasii']},
                           {label: 'COVAX - AstraZeneca/SKBio', value: country[0]['#capacity+doses+covax+astrazenecaskbio']},
+                          {label: 'COVAX', value: country[0]['#capacity+doses+delivered+covax']},
                           {label: 'Other - Source Country', value: country[0]['#capacity+doses+delivered+others']}];
 
 
@@ -1063,7 +1064,7 @@ function createMapTooltip(country_code, country_name, point) {
         content += 'Breakdown (doses):<div class="table-display">';
         tableArray.forEach(function(row, index) {
           if (row.value!=undefined) {
-            var status = (row.label=='Other - Source Country') ? '(delivered)' : '(forecasted)';
+            var status = (row.label=='Other - Source Country' || row.label=='COVAX') ? '(delivered)' : '(forecasted)';
             var otherSource = (row.label=='Other - Source Country' && country[0]['#meta+source+doses+country+name']!=undefined) ? '<div class="small">'+ country[0]['#meta+source+doses+country+name'] +'</div>' : '';
             content += '<div class="table-row row-separator"><div>'+ row.label +' '+ status +':'+ otherSource +'</div><div>'+ numFormat(row.value) +'</div></div>';
           }
