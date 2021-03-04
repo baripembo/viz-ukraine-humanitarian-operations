@@ -424,7 +424,7 @@ function createRankingChart() {
       indicator = '#value+food+num+ratio';
       break;
     case '#targeted+doses+delivered+pct':
-      indicator = '#capacity+doses+forecast+covax';
+      indicator = '#capacity+doses+delivered+total';
       break;
     default:
       indicator = currentIndicator.id;
@@ -437,7 +437,7 @@ function createRankingChart() {
   }
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
     $('.ranking-container').addClass('ranking-vaccine');
-    $('.ranking-select').val('#capacity+doses+forecast+covax');
+    $('.ranking-select').val(indicator);
   }
   else {
     $('.ranking-select').val('descending');
