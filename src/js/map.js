@@ -733,7 +733,7 @@ function setGlobalLegend(scale) {
     noDataKey.find('rect').css('fill', '#FFF');
 
     specialKey.css('display', 'block');
-    specialKey.find('.label').text('Forecast Only');
+    specialKey.find('.label').text('Allocations');
     specialKey.find('rect').css('fill', '#DDD');
   }
   else {
