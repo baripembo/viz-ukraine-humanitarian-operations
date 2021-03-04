@@ -10,10 +10,21 @@ function setKeyFigures() {
 	if (indicator=='#event+year+todate+num') indicator = '#access-data';
 	createSource(secondaryPanelSource, indicator);
 
-	//global stats
+	//set global stats
 	var globalData = regionalData.filter(function(region) { return region['#region+name']=='global'; });
-	secondaryPanel.find('.global-figures').html('<b>Global COVID-19 Figures:</b><br>'+ shortenNumFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths');
+	var globalFigures = '<b>Global COVID-19 Figures:</b><br>'+ shortenNumFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths';
+	
+	//show global vax stat only on covax layer
+	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined)
+		globalFigures += '<br><br><b>Global vaccines administered: '+ shortenNumFormat(worldData['#capacity+doses+administered+total']) +'</b>';
+	
+	//print global stats
+	secondaryPanel.find('.global-figures').html(globalFigures);
 
+	//if on covax layer, show HRP data by default
+	if (currentIndicator.id=='#targeted+doses+delivered+pct' && currentRegion=='') currentRegion = 'HRPs';
+
+	//get regional data
 	var data = worldData;
 	if (currentRegion!='') {
 		regionalData.forEach(function(d) {
@@ -23,6 +34,7 @@ function setKeyFigures() {
 		});
 	}
 
+	//tally countries with data
 	var totalCountries = 0;
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
@@ -59,6 +71,7 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'COVAX Delivered (Number of Doses)', '', covaxDelivered);
 		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+others']));
 		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+total']));
+		createKeyFigure('.figures', 'Total Administered (Number of Doses)', '', data['#capacity+doses+administered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+administered+total']));
 	}
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
