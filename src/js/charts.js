@@ -573,7 +573,6 @@ function updateRankingChart(sortMode) {
     rankingData.sort(function(a, b){
        return d3.descending(+a.value, +b.value);
     });
-    console.log(rankingData)
 
     if (rankingData.length<1) {
       $('.ranking-chart').append('<p>No Doses Delivered</p>');

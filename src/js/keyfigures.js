@@ -15,8 +15,10 @@ function setKeyFigures() {
 	var globalFigures = '<b>Global COVID-19 Figures:</b><br>'+ shortenNumFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths';
 	
 	//show global vax stat only on covax layer
-	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined)
-		globalFigures += '<br><br><b>Global vaccines administered: '+ shortenNumFormat(worldData['#capacity+doses+administered+total']) +'</b>';
+	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined) {
+		var totalAdministeredVal = '283M';//shortenNumFormat(worldData['#capacity+doses+administered+total']);
+		globalFigures += '<br><br><b>Global vaccines administered: '+ totalAdministeredVal +'</b>';
+	}
 	
 	//print global stats
 	secondaryPanel.find('.global-figures').html(globalFigures);

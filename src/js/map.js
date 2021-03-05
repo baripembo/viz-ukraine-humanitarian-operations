@@ -1053,21 +1053,30 @@ function createMapTooltip(country_code, country_name, point) {
     //vaccine layer
     else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
       if (val!='No Data') {
-        var tableArray = [{label: 'COVAX - Pfizer/BioNTech', value: country[0]['#capacity+doses+covax+pfizerbiontech']},
-                          {label: 'COVAX - AstraZeneca/SII', value: country[0]['#capacity+doses+covax+astrazenecasii']},
-                          {label: 'COVAX - AstraZeneca/SKBio', value: country[0]['#capacity+doses+covax+astrazenecaskbio']},
-                          {label: 'COVAX', value: country[0]['#capacity+doses+delivered+covax']},
-                          {label: 'Other - Source Country', value: country[0]['#capacity+doses+delivered+others']}];
+        //allocated data
+        var covaxAllocatedTotal = 0;
+        if (country[0]['#capacity+doses+covax+pfizerbiontech']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+pfizerbiontech'];
+        if (country[0]['#capacity+doses+covax+astrazenecaskbio']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+astrazenecaskbio'];
+        if (country[0]['#capacity+doses+covax+astrazenecasii']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+astrazenecasii'];
+        var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];//country[0]['#capacity+covax+total']
 
+        //delivered data
+        var funderArray = (country[0]['#meta+vaccine+funder']!=undefined) ? country[0]['#meta+vaccine+funder'].split('|') : [];
+        var producerArray = (country[0]['#meta+vaccine+producer']!=undefined) ? country[0]['#meta+vaccine+producer'].split('|') : [];
+        var dosesArray = (country[0]['#capacity+vaccine+doses']!=undefined) ? country[0]['#capacity+vaccine+doses'].split('|') : [];
+        var totalDelivered = (country[0]['#capacity+doses+delivered+total']!=undefined) ? country[0]['#capacity+doses+delivered+total'] : 0;
 
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        content += 'Breakdown (doses):<div class="table-display">';
-        tableArray.forEach(function(row, index) {
+        content += '<div class="table-display layer-covax">';
+        content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
+        allocatedArray.forEach(function(row, index) {
           if (row.value!=undefined) {
-            var status = (row.label=='Other - Source Country' || row.label=='COVAX') ? '(delivered)' : '(allocated)';
-            var otherSource = (row.label=='Other - Source Country' && country[0]['#meta+source+doses+country+name']!=undefined) ? '<div class="small">'+ country[0]['#meta+source+doses+country+name'] +'</div>' : '';
-            content += '<div class="table-row row-separator"><div>'+ row.label +' '+ status +':'+ otherSource +'</div><div>'+ numFormat(row.value) +'</div></div>';
+            content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
           }
+        });
+        content += '<div class="table-row row-separator"><div>Delivered (doses)</div><div>'+ numFormat(totalDelivered) +'</div></div>';
+        dosesArray.forEach(function(doses, index) {
+          content += '<div class="table-row"><div>'+ funderArray[index] + ' – ' + producerArray[index] +'</div><div>'+ numFormat(doses) +'</div></div>';
         });
         content += '</div>';
       }
@@ -1250,8 +1259,8 @@ function createMapTooltip(country_code, country_name, point) {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         content += '<div class="table-display">';
-        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row"><div>Total IFI Funding per Capita:</div><div>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</div></div>';
-        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row"><div>Total Amount Combined:</div><div>'+ formatValue(country[0]['#value+ifi+total']) +'</div></div>';
+        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row"><div>Total IFI Funding per Capita:&nbsp;</div><div>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</div></div>';
+        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row"><div>Total Amount Combined:&nbsp;</div><div>'+ formatValue(country[0]['#value+ifi+total']) +'</div></div>';
         content += '</div>';
 
         if (parseFloat(val)>0) {
@@ -1259,7 +1268,7 @@ function createMapTooltip(country_code, country_name, point) {
           var fundingArray = ['adb','afdb','eib', 'ebrd', 'idb','ifc','imf','isdb','unmptf','wb'];
           fundingArray.forEach(function(fund) {
             var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
-            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
+            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':&nbsp;</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
           });
           content += '</div>';
         }

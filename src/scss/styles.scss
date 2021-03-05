@@ -131,6 +131,16 @@ label {
 			}
 		}
 	}
+	&.layer-covax {
+		.table-row {
+			color: #888;
+			&.row-separator {
+				border-top: 0;
+				color: #000;
+				margin: 6px 0;
+			}
+		}
+	}
 }
 
 .stat {
