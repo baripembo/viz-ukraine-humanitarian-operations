@@ -85,7 +85,7 @@ $( document ).ready(function() {
       sourcesData = allData.sources_data;
       covidTrendData = allData.who_covid_data;
       immunizationData = allData.vaccination_campaigns_data;
-
+      
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];

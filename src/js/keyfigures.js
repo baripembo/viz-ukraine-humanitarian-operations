@@ -16,7 +16,7 @@ function setKeyFigures() {
 	
 	//show global vax stat only on covax layer
 	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined) {
-		var totalAdministeredVal = '283M';//shortenNumFormat(worldData['#capacity+doses+administered+total']);
+		var totalAdministeredVal = shortenNumFormat(worldData['#capacity+doses+administered+total']);
 		globalFigures += '<br><br><b>Global vaccines administered: '+ totalAdministeredVal +'</b>';
 	}
 	
