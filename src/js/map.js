@@ -1055,10 +1055,8 @@ function createMapTooltip(country_code, country_name, point) {
       if (val!='No Data') {
         //allocated data
         var covaxAllocatedTotal = 0;
-        if (country[0]['#capacity+doses+covax+pfizerbiontech']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+pfizerbiontech'];
-        if (country[0]['#capacity+doses+covax+astrazenecaskbio']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+astrazenecaskbio'];
-        if (country[0]['#capacity+doses+covax+astrazenecasii']!=undefined) covaxAllocatedTotal += +country[0]['#capacity+doses+covax+astrazenecasii'];
-        var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];//country[0]['#capacity+covax+total']
+        if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
+        var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
 
         //delivered data
         var funderArray = (country[0]['#meta+vaccine+funder']!=undefined) ? country[0]['#meta+vaccine+funder'].split('|') : [];
