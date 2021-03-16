@@ -1174,17 +1174,19 @@ function createMapTooltip(country_code, country_name, point) {
     //INFORM layer
     else if (currentIndicator.id=='#severity+inform+type') {
       var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
-      content += 'INFORM Severity Index:<div class="stat">' + numVal + '</div>';
-      if (numVal!='No Data') {
-        var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
-                          {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},
-                          {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
-        content += '<div class="table-display">';
-        tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
-        });
-        content += '</div>';
-      }
+      var informClass = country[0]['#severity+inform+type'];
+      var informTrend = country[0]['#severity+inform+trend'];
+      content += 'INFORM Severity Index: <div><span class="stat">' + numVal + '</span> <span class="subtext inline">(' + informClass + ' / ' + informTrend + ')</span></div>';
+      // if (numVal!='No Data') {
+      //   var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
+      //                     {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},
+      //                     {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
+      //   content += '<div class="table-display">';
+      //   tableArray.forEach(function(row) {
+      //     if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
+      //   });
+      //   content += '</div>';
+      //}
     }
     //Humanitarian Funding Level layer
     else if (currentIndicator.id=='#value+funding+hrp+pct') {

@@ -110,6 +110,7 @@ label {
 }
 .subtext {
 	color: #888;
+	text-transform: capitalize;
 }
 
 .table-display {
@@ -898,7 +899,10 @@ circle.swatch {
 			color: #888;
 			display: block;
 			margin-top: -10px;
-			margin-bottom: 10px;
+			margin-bottom: 10px;	
+			&.inline {
+				display: inline-block;
+			}
 		}
 		.cases-total,
 		.deaths-total {
