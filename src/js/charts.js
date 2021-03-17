@@ -410,21 +410,25 @@ function createRankingChart() {
   $('.ranking-container').removeClass('ranking-vaccine');
 
   //set title
-  $('.secondary-panel .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country' );
+  var rankingTitle = (currentIndicator.id=='#impact+type') ? 'Total Number of Affected Learners' : $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country'
+  $('.secondary-panel .ranking-title').text(rankingTitle);
 
   var indicator;
   switch(currentIndicator.id) {
     case '#severity+inform+type':
       indicator = '#severity+inform+num';
       break;
+    case '#targeted+doses+delivered+pct':
+      indicator = '#capacity+doses+delivered+total';
+      break;
+    case '#impact+type':
+      indicator = '#population+learners';
+      break;
     case '#immunization-campaigns':
       indicator = '#vaccination+num+ratio';
       break;
     case '#food-prices':
       indicator = '#value+food+num+ratio';
-      break;
-    case '#targeted+doses+delivered+pct':
-      indicator = '#capacity+doses+delivered+total';
       break;
     default:
       indicator = currentIndicator.id;

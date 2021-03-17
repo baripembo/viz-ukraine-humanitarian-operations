@@ -3,6 +3,7 @@ var shortenNumFormat = d3.format('.2s');
 var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
+var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var populationColorRange = ['#FFE281','#FDB96D','#FA9059','#F27253','#E9554D'];
@@ -26,7 +27,7 @@ $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
   //console.log(prod);
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2hnbWs5NzkxMXh2MnNvcmF6dXIxMWE0In0.0GfmJoEJyWFQ5UzNxl2WgA';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
   viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
@@ -116,6 +117,9 @@ $( document ).ready(function() {
         //create cases by gender indicator
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
         
+        //tally total affected learners for school closures
+        item['#population+learners'] = (item['#population+learners+pre_primary_to_secondary']!=undefined && item['#population+learners+tertiary']!=undefined) ? parseFloat(item['#population+learners+pre_primary_to_secondary'].replace(/,/g, '')) + parseFloat(item['#population+learners+tertiary'].replace(/,/g, '')) : null;
+
         //consolidate IPC data
         if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
           item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];

@@ -41,7 +41,7 @@ function setKeyFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#severity+inform+type') {
+			if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -83,6 +83,11 @@ function setKeyFigures() {
 		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of Travel Authorizations Denied', '', percentFormat(data['#access+travel+pct']));
 		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
 		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
+	}
+	//school closures
+	else if (currentIndicator.id=='#impact+type') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		//if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total Violent Security Incidents Against Aid Workers since Jan 2020', '', data['#event+year+todate+num']);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
