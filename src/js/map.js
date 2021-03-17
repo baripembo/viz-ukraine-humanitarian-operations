@@ -1177,16 +1177,6 @@ function createMapTooltip(country_code, country_name, point) {
       var informClass = country[0]['#severity+inform+type'];
       var informTrend = country[0]['#severity+inform+trend'];
       content += 'INFORM Severity Index: <div><span class="stat">' + numVal + '</span> <span class="subtext inline">(' + informClass + ' / ' + informTrend + ')</span></div>';
-      // if (numVal!='No Data') {
-      //   var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
-      //                     {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},
-      //                     {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
-      //   content += '<div class="table-display">';
-      //   tableArray.forEach(function(row) {
-      //     if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
-      //   });
-      //   content += '</div>';
-      //}
     }
     //Humanitarian Funding Level layer
     else if (currentIndicator.id=='#value+funding+hrp+pct') {
@@ -1203,8 +1193,8 @@ function createMapTooltip(country_code, country_name, point) {
         content += '</div>';
       }
       else {
-        if (isVal(country[0]['#value+funding+other+planname'])) {
-          var planArray = country[0]['#value+funding+other+planname'].split('|');
+        if (isVal(country[0]['#value+funding+other+plan_name'])) {
+          var planArray = country[0]['#value+funding+other+plan_name'].split('|');
           var planPctArray = (isVal(country[0]['#value+funding+other+pct'])) ? country[0]['#value+funding+other+pct'].split('|') : [0];
           var planRequiredArray = (isVal(country[0]['#value+funding+other+required+usd'])) ? country[0]['#value+funding+other+required+usd'].split('|') : [0];
           var planTotalArray = (isVal(country[0]['#value+funding+other+total+usd'])) ? country[0]['#value+funding+other+total+usd'].split('|') : [0];
