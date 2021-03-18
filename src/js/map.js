@@ -547,7 +547,9 @@ function getGlobalLegendScale() {
       scale = d3.scaleQuantile().domain(data).range(colorRange);
   }
   else if (currentIndicator.id=='#vaccination+postponed+num') {
-    scale = d3.scaleQuantize().domain([0, 5]).range(colorRange);
+    //set the max to at least 5
+    max = (max>5) ? max : 5;
+    scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -1165,7 +1167,7 @@ function createMapTooltip(country_code, country_name, point) {
         var content = '<h2>' + country_name + '</h2><div class="stat">No data</div>';
       }
       else {
-        var content = '<h2>' + country_name + ' ' + val + '</h2>';
+        var content = '<h2>' + country_name + '</h2>';
         content += '<table><tr><th>Campaign Immunization:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
         vaccData.forEach(function(row) {
           var className = (row['#status+name'].indexOf('Postpone')>-1) ? 'covid-postpone' : '';
