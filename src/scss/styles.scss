@@ -110,6 +110,7 @@ label {
 }
 .subtext {
 	color: #888;
+	text-transform: capitalize;
 }
 
 .table-display {
@@ -118,16 +119,24 @@ label {
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
-		.val {
-			min-width: 58px;
-			padding-left: 7px;
-			text-align: right;
+		>div:first-child {
+			padding-right: 20px;
 		}
 		&.row-separator {
 			border-bottom: 1px solid #CCC;
 			padding: 8px 0;
 			&:first-child {
 				border-top: 1px solid #CCC;
+			}
+		}
+	}
+	&.layer-covax {
+		.table-row {
+			color: #888;
+			&.row-separator {
+				border-top: 0;
+				color: #000;
+				margin: 6px 0;
 			}
 		}
 	}
@@ -723,11 +732,8 @@ a:visited {
 		display: block;
 		.legend-container {
 			height: 83px;
-			&.immunization-campaign {
-				height: 32px;
-			}
-			&.access-severity {
-				height: 50px;
+			&.impact-type {
+				height: 68px;
 			}
 		}
 		.source-secondary {
@@ -888,7 +894,10 @@ circle.swatch {
 			color: #888;
 			display: block;
 			margin-top: -10px;
-			margin-bottom: 10px;
+			margin-bottom: 10px;	
+			&.inline {
+				display: inline-block;
+			}
 		}
 		.cases-total,
 		.deaths-total {

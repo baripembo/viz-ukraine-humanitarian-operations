@@ -474,13 +474,13 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#severity+inform+type') {
+      else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
       else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
         if (isVal(val)) {
-          color = (val==0) ? '#E7E4E6' : colorScale(val);
+          color = (val==0) ? '#DDD' : colorScale(val);
         }
         else {
           color = colorNoData;
@@ -529,7 +529,7 @@ function getGlobalLegendScale() {
   
   if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id=='#severity+inform+type') max = 0;
+  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') max = 0.2;
   else max = max;
 
@@ -545,6 +545,9 @@ function getGlobalLegendScale() {
       scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
+  }
+  else if (currentIndicator.id=='#impact+type') {
+    scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic Break']).range(schoolClosureColorRange);
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -622,7 +625,7 @@ function setGlobalLegend(scale) {
     //covid positive testing footnote
     createFootnote('.map-legend.global', 'Positive Testing Rate: This is the daily positive rate, given as a rolling 7-day average. According WHO, a positive rate of less than 5% is one indicator that the pandemic may be under control in a country.', '#affected+infected+new+per100000+weekly');
     //vaccine footnote
-    createFootnote('.map-legend.global', 'Note: Data refers to doses delivered to country not administered to people.', '#targeted+doses+delivered+pct');
+    createFootnote('.map-legend.global', 'Note: Data refers to doses delivered to country not administered to people. Only countries with a Humanitarian Response Plan are included', '#targeted+doses+delivered+pct');
     //pin footnote
     createFootnote('.map-legend.global', 'Population percentages greater than 100% include refugees, migrants, and/or asylum seekers.', '#affected+inneed+pct');
     //vacc footnote
@@ -691,6 +694,9 @@ function setGlobalLegend(scale) {
   }
   else {
     $('.map-legend.global .legend-container').show();
+    var layerID = currentIndicator.id.replaceAll('+','-').replace('#','');
+    $('.map-legend.global .legend-container').attr('class', 'legend-container '+ layerID);
+
     var legend;
     if (currentIndicator.id=='#value+gdp+ifi+pct' || currentIndicator.id=='#targeted+doses+delivered+pct') {
       var legendFormat = d3.format('.0%');
@@ -704,6 +710,7 @@ function setGlobalLegend(scale) {
     else {
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
       if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+sex+new+avg+per100000') legendFormat = d3.format('.1f');
+      
       legend = d3.legendColor()
         .labelFormat(legendFormat)
         .cells(colorRange.length)
@@ -716,6 +723,7 @@ function setGlobalLegend(scale) {
   //no data
   var noDataKey = $('.map-legend.global .no-data-key');
   var specialKey = $('.map-legend.global .special-key');
+  specialKey.hide();
   if (currentIndicator.id=='#affected+inneed+pct') {
     noDataKey.find('.label').text('Refugee/IDP data only');
     noDataKey.find('rect').css('fill', '#E7E4E6');
@@ -732,13 +740,12 @@ function setGlobalLegend(scale) {
     noDataKey.find('rect').css('fill', '#FFF');
 
     specialKey.css('display', 'block');
-    specialKey.find('.label').text('Forecast Only');
-    specialKey.find('rect').css('fill', '#E7E4E6');
+    specialKey.find('.label').text('Allocations');
+    specialKey.find('rect').css('fill', '#DDD');
   }
   else {
     noDataKey.find('.label').text('No Data');
     noDataKey.find('rect').css('fill', '#FFF');
-    specialKey.hide();
   }
 
   //show/hide footnotes
@@ -1053,20 +1060,28 @@ function createMapTooltip(country_code, country_name, point) {
     //vaccine layer
     else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
       if (val!='No Data') {
-        var tableArray = [{label: 'COVAX - Pfizer/BioNTech', value: country[0]['#capacity+doses+covax+pfizerbiontech']},
-                          {label: 'COVAX - AstraZeneca/SII', value: country[0]['#capacity+doses+covax+astrazenecasii']},
-                          {label: 'COVAX - AstraZeneca/SKBio', value: country[0]['#capacity+doses+covax+astrazenecaskbio']},
-                          {label: 'Other - Source Country', value: country[0]['#capacity+doses+delivered+others']}];
+        //allocated data
+        var covaxAllocatedTotal = 0;
+        if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
+        var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
 
+        //delivered data
+        var funderArray = (country[0]['#meta+vaccine+funder']!=undefined) ? country[0]['#meta+vaccine+funder'].split('|') : [];
+        var producerArray = (country[0]['#meta+vaccine+producer']!=undefined) ? country[0]['#meta+vaccine+producer'].split('|') : [];
+        var dosesArray = (country[0]['#capacity+vaccine+doses']!=undefined) ? country[0]['#capacity+vaccine+doses'].split('|') : [];
+        var totalDelivered = (country[0]['#capacity+doses+delivered+total']!=undefined) ? country[0]['#capacity+doses+delivered+total'] : 0;
 
         content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        content += 'Breakdown (doses):<div class="table-display">';
-        tableArray.forEach(function(row, index) {
+        content += '<div class="table-display layer-covax">';
+        content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
+        allocatedArray.forEach(function(row, index) {
           if (row.value!=undefined) {
-            var status = (row.label=='Other - Source Country') ? '(delivered)' : '(forecasted)';
-            var otherSource = (row.label=='Other - Source Country' && country[0]['#meta+source+doses+country+name']!=undefined) ? '<div class="small">'+ country[0]['#meta+source+doses+country+name'] +'</div>' : '';
-            content += '<div class="table-row row-separator"><div>'+ row.label +' '+ status +':'+ otherSource +'</div><div>'+ numFormat(row.value) +'</div></div>';
+            content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
           }
+        });
+        content += '<div class="table-row row-separator"><div>Delivered (doses)</div><div>'+ numFormat(totalDelivered) +'</div></div>';
+        dosesArray.forEach(function(doses, index) {
+          content += '<div class="table-row"><div>'+ funderArray[index] + ' – ' + producerArray[index] +'</div><div>'+ numFormat(doses) +'</div></div>';
         });
         content += '</div>';
       }
@@ -1142,6 +1157,17 @@ function createMapTooltip(country_code, country_name, point) {
       val = (val!='No Data') ? numFormat(val) : val;
       content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
     }
+    //School closures layer
+    else if (currentIndicator.id=='#impact+type') {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      var tableArray = [{label: 'Number of learners enrolled from pre-primary to upper-secondary education', value: country[0]['#population+learners+pre_primary_to_secondary']},
+                        {label: 'Number of learners enrolled in tertiary education programmes', value: country[0]['#population+learners+tertiary']}];
+      content += '<div class="table-display">';
+      tableArray.forEach(function(row) {
+        if (row.value!=undefined) content += '<div class="table-row row-separator"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
+      });
+      content += '</div>';
+    }
     //Immunization campaigns layer
     else if (currentIndicator.id=='#vaccination+num+ratio') {
       var vaccData = [];
@@ -1166,37 +1192,27 @@ function createMapTooltip(country_code, country_name, point) {
     //INFORM layer
     else if (currentIndicator.id=='#severity+inform+type') {
       var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
-      content += 'INFORM Severity Index:<div class="stat">' + numVal + '</div>';
-      if (numVal!='No Data') {
-        var tableArray = [{label: 'Lack of Coping Capacity', value: country[0]['#severity+coping+inform+num']},
-                          {label: 'COVID-19 Hazard & Exposure', value: country[0]['#severity+hazard+inform+num']},
-                          {label: 'Vulnerability', value: country[0]['#severity+inform+num+vulnerability']}];
-        content += '<div class="table-display">';
-        tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
-        });
-        content += '</div>';
-      }
+      var informClass = country[0]['#severity+inform+type'];
+      var informTrend = country[0]['#severity+inform+trend'];
+      content += 'INFORM Severity Index: <div><span class="stat">' + numVal + '</span> <span class="subtext inline">(' + informClass + ' / ' + informTrend + ')</span></div>';
     }
     //Humanitarian Funding Level layer
     else if (currentIndicator.id=='#value+funding+hrp+pct') {
       if (val!='No Data') {
         content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
-        var tableArray = [{label: 'HRP Requirement', value: country[0]['#value+funding+hrp+required+usd']},
-                          {label: 'HRP Funding Level for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+pct']},
-                          {label: 'HRP Requirement for COVID-19 GHRP', value: country[0]['#value+covid+funding+hrp+required+usd']}];
+        var tableArray = [{label: 'HRP Requirement', value: country[0]['#value+funding+hrp+required+usd']}];
         content += '<div class="table-display">';
         tableArray.forEach(function(row) {
           if (isVal(row.value)) {
             var value = (row.label=='HRP Funding Level for COVID-19 GHRP') ? percentFormat(row.value) : formatValue(row.value);
-            content += '<div class="table-row"><div>'+ row.label +':</div><div class="val">'+ value +'</div></div>';
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ value +'</div></div>';
           }
         });
         content += '</div>';
       }
       else {
-        if (isVal(country[0]['#value+funding+other+planname'])) {
-          var planArray = country[0]['#value+funding+other+planname'].split('|');
+        if (isVal(country[0]['#value+funding+other+plan_name'])) {
+          var planArray = country[0]['#value+funding+other+plan_name'].split('|');
           var planPctArray = (isVal(country[0]['#value+funding+other+pct'])) ? country[0]['#value+funding+other+pct'].split('|') : [0];
           var planRequiredArray = (isVal(country[0]['#value+funding+other+required+usd'])) ? country[0]['#value+funding+other+required+usd'].split('|') : [0];
           var planTotalArray = (isVal(country[0]['#value+funding+other+total+usd'])) ? country[0]['#value+funding+other+total+usd'].split('|') : [0];
