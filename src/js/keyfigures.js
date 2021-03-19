@@ -87,7 +87,12 @@ function setKeyFigures() {
 	//school closures
 	else if (currentIndicator.id=='#impact+type') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		//if (data['#event+year+todate+num']!=undefined) createKeyFigure('.figures', 'Total Violent Security Incidents Against Aid Workers since Jan 2020', '', data['#event+year+todate+num']);
+		var affectedLearners = (data['#affected+learners']==undefined) ? 0 : shortenNumFormat(data['#affected+learners']);
+		var affectedLearnersPct = (data['#affected+learners+pct']==undefined) ? '0%' : percentFormat(data['#affected+learners+pct']);
+		var statusClosed = (data['#status+country+closed']==undefined) ? 0 : data['#status+country+closed'];
+		createKeyFigure('.figures', 'Number of Affected Learners', '', affectedLearners);
+		createKeyFigure('.figures', 'Percentage of Affected Learners in GHO countries', '', affectedLearnersPct);
+		createKeyFigure('.figures', 'Number of Country-Wide Closures', '', statusClosed);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {

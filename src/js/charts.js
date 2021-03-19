@@ -422,7 +422,7 @@ function createRankingChart() {
       indicator = '#capacity+doses+delivered+total';
       break;
     case '#impact+type':
-      indicator = '#population+learners';
+      indicator = '#affected+learners';
       break;
     case '#immunization-campaigns':
       indicator = '#vaccination+num+ratio';
@@ -512,7 +512,7 @@ function createRankingChart() {
     .attr('class', 'bar')
     .attr('height', rankingBarHeight)
     .attr('width', function (d) {
-      return (d.value<0) ? 0 : rankingX(d.value);
+      return (d.value<=0) ? 0 : rankingX(d.value);
     });
 
   //add country names
@@ -529,7 +529,8 @@ function createRankingChart() {
     .attr('class', 'label')
     .attr('y', 9)
     .attr('x', function (d) {
-      return rankingX(d.value) + 3;
+      var xpos = (d.value<=0) ? 0 : rankingX(d.value);
+      return xpos + 3;
     })
     .text(function (d) {
       return valueFormat(d.value);
@@ -579,7 +580,7 @@ function updateRankingChart(sortMode) {
     });
 
     if (rankingData.length<1) {
-      $('.ranking-chart').append('<p>No Doses Delivered</p>');
+      $('.ranking-chart').append('<p>No Data</p>');
       $('.ranking-chart > p').css('text-align', 'center');
     }
 
@@ -636,7 +637,7 @@ function updateRankingChart(sortMode) {
       .transition()
         .duration(400)
       .attr('width', function (d) {
-        return (d.value<0) ? 0 : rankingX(d.value);
+        return (d.value<=0) ? 0 : rankingX(d.value);
       });
 
     //add country names
@@ -653,7 +654,8 @@ function updateRankingChart(sortMode) {
       .attr('class', 'label')
       .attr('y', 9)
       .attr('x', function (d) {
-        return rankingX(d.value) + 3;
+        var xpos = (d.value<=0) ? 0 : rankingX(d.value);
+        return xpos + 3;
       })
       .text(function (d) {
         return valueFormat(d.value);
