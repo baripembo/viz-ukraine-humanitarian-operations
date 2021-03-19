@@ -1164,7 +1164,7 @@ function createMapTooltip(country_code, country_name, point) {
                         {label: 'Number of learners enrolled in tertiary education programmes', value: country[0]['#population+learners+tertiary']}];
       content += '<div class="table-display">';
       tableArray.forEach(function(row) {
-        if (row.value!=undefined) content += '<div class="table-row row-separator"><div>'+ row.label +':</div><div>'+ row.value +'</div></div>';
+        if (row.value!=undefined) content += '<div class="table-row row-separator"><div>'+ row.label +':</div><div>'+ numFormat(row.value) +'</div></div>';
       });
       content += '</div>';
     }
