@@ -24,7 +24,7 @@ function setKeyFigures() {
 	secondaryPanel.find('.global-figures').html(globalFigures);
 
 	//if on covax layer, show HRP data by default
-	if (currentIndicator.id=='#targeted+doses+delivered+pct' && currentRegion=='') currentRegion = 'HRPs';
+	currentRegion = (currentIndicator.id=='#targeted+doses+delivered+pct' && currentRegion=='') ? 'HRPs' : d3.select('.region-select').node().value;
 
 	//get regional data
 	var data = worldData;
