@@ -136,12 +136,12 @@ function displayMap() {
     }
   });
 
-  //deeplink to country if parameter exists
-  if (viewInitialized==true) deepLinkView();
-
   //init global and country layers
   initGlobalLayer();
   initCountryLayer();
+
+  //deeplink to country if parameter exists
+  if (viewInitialized==true) deepLinkView();
 
   //create tooltip
   tooltip = new mapboxgl.Popup({
@@ -170,7 +170,8 @@ function deepLinkView() {
   if (location.indexOf('?layer=')>-1) {
     var layer = location.split('layer=')[1];
     var menuItem = $('.menu-indicators').find('li[data-layer="'+layer+'"]');
-    if (menuItem!=undefined) selectLayer(menuItem)
+    menuItem = (menuItem.length<1) ? $('.menu-indicators').find('li[data-layer="covid-19_cases_and_deaths"]') : menuItem;
+    selectLayer(menuItem);
   }
 }
 
@@ -190,6 +191,9 @@ function createEvents() {
   //menu events
   $('.menu-indicators li').on('click', function() {
     selectLayer(this);
+
+    //reset any deep links
+    window.history.replaceState(null, null, window.location.pathname);
   });
 
   //global figures close button
@@ -461,6 +465,7 @@ function initGlobalLayer() {
   //global figures
   setKeyFigures();
 }
+
 
 function updateGlobalLayer() {
   setKeyFigures();
