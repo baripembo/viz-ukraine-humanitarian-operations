@@ -22,19 +22,6 @@ function initCountryPanel() {
   createFigure(covidDiv, {className: 'weekly-cases', title: 'Weekly Number of New Cases', stat: numFormat(weeklyCases), indicator: '#affected+killed'});
   createFigure(covidDiv, {className: 'weekly-deaths', title: 'Weekly Number of New Deaths', stat: numFormat(weeklyDeaths), indicator: '#affected+killed'});
 
-  //projections
-  var projectionsDiv = $('.country-panel .projections .panel-inner');
-  projectionsDiv.children().remove();  
-  projectionsDiv.append('<h6>COVID-19 Projections</h6><div class="bar-chart projections-cases"><p class="chart-title">Cases</p></div>');
-  var cases = [{model: 'Imperial', min: data['#affected+infected+min+imperial'], max: data['#affected+infected+max+imperial']},
-               {model: 'LSHTM', min: data['#affected+infected+min+lshtm'], max: data['#affected+infected+max+lshtm']}];
-  createProjectionsChart(cases, 'Cases');
-  
-  projectionsDiv.append('<div class="bar-chart projections-deaths"><p class="chart-title">Deaths</p></div>');
-  var deaths = [{model: 'Imperial', min: data['#affected+killed+min+imperial'], max: data['#affected+killed+max+imperial']},
-                {model: 'LSHTM', min: data['#affected+killed+min+lshtm'], max: data['#affected+killed+max+lshtm']}];
-  createProjectionsChart(deaths, 'Deaths');
-
   //hrp
   var hrpDiv = $('.country-panel .hrp .panel-inner');
   hrpDiv.children().remove();
