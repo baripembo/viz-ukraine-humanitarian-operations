@@ -137,7 +137,7 @@ function displayMap() {
   });
 
   //deeplink to country if parameter exists
-  if (viewInitialized==true) deepLinkCountryView();
+  if (viewInitialized==true) deepLinkView();
 
   //init global and country layers
   initGlobalLayer();
@@ -151,10 +151,11 @@ function displayMap() {
   });
 }
 
-function deepLinkCountryView() {
+function deepLinkView() {
   var location = window.location.search;
+  //deep link to country view
   if (location.indexOf('?c=')>-1) {
-    var countryCode = location.split('=')[1].toUpperCase();
+    var countryCode = location.split('c=')[1].toUpperCase();
     if (countryCodeList.hasOwnProperty(countryCode)) {    
       $('.country-select').val(countryCode);
       currentCountry.code = countryCode;
@@ -164,6 +165,12 @@ function deepLinkCountryView() {
       var selectedFeatures = matchMapFeatures(currentCountry.code);
       selectCountry(selectedFeatures);
     }
+  }
+  //deep link to specific layer in global view
+  if (location.indexOf('?layer=')>-1) {
+    var layer = location.split('layer=')[1];
+    var menuItem = $('.menu-indicators').find('li[data-layer="'+layer+'"]');
+    if (menuItem!=undefined) selectLayer(menuItem)
   }
 }
 
@@ -182,35 +189,7 @@ function matchMapFeatures(country_code) {
 function createEvents() {
   //menu events
   $('.menu-indicators li').on('click', function() {
-    $('.menu-indicators li').removeClass('selected');
-    $('.menu-indicators li div').removeClass('expand');
-    $(this).addClass('selected');
-    if (currentIndicator.id==$(this).attr('data-id')) {
-      toggleSecondaryPanel(this);
-    }
-    else {
-      currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-      toggleSecondaryPanel(this, 'open');
-
-      //set food prices view
-      if (currentIndicator.id!='#value+food+num+ratio') {
-        closeModal();
-      }
-
-      mpTrack('wrl', $(this).find('div').text());
-      updateGlobalLayer();
-    }
-
-    //handle tab views
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-      $('.content').addClass('tab-view');
-      $('.tab-menubar').show();
-    }
-    else {
-      $('.content').removeClass('tab-view');
-      $('.tab-menubar').hide();
-      $('#chart-view').hide();
-    }
+    selectLayer(this);
   });
 
   //global figures close button
@@ -278,6 +257,40 @@ function createEvents() {
     mpTrack(currentCountry.code, currentCountryIndicator.name);
   });
 }
+
+//set global layer view
+function selectLayer(menuItem) {
+  $('.menu-indicators li').removeClass('selected');
+  $('.menu-indicators li div').removeClass('expand');
+  $(menuItem).addClass('selected');
+  if (currentIndicator.id==$(menuItem).attr('data-id')) {
+    toggleSecondaryPanel(menuItem);
+  }
+  else {
+    currentIndicator = {id: $(menuItem).attr('data-id'), name: $(menuItem).attr('data-legend')};
+    toggleSecondaryPanel(menuItem, 'open');
+
+    //set food prices view
+    if (currentIndicator.id!='#value+food+num+ratio') {
+      closeModal();
+    }
+
+    mpTrack('wrl', $(menuItem).find('div').text());
+    updateGlobalLayer();
+  }
+
+  //handle tab views
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+    $('.content').addClass('tab-view');
+    $('.tab-menubar').show();
+  }
+  else {
+    $('.content').removeClass('tab-view');
+    $('.tab-menubar').hide();
+    $('#chart-view').hide();
+  }
+}
+
 
 function toggleSecondaryPanel(currentBtn, state) {
   var width = $('.secondary-panel').outerWidth();
