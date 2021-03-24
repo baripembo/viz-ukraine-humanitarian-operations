@@ -102,7 +102,7 @@ function displayMap() {
           type: 'raster',
           source: {
             type: 'raster',
-            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA'],
+            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token='+mapboxgl.accessToken],
           }
         },
         countryBoundaryLayer
@@ -194,7 +194,7 @@ function createEvents() {
 
     //reset any deep links
     var layer = $(this).attr('data-layer');
-    var location = (layer!=undefined) ? window.location.pathname+'?layer='+layer : window.location.pathname;
+    var location = (layer==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layer;
     window.history.replaceState(null, null, location);
   });
 
@@ -566,15 +566,13 @@ function getGlobalLegendScale() {
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
   }
-<<<<<<< HEAD
   else if (currentIndicator.id=='#vaccination+postponed+num') {
     //set the max to at least 5
     max = (max>5) ? max : 5;
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
-=======
+  }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic Break']).range(schoolClosureColorRange);
->>>>>>> school-closures
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -597,7 +595,6 @@ function getGlobalLegendScale() {
     scale = d3.scaleThreshold()
       .domain([ 0.03, 0.05, 0.1, 0.15 ])
       .range(colorRange);
-      //0- 3%; 3-5%; 5-10%; 10-15%; 15-20%"
   }
   else {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
