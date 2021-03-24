@@ -194,7 +194,8 @@ function createEvents() {
 
     //reset any deep links
     var layer = $(this).attr('data-layer');
-    window.history.replaceState(null, null, window.location.pathname+'?layer='+layer);
+    var location = (layer!=undefined) ? window.location.pathname+'?layer='+layer : window.location.pathname;
+    window.history.replaceState(null, null, location);
   });
 
   //global figures close button
@@ -493,7 +494,7 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#severity+inform+type') {
+      else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
       else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
@@ -548,7 +549,7 @@ function getGlobalLegendScale() {
   
   if (currentIndicator.id=='#severity+economic+num') max = 10;
   else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id=='#severity+inform+type') max = 0;
+  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') max = 0.2;
   else max = max;
 
@@ -565,10 +566,15 @@ function getGlobalLegendScale() {
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
   }
+<<<<<<< HEAD
   else if (currentIndicator.id=='#vaccination+postponed+num') {
     //set the max to at least 5
     max = (max>5) ? max : 5;
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+=======
+  else if (currentIndicator.id=='#impact+type') {
+    scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic Break']).range(schoolClosureColorRange);
+>>>>>>> school-closures
   }
   else if (currentIndicator.id=='#severity+stringency+num') {
     scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
@@ -715,6 +721,9 @@ function setGlobalLegend(scale) {
   }
   else {
     $('.map-legend.global .legend-container').show();
+    var layerID = currentIndicator.id.replaceAll('+','-').replace('#','');
+    $('.map-legend.global .legend-container').attr('class', 'legend-container '+ layerID);
+
     var legend;
     if (currentIndicator.id=='#value+gdp+ifi+pct' || currentIndicator.id=='#targeted+doses+delivered+pct') {
       var legendFormat = d3.format('.0%');
@@ -728,6 +737,7 @@ function setGlobalLegend(scale) {
     else {
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
       if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+sex+new+avg+per100000') legendFormat = d3.format('.1f');
+      
       legend = d3.legendColor()
         .labelFormat(legendFormat)
         .cells(colorRange.length)
@@ -1174,6 +1184,17 @@ function createMapTooltip(country_code, country_name, point) {
       val = (val!='No Data') ? numFormat(val) : val;
       content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
     }
+    //School closures layer
+    else if (currentIndicator.id=='#impact+type') {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      var tableArray = [{label: 'Number of learners enrolled from pre-primary to upper-secondary education', value: country[0]['#population+learners+pre_primary_to_secondary']},
+                        {label: 'Number of learners enrolled in tertiary education programmes', value: country[0]['#population+learners+tertiary']}];
+      content += '<div class="table-display">';
+      tableArray.forEach(function(row) {
+        if (row.value!=undefined) content += '<div class="table-row row-separator"><div>'+ row.label +':</div><div>'+ numFormat(row.value) +'</div></div>';
+      });
+      content += '</div>';
+    }
     //Immunization campaigns layer
     else if (currentIndicator.id=='#vaccination+postponed+num') {
       var vaccData = [];
@@ -1211,7 +1232,7 @@ function createMapTooltip(country_code, country_name, point) {
         tableArray.forEach(function(row) {
           if (isVal(row.value)) {
             var value = (row.label=='HRP Funding Level for COVID-19 GHRP') ? percentFormat(row.value) : formatValue(row.value);
-            content += '<div class="table-row"><div>'+ row.label +':</div><div class="val">'+ value +'</div></div>';
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ value +'</div></div>';
           }
         });
         content += '</div>';
@@ -1273,8 +1294,8 @@ function createMapTooltip(country_code, country_name, point) {
       content +=  currentIndicator.name + ':<div class="stat">' + val + '</div>';
       if (val!='No Data') {
         content += '<div class="table-display">';
-        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row"><div>Total IFI Funding per Capita:&nbsp;</div><div>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</div></div>';
-        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row"><div>Total Amount Combined:&nbsp;</div><div>'+ formatValue(country[0]['#value+ifi+total']) +'</div></div>';
+        if (isVal(country[0]['#value+ifi+percap'])) content += '<div class="table-row"><div>Total IFI Funding per Capita:</div><div>'+ d3.format('$,.2f')(country[0]['#value+ifi+percap']) +'</div></div>';
+        if (isVal(country[0]['#value+ifi+total'])) content += '<div class="table-row"><div>Total Amount Combined:</div><div>'+ formatValue(country[0]['#value+ifi+total']) +'</div></div>';
         content += '</div>';
 
         if (parseFloat(val)>0) {
@@ -1282,7 +1303,7 @@ function createMapTooltip(country_code, country_name, point) {
           var fundingArray = ['adb','afdb','eib', 'ebrd', 'idb','ifc','imf','isdb','unmptf','wb'];
           fundingArray.forEach(function(fund) {
             var fundName = (fund=='wb') ? 'World Bank' : fund.toUpperCase(); 
-            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':&nbsp;</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
+            if (isVal(country[0]['#value+'+fund+'+total'])) content += '<div class="table-row"><div>'+ fundName +':</div><div>'+ formatValue(country[0]['#value+'+fund+'+total']) +'</div></div>';
           });
           content += '</div>';
         }

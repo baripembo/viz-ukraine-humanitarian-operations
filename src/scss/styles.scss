@@ -119,10 +119,8 @@ label {
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
-		.val {
-			min-width: 58px;
-			padding-left: 7px;
-			text-align: right;
+		>div:first-child {
+			padding-right: 20px;
 		}
 		&.row-separator {
 			border-bottom: 1px solid #CCC;
@@ -734,11 +732,8 @@ a:visited {
 		display: block;
 		.legend-container {
 			height: 83px;
-			&.immunization-campaign {
-				height: 32px;
-			}
-			&.access-severity {
-				height: 50px;
+			&.impact-type {
+				height: 68px;
 			}
 		}
 		.source-secondary {

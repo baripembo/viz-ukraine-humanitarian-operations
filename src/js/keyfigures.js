@@ -41,7 +41,7 @@ function setKeyFigures() {
 	nationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
-			if (currentIndicator.id=='#severity+inform+type') {
+			if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
 				if (val!=undefined)
 					totalCountries++;
 			}
@@ -83,6 +83,16 @@ function setKeyFigures() {
 		if (data['#access+travel+pct']!=undefined) createKeyFigure('.figures', 'Average of Travel Authorizations Denied', '', percentFormat(data['#access+travel+pct']));
 		if (data['#activity+cerf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CERF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cerf+project+insecurity+pct']));
 		if (data['#activity+cbpf+project+insecurity+pct']!=undefined) createKeyFigure('.figures', 'Average of CBPF Projects Affected by Access Constraints', '', percentFormat(data['#activity+cbpf+project+insecurity+pct']));
+	}
+	//school closures
+	else if (currentIndicator.id=='#impact+type') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var affectedLearners = (data['#affected+learners']==undefined) ? 0 : shortenNumFormat(data['#affected+learners']);
+		var affectedLearnersPct = (data['#affected+learners+pct']==undefined) ? '0%' : percentFormat(data['#affected+learners+pct']);
+		var statusClosed = (data['#status+country+closed']==undefined) ? 0 : data['#status+country+closed'];
+		createKeyFigure('.figures', 'Number of Affected Learners', '', affectedLearners);
+		createKeyFigure('.figures', 'Percentage of Affected Learners in GHO countries', '', affectedLearnersPct);
+		createKeyFigure('.figures', 'Number of Country-Wide Closures', '', statusClosed);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {

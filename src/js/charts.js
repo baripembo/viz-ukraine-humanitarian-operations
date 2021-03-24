@@ -410,21 +410,25 @@ function createRankingChart() {
   $('.ranking-container').removeClass('ranking-vaccine');
 
   //set title
-  $('.secondary-panel .ranking-title').text( $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country' );
+  var rankingTitle = (currentIndicator.id=='#impact+type') ? 'Total Number of Affected Learners' : $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country'
+  $('.secondary-panel .ranking-title').text(rankingTitle);
 
   var indicator;
   switch(currentIndicator.id) {
     case '#severity+inform+type':
       indicator = '#severity+inform+num';
       break;
+    case '#targeted+doses+delivered+pct':
+      indicator = '#capacity+doses+delivered+total';
+      break;
+    case '#impact+type':
+      indicator = '#affected+learners';
+      break;
     case '#immunization-campaigns':
       indicator = '#vaccination+postponed+num';
       break;
     case '#food-prices':
       indicator = '#value+food+num+ratio';
-      break;
-    case '#targeted+doses+delivered+pct':
-      indicator = '#capacity+doses+delivered+total';
       break;
     default:
       indicator = currentIndicator.id;
@@ -508,7 +512,7 @@ function createRankingChart() {
     .attr('class', 'bar')
     .attr('height', rankingBarHeight)
     .attr('width', function (d) {
-      return (d.value<0) ? 0 : rankingX(d.value);
+      return (d.value<=0) ? 0 : rankingX(d.value);
     });
 
   //add country names
@@ -525,7 +529,8 @@ function createRankingChart() {
     .attr('class', 'label')
     .attr('y', 9)
     .attr('x', function (d) {
-      return rankingX(d.value) + 3;
+      var xpos = (d.value<=0) ? 0 : rankingX(d.value);
+      return xpos + 3;
     })
     .text(function (d) {
       return valueFormat(d.value);
@@ -575,7 +580,7 @@ function updateRankingChart(sortMode) {
     });
 
     if (rankingData.length<1) {
-      $('.ranking-chart').append('<p>No Doses Delivered</p>');
+      $('.ranking-chart').append('<p>No Data</p>');
       $('.ranking-chart > p').css('text-align', 'center');
     }
 
@@ -632,7 +637,7 @@ function updateRankingChart(sortMode) {
       .transition()
         .duration(400)
       .attr('width', function (d) {
-        return (d.value<0) ? 0 : rankingX(d.value);
+        return (d.value<=0) ? 0 : rankingX(d.value);
       });
 
     //add country names
@@ -649,7 +654,8 @@ function updateRankingChart(sortMode) {
       .attr('class', 'label')
       .attr('y', 9)
       .attr('x', function (d) {
-        return rankingX(d.value) + 3;
+        var xpos = (d.value<=0) ? 0 : rankingX(d.value);
+        return xpos + 3;
       })
       .text(function (d) {
         return valueFormat(d.value);
