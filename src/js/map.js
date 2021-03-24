@@ -193,7 +193,8 @@ function createEvents() {
     selectLayer(this);
 
     //reset any deep links
-    window.history.replaceState(null, null, window.location.pathname);
+    var layer = $(this).attr('data-layer');
+    window.history.replaceState(null, null, window.location.pathname+'?layer='+layer);
   });
 
   //global figures close button
