@@ -425,7 +425,7 @@ function createRankingChart() {
       indicator = '#affected+learners';
       break;
     case '#immunization-campaigns':
-      indicator = '#vaccination+num+ratio';
+      indicator = '#vaccination+postponed+num';
       break;
     case '#food-prices':
       indicator = '#value+food+num+ratio';

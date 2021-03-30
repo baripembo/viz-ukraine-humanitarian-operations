@@ -61,67 +61,68 @@
             <button onclick="showPopupSmart12150(true);" class="btn-subscription">Sign up for the monthly report</button>
             <div class='download-link'>
               <a href='https://tools.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
-              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br><label class="label-small">NEW</label>(pdf)</span><i class='humanitarianicons-Download'></i></a>
+              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br><!-- <label class="label-small">NEW</label> -->(pdf)</span><i class='humanitarianicons-Download'></i></a>
             </div>
+            <button onclick='showPopupSmart12150(true);' class='btn-subscription'>Sign up for the monthly report</button>
 
             <div class='global-menu'>
-              <label for="regionSelect" class="visuallyhidden">Select a region: </label>
+              <label for='regionSelect' class='visuallyhidden'>Select a region: </label>
               <select id='regionSelect' class='region-select'>
                 <option>All Regions</option>
               </select>
               
               <h4>Vulnerability and Socio-Economic Risk</h4>
               <ul class='menu-indicators'>
-                <li data-id='#affected+infected+new+per100000+weekly' data-legend='Weekly Number of New Cases per 100,000 People' class='selected'>
+                <li data-id='#affected+infected+new+per100000+weekly' data-legend='Weekly Number of New Cases per 100,000 People' data-layer='covid-19_cases_and_deaths' class='selected'>
                   <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
                 </li>
-                <li data-id='#affected+infected+sex+new+avg+per100000' data-legend='Weekly Number of New Cases per 100,000 People'>
+                <li data-id='#affected+infected+sex+new+avg+per100000' data-legend='Weekly Number of New Cases per 100,000 People' data-layer='covid-19_cases_and_deaths_(sex_disaggregated)'>
                   <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths (Sex Disaggregated)</div>
                 </li>
-                <li data-id='#targeted+doses+delivered+pct' data-legend='Population Coverage by Number of Delivered Doses (COVAX + Other)'>
-                  <div><!-- <i class='humanitarianicons-Vaccine'></i> --><label class="label-small">NEW</label> COVID-19 Vaccine Roll-out</div>
+                <li data-id='#targeted+doses+delivered+pct' data-legend='Population Coverage by Number of Delivered Doses (COVAX + Other)' data-layer='covid-19_vaccine_roll-out'>
+                  <div><i class='humanitarianicons-Vaccine'></i> COVID-19 Vaccine Roll-out</div>
                 </li>
-                <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)'>
+                <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)' data-layer='people_in_need_2021'>
                   <div><i class='humanitarianicons-People-in-need'></i>People in Need 2021</div>
                 </li>
                 <!-- <li data-id='#event+year+todate+num' data-legend='Violent Security Incidents Against Aid Workers since Jan 2020'>
                   <div><i class='humanitarianicons-Humanitarian-access'></i>Humanitarian Access</div>
                 </li> -->
-                <li data-id='#affected+food+p3plus+pct' data-legend='IPC Acute Food Insecurity (% of population in IPC Phase 3+)'>
+                <li data-id='#affected+food+p3plus+pct' data-legend='IPC Acute Food Insecurity (% of population in IPC Phase 3+)' data-layer='ipc_acute_food_insecurity'>
                   <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
                 </li>
-                <li data-id='#affected+children+sam' data-legend='Number of Children 6-59 Months Admitted for Treatment of Severe Acute Malnutrition (SAM)'>
+                <li data-id='#affected+children+sam' data-legend='Number of Children 6-59 Months Admitted for Treatment of Severe Acute Malnutrition (SAM)' data-layer='severe_acute_malnutrition'>
                   <div><i class='humanitarianicons-Nutrition'></i>Severe Acute Malnutrition</div>
                 </li>
-                <li data-id='#impact+type' data-legend='COVID-19 School Closures'>
-                  <div><i class='humanitarianicons-School-affected'></i>School Closures</div>
+                <li data-id='#impact+type' data-legend='COVID-19 School Closures' data-layer='school_closures'>
+                  <div><!-- <i class='humanitarianicons-School-affected'></i> --><label class="label-small">NEW</label> School Closures</div>
                 </li>
-                <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)'>
+                <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)' data-layer='food_market_prices'>
                   <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
                 </li>
-                <li data-id='#vaccination+num+ratio' data-legend='Immunization campaign status (% postponed)'>
+                <li data-id='#vaccination+postponed+num' data-legend='Number of immunization campaigns canceled or postponed due to COVID' data-layer='immunization_campaign_status'>
                   <div><i class='humanitarianicons-Vaccine'></i>Immunization campaign status</div>
                 </li>
-                <li data-id='#severity+stringency+num' data-legend='Oxford COVID-19 Government Stringency Index'>
+                <li data-id='#severity+stringency+num' data-legend='Oxford COVID-19 Government Stringency Index' data-layer='oxford_covid-19_government_stringency_index'>
                   <div><i class='humanitarianicons-Analysis'></i>Oxford COVID-19 Government Stringency Index</div>
                 </li>
-                <li data-id='#severity+inform+type' data-legend='INFORM Severity Class'>
+                <li data-id='#severity+inform+type' data-legend='INFORM Severity Class' data-layer='inform_severity_index'>
                   <div><i class='humanitarianicons-Analysis'></i>INFORM Severity Index</div>
                 </li>
               </ul>
 
               <h4>Humanitarian Funding and International Financing</h4>
               <ul class='menu-indicators'>
-                <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP)'>
+                <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP)' data-layer='humanitarian_funding_level'>
                   <div><i class='humanitarianicons-Financing'></i>Humanitarian Funding Level</div>
                 </li>
-                <li data-id='#value+cerf+covid+funding+total+usd' data-legend='CERF COVID-19 Allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CERF COVID-19 Allocations</div>
+                <li data-id='#value+cerf+covid+funding+total+usd' data-legend='CERF Allocations' data-layer='cerf_allocations'>
+                  <div><i class='humanitarianicons-Fund'></i>CERF Allocations</div>
                 </li>
-                <li data-id='#value+cbpf+covid+funding+total+usd' data-legend='CBPF COVID-19 Allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CBPF COVID-19 Allocations</div>
+                <li data-id='#value+cbpf+covid+funding+total+usd' data-legend='CBPF Allocations' data-layer='cbpf_allocations'>
+                  <div><i class='humanitarianicons-Fund'></i>CBPF Allocations</div>
                 </li>
-                <li data-id='#value+gdp+ifi+pct' data-legend='Total IFI Funding (% of GDP)'>
+                <li data-id='#value+gdp+ifi+pct' data-legend='Total IFI Funding (% of GDP)' data-layer='ifi_financing_for_covid-19_response'>
                   <div><i class='humanitarianicons-University'></i>IFI Financing for COVID-19 Response</div>
                 </li>
               </ul>
@@ -289,7 +290,7 @@
             <label for='indicatorSelect' class='visuallyhidden'>Select an indicator: </label>
             <select id='indicatorSelect' class='indicator-select'>
               <option value=''>Jump to Indicators</option>
-              <option value='covid'>COVID-19 Cases and Projections</option>
+              <option value='covid'>COVID-19 Cases and Deaths</option>
               <option value='hrp'>2020 HRP and COVID-19 Funding</option>
               <option value='inform'>INFORM Severity Index</option>
               <option value='schools'>School Closure</option>
@@ -297,14 +298,11 @@
           </div>
           <div class='panel-content'>
             <div class='covid'>
-              <h5>COVID-19 Cases and Projections</h5>
+              <h5>COVID-19 Cases and Deaths</h5>
               <div class='panel-inner'></div>
             </div>
             <div class='panel-inner cases-timeseries'>
               <div class='country-timeseries-chart'></div>
-            </div>
-            <div class='projections'>
-              <div class='panel-inner'></div>
             </div>
             <div class='hrp'>
               <h5>2020 HRP and COVID-19 Funding</h5>

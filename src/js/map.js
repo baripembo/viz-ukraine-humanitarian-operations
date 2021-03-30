@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7/',
+    style: 'mapbox://styles/humdata/ckmw4fgj215dn17mr2jhhyqva/draft',
     center: [-25, 0],
     minZoom: 1,
     zoom: zoomLevel,
@@ -62,21 +62,21 @@ function displayMap() {
       case 'adm0-centroids':
         globalMarkerLayer = layer.id;
         break;
-      case 'adm1-fills':
+      case 'hrp27-polbnda-adm1-simplified-3m1uwf':
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
         break;
-      case 'adm1-boundaries':
-        countryBoundaryLayer = layer.id;
-        map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
-        break;
-      case 'hrp25-centroid-adm1-simplified-o':
+      case 'adm1-label':
         countryLabelLayer = layer.id;
         map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
         break;
       case 'adm1-marker-points':
         countryMarkerLayer = layer.id;
         map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
+        break;
+      case 'adm1-boundaries':
+        countryBoundaryLayer = layer.id;
+        map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
         break;
       default:
         //do nothing
@@ -102,7 +102,7 @@ function displayMap() {
           type: 'raster',
           source: {
             type: 'raster',
-            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA'],
+            tiles: ['https://api.mapbox.com/v4/humdata.'+raster+'/{z}/{x}/{y}.png?access_token='+mapboxgl.accessToken],
           }
         },
         countryBoundaryLayer
@@ -136,12 +136,12 @@ function displayMap() {
     }
   });
 
-  //deeplink to country if parameter exists
-  if (viewInitialized==true) deepLinkCountryView();
-
   //init global and country layers
   initGlobalLayer();
   initCountryLayer();
+
+  //deeplink to country if parameter exists
+  if (viewInitialized==true) deepLinkView();
 
   //create tooltip
   tooltip = new mapboxgl.Popup({
@@ -151,10 +151,11 @@ function displayMap() {
   });
 }
 
-function deepLinkCountryView() {
+function deepLinkView() {
   var location = window.location.search;
+  //deep link to country view
   if (location.indexOf('?c=')>-1) {
-    var countryCode = location.split('=')[1].toUpperCase();
+    var countryCode = location.split('c=')[1].toUpperCase();
     if (countryCodeList.hasOwnProperty(countryCode)) {    
       $('.country-select').val(countryCode);
       currentCountry.code = countryCode;
@@ -164,6 +165,13 @@ function deepLinkCountryView() {
       var selectedFeatures = matchMapFeatures(currentCountry.code);
       selectCountry(selectedFeatures);
     }
+  }
+  //deep link to specific layer in global view
+  if (location.indexOf('?layer=')>-1) {
+    var layer = location.split('layer=')[1];
+    var menuItem = $('.menu-indicators').find('li[data-layer="'+layer+'"]');
+    menuItem = (menuItem.length<1) ? $('.menu-indicators').find('li[data-layer="covid-19_cases_and_deaths"]') : menuItem;
+    selectLayer(menuItem);
   }
 }
 
@@ -182,35 +190,12 @@ function matchMapFeatures(country_code) {
 function createEvents() {
   //menu events
   $('.menu-indicators li').on('click', function() {
-    $('.menu-indicators li').removeClass('selected');
-    $('.menu-indicators li div').removeClass('expand');
-    $(this).addClass('selected');
-    if (currentIndicator.id==$(this).attr('data-id')) {
-      toggleSecondaryPanel(this);
-    }
-    else {
-      currentIndicator = {id: $(this).attr('data-id'), name: $(this).attr('data-legend')};
-      toggleSecondaryPanel(this, 'open');
+    selectLayer(this);
 
-      //set food prices view
-      if (currentIndicator.id!='#value+food+num+ratio') {
-        closeModal();
-      }
-
-      mpTrack('wrl', $(this).find('div').text());
-      updateGlobalLayer();
-    }
-
-    //handle tab views
-    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-      $('.content').addClass('tab-view');
-      $('.tab-menubar').show();
-    }
-    else {
-      $('.content').removeClass('tab-view');
-      $('.tab-menubar').hide();
-      $('#chart-view').hide();
-    }
+    //reset any deep links
+    var layer = $(this).attr('data-layer');
+    var location = (layer==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layer;
+    window.history.replaceState(null, null, location);
   });
 
   //global figures close button
@@ -278,6 +263,40 @@ function createEvents() {
     mpTrack(currentCountry.code, currentCountryIndicator.name);
   });
 }
+
+//set global layer view
+function selectLayer(menuItem) {
+  $('.menu-indicators li').removeClass('selected');
+  $('.menu-indicators li div').removeClass('expand');
+  $(menuItem).addClass('selected');
+  if (currentIndicator.id==$(menuItem).attr('data-id')) {
+    toggleSecondaryPanel(menuItem);
+  }
+  else {
+    currentIndicator = {id: $(menuItem).attr('data-id'), name: $(menuItem).attr('data-legend')};
+    toggleSecondaryPanel(menuItem, 'open');
+
+    //set food prices view
+    if (currentIndicator.id!='#value+food+num+ratio') {
+      closeModal();
+    }
+
+    mpTrack('wrl', $(menuItem).find('div').text());
+    updateGlobalLayer();
+  }
+
+  //handle tab views
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+    $('.content').addClass('tab-view');
+    $('.tab-menubar').show();
+  }
+  else {
+    $('.content').removeClass('tab-view');
+    $('.tab-menubar').hide();
+    $('#chart-view').hide();
+  }
+}
+
 
 function toggleSecondaryPanel(currentBtn, state) {
   var width = $('.secondary-panel').outerWidth();
@@ -449,6 +468,7 @@ function initGlobalLayer() {
   setKeyFigures();
 }
 
+
 function updateGlobalLayer() {
   setKeyFigures();
 
@@ -546,6 +566,11 @@ function getGlobalLegendScale() {
     else
       scale = d3.scaleQuantile().domain(data).range(colorRange);
   }
+  else if (currentIndicator.id=='#vaccination+postponed+num') {
+    //set the max to at least 5
+    max = (max>5) ? max : 5;
+    scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+  }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic Break']).range(schoolClosureColorRange);
   }
@@ -570,7 +595,6 @@ function getGlobalLegendScale() {
     scale = d3.scaleThreshold()
       .domain([ 0.03, 0.05, 0.1, 0.15 ])
       .range(colorRange);
-      //0- 3%; 3-5%; 5-10%; 10-15%; 15-20%"
   }
   else {
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
@@ -629,7 +653,7 @@ function setGlobalLegend(scale) {
     //pin footnote
     createFootnote('.map-legend.global', 'Population percentages greater than 100% include refugees, migrants, and/or asylum seekers.', '#affected+inneed+pct');
     //vacc footnote
-    createFootnote('.map-legend.global', 'Methodology: Information about interrupted immunization campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total immunization campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.', '#vaccination+num+ratio');
+    createFootnote('.map-legend.global', 'Methodology: Information about interrupted immunization campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed or cancelled campaigns and total immunization campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.', '#vaccination+postponed+num');
     //food prices footnote
     createFootnote('.map-legend.global', 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.', '#value+food+num+ratio');
     //oxford footnote
@@ -781,6 +805,7 @@ function initCountryLayer() {
 
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
+    console.log('mouseenter', e.features[0].properties.ADM0_REF, e.features[0].properties.ADM1_REF)
     map.getCanvas().style.cursor = 'pointer';
     tooltip.addTo(map);
   });
@@ -823,7 +848,7 @@ function updateCountryLayer() {
     case '#population':
       clrRange = populationColorRange;
       break;
-    case '#vaccination+num+ratio':
+    case '#vaccination+postponed+num':
       clrRange = immunizationColorRange;
       break;
     default:
@@ -1169,7 +1194,7 @@ function createMapTooltip(country_code, country_name, point) {
       content += '</div>';
     }
     //Immunization campaigns layer
-    else if (currentIndicator.id=='#vaccination+num+ratio') {
+    else if (currentIndicator.id=='#vaccination+postponed+num') {
       var vaccData = [];
       immunizationDataByCountry.forEach(function(country) {
         if (country.key==country_code) {
