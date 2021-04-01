@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckmw4fgj215dn17mr2jhhyqva/draft',
+    style: 'mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7',
     center: [-25, 0],
     minZoom: 1,
     zoom: zoomLevel,
@@ -62,7 +62,7 @@ function displayMap() {
       case 'adm0-centroids':
         globalMarkerLayer = layer.id;
         break;
-      case 'hrp27-polbnda-adm1-simplified-3m1uwf':
+      case 'adm1-fills':
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
         break;
@@ -805,7 +805,6 @@ function initCountryLayer() {
 
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
-    console.log('mouseenter', e.features[0].properties.ADM0_REF, e.features[0].properties.ADM1_REF)
     map.getCanvas().style.cursor = 'pointer';
     tooltip.addTo(map);
   });

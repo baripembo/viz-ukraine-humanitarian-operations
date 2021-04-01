@@ -166,7 +166,7 @@ const countryCodeList = {
   MOZ: '5jojox7h',
   NER: '9gbs4a2a',
   NGA: '3ceksugh',
-  PAK: '94y0veay',
+  //PAK: '94y0veay',
   PSE: '1emy37d7',
   SDN: 'a2zw3leb',
   SOM: '3s7xeitz',
