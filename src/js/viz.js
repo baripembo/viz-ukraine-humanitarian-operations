@@ -68,7 +68,7 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/cerf2021/out.json'),//https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json
       d3.json('data/ocha-regions-bbox.geojson')
     ]).then(function(data) {
       console.log('Data loaded');

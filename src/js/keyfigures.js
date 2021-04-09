@@ -107,28 +107,28 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Total Funding Level', '', percentFormat(data['#value+funding+hrp+pct']));
 	}
 	//CERF
-	else if (currentIndicator.id=='#value+cerf+covid+funding+total+usd') {
+	else if (currentIndicator.id=='#value+cerf+funding+total+usd') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		createKeyFigure('.figures', 'Total CERF Funding', '', formatValue(data['#value+cerf+covid+funding+total+usd']));
-		if (data['#value+cerf+covid+funding+total+usd'] > 0) {
+		createKeyFigure('.figures', 'Total CERF Funding', '', formatValue(data['#value+cerf+funding+total+usd']));
+		if (data['#value+cerf+funding+total+usd'] > 0) {
 			var gmText = getGamText(data, 'cerf');
 			$('.figures .key-figure .inner').append('<div class="small">'+ gmText +'</div>');
 		}
 	}
 	//CBPF
-	else if (currentIndicator.id=='#value+cbpf+covid+funding+total+usd') {
+	else if (currentIndicator.id=='#value+cbpf+funding+total+usd') {
 		//num countries
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		createKeyFigure('.figures', 'Total CBPF Funding', '', formatValue(data['#value+cbpf+covid+funding+total+usd']));
+		createKeyFigure('.figures', 'Total CBPF Funding', '', formatValue(data['#value+cbpf+funding+total+usd']));
 		
 		//gam
-		if (data['#value+cbpf+covid+funding+total+usd'] > 0) {
+		if (data['#value+cbpf+funding+total+usd'] > 0) {
 			var gmText = getGamText(data, 'cbpf');
 			$('.figures .key-figure .inner').append('<div class="small">'+ gmText +'</div>');
 		}
 
 		//beneficieries
-		if (data['#affected+cbpf+covid+funding+total'] > 0) {
+		if (data['#affected+cbpf+funding+total'] > 0) {
 			var beneficiaryText = getBeneficiaryText(data);
 			$('.figures .key-figure .inner').append('<div class="small">'+ beneficiaryText +'</div>');
 		}
