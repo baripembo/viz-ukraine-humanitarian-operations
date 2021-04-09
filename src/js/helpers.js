@@ -104,21 +104,21 @@ function hasGamData(data, indicator) {
 function getGamText(data, indicator) {
   var gmText = '**Gender-Age Marker:<br>';
   for (var i=0;i<5;i++) {
-    var pct = (data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+covid+funding+gm'+ i +'+total+usd'] / data['#value+'+ indicator + '+covid+funding+total+usd']) : '0%';
+    var pct = (data['#value+'+ indicator + '+funding+gm'+ i +'+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+funding+gm'+ i +'+total+usd'] / data['#value+'+ indicator + '+funding+total+usd']) : '0%';
     gmText += '['+i+']: ' + pct;
     gmText += ', ';
   }
   gmText += '[NA]: ';
-  gmText += (data['#value+'+ indicator + '+covid+funding+gmempty+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+covid+funding+gmempty+total+usd'] / data['#value+'+ indicator +'+covid+funding+total+usd']) : '0%';
+  gmText += (data['#value+'+ indicator + '+funding+gmempty+total+usd']!=undefined) ? percentFormat(data['#value+'+ indicator + '+funding+gmempty+total+usd'] / data['#value+'+ indicator +'+funding+total+usd']) : '0%';
   return gmText;
 }
 
 function getBeneficiaryText(data) {
   var beneficiaryText = 'Beneficiary breakdown:<br>';
-  beneficiaryText += (data['#affected+cbpf+covid+funding+men']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+men'] / data['#affected+cbpf+covid+funding+total']) + ' Male, ' : '0% Male, ';
-  beneficiaryText += (data['#affected+cbpf+covid+funding+women']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+women'] / data['#affected+cbpf+covid+funding+total']) + ' Female, ' : '0% Female, ';
-  beneficiaryText += (data['#affected+boys+cbpf+covid+funding']!=undefined) ? percentFormat(data['#affected+boys+cbpf+covid+funding'] / data['#affected+cbpf+covid+funding+total']) + ' Boys, ' : '0% Boys, ';
-  beneficiaryText += (data['#affected+cbpf+covid+funding+girls']!=undefined) ? percentFormat(data['#affected+cbpf+covid+funding+girls'] / data['#affected+cbpf+covid+funding+total']) + ' Girls' : '0% Girls';
+  beneficiaryText += (data['#affected+cbpf+funding+men']!=undefined) ? percentFormat(data['#affected+cbpf+funding+men'] / data['#affected+cbpf+funding+total']) + ' Male, ' : '0% Male, ';
+  beneficiaryText += (data['#affected+cbpf+funding+women']!=undefined) ? percentFormat(data['#affected+cbpf+funding+women'] / data['#affected+cbpf+funding+total']) + ' Female, ' : '0% Female, ';
+  beneficiaryText += (data['#affected+boys+cbpf+funding']!=undefined) ? percentFormat(data['#affected+boys+cbpf+funding'] / data['#affected+cbpf+funding+total']) + ' Boys, ' : '0% Boys, ';
+  beneficiaryText += (data['#affected+cbpf+funding+girls']!=undefined) ? percentFormat(data['#affected+cbpf+funding+girls'] / data['#affected+cbpf+funding+total']) + ' Girls' : '0% Girls';
   return beneficiaryText;
 }
 
