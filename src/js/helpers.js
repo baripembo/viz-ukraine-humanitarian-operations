@@ -163,7 +163,7 @@ const countryCodeList = {
   LBY: '0o4l8ysb',
   MLI: '17y8a20i',
   MMR: '7wk9p4wu',
-  //MOZ: '5jojox7h',
+  MOZ: '5jojox7h',
   NER: '9gbs4a2a',
   NGA: '3ceksugh',
   //PAK: '94y0veay',
