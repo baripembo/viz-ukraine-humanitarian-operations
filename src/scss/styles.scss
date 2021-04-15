@@ -388,11 +388,15 @@ a:visited {
   background-color: #007CE1;
   border: 0;
   color: #FFF;
-  cursor: pointer;
-  border-radius: 0;
+  cursor: pointer;  
+  display: inline-block;
   font-size: 12px;
   margin: 0 20px 10px;
 	padding: 5px 10px;
+  text-decoration: none;
+  &:visited {
+  	color: #FFF;
+  }
 }
 
 .download-link {
