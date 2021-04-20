@@ -60,9 +60,9 @@
             <h4>Download:</h4>
             <div class='download-link'>
               <a href='https://tools.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
-              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br><label class="label-small">NEW</label>(pdf)</span><i class='humanitarianicons-Download'></i></a>
+              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br><!-- <label class="label-small">NEW</label> -->(pdf)</span><i class='humanitarianicons-Download'></i></a>
             </div>
-            <button onclick='showPopupSmart12150(true);' class='btn-subscription'>Sign up for the monthly report</button>
+            <a href="https://mailchi.mp/humdata/c19-monthly" target="_blank" class='btn-subscription'>Sign up for the monthly report</a>
 
             <div class='global-menu'>
               <label for='regionSelect' class='visuallyhidden'>Select a region: </label>
@@ -94,7 +94,7 @@
                   <div><i class='humanitarianicons-Nutrition'></i>Severe Acute Malnutrition</div>
                 </li>
                 <li data-id='#impact+type' data-legend='COVID-19 School Closures' data-layer='school_closures'>
-                  <div><!-- <i class='humanitarianicons-School-affected'></i> --><label class="label-small">NEW</label> School Closures</div>
+                  <div><i class='humanitarianicons-School-affected'></i> School Closures</div>
                 </li>
                 <li data-id='#value+food+num+ratio' data-legend='Food Market Prices (% in crisis)' data-layer='food_market_prices'>
                   <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
@@ -115,11 +115,11 @@
                 <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP)' data-layer='humanitarian_funding_level'>
                   <div><i class='humanitarianicons-Financing'></i>Humanitarian Funding Level</div>
                 </li>
-                <li data-id='#value+cerf+funding+total+usd' data-legend='CERF Allocations' data-layer='cerf_allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CERF Allocations</div>
+                <li data-id='#value+cerf+funding+total+usd' data-legend='CERF Allocations 2021' data-layer='cerf_allocations'>
+                  <div><i class='humanitarianicons-Fund'></i>CERF Allocations 2021</div>
                 </li>
-                <li data-id='#value+cbpf+funding+total+usd' data-legend='CBPF Allocations' data-layer='cbpf_allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CBPF Allocations</div>
+                <li data-id='#value+cbpf+funding+total+usd' data-legend='CBPF Allocations 2021' data-layer='cbpf_allocations'>
+                  <div><i class='humanitarianicons-Fund'></i>CBPF Allocations 2021</div>
                 </li>
                 <li data-id='#value+gdp+ifi+pct' data-legend='Total IFI Funding (% of GDP)' data-layer='ifi_financing_for_covid-19_response'>
                   <div><i class='humanitarianicons-University'></i>IFI Financing for COVID-19 Response</div>
@@ -191,6 +191,13 @@
                     <option value='#capacity+doses+delivered+covax'>COVAX Delivered</option>
                     <option value='#capacity+doses+delivered+others'>Other Delivered</option>
                   </select>
+                  <div class='sorting-select-container'>
+                    <p>Sort by:</p>
+                    <select id='vaccineSortingSelect' class='sorting-select'>
+                      <option value='#country+name'>Country</option>
+                      <option value='#meta+vaccine+funder'>Vaccine by source</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <div class='ranking-chart'></div>
