@@ -443,12 +443,15 @@ function createRankingChart() {
     $('.ranking-container').addClass('ranking-vaccine');
     $('.ranking-select').val(indicator);
   }
+  else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
+    $('.ranking-chart').append('<p>Sort by:</p>');
+  }
   else {
     $('.ranking-select').val('descending');
   }
 
   //format data
-  rankingData = formatRankingData(indicator);
+  rankingData = formatRankingData(indicator, d3.select('#vaccineSortingSelect').node().value);
 
   var valueMax = d3.max(rankingData, function(d) { return +d.value; });
   valueFormat = d3.format(',.0f');
@@ -537,15 +540,29 @@ function createRankingChart() {
     });
 }
 
-function formatRankingData(indicator) {
-  var rankingByCountry = d3.nest()
-    .key(function(d) {
-      if (regionMatch(d['#region+name'])) return d['#country+name']; 
-    })
-    .rollup(function(v) {
-      if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
-    })
-    .entries(nationalData);
+function formatRankingData(indicator, sorter) {
+  var isCovaxLayer = (indicator.indexOf('#capacity+doses')>-1) ? true : false;
+  if (isCovaxLayer) {
+    if (sorter==undefined) sorter = '#country+name';
+    var rankingByCountry = d3.nest()
+      .key(function(d) {
+        if (regionMatch(d['#region+name'])) return d[sorter]; 
+      })
+      .rollup(function(v) {
+        if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
+      })
+      .entries(nationalData);
+  }
+  else {  
+    var rankingByCountry = d3.nest()
+      .key(function(d) {
+        if (regionMatch(d['#region+name'])) return d['#country+name']; 
+      })
+      .rollup(function(v) {
+        if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
+      })
+      .entries(nationalData);
+  }
 
   var data = rankingByCountry.filter(function(item) {
     return isVal(item.value) && !isNaN(item.value);
@@ -554,7 +571,7 @@ function formatRankingData(indicator) {
   return data;
 }
 
-function updateRankingChart(sortMode) {
+function updateRankingChart(sortMode, secondarySortMode) {
   if (sortMode=='ascending' || sortMode=='descending') {
     //sort the chart
     rankingData.sort(function(a, b){
@@ -574,7 +591,7 @@ function updateRankingChart(sortMode) {
     //empty and redraw chart with new indicator
     $('.secondary-panel').find('.ranking-chart').empty();
 
-    rankingData = formatRankingData(sortMode);
+    rankingData = formatRankingData(sortMode, secondarySortMode);
     rankingData.sort(function(a, b){
        return d3.descending(+a.value, +b.value);
     });

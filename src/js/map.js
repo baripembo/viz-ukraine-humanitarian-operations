@@ -208,7 +208,15 @@ function createEvents() {
   d3.selectAll('.ranking-select').on('change',function(e) {
     var selected = d3.select(this).node().value;
     if (selected!='') {
-      updateRankingChart(selected);
+      updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
+    }
+  });
+
+  //rank sorting select event (only on COVAX layer)
+  d3.selectAll('.sorting-select').on('change',function(e) {
+    var selected = d3.select(this).node().value;
+    if (selected!='') {
+      updateRankingChart(d3.select('#vaccineRankingSelect').node().value, selected);
     }
   });
 
