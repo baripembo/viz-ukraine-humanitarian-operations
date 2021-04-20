@@ -1252,7 +1252,7 @@ function createMapTooltip(country_code, country_name, point) {
           });
         }
         else {
-          content +=  currentIndicator.name + ':<div class="stat">Under Review</div>';
+          content +=  currentIndicator.name + ':<div class="stat">N/A</div>';
         }
       }
     }

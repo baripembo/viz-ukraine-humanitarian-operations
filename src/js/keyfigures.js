@@ -57,7 +57,7 @@ function setKeyFigures() {
 	if (currentIndicator.id=='#affected+inneed+pct') {
 		var totalPIN = d3.sum(nationalData, function(d) {
 			if (regionMatch(d['#region+name'])) {
-				return +d['#affected+inneed']; 
+				return +d['#affected+inneed'];
 			}
 		});
 		//hardcode global PIN to match OCHA data
