@@ -276,7 +276,7 @@ $( document ).ready(function() {
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)
-      deepLinkCountryView();
+      deepLinkView();
 
     viewInitialized = true;
   }

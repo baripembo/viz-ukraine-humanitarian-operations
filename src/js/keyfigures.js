@@ -55,15 +55,10 @@ function setKeyFigures() {
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
-		var totalPIN = d3.sum(nationalData, function(d) {
-			if (regionMatch(d['#region+name'])) {
-				return +d['#affected+inneed'];
-			}
-		});
-		//hardcode global PIN to match OCHA data
-		totalPIN = (currentRegion=='') ? '431M' : (d3.format('.4s'))(totalPIN);
-		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', totalPIN);
+		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
+		if (currentRegion=='') affectedPIN = '431M';//hardcode global PIN to match OCHA data
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', affectedPIN);
 	}
 	//vaccine rollout
 	else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
@@ -94,6 +89,12 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Number of Affected Learners', '', affectedLearners);
 		createKeyFigure('.figures', 'Percentage of Affected Learners in GHO countries', '', affectedLearnersPct);
 		createKeyFigure('.figures', 'Number of Country-Wide Closures', '', statusClosed);
+	} 
+	//immunizations
+	else if (currentIndicator.id=='#vaccination+postponed+num') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var postponedNum = (data[indicator]==undefined) ? 0 : data[indicator];
+		createKeyFigure('.figures', 'Total number of immunization campaigns canceled or postponed due to COVID', '', postponedNum);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
