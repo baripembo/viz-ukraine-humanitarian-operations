@@ -118,21 +118,20 @@ $( document ).ready(function() {
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
         
         //consolidate IPC data
-        if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
-          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+        if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
+          item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
         }
-        if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
-          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+        if (item['#affected+food+ipc+p3+num'] || item['#affected+ch+food+p3+num']) {
+          item['#affected+food+p3+num'] = (item['#affected+food+ipc+p3+num']) ? item['#affected+food+ipc+p3+num'] : item['#affected+ch+food+p3+num'];
         }
-        if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
-          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
-          //item['#ipc-source'] = (item['#affected+food+ipc+p3plus+pct']) ? '#affected+food+ipc+p3plus+pct' : '#affected+ch+food+p3plus+pct';
+        if (item['#affected+food+ipc+p3plus+num'] || item['#affected+ch+food+p3plus+num']) {
+          item['#affected+food+p3plus+num'] = (item['#affected+food+ipc+p3plus+num']) ? item['#affected+food+ipc+p3plus+num'] : item['#affected+ch+food+p3plus+num'];
         }
-        if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
-          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+        if (item['#affected+food+ipc+p4+num'] || item['#affected+ch+food+p4+num']) {
+          item['#affected+food+p4+num'] = (item['#affected+food+ipc+p4+num']) ? item['#affected+food+ipc+p4+num'] : item['#affected+ch+food+p4+num'];
         }
-        if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
-          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+        if (item['#affected+food+ipc+p5+num'] || item['#affected+ch+food+p5+num']) {
+          item['#affected+food+p5+num'] = (item['#affected+food+ipc+p5+num']) ? item['#affected+food+ipc+p5+num'] : item['#affected+ch+food+p5+num'];
         }
         if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
           item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
@@ -153,7 +152,7 @@ $( document ).ready(function() {
         var isEmpty = false;
         //check first two data points to choose btwn IPC and CH datasets
         for (var i=0; i<2; i++) {
-          var val = country.values[i]['#affected+food+ipc+p3plus+pct'];
+          var val = country.values[i]['#affected+food+ipc+p3plus+num'];
           if (i==0 && (!isVal(val) || isNaN(val))) {
             isEmpty = true;
           }
@@ -161,7 +160,7 @@ $( document ).ready(function() {
             isEmpty = false;
           }
         }
-        country['#ipc+source'] = (isEmpty) ? '#affected+ch+food+p3plus+pct' : '#affected+food+ipc+p3plus+pct';
+        country['#ipc+source'] = (isEmpty) ? '#affected+ch+food+p3plus+num' : '#affected+food+ipc+p3plus+num';
       });
 
       //group countries by region    

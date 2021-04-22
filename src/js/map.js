@@ -833,7 +833,7 @@ function initCountryLayer() {
 
 function updateCountryLayer() {
   colorNoData = '#FFF';
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct') currentCountryIndicator.id = getIPCDataSource();
+  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+num') currentCountryIndicator.id = getIPCDataSource();
   $('.map-legend.country .legend-container').removeClass('no-data');
 
   //max
@@ -979,19 +979,19 @@ function updateCountryLegend(scale) {
     var startDate = new Date(data['#date+ipc+start']);
     var endDate = new Date(data['#date+ipc+end']);
     startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
-    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);// +' - '+ data['#date+ipc+period'];
+    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);
     $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
   }
   else {
-    var sourceObj = getSource('#affected+food+ipc+p3plus+pct');
+    var sourceObj = getSource('#affected+food+ipc+p3plus+num');
     var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
     $('.map-legend.country').find('.food-security-source .source .date').text(date);
   }
 
   var legendFormat;
-  if (currentCountryIndicator.id=='#affected+ch+food+p3plus+pct' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+pct' || currentCountryIndicator.id.indexOf('vaccinated')>-1)
+  if (currentCountryIndicator.id.indexOf('vaccinated')>-1)
     legendFormat = d3.format('.0%');
-  else if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+idps+ind')
+  else if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+idps+ind' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+num' || currentCountryIndicator.id=='#affected+ch+food+p3plus+num')
     legendFormat = shortenNumFormat;
   else
     legendFormat = d3.format('.0f');
@@ -1155,7 +1155,7 @@ function createMapTooltip(country_code, country_name, point) {
       content += '</div>';
     }
     //IPC layer
-    else if (currentIndicator.id=='#affected+food+p3plus+pct') {
+    else if (currentIndicator.id=='#affected+food+p3plus+num') {
       var dateSpan = '';
       if (country[0]['#date+ipc+start']!=undefined) {
         var startDate = new Date(country[0]['#date+ipc+start']);
@@ -1163,15 +1163,19 @@ function createMapTooltip(country_code, country_name, point) {
         startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
         var dateSpan = '<span class="subtext">('+ startDate +'-'+ d3.utcFormat('%b %Y')(endDate) +' - '+ country[0]['#date+ipc+period'] +')</span>';
       }
-      content += 'Total % Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + val + '</div>';
+      var shortVal = (isNaN(val)) ? val : shortenNumFormat(val);
+      content += 'Total Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + shortVal + '</div>';
       if (val!='No Data') {
-        if (country[0]['#affected+food+analysed+pct']!=undefined) content += '<span>('+ percentFormat(country[0]['#affected+food+analysed+pct']) +' or '+ shortenNumFormat(country[0]['#affected+food+analysed+num']) +' of total country population analysed)</span>';
-        var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+pct']},
-                          {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+pct']},
-                          {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+pct']}];
+        if (country[0]['#affected+food+analysed+num']!=undefined) content += '<span>('+ shortenNumFormat(country[0]['#affected+food+analysed+num']) +' of total country population analysed)</span>';
+        var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+num']},
+                          {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+num']},
+                          {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+num']}];
         content += '<div class="table-display">Breakdown:';
         tableArray.forEach(function(row) {
-          if (row.value!=undefined) content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ percentFormat(row.value) +'</div></div>';
+          if (row.value!=undefined) {
+            var shortRowVal = (row.value==0) ? 0 : shortenNumFormat(row.value);
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ shortRowVal +'</div></div>';
+          }
         });
         content += '</div>';
       }
@@ -1407,7 +1411,7 @@ function createCountryMapTooltip(adm1_name) {
     //format content for tooltip
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
-      if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
+      if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+num' || currentCountryIndicator.id=='#affected+ch+food+p3plus+num') val = shortenNumFormat(val);
       if (currentCountryIndicator.id=='#affected+idps+ind') val = numFormat(val);
     }
     else {
