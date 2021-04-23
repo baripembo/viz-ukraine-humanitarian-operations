@@ -212,6 +212,13 @@ function createEvents() {
     }
   });
 
+  //chart view trendseries select event
+  d3.select('.trendseries-select').on('change',function(e) {
+    var selected = d3.select('.trendseries-select').node().value;
+    //initTrendseries(covidTrendData, selected);
+    updateTrendseries(selected);
+  });
+
   //region select event
   d3.select('.region-select').on('change',function(e) {
     currentRegion = d3.select('.region-select').node().value;
@@ -531,9 +538,9 @@ function updateGlobalLayer() {
   setGlobalLegend(colorScale);
 
   //update global timeseries chart
-  globalTimeseriesChart.hide();
-  globalTimeseriesChart.show(countryList);
-  createTimeseriesLegend(globalTimeseriesChart);
+  // globalTimeseriesChart.hide();
+  // globalTimeseriesChart.show(countryList);
+  // createTimeseriesLegend(globalTimeseriesChart);
 }
 
 function getGlobalLegendScale() {
