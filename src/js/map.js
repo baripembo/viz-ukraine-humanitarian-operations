@@ -215,7 +215,6 @@ function createEvents() {
   //chart view trendseries select event
   d3.select('.trendseries-select').on('change',function(e) {
     var selected = d3.select('.trendseries-select').node().value;
-    //initTrendseries(covidTrendData, selected);
     updateTrendseries(selected);
   });
 

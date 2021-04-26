@@ -243,7 +243,10 @@ $( document ).ready(function() {
       .selectAll('option')
       .data(globalCountryList)
       .enter().append('option')
-        .text(function(d) { return d.name; })
+        .text(function(d) { 
+          var name = (d.name=='oPt') ? 'Occupied Palestinian Territory' : d.name;
+          return name; 
+        })
         .attr('value', function (d) { return d.code; });
 
     //create tab events
