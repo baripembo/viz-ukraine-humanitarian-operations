@@ -108,10 +108,10 @@ function initTrendseries(countryCode) {
   createTrendseries(casesArray, '.cases-trend-chart');
 
   //deaths chart
-  // var deathsArray = formatTrendseriesData(countryCode, 'killed');
-  // var latestVal = deathsArray[deathsArray.length-1]['weekly_new'];
-  // $('.deaths-title').html('<h6>Weekly Number of New Deaths</h6><div class="num">'+numFormat(latestVal)+'</div>');
-  // createTrendseries(deathsArray, '.deaths-trend-chart');
+  var deathsArray = formatTrendseriesData(countryCode, 'killed');
+  var latestVal = deathsArray[deathsArray.length-1]['weekly_new'];
+  $('.deaths-title').html('<h6>Weekly Number of New Deaths</h6><div class="num">'+numFormat(latestVal)+'</div>');
+  createTrendseries(deathsArray, '.deaths-trend-chart');
 }
 
 function formatTrendseriesData(countryCode, indicator) {
@@ -140,14 +140,15 @@ function formatTrendseriesData(countryCode, indicator) {
   return trendArray;
 }
 
-var casesTrendChart = '';
+var casesTrendChart, deathsTrendChart = '';
 function createTrendseries(array, div) {
-  console.log(array)
   var chartWidth = viewportWidth - $('.secondary-panel').width() - 75;
   var chartHeight = 200;
   var colorArray = ['#F8B1AD'];
+  var isCases = (div.indexOf('cases')>-1) ? true : false;
+  //var maxVal = d3.max(array, function(d) { return +d.weekly_new; });
 
-  casesTrendChart = c3.generate({
+  var chart = c3.generate({
     size: {
       width: chartWidth,
       height: chartHeight
@@ -184,9 +185,11 @@ function createTrendseries(array, div) {
       y: {
         min: 0,
         padding: { top:0, bottom:0 },
-        tick: { 
+        tick: {
           outer: false,
-          format: shortenNumFormat
+          format: function(d) {
+            return (d<10) ? d : shortenNumFormat(d);
+          }
         }
       }
     },
@@ -195,11 +198,12 @@ function createTrendseries(array, div) {
     },
     tooltip: {
       contents: function(d, defaultTitleFormat, defaultValueFormat, color) {
+        var indicator = (isCases) ? 'Cases' : 'Deaths';
         var index = d[0].index;
         var content = '<table class="trendseries-tooltip">';
         content += '<thead><th colspan="2">' + defaultTitleFormat(d[0].x) + '</th></thead>';
-        content += '<tr><td>Weekly Number of New Cases</td><td>' + numFormat(array[index]['weekly_new']) + '</td></tr>';
-        content += '<tr><td>New Cases per 100,000</td><td>' + d3.format('.1f')(array[index]['new_per_capita']) + '</td></tr>';
+        content += '<tr><td>Weekly Number of New '+indicator+'</td><td>' + numFormat(array[index]['weekly_new']) + '</td></tr>';
+        content += '<tr><td>New '+indicator+' per 100,000</td><td>' + d3.format('.1f')(array[index]['new_per_capita']) + '</td></tr>';
         content += '<tr><td>Weekly Trend</td><td>' + numFormat(array[index]['weekly_trend']) + '</td></tr>';
         content += '<tr><td>Weekly Trend in %</td><td>' + percentFormat(array[index]['weekly_trend_pct']) + '</td></tr>';
         content += '</table>';
@@ -208,16 +212,34 @@ function createTrendseries(array, div) {
     },
     transition: { duration: 500 }
   });
+
+  //save references to trend charts
+  if (isCases) {
+    casesTrendChart = chart;
+  }
+  else {
+    deathsTrendChart = chart;
+  }
 }
 
 function updateTrendseries(countryCode) {
-  var trendseriesArray = formatTrendseriesData(countryCode, 'infected');
-  var latestVal = trendseriesArray[trendseriesArray.length-1]['weekly_new'];
+  var casesArray = formatTrendseriesData(countryCode, 'infected');
+  var latestVal = casesArray[casesArray.length-1]['weekly_new'];
   $('.cases-title').find('.num').html(numFormat(latestVal));
-  createTrendseries(trendseriesArray, '.cases-trend-chart');
-
   casesTrendChart.load({
-    json: trendseriesArray,
+    json: casesArray,
+    keys: {
+      x: 'date',
+      value: ['weekly_new']
+    }
+  });
+
+
+  var deathsArray = formatTrendseriesData(countryCode, 'killed');
+  var latestVal = deathsArray[deathsArray.length-1]['weekly_new'];
+  $('.deaths-title').find('.num').html(numFormat(latestVal));
+  deathsTrendChart.load({
+    json: deathsArray,
     keys: {
       x: 'date',
       value: ['weekly_new']
