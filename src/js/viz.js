@@ -12,13 +12,14 @@ var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
-var globalTimeseriesChart, countryTimeseriesChart = '';
+var countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var viewInitialized = false;
 var zoomLevel = 1.4;
 
 var hrpData = [];
+var globalCountryList = [];
 var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
@@ -118,25 +119,30 @@ $( document ).ready(function() {
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
         
         //consolidate IPC data
-        if (item['#affected+food+ipc+analysed+pct'] || item['#affected+ch+food+analysed+pct']) {
-          item['#affected+food+analysed+pct'] = (item['#affected+food+ipc+analysed+pct']) ? item['#affected+food+ipc+analysed+pct'] : item['#affected+ch+food+analysed+pct'];
+        if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
+          item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
         }
-        if (item['#affected+food+ipc+p3+pct'] || item['#affected+ch+food+p3+pct']) {
-          item['#affected+food+p3+pct'] = (item['#affected+food+ipc+p3+pct']) ? item['#affected+food+ipc+p3+pct'] : item['#affected+ch+food+p3+pct'];
+        if (item['#affected+food+ipc+p3+num'] || item['#affected+ch+food+p3+num']) {
+          item['#affected+food+p3+num'] = (item['#affected+food+ipc+p3+num']) ? item['#affected+food+ipc+p3+num'] : item['#affected+ch+food+p3+num'];
         }
-        if (item['#affected+food+ipc+p3plus+pct'] || item['#affected+ch+food+p3plus+pct']) {
-          item['#affected+food+p3plus+pct'] = (item['#affected+food+ipc+p3plus+pct']) ? item['#affected+food+ipc+p3plus+pct'] : item['#affected+ch+food+p3plus+pct'];
-          //item['#ipc-source'] = (item['#affected+food+ipc+p3plus+pct']) ? '#affected+food+ipc+p3plus+pct' : '#affected+ch+food+p3plus+pct';
+        if (item['#affected+food+ipc+p3plus+num'] || item['#affected+ch+food+p3plus+num']) {
+          item['#affected+food+p3plus+num'] = (item['#affected+food+ipc+p3plus+num']) ? item['#affected+food+ipc+p3plus+num'] : item['#affected+ch+food+p3plus+num'];
         }
-        if (item['#affected+food+ipc+p4+pct'] || item['#affected+ch+food+p4+pct']) {
-          item['#affected+food+p4+pct'] = (item['#affected+food+ipc+p4+pct']) ? item['#affected+food+ipc+p4+pct'] : item['#affected+ch+food+p4+pct'];
+        if (item['#affected+food+ipc+p4+num'] || item['#affected+ch+food+p4+num']) {
+          item['#affected+food+p4+num'] = (item['#affected+food+ipc+p4+num']) ? item['#affected+food+ipc+p4+num'] : item['#affected+ch+food+p4+num'];
         }
-        if (item['#affected+food+ipc+p5+pct'] || item['#affected+ch+food+p5+pct']) {
-          item['#affected+food+p5+pct'] = (item['#affected+food+ipc+p5+pct']) ? item['#affected+food+ipc+p5+pct'] : item['#affected+ch+food+p5+pct'];
+        if (item['#affected+food+ipc+p5+num'] || item['#affected+ch+food+p5+num']) {
+          item['#affected+food+p5+num'] = (item['#affected+food+ipc+p5+num']) ? item['#affected+food+ipc+p5+num'] : item['#affected+ch+food+p5+num'];
         }
         if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
           item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
         }
+
+        //keep global list of countries
+        globalCountryList.push({
+          'name': item['#country+name'],
+          'code': item['#country+code']
+        });
       });
 
       //group national data by country -- drives country panel    
@@ -153,7 +159,7 @@ $( document ).ready(function() {
         var isEmpty = false;
         //check first two data points to choose btwn IPC and CH datasets
         for (var i=0; i<2; i++) {
-          var val = country.values[i]['#affected+food+ipc+p3plus+pct'];
+          var val = country.values[i]['#affected+food+ipc+p3plus+num'];
           if (i==0 && (!isVal(val) || isNaN(val))) {
             isEmpty = true;
           }
@@ -161,7 +167,7 @@ $( document ).ready(function() {
             isEmpty = false;
           }
         }
-        country['#ipc+source'] = (isEmpty) ? '#affected+ch+food+p3plus+pct' : '#affected+food+ipc+p3plus+pct';
+        country['#ipc+source'] = (isEmpty) ? '#affected+ch+food+p3plus+num' : '#affected+food+ipc+p3plus+num';
       });
 
       //group countries by region    
@@ -216,7 +222,7 @@ $( document ).ready(function() {
     $('.region-select').prepend('<option value="">All Regions</option>');
     $('.region-select').val($('.region-select option:first').val());
 
-    //create country select
+    //create hrp country select
     var countryArray = Object.keys(countryCodeList);
     hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
     hrpData.sort(function(a, b){
@@ -231,6 +237,14 @@ $( document ).ready(function() {
     //insert default option    
     $('.country-select').prepend('<option value="">View Country Page</option>');
     $('.country-select').val($('.country-select option:first').val());
+
+    //create chart view country select
+    var trendseriesSelect = d3.select('.trendseries-select')
+      .selectAll('option')
+      .data(globalCountryList)
+      .enter().append('option')
+        .text(function(d) { return d.name; })
+        .attr('value', function (d) { return d.code; });
 
     //create tab events
     $('.tab-menubar .tab-button').on('click', function() {
@@ -267,9 +281,9 @@ $( document ).ready(function() {
       });
     });
 
-    //load timeseries for global view 
+    //load trenseries for global view
     createSource($('#chart-view .source-container'), '#affected+infected');
-    initTimeseries(timeseriesData, '.global-timeseries-chart');
+    initTrendseries('ABW');
 
     //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');

@@ -87,7 +87,7 @@
                 <!-- <li data-id='#event+year+todate+num' data-legend='Violent Security Incidents Against Aid Workers since Jan 2020'>
                   <div><i class='humanitarianicons-Humanitarian-access'></i>Humanitarian Access</div>
                 </li> -->
-                <li data-id='#affected+food+p3plus+pct' data-legend='IPC Acute Food Insecurity (% of population in IPC Phase 3+)' data-layer='ipc_acute_food_insecurity'>
+                <li data-id='#affected+food+p3plus+num' data-legend='IPC Acute Food Insecurity (population in IPC Phase 3+)' data-layer='ipc_acute_food_insecurity'>
                   <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
                 </li>
                 <li data-id='#affected+children+sam' data-legend='Number of Children 6-59 Months Admitted for Treatment of Severe Acute Malnutrition (SAM)' data-layer='severe_acute_malnutrition'>
@@ -207,7 +207,7 @@
           <div id='global-map'>
             <div class='tab-menubar'>
               <div class='tab-button active' data-id='map-view'>Map View</div>
-              <div class='tab-button' data-id='chart-view'>Chart View</div>
+              <div class='tab-button' data-id='chart-view'><label class="label-small">NEW</label> Chart View</div>
             </div>
             <div class='map-legend global'>
               <div class='toggle-icon'></div>
@@ -223,7 +223,7 @@
               <div class='source-container population-source'></div>
               <label>IDPs (IOM-DTM) <input checked='true' name='countryIndicators' type='radio' value='#affected+idps+ind' id='idps'></label>
               <div class='source-container idps-source'></div>
-              <label>Acute Food Insecurity<br> (% of population in IPC Phase 3+) <input name='countryIndicators' type='radio' value='#affected+food+ipc+p3plus+pct' id='foodSecurity'></label>
+              <label>Acute Food Insecurity<br> (population in IPC Phase 3+) <input name='countryIndicators' type='radio' value='#affected+food+ipc+p3plus+num' id='foodSecurity'></label>
               <div class='source-container food-security-source'></div>
               <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
               <div class='source-container orgs-source'></div>
@@ -260,7 +260,13 @@
 
           <div id='chart-view'>
             <div class='source-container'></div>
-            <div class='global-timeseries-chart'></div>
+            <div class='trendseries-container'>
+              <select id='trendseriesSelect' class='trendseries-select'></select>
+              <div class='cases-title'></div>
+              <div class='cases-trend-chart'></div>
+              <div class='deaths-title'></div>
+              <div class='deaths-trend-chart'></div>
+            </div>
           </div>
 
           <div class='loader'>
