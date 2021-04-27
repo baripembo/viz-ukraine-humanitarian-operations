@@ -158,7 +158,7 @@ function setKeyFigures() {
 		var covidGlobal = (currentRegion!='') ? covidTrendData[currentRegion] : covidTrendData.GHO;
 		var weeklyCases = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+weekly'] : 0;
 		var weeklyDeaths = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+killed+new+weekly'] : 0;
-		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+pct+weekly'] : 0;
+		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+pct+weekly']*100 : 0;
 		
 		if (covidGlobal!=undefined) {
 			//weekly new cases
@@ -183,7 +183,7 @@ function setKeyFigures() {
 			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 	    var pctArray = [];
 	    covidGlobal.forEach(function(d) {
-	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
+	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']*100};
 	      pctArray.push(obj);
 	    });
 			createSparkline(pctArray, '.secondary-panel .cases-trend');

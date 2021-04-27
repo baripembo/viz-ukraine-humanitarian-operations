@@ -1356,7 +1356,7 @@ function createMapTooltip(country_code, country_name, point) {
       if (country[0]['#covid+trend+pct']!=undefined) {
         var pctArray = [];
         covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
+          var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']*100};
           pctArray.push(obj);
         });
         createSparkline(pctArray, '.mapboxgl-popup-content .covid-pct .sparkline-container');
