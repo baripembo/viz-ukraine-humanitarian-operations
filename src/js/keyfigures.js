@@ -16,7 +16,7 @@ function setKeyFigures() {
 	
 	//show global vax stat only on covax layer
 	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined) {
-		var totalAdministeredVal = shortenNumFormat(worldData['#capacity+doses+administered+total']);
+		var totalAdministeredVal = d3.format('.3s')(worldData['#capacity+doses+administered+total']).replace(/G/,"B");
 		globalFigures += '<br><br><b>Global vaccines administered: '+ totalAdministeredVal +'</b>';
 	}
 	
