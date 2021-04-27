@@ -179,7 +179,7 @@ function createTrendseries(array, div) {
         tick: {
           outer: false,
           format: function(d) {
-            var date = dateFormat(d);
+            var date = chartDateFormat(d);
             return date;
           }
         }
@@ -352,7 +352,7 @@ function createTimeSeries(array, div) {
           outer: false,
           values: dateArray,
           format: function(d, i) {
-            var date = dateFormat(d);
+            var date = chartDateFormat(d);
             date = (d.getMonth()%3==0) ? date : '';
             return date;
           }
