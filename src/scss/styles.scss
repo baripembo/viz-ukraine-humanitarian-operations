@@ -144,9 +144,9 @@ label {
 
 .stat {
   font-family: 'Gotham-Light', sans-serif;
-  font-size: 36px;
-  line-height: 40px;
-  margin: 30px 0;
+  font-size: 29px;
+  line-height: 35px;
+  margin: 20px 0;
 }
 
 ul {
@@ -468,7 +468,8 @@ a:visited {
 .country-select,
 .indicator-select,
 .ranking-select,
-.sorting-select {    
+.sorting-select,
+.trendseries-select { 
 	background-color: #FFF;
   border-color: #FFF;
 	border-radius: 8px;
@@ -513,6 +514,10 @@ a:visited {
 	p {
 		margin-right: 5px;
 	}
+}
+
+.trendseries-select {
+	width: auto;
 }
 
 .secondary-panel {
@@ -1105,7 +1110,6 @@ table {
 	}
 }
 
-.global-timeseries-chart,
 .country-timeseries-chart {
 	.timeseries-legend {
 	  background-color: rgba(255, 255, 255, 0.5);
@@ -1210,14 +1214,61 @@ table {
 	background-color: #FFF;
 	display: none;
   left: 0;
+  overflow: auto;
   padding: 15px 30px;
 	position: absolute;
   top: 50px;
   width: 100%;
   z-index: 3;
   .source-container {
-  	margin-bottom: 40px;
+  	margin-bottom: 20px;
   }
+  .cases-title,
+  .deaths-title {
+  	border-top: 1px solid #CCC;
+  	margin-top: 30px;
+  	h6 {
+  		margin-top: 25px;
+  	}
+  	.num {
+  		color: #000;
+	    font-family: 'Gotham-Light', sans-serif;
+	    font-size: 42px;
+	    line-height: 40px;
+	    padding: 10px 0;
+  	}
+  }
+  .c3-bar._expanded_ {
+  	fill: #F2645B !important;
+  	fill-opacity: 1 !important;
+  }
+}
+
+.trendseries-tooltip {
+	background-color: #FFF;
+	border: 1px solid #E2E2E2;
+	border-collapse: collapse;
+  border-spacing: 0;
+	th {
+		background-color: #B3B3B3;
+		border: 1px solid #B3B3B3;
+		color: #FFF;
+		font-family: 'Source Sans Pro', sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		margin: 0;
+		padding: 6px 6px;
+	}
+	td {
+		font-family: 'Source Sans Pro', sans-serif;
+		font-size: 13px;
+		font-weight: normal !important;
+		padding: 4px 7px;
+		&:last-child {
+			border-left: 1px solid #E2E2E2;
+			text-align: right;
+		}
+	}
 }
 
 //accessibility helper class

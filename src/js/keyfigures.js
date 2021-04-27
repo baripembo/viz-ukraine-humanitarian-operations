@@ -12,11 +12,11 @@ function setKeyFigures() {
 
 	//set global stats
 	var globalData = regionalData.filter(function(region) { return region['#region+name']=='global'; });
-	var globalFigures = '<b>Global COVID-19 Figures:</b><br>'+ shortenNumFormat(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths';
+	var globalFigures = '<b>Global COVID-19 Figures:</b><br>'+ d3.format('.3s')(globalData[0]['#affected+infected']) +' total confirmed cases<br>'+ shortenNumFormat(globalData[0]['#affected+killed']) +' total confirmed deaths';
 	
 	//show global vax stat only on covax layer
 	if (currentIndicator.id=='#targeted+doses+delivered+pct' && worldData['#capacity+doses+administered+total']!=undefined) {
-		var totalAdministeredVal = shortenNumFormat(worldData['#capacity+doses+administered+total']);
+		var totalAdministeredVal = d3.format('.3s')(worldData['#capacity+doses+administered+total']).replace(/G/,"B");
 		globalFigures += '<br><br><b>Global vaccines administered: '+ totalAdministeredVal +'</b>';
 	}
 	
@@ -55,15 +55,10 @@ function setKeyFigures() {
 
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
-		var totalPIN = d3.sum(nationalData, function(d) {
-			if (regionMatch(d['#region+name'])) {
-				return +d['#affected+inneed'];
-			}
-		});
-		//hardcode global PIN to match OCHA data
-		totalPIN = (currentRegion=='') ? '431M' : (d3.format('.4s'))(totalPIN);
-		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', totalPIN);
+		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
+		if (currentRegion=='') affectedPIN = '431M';//hardcode global PIN to match OCHA data
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', affectedPIN);
 	}
 	//vaccine rollout
 	else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
@@ -75,6 +70,18 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+others']));
 		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+total']));
 		createKeyFigure('.figures', 'Total Administered (Number of Doses)', '', data['#capacity+doses+administered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+administered+total']));
+	} 
+	//IPC
+	else if (currentIndicator.id=='#affected+food+p3plus+num') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var ipcTotal = (data['#affected+food+ipc+p3plus+num']==undefined) ? 0 : d3.format('.3s')(data['#affected+food+ipc+p3plus+num']);
+		createKeyFigure('.figures', 'Total number of people in IPC 3+', '', ipcTotal);
+	}
+	//SAM
+	else if (currentIndicator.id=='#affected+children+sam') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var samTotal = (data[indicator]==undefined) ? 0 : d3.format('.3s')(data[indicator]);
+		createKeyFigure('.figures', 'Number of Admissions', '', samTotal);
 	}
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
@@ -94,6 +101,12 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Number of Affected Learners', '', affectedLearners);
 		createKeyFigure('.figures', 'Percentage of Affected Learners in GHO countries', '', affectedLearnersPct);
 		createKeyFigure('.figures', 'Number of Country-Wide Closures', '', statusClosed);
+	} 
+	//immunizations
+	else if (currentIndicator.id=='#vaccination+postponed+num') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var postponedNum = (data[indicator]==undefined) ? 0 : data[indicator];
+		createKeyFigure('.figures', 'Total number of immunization campaigns canceled or postponed due to COVID', '', postponedNum);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
@@ -157,7 +170,7 @@ function setKeyFigures() {
 		var covidGlobal = (currentRegion!='') ? covidTrendData[currentRegion] : covidTrendData.GHO;
 		var weeklyCases = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+weekly'] : 0;
 		var weeklyDeaths = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+killed+new+weekly'] : 0;
-		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+pct+weekly'] : 0;
+		var weeklyTrend = (covidGlobal!=undefined) ? covidGlobal[covidGlobal.length-1]['#affected+infected+new+pct+weekly']*100 : 0;
 		
 		if (covidGlobal!=undefined) {
 			//weekly new cases
@@ -182,7 +195,7 @@ function setKeyFigures() {
 			createKeyFigure('.figures', 'Weekly Trend<br>(new cases past week / prior week)', 'cases-trend', weeklyTrend.toFixed(1) + '%');
 	    var pctArray = [];
 	    covidGlobal.forEach(function(d) {
-	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
+	      var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']*100};
 	      pctArray.push(obj);
 	    });
 			createSparkline(pctArray, '.secondary-panel .cases-trend');
@@ -242,7 +255,7 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	if (indicator=='#affected+food+p3plus+pct') indicator = '#affected+food+ipc+p3plus+pct';
+	if (indicator=='#affected+food+p3plus+num') indicator = '#affected+food+ipc+p3plus+num';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
