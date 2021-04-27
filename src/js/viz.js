@@ -49,7 +49,7 @@ $( document ).ready(function() {
     $('.content').width(viewportWidth + $('.content-left').innerWidth());
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('#chart-view').height(viewportHeight - $('.tab-menubar').height());
+    $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
     $('.map-legend.global, .map-legend.country').css('max-height', viewportHeight - 200);
     if (viewportHeight<696) {
