@@ -70,6 +70,12 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+others']));
 		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+total']));
 		createKeyFigure('.figures', 'Total Administered (Number of Doses)', '', data['#capacity+doses+administered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+administered+total']));
+	} 
+	//ipc
+	else if (currentIndicator.id=='#affected+food+p3plus+num') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		var ipcTotal = (data['#affected+food+ipc+p3plus+num']==undefined) ? 0 : d3.format('.3s')(data['#affected+food+ipc+p3plus+num']);
+		createKeyFigure('.figures', 'Total number of people in IPC 3+', '', ipcTotal);
 	}
 	//access severity
 	else if (currentIndicator.id=='#event+year+todate+num') {
