@@ -204,7 +204,7 @@ function createTrendseries(array, div) {
         var currentArray = (isCases) ? casesTrendArray : deathsTrendArray;
         var index = d[0].index;
         var content = '<table class="trendseries-tooltip">';
-        content += '<thead><th colspan="2">' + defaultTitleFormat(d[0].x) + ' ' + d[0].value + ' ' + currentArray[index]['weekly_new'] +'</th></thead>';
+        content += '<thead><th colspan="2">' + defaultTitleFormat(d[0].x) + '</th></thead>';
         content += '<tr><td>Weekly Number of New '+indicator+'</td><td>' + numFormat(currentArray[index]['weekly_new']) + '</td></tr>';
         content += '<tr><td>New '+indicator+' per 100,000</td><td>' + d3.format('.1f')(currentArray[index]['new_per_capita']) + '</td></tr>';
         content += '<tr><td>Weekly Trend</td><td>' + numFormat(currentArray[index]['weekly_trend']) + '</td></tr>';
