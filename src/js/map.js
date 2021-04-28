@@ -210,11 +210,11 @@ function createEvents() {
     if (selected!='') {  
       //show/hide vaccine sort select if Total Delivered is selected
       if (selected=='#capacity+doses+delivered+total') {
-        $('.sorting-select-container').show();
+        $('.vaccine-sorting-container').show();
         updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
       }
       else {
-        $('.sorting-select-container').hide();
+        $('.vaccine-sorting-container').hide();
         updateRankingChart(selected);
       }
     }
@@ -301,6 +301,11 @@ function selectLayer(menuItem) {
     //set food prices view
     if (currentIndicator.id!='#value+food+num+ratio') {
       closeModal();
+    }
+
+    //reset vaccine sorting select
+    if (currentIndicator.id!='#targeted+doses+delivered+pct') {
+      $('.vaccine-sorting-container').show();
     }
 
     mpTrack('wrl', $(menuItem).find('div').text());
