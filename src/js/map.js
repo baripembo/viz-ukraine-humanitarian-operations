@@ -207,16 +207,16 @@ function createEvents() {
   //ranking select event
   d3.selectAll('.ranking-select').on('change',function(e) {
     var selected = d3.select(this).node().value;
-    if (selected!='') {
-      updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
-    }
-    
-    //show/hide vaccine sort select if Total Delivered is selected
-    if (selected=='#capacity+doses+delivered+total') {
-      $('.sorting-select-container').show();
-    }
-    else {
-      $('.sorting-select-container').hide();
+    if (selected!='') {  
+      //show/hide vaccine sort select if Total Delivered is selected
+      if (selected=='#capacity+doses+delivered+total') {
+        $('.sorting-select-container').show();
+        updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
+      }
+      else {
+        $('.sorting-select-container').hide();
+        updateRankingChart(selected);
+      }
     }
   });
 

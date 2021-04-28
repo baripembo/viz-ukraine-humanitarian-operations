@@ -671,32 +671,26 @@ function formatRankingData(indicator, sorter) {
         .entries(nationalData);
     }
     else {
-      var test = {};
-      var rankingByCountry = d3.nest()
-        .key(function(d) {
-          if (regionMatch(d['#region+name'])) return d[sorter]; 
-        })
-        .rollup(function(v) {
-          if (regionMatch(v[0]['#region+name'])) {
-            //test[v[0]['#meta+vaccine+funder']] = +test[v[0]['#meta+vaccine+funder']] + +v[0]['#capacity+vaccine+doses'];
-            var funders = v[0]['#meta+vaccine+funder'].split('|');
-            var doses = v[0]['#capacity+vaccine+doses'].split('|');
+      //aggregate vax data by funder
+      var funderObject = {};
+      for (var i=0; i<nationalData.length; i++) {
+        if (regionMatch(nationalData[i]['#region+name'])) {
+          if (nationalData[i]['#meta+vaccine+funder']!=undefined && nationalData[i]['#capacity+vaccine+doses']!=undefined) {          
+            var funders = nationalData[i]['#meta+vaccine+funder'].split('|');
+            var doses = nationalData[i]['#capacity+vaccine+doses'].split('|');
             funders.forEach(function(funder, index) {
-              test[funder] = (test[funder]==undefined) ? +doses[index] : +test[funder] + +doses[index];
+              funderObject[funder] = (funderObject[funder]==undefined) ? +doses[index] : funderObject[funder] + +doses[index];
             });
-            console.log(v[0]['#meta+vaccine+funder'])
-            console.log(v[0]['#capacity+vaccine+doses'])
-            //return v[0][indicator];
           }
-        })
-        .entries(nationalData);
+        }
+      }
 
-        console.log(test)
-        console.log(rankingByCountry)
+      //format aggregated vax data for ranking chart
+      var rankingByCountry = [];
+      for (const [funder, doses] of Object.entries(funderObject)) {
+        rankingByCountry.push({key: funder, value: doses});        
+      }
     }
-
-      //#meta+vaccine+funder #capacity+vaccine+doses
-
   }
   else {  
     var rankingByCountry = d3.nest()
