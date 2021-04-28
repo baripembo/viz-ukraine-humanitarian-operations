@@ -210,6 +210,14 @@ function createEvents() {
     if (selected!='') {
       updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
     }
+    
+    //show/hide vaccine sort select if Total Delivered is selected
+    if (selected=='#capacity+doses+delivered+total') {
+      $('.sorting-select-container').show();
+    }
+    else {
+      $('.sorting-select-container').hide();
+    }
   });
 
   //rank sorting select event (only on COVAX layer)

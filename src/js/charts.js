@@ -660,14 +660,43 @@ function formatRankingData(indicator, sorter) {
   var isCovaxLayer = (indicator.indexOf('#capacity+doses')>-1) ? true : false;
   if (isCovaxLayer) {
     if (sorter==undefined) sorter = '#country+name';
-    var rankingByCountry = d3.nest()
-      .key(function(d) {
-        if (regionMatch(d['#region+name'])) return d[sorter]; 
-      })
-      .rollup(function(v) {
-        if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
-      })
-      .entries(nationalData);
+    if (sorter=='#country+name') {
+      var rankingByCountry = d3.nest()
+        .key(function(d) {
+          if (regionMatch(d['#region+name'])) return d[sorter]; 
+        })
+        .rollup(function(v) {
+          if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
+        })
+        .entries(nationalData);
+    }
+    else {
+      var test = {};
+      var rankingByCountry = d3.nest()
+        .key(function(d) {
+          if (regionMatch(d['#region+name'])) return d[sorter]; 
+        })
+        .rollup(function(v) {
+          if (regionMatch(v[0]['#region+name'])) {
+            //test[v[0]['#meta+vaccine+funder']] = +test[v[0]['#meta+vaccine+funder']] + +v[0]['#capacity+vaccine+doses'];
+            var funders = v[0]['#meta+vaccine+funder'].split('|');
+            var doses = v[0]['#capacity+vaccine+doses'].split('|');
+            funders.forEach(function(funder, index) {
+              test[funder] = (test[funder]==undefined) ? +doses[index] : +test[funder] + +doses[index];
+            });
+            console.log(v[0]['#meta+vaccine+funder'])
+            console.log(v[0]['#capacity+vaccine+doses'])
+            //return v[0][indicator];
+          }
+        })
+        .entries(nationalData);
+
+        console.log(test)
+        console.log(rankingByCountry)
+    }
+
+      //#meta+vaccine+funder #capacity+vaccine+doses
+
   }
   else {  
     var rankingByCountry = d3.nest()
