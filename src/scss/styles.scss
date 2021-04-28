@@ -113,6 +113,17 @@ label {
 	text-transform: capitalize;
 }
 
+.btn-subscription {
+    background-color: #007CE1;
+    border: 0;
+    color: #FFF;
+    cursor: pointer;
+    border-radius: 0;
+    font-size: 12px;
+    margin: 10px 20px 20px;
+	padding: 5px 10px;
+}
+
 .table-display {
 	margin: 5px 0 20px;
 	.table-row {
@@ -518,6 +529,16 @@ a:visited {
 
 .trendseries-select {
 	width: auto;
+}
+
+.sorting-select-container {
+	align-items: center;
+	display: flex;
+	flex-wrap: nowrap;
+	margin-top: 10px;
+	p {
+		margin-right: 5px;
+	}
 }
 
 .secondary-panel {
