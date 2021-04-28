@@ -2,6 +2,7 @@ var numFormat = d3.format(',');
 var shortenNumFormat = d3.format('.2s');
 var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
+var chartDateFormat = d3.utcFormat("%-m/%-d/%y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
@@ -49,7 +50,7 @@ $( document ).ready(function() {
     $('.content').width(viewportWidth + $('.content-left').innerWidth());
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('#chart-view').height(viewportHeight - $('.tab-menubar').height());
+    $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
     $('.map-legend.global, .map-legend.country').css('max-height', viewportHeight - 200);
     if (viewportHeight<696) {
@@ -109,7 +110,7 @@ $( document ).ready(function() {
         
         //store covid trend data
         var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+pct+weekly']/100;
+        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+pct+weekly'];
         item['#affected+infected+new+per100000+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+per100000+weekly'];
         item['#affected+infected+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
         item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
@@ -243,7 +244,10 @@ $( document ).ready(function() {
       .selectAll('option')
       .data(globalCountryList)
       .enter().append('option')
-        .text(function(d) { return d.name; })
+        .text(function(d) { 
+          var name = (d.name=='oPt') ? 'Occupied Palestinian Territory' : d.name;
+          return name; 
+        })
         .attr('value', function (d) { return d.code; });
 
     //create tab events

@@ -207,8 +207,16 @@ function createEvents() {
   //ranking select event
   d3.selectAll('.ranking-select').on('change',function(e) {
     var selected = d3.select(this).node().value;
-    if (selected!='') {
-      updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
+    if (selected!='') {  
+      //show/hide vaccine sort select if Total Delivered is selected
+      if (selected=='#capacity+doses+delivered+total') {
+        $('.sorting-select-container').show();
+        updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
+      }
+      else {
+        $('.sorting-select-container').hide();
+        updateRankingChart(selected);
+      }
     }
   });
 
@@ -223,7 +231,6 @@ function createEvents() {
   //chart view trendseries select event
   d3.select('.trendseries-select').on('change',function(e) {
     var selected = d3.select('.trendseries-select').node().value;
-    //initTrendseries(covidTrendData, selected);
     updateTrendseries(selected);
   });
 
@@ -1371,7 +1378,7 @@ function createMapTooltip(country_code, country_name, point) {
       if (country[0]['#covid+trend+pct']!=undefined) {
         var pctArray = [];
         covidTrendData[country_code].forEach(function(d) {
-          var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']};
+          var obj = {date: d['#date+reported'], value: d['#affected+infected+new+pct+weekly']*100};
           pctArray.push(obj);
         });
         createSparkline(pctArray, '.mapboxgl-popup-content .covid-pct .sparkline-container');

@@ -155,9 +155,9 @@ label {
 
 .stat {
   font-family: 'Gotham-Light', sans-serif;
-  font-size: 36px;
-  line-height: 40px;
-  margin: 30px 0;
+  font-size: 29px;
+  line-height: 35px;
+  margin: 20px 0;
 }
 
 ul {
@@ -479,8 +479,8 @@ a:visited {
 .country-select,
 .indicator-select,
 .ranking-select,
-.trendseries-select,
-.sorting-select {    
+.sorting-select,
+.trendseries-select { 
 	background-color: #FFF;
   border-color: #FFF;
 	border-radius: 8px;
@@ -515,6 +515,16 @@ a:visited {
 	margin-left: 0;
 	padding: 0;
 	width: auto;
+}
+
+.sorting-select-container {
+	align-items: center;
+	display: flex;
+	flex-wrap: nowrap;
+	margin-top: 10px;
+	p {
+		margin-right: 5px;
+	}
 }
 
 .trendseries-select {
@@ -1225,6 +1235,7 @@ table {
 	background-color: #FFF;
 	display: none;
   left: 0;
+  overflow: auto;
   padding: 15px 30px;
 	position: absolute;
   top: 50px;

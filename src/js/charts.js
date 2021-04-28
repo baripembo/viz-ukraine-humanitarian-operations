@@ -141,6 +141,8 @@ function formatTrendseriesData(countryCode, indicator) {
 }
 
 var casesTrendChart, deathsTrendChart = '';
+var casesTrendArray = [];
+var deathsTrendArray = [];
 function createTrendseries(array, div) {
   var chartWidth = viewportWidth - $('.secondary-panel').width() - 75;
   var chartHeight = 200;
@@ -177,7 +179,7 @@ function createTrendseries(array, div) {
         tick: {
           outer: false,
           format: function(d) {
-            var date = dateFormat(d);
+            var date = chartDateFormat(d);
             return date;
           }
         }
@@ -199,13 +201,14 @@ function createTrendseries(array, div) {
     tooltip: {
       contents: function(d, defaultTitleFormat, defaultValueFormat, color) {
         var indicator = (isCases) ? 'Cases' : 'Deaths';
+        var currentArray = (isCases) ? casesTrendArray : deathsTrendArray;
         var index = d[0].index;
         var content = '<table class="trendseries-tooltip">';
         content += '<thead><th colspan="2">' + defaultTitleFormat(d[0].x) + '</th></thead>';
-        content += '<tr><td>Weekly Number of New '+indicator+'</td><td>' + numFormat(array[index]['weekly_new']) + '</td></tr>';
-        content += '<tr><td>New '+indicator+' per 100,000</td><td>' + d3.format('.1f')(array[index]['new_per_capita']) + '</td></tr>';
-        content += '<tr><td>Weekly Trend</td><td>' + numFormat(array[index]['weekly_trend']) + '</td></tr>';
-        content += '<tr><td>Weekly Trend in %</td><td>' + percentFormat(array[index]['weekly_trend_pct']) + '</td></tr>';
+        content += '<tr><td>Weekly Number of New '+indicator+'</td><td>' + numFormat(currentArray[index]['weekly_new']) + '</td></tr>';
+        content += '<tr><td>New '+indicator+' per 100,000</td><td>' + d3.format('.1f')(currentArray[index]['new_per_capita']) + '</td></tr>';
+        content += '<tr><td>Weekly Trend</td><td>' + numFormat(currentArray[index]['weekly_trend']) + '</td></tr>';
+        content += '<tr><td>Weekly Trend in %</td><td>' + percentFormat(currentArray[index]['weekly_trend_pct']) + '</td></tr>';
         content += '</table>';
         return content;
       }
@@ -216,30 +219,31 @@ function createTrendseries(array, div) {
   //save references to trend charts
   if (isCases) {
     casesTrendChart = chart;
+    casesTrendArray = array;
   }
   else {
     deathsTrendChart = chart;
+    deathsTrendArray = array;
   }
 }
 
 function updateTrendseries(countryCode) {
-  var casesArray = formatTrendseriesData(countryCode, 'infected');
-  var latestVal = casesArray[casesArray.length-1]['weekly_new'];
+  casesTrendArray = formatTrendseriesData(countryCode, 'infected');
+  var latestVal = casesTrendArray[casesTrendArray.length-1]['weekly_new'];
   $('.cases-title').find('.num').html(numFormat(latestVal));
   casesTrendChart.load({
-    json: casesArray,
+    json: casesTrendArray,
     keys: {
       x: 'date',
       value: ['weekly_new']
     }
   });
-
-
-  var deathsArray = formatTrendseriesData(countryCode, 'killed');
-  var latestVal = deathsArray[deathsArray.length-1]['weekly_new'];
+  
+  deathsTrendArray = formatTrendseriesData(countryCode, 'killed');
+  var latestVal = deathsTrendArray[deathsTrendArray.length-1]['weekly_new'];
   $('.deaths-title').find('.num').html(numFormat(latestVal));
   deathsTrendChart.load({
-    json: deathsArray,
+    json: deathsTrendArray,
     keys: {
       x: 'date',
       value: ['weekly_new']
@@ -348,7 +352,7 @@ function createTimeSeries(array, div) {
           outer: false,
           values: dateArray,
           format: function(d, i) {
-            var date = dateFormat(d);
+            var date = chartDateFormat(d);
             date = (d.getMonth()%3==0) ? date : '';
             return date;
           }
@@ -656,14 +660,37 @@ function formatRankingData(indicator, sorter) {
   var isCovaxLayer = (indicator.indexOf('#capacity+doses')>-1) ? true : false;
   if (isCovaxLayer) {
     if (sorter==undefined) sorter = '#country+name';
-    var rankingByCountry = d3.nest()
-      .key(function(d) {
-        if (regionMatch(d['#region+name'])) return d[sorter]; 
-      })
-      .rollup(function(v) {
-        if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
-      })
-      .entries(nationalData);
+    if (sorter=='#country+name') {
+      var rankingByCountry = d3.nest()
+        .key(function(d) {
+          if (regionMatch(d['#region+name'])) return d[sorter]; 
+        })
+        .rollup(function(v) {
+          if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
+        })
+        .entries(nationalData);
+    }
+    else {
+      //aggregate vax data by funder
+      var funderObject = {};
+      for (var i=0; i<nationalData.length; i++) {
+        if (regionMatch(nationalData[i]['#region+name'])) {
+          if (nationalData[i]['#meta+vaccine+funder']!=undefined && nationalData[i]['#capacity+vaccine+doses']!=undefined) {          
+            var funders = nationalData[i]['#meta+vaccine+funder'].split('|');
+            var doses = nationalData[i]['#capacity+vaccine+doses'].split('|');
+            funders.forEach(function(funder, index) {
+              funderObject[funder] = (funderObject[funder]==undefined) ? +doses[index] : funderObject[funder] + +doses[index];
+            });
+          }
+        }
+      }
+
+      //format aggregated vax data for ranking chart
+      var rankingByCountry = [];
+      for (const [funder, doses] of Object.entries(funderObject)) {
+        rankingByCountry.push({key: funder, value: doses});        
+      }
+    }
   }
   else {  
     var rankingByCountry = d3.nest()
