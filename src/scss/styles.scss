@@ -113,6 +113,17 @@ label {
 	text-transform: capitalize;
 }
 
+.btn-subscription {
+    background-color: #007CE1;
+    border: 0;
+    color: #FFF;
+    cursor: pointer;
+    border-radius: 0;
+    font-size: 12px;
+    margin: 10px 20px 20px;
+	padding: 5px 10px;
+}
+
 .table-display {
 	margin: 5px 0 20px;
 	.table-row {
@@ -468,7 +479,8 @@ a:visited {
 .country-select,
 .indicator-select,
 .ranking-select,
-.trendseries-select {    
+.sorting-select,
+.trendseries-select { 
 	background-color: #FFF;
   border-color: #FFF;
 	border-radius: 8px;
@@ -493,19 +505,40 @@ a:visited {
 	z-index: 3;
 }
 
-.ranking-select {
+.ranking-select,
+.sorting-select {
 	border-radius: 4px;
 	box-shadow: 0 2px 4px rgba(0,0,0,.5);
 	font-size: 14px;
 	font-weight: normal;
 	height: 30px;
-	margin-left: 8px;
+	margin-left: 0;
 	padding: 0;
 	width: auto;
 }
 
+.vaccine-sorting-container {
+	align-items: center;
+	display: flex;
+	flex-wrap: nowrap;
+	margin-top: 10px;
+	p {
+		margin-right: 5px;
+	}
+}
+
 .trendseries-select {
 	width: auto;
+}
+
+.sorting-select-container {
+	align-items: center;
+	display: flex;
+	flex-wrap: nowrap;
+	margin-top: 10px;
+	p {
+		margin-right: 5px;
+	}
 }
 
 .secondary-panel {

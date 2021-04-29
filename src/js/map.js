@@ -207,8 +207,24 @@ function createEvents() {
   //ranking select event
   d3.selectAll('.ranking-select').on('change',function(e) {
     var selected = d3.select(this).node().value;
+    if (selected!='') {  
+      //show/hide vaccine sort select if Total Delivered is selected
+      if (selected=='#capacity+doses+delivered+total') {
+        $('.vaccine-sorting-container').show();
+        updateRankingChart(selected, d3.select('#vaccineSortingSelect').node().value);
+      }
+      else {
+        $('.vaccine-sorting-container').hide();
+        updateRankingChart(selected);
+      }
+    }
+  });
+
+  //rank sorting select event (only on COVAX layer)
+  d3.selectAll('.sorting-select').on('change',function(e) {
+    var selected = d3.select(this).node().value;
     if (selected!='') {
-      updateRankingChart(selected);
+      updateRankingChart(d3.select('#vaccineRankingSelect').node().value, selected);
     }
   });
 
@@ -285,6 +301,11 @@ function selectLayer(menuItem) {
     //set food prices view
     if (currentIndicator.id!='#value+food+num+ratio') {
       closeModal();
+    }
+
+    //reset vaccine sorting select
+    if (currentIndicator.id!='#targeted+doses+delivered+pct') {
+      $('.vaccine-sorting-container').show();
     }
 
     mpTrack('wrl', $(menuItem).find('div').text());
