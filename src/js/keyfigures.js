@@ -255,7 +255,8 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	//if (indicator=='#affected+food+p3plus+num') indicator = '#affected+food+ipc+p3plus+num';
+  var isGlobal = ($('.content').hasClass('country-view')) ? false : true;
+	if (isGlobal && indicator=='#affected+food+p3plus+num') indicator = '#affected+food+ipc+p3plus+num';
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {

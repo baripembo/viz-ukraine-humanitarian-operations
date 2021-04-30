@@ -29,7 +29,7 @@ $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
   //console.log(prod);
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2hnbWs5NzkxMXh2MnNvcmF6dXIxMWE0In0.0GfmJoEJyWFQ5UzNxl2WgA';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2FvMW1wbDIwMzE2MnFwMW9teHQxOXhpIn0.Uri8IURftz3Jv5It51ISAA';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
   viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
@@ -119,25 +119,15 @@ $( document ).ready(function() {
         //create cases by gender indicator
         item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
         
-        //consolidate IPC data
-        if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
-          item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
-        }
-        if (item['#affected+food+ipc+p3+num'] || item['#affected+ch+food+p3+num']) {
-          item['#affected+food+p3+num'] = (item['#affected+food+ipc+p3+num']) ? item['#affected+food+ipc+p3+num'] : item['#affected+ch+food+p3+num'];
-        }
-        if (item['#affected+food+ipc+p3plus+num'] || item['#affected+ch+food+p3plus+num']) {
-          item['#affected+food+p3plus+num'] = (item['#affected+food+ipc+p3plus+num']) ? item['#affected+food+ipc+p3plus+num'] : item['#affected+ch+food+p3plus+num'];
-        }
-        if (item['#affected+food+ipc+p4+num'] || item['#affected+ch+food+p4+num']) {
-          item['#affected+food+p4+num'] = (item['#affected+food+ipc+p4+num']) ? item['#affected+food+ipc+p4+num'] : item['#affected+ch+food+p4+num'];
-        }
-        if (item['#affected+food+ipc+p5+num'] || item['#affected+ch+food+p5+num']) {
-          item['#affected+food+p5+num'] = (item['#affected+food+ipc+p5+num']) ? item['#affected+food+ipc+p5+num'] : item['#affected+ch+food+p5+num'];
-        }
-        if (item['#affected+food+ipc+analysed+num'] || item['#affected+ch+food+analysed+num']) {
-          item['#affected+food+analysed+num'] = (item['#affected+food+ipc+analysed+num']) ? item['#affected+food+ipc+analysed+num'] : item['#affected+ch+food+analysed+num'];
-        }
+        //select CH vs IPC data
+        var ipcParams = ['+analysed+num','+p3+num','+p3plus+num','+p4+num','+p5+num']
+        var ipcPrefix = '#affected+food+ipc';
+        var chPrefix = '#affected+ch+food';
+        ipcParams.forEach(function(param) {
+          if (item[ipcPrefix+param] || item[chPrefix+param]) {
+            item['#affected+food'+param] = (item[chPrefix+param]) ? item[chPrefix+param] : item[ipcPrefix+param];
+          }
+        });
 
         //keep global list of countries
         globalCountryList.push({
