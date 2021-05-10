@@ -1238,7 +1238,7 @@ function createMapTooltip(country_code, country_name, point) {
         var content = '<h2>' + country_name + '</h2>';
         content += '<table><tr><th>Campaign Immunization:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
         vaccData.forEach(function(row) {
-          var className = (row['#status+name'].indexOf('Postpone')>-1) ? 'covid-postpone' : '';
+          var className = (row['#status+name'].indexOf('Postpone')>-1 && row['#status+name'].indexOf('COVID')>-1) ? 'covid-postpone' : '';
           content += '<tr class="'+className+'"><td>'+row['#service+name']+'</td><td>'+row['#date+start']+'</td><td>'+row['#status+name']+'</td></tr>';
         });
         content += '</table>';
