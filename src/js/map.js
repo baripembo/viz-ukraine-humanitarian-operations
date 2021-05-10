@@ -761,6 +761,7 @@ function setGlobalLegend(scale) {
     else {
       var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
       if (currentIndicator.id=='#affected+infected+new+per100000+weekly' || currentIndicator.id=='#affected+infected+sex+new+avg+per100000') legendFormat = d3.format('.1f');
+      if (currentIndicator.id=='#vaccination+postponed+num') legendFormat = numFormat;
       
       legend = d3.legendColor()
         .labelFormat(legendFormat)
