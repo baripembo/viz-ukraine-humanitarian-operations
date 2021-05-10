@@ -147,18 +147,27 @@ $( document ).ready(function() {
         .entries(subnationalData);
       subnationalDataByCountry.forEach(function(country) {
         var index = 0;
-        var isEmpty = false;
+        var ipcEmpty = false;
+        var chEmpty = false;
         //check first two data points to choose btwn IPC and CH datasets
         for (var i=0; i<2; i++) {
-          var val = country.values[i]['#affected+food+ipc+p3plus+num'];
-          if (i==0 && (!isVal(val) || isNaN(val))) {
-            isEmpty = true;
+          var ipcVal = country.values[i]['#affected+food+ipc+p3plus+num'];
+          var chVal = country.values[i]['#affected+ch+food+p3plus+num'];
+          if (i==0 && (!isVal(ipcVal) || isNaN(ipcVal))) {
+            ipcEmpty = true;
           }
-          if (i==1 && isEmpty && isVal(val) && !isNaN(val)) {
-            isEmpty = false;
+          if (i==1 && ipcEmpty && isVal(ipcVal) && !isNaN(ipcVal)) {
+            ipcEmpty = false;
+          }
+          if (i==0 && (!isVal(chVal) || isNaN(chVal))) {
+            chEmpty = true;
+          }
+          if (i==1 && chEmpty && isVal(chVal) && !isNaN(chVal)) {
+            chEmpty = false;
           }
         }
-        country['#ipc+source'] = (isEmpty) ? '#affected+ch+food+p3plus+num' : '#affected+food+ipc+p3plus+num';
+        //default to ipc source if both ipc and ch are empty
+        country['#ipc+source'] = (!ipcEmpty || chEmpty && ipcEmpty) ? '#affected+food+ipc+p3plus+num' : '#affected+ch+food+p3plus+num';
       });
 
       //group countries by region    
