@@ -168,6 +168,9 @@ $( document ).ready(function() {
         }
         //default to ipc source if both ipc and ch are empty
         country['#ipc+source'] = (!ipcEmpty || chEmpty && ipcEmpty) ? '#affected+food+ipc+p3plus+num' : '#affected+ch+food+p3plus+num';
+
+        //exception for CAF, should default to ch
+        if (country.key=='CAF' && !chEmpty) country['#ipc+source'] = '#affected+ch+food+p3plus+num';
       });
 
       //group countries by region    
