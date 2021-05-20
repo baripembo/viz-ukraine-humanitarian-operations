@@ -134,6 +134,9 @@ $( document ).ready(function() {
           'name': item['#country+name'],
           'code': item['#country+code']
         });
+        globalCountryList.sort(function(a,b) {
+          return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
+        });
       });
 
       //group national data by country -- drives country panel    
