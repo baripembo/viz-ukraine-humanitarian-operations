@@ -292,7 +292,7 @@ $( document ).ready(function() {
 
     //load trenseries for global view
     createSource($('#chart-view .source-container'), '#affected+infected');
-    initTrendseries('ABW');
+    initTrendseries(globalCountryList[0].code);
 
     //load timeseries for country view 
     initTimeseries(timeseriesData, '.country-timeseries-chart');
