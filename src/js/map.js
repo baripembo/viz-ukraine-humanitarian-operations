@@ -436,16 +436,16 @@ function handleGlobalEvents(layer) {
       if (feature.sourceLayer==adm0SourceLayer)
         target = feature;
     });
-  
     if (target!=null) {
       currentCountry.code = target.properties.ISO_3;
       currentCountry.name = (target.properties.Terr_Name=='CuraÃ§ao') ? 'Curaçao' : target.properties.Terr_Name;
 
       if (currentCountry.code!=undefined) {
         var country = nationalData.filter(c => c['#country+code'] == currentCountry.code);
-        if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
-          openModal(currentCountry.name);
-        }
+  console.log('click', currentCountry.code, currentCountry.name)
+        
+
+        createComparison(country)
       }
     }
   });
@@ -1032,6 +1032,49 @@ function updateCountryLegend(scale) {
   var g = d3.select('.map-legend.country .scale');
   g.call(legend);
 }
+
+
+/**********************************/
+/*** COMPARISON PANEL FUNCTIONS ***/
+/**********************************/
+function createComparison(object) {
+  var val = object[0][currentIndicator.id];
+  var country = object[0];
+  var content = '';
+
+  //COVID layer
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+    if (val!='No Data') {
+      var headers = ['Comparison','Weekly # of New Cases per 100,000','Weekly # of New Cases','Weekly # of New Deaths','Weekly Trend','Daily Tests per 1000','Positive Test Rate'];
+      var data = [
+        country['#country+name'],
+        d3.format('.1f')(country['#affected+infected+new+per100000+weekly']),
+        numFormat(country['#affected+infected+new+weekly']),
+        numFormat(country['#affected+killed+new+weekly']),
+        percentFormat(country['#covid+trend+pct']),
+        (country['#affected+tested+avg+per1000']==undefined) ? 'No Data' : parseFloat(country['#affected+tested+avg+per1000']).toFixed(2),
+        (country['#affected+tested+positive+pct']==undefined) ? 'No Data' : percentFormat(country['#affected+tested+positive+pct'])
+      ];
+      data.forEach(function(d) {
+        content += d + ' ';
+      })
+      // <div class='comparison-table'>
+      //   <div class='row'>
+      //     <div></div>
+      //   </div>
+
+      //   <div class='row'></div>
+      // </div>
+
+    }
+    else {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+    }
+  }
+
+  $('.comparison-panel').append('<div>' + content + '</div>')
+}
+
 
 
 /*************************/
