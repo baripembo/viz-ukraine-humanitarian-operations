@@ -196,12 +196,20 @@ function createEvents() {
     var layer = $(this).attr('data-layer');
     var location = (layer==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layer;
     window.history.replaceState(null, null, location);
+
+    //reset comparison list
+    if (currentIndicator.id!=='#affected+infected+new+per100000+weekly') resetComparison();
   });
 
   //global figures close button
   $('.secondary-panel .close-btn').on('click', function() {
     var currentBtn = $('[data-id="'+currentIndicator.id+'"]');
     toggleSecondaryPanel(currentBtn);
+  });
+
+  //global figures close button
+  $('.comparison-panel .modal-close-btn').on('click', function() {
+    $('.comparison-panel').hide();
   });
 
   //ranking select event
@@ -344,7 +352,7 @@ function toggleSecondaryPanel(currentBtn, state) {
     }
   });
 
-  $('.tab-menubar, #chart-view').animate({
+  $('.tab-menubar, #chart-view, .comparison-panel').animate({
     left: newTabPos
   }, 200);
 }
@@ -442,10 +450,12 @@ function handleGlobalEvents(layer) {
 
       if (currentCountry.code!=undefined) {
         var country = nationalData.filter(c => c['#country+code'] == currentCountry.code);
-  console.log('click', currentCountry.code, currentCountry.name)
-        
 
         createComparison(country)
+     
+        if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
+          openModal(currentCountry.name);
+        }
       }
     }
   });
@@ -1038,44 +1048,59 @@ function updateCountryLegend(scale) {
 /*** COMPARISON PANEL FUNCTIONS ***/
 /**********************************/
 function createComparison(object) {
-  var val = object[0][currentIndicator.id];
   var country = object[0];
-  var content = '';
+  if (!comparisonList.includes(country['#country+code']) && comparisonList.length<5) {  
+    var val = object[0][currentIndicator.id];
+    var content = '';
 
-  //COVID layer
-  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
-    if (val!='No Data') {
-      var headers = ['Comparison','Weekly # of New Cases per 100,000','Weekly # of New Cases','Weekly # of New Deaths','Weekly Trend','Daily Tests per 1000','Positive Test Rate'];
-      var data = [
-        country['#country+name'],
-        d3.format('.1f')(country['#affected+infected+new+per100000+weekly']),
-        numFormat(country['#affected+infected+new+weekly']),
-        numFormat(country['#affected+killed+new+weekly']),
-        percentFormat(country['#covid+trend+pct']),
-        (country['#affected+tested+avg+per1000']==undefined) ? 'No Data' : parseFloat(country['#affected+tested+avg+per1000']).toFixed(2),
-        (country['#affected+tested+positive+pct']==undefined) ? 'No Data' : percentFormat(country['#affected+tested+positive+pct'])
-      ];
-      data.forEach(function(d) {
-        content += d + ' ';
-      })
-      // <div class='comparison-table'>
-      //   <div class='row'>
-      //     <div></div>
-      //   </div>
+    //COVID layer
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+      if (val!='No Data') {
+        var headers = ['Comparison','Weekly # of New Cases per 100,000','Weekly # of New Cases','Weekly # of New Deaths','Weekly Trend','Daily Tests per 1000','Positive Test Rate'];
+        var data = [
+          country['#country+name'],
+          d3.format('.1f')(country['#affected+infected+new+per100000+weekly']),
+          numFormat(country['#affected+infected+new+weekly']),
+          numFormat(country['#affected+killed+new+weekly']),
+          percentFormat(country['#covid+trend+pct']),
+          (country['#affected+tested+avg+per1000']==undefined) ? 'No Data' : parseFloat(country['#affected+tested+avg+per1000']).toFixed(2),
+          (country['#affected+tested+positive+pct']==undefined) ? 'No Data' : percentFormat(country['#affected+tested+positive+pct'])
+        ];
 
-      //   <div class='row'></div>
-      // </div>
+        //add table headers
+        if ($('.comparison-table').children().length<1) {
+          content += '<thead>';
+          headers.forEach(function(header, index) {
+            if (index==0)
+              content += '<td><h6>' + header + '</h6></td>';
+            else
+              content += '<td>' + header + '</td>';
+          });
+          content += '</thead>';
+        }
 
+        content += '<tr>';
+        data.forEach(function(d) {
+          content += '<td>'+ d + '</td>';
+        })
+        content += '</tr>';
+      }
+      else {
+        content += currentIndicator.name + '<tr><td>' + val + '</td></tr>';
+      }
     }
-    else {
-      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-    }
+
+    comparisonList.push(country['#country+code'])
+    $('.comparison-table').append(content)
+    $('.comparison-panel').show();
   }
-
-  $('.comparison-panel').append('<div>' + content + '</div>')
 }
 
-
+function resetComparison() {
+  $('.comparison-panel').hide();
+  $('.comparison-table').empty();
+  comparisonList = [];
+}
 
 /*************************/
 /*** TOOLTIP FUNCTIONS ***/
@@ -1280,7 +1305,7 @@ function createMapTooltip(country_code, country_name, point) {
       }
       else {
         var content = '<h2>' + country_name + '</h2>';
-        content += '<table><tr><th>Campaign Immunization:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
+        content += '<table class="immunization-table"><tr><th>Campaign Immunization:</th><th>Planned Start Date:</th><th>Status:</th></tr>';
         vaccData.forEach(function(row) {
           var className = (row['#status+name'].indexOf('Postponed COVID')>-1 || row['#status+name'].indexOf('Cancelled')>-1) ? 'covid-postpone' : '';
           content += '<tr class="'+className+'"><td>'+row['#service+name']+'</td><td>'+row['#date+start']+'</td><td>'+row['#status+name']+'</td></tr>';

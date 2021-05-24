@@ -990,7 +990,7 @@ circle.swatch {
 }
 
 
-table {
+table.immunization-table {
 	font-size: 12px;
 	line-height: 14px;
 	th {
@@ -1295,11 +1295,48 @@ table {
 .comparison-panel {
 	background-color: #F5FBFC;
   bottom: 0;
-	height: 150px;
-  left: 20px;
+  display: none;
+	font-family: 'Source Sans Pro', sans-serif;
+	height: 176px;
+  left: 0;
+  margin-left: 20px;
+  padding-top: 25px;
 	width: 500px;    
 	position: absolute;
   z-index: 2;
+  .modal-close-btn {
+  	color: #888;
+  	right: 15px;
+  	top: 10px;
+  }
+  h6 {
+  	font-size: 12px;
+  }
+  .comparison-table {
+  	border-collapse: collapse;
+  	width: 100%;
+  	thead {
+  		font-weight: 700;
+  		line-height: 15px;
+    	vertical-align: bottom;
+    	td {
+    		padding-bottom: 5px;
+    	}
+  	}
+  	tr {
+  		border-bottom: 1px solid #CCC;
+  		td {
+  			text-align: right;
+  			&:first-child {
+  				padding-left: 15px;
+  				text-align: left;
+  			}
+  			&:last-child {
+  				padding-right: 15px;
+  			}
+  		}
+  	}
+  }
 }
 
 //accessibility helper class
