@@ -114,13 +114,13 @@ label {
 }
 
 .btn-subscription {
-    background-color: #007CE1;
-    border: 0;
-    color: #FFF;
-    cursor: pointer;
-    border-radius: 0;
-    font-size: 12px;
-    margin: 10px 20px 20px;
+  background-color: #007CE1;
+  border: 0;
+  color: #FFF;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: 12px;
+  margin: 10px 20px 20px;
 	padding: 5px 10px;
 }
 
@@ -990,7 +990,7 @@ circle.swatch {
 }
 
 
-table {
+table.immunization-table {
 	font-size: 12px;
 	line-height: 14px;
 	th {
@@ -1290,6 +1290,53 @@ table {
 			text-align: right;
 		}
 	}
+}
+
+.comparison-panel {
+	background-color: #F5FBFC;
+  bottom: 0;
+  display: none;
+	font-family: 'Source Sans Pro', sans-serif;
+	height: 176px;
+  left: 0;
+  margin-left: 20px;
+  padding-top: 25px;
+	width: 500px;    
+	position: absolute;
+  z-index: 2;
+  .modal-close-btn {
+  	color: #888;
+  	right: 15px;
+  	top: 10px;
+  }
+  h6 {
+  	font-size: 12px;
+  }
+  .comparison-table {
+  	border-collapse: collapse;
+  	width: 100%;
+  	thead {
+  		font-weight: 700;
+  		line-height: 15px;
+    	vertical-align: bottom;
+    	td {
+    		padding-bottom: 5px;
+    	}
+  	}
+  	tr {
+  		border-bottom: 1px solid #CCC;
+  		td {
+  			text-align: right;
+  			&:first-child {
+  				padding-left: 15px;
+  				text-align: left;
+  			}
+  			&:last-child {
+  				padding-right: 15px;
+  			}
+  		}
+  	}
+  }
 }
 
 //accessibility helper class

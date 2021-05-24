@@ -642,6 +642,8 @@ function createRankingChart() {
     .text(function (d) {
       return truncateString(d.key, 15);
     })
+    .append('svg:title')
+    .text(function(d) { return d.key; });
 
   //add a value label to the right of each bar
   rankingBars.append('text')

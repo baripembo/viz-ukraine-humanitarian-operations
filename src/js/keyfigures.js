@@ -56,7 +56,7 @@ function setKeyFigures() {
 	//PIN
 	if (currentIndicator.id=='#affected+inneed+pct') {
 		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
-		if (currentRegion=='') affectedPIN = '431M';//hardcode global PIN to match OCHA data
+		if (currentRegion=='') affectedPIN = '237.1M';//hardcode global PIN to match OCHA data
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', affectedPIN);
 	}
@@ -95,7 +95,7 @@ function setKeyFigures() {
 	//school closures
 	else if (currentIndicator.id=='#impact+type') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		var affectedLearners = (data['#affected+learners']==undefined) ? 0 : shortenNumFormat(data['#affected+learners']);
+		var affectedLearners = (data['#affected+learners']==undefined) ? 0 : d3.format('.3s')(data['#affected+learners']);
 		var affectedLearnersPct = (data['#affected+learners+pct']==undefined) ? '0%' : percentFormat(data['#affected+learners+pct']);
 		var statusClosed = (data['#status+country+closed']==undefined) ? 0 : data['#status+country+closed'];
 		createKeyFigure('.figures', 'Number of Affected Learners', '', affectedLearners);
@@ -255,7 +255,7 @@ function updateSource(div, indicator) {
 }
 
 function getSource(indicator) {
-	if (indicator=='#affected+food+p3plus+num') indicator = '#affected+food+ipc+p3plus+num';
+  var isGlobal = ($('.content').hasClass('country-view')) ? false : true;
   var obj = {};
   sourcesData.forEach(function(item) {
     if (item['#indicator+name']==indicator) {
