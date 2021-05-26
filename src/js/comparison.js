@@ -23,7 +23,7 @@ function createComparison(object) {
         ];
 
         $('.comparison-panel .message').remove();
-        
+
         //add table headers
         if ($('.comparison-table').children().length<1) {
           content += '<thead>';
@@ -42,12 +42,12 @@ function createComparison(object) {
         //fill in next table row
         addRow(data);
       }
-    }
-
-    //show comparison panel and close secondary panel    
-    $('.comparison-panel').addClass('expand').show();
-    toggleSecondaryPanel(null, 'close');
+    }    
   }
+
+  //show comparison panel and close secondary panel    
+  $('.comparison-panel').addClass('expand').show();
+  toggleSecondaryPanel(null, 'close');
 }
 
 function addRow(data) {
