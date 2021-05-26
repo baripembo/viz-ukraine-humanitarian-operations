@@ -45,9 +45,11 @@ function createComparison(object) {
     }    
   }
 
-  //show comparison panel and close secondary panel    
-  $('.comparison-panel').addClass('expand').show();
-  toggleSecondaryPanel(null, 'close');
+  if (currentIndicator.id=='#affected+infected+new+per100000+weekly') {
+    //show comparison panel and close secondary panel    
+    $('.comparison-panel').addClass('expand').show();
+    toggleSecondaryPanel(null, 'close');
+  }
 }
 
 function addRow(data) {
