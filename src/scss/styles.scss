@@ -349,7 +349,8 @@ a:visited {
 	z-index: 101;
 }
 
-.modal-close-btn {
+.modal-close-btn,
+.panel-close-btn {
   cursor: pointer;
   position: absolute;
   right: 20px;
@@ -1295,37 +1296,41 @@ table.immunization-table {
 .comparison-panel {
 	background-color: #F5FBFC;
   bottom: 0;
-  display: none;
 	font-family: 'Source Sans Pro', sans-serif;
-	height: 176px;
+	height: 35px;
   left: 0;
   margin-left: 20px;
   padding-top: 25px;
 	width: 500px;    
 	position: absolute;
-  z-index: 2;
-  .modal-close-btn {
+  z-index: 3;
+  &.expand {
+  	height: 205px;
+  }
+  .message {
+    left: 15px;
+  	position: absolute;
+    top: 10px;
+  }
+  .panel-close-btn,
+  .row-close-btn {
   	color: #888;
+  	cursor: pointer;
+  	&:hover {
+  		color: #007CE1;
+  	}
+  }
+  .panel-close-btn {
   	right: 15px;
   	top: 10px;
-  }
-  h6 {
-  	font-size: 12px;
   }
   .comparison-table {
   	border-collapse: collapse;
   	width: 100%;
-  	thead {
-  		font-weight: 700;
-  		line-height: 15px;
-    	vertical-align: bottom;
-    	td {
-    		padding-bottom: 5px;
-    	}
-  	}
   	tr {
   		border-bottom: 1px solid #CCC;
   		td {
+  			padding: 2px 4px;
   			text-align: right;
   			&:first-child {
   				padding-left: 15px;
@@ -1334,6 +1339,22 @@ table.immunization-table {
   			&:last-child {
   				padding-right: 15px;
   			}
+  		}
+  	}
+  	thead {
+  		font-weight: 700;
+  		line-height: 15px;
+    	vertical-align: bottom;
+    	td {
+    		padding: 5px 4px;
+    	}
+  	}
+  	tbody {
+  		td {
+  			max-width: 100px;
+  			white-space: nowrap;
+			  overflow: hidden;
+			  text-overflow: ellipsis;
   		}
   	}
   }
