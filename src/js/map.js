@@ -33,7 +33,7 @@ function displayMap() {
   //position global figures
   if (window.innerWidth>=1440) {
     $('.menu-indicators li:first-child div').addClass('expand');
-    $('.tab-menubar, #chart-view').css('left', $('.secondary-panel').outerWidth());
+    $('.tab-menubar, #chart-view, .comparison-panel').css('left', $('.secondary-panel').outerWidth());
     $('.secondary-panel').animate({
       left: 0
     }, 200);
