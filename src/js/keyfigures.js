@@ -1,4 +1,5 @@
 function setKeyFigures() {
+	console.log('setKeyFigures')
 	var secondaryPanel = $('.secondary-panel');
 	var secondaryPanelSource = $('.secondary-panel .source-container');
 	secondaryPanel.find('.figures, .source-container, .ranking-chart').empty();
@@ -24,7 +25,7 @@ function setKeyFigures() {
 	secondaryPanel.find('.global-figures').html(globalFigures);
 
 	//if on covax layer, show HRP data by default
-	currentRegion = (currentIndicator.id=='#targeted+doses+delivered+pct' && currentRegion=='') ? 'HRPs' : d3.select('.region-select').node().value;
+	currentRegion = (currentIndicator.id=='#targeted+doses+delivered+pct' && (currentRegion=='' || currentRegion=='HRPs')) ? 'HRPs' : d3.select('.region-select').node().value;
 
 	//get regional data
 	var data = worldData;
@@ -70,6 +71,7 @@ function setKeyFigures() {
 		createKeyFigure('.figures', 'Other Delivered (Number of Doses)', '', data['#capacity+doses+delivered+others']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+others']));
 		createKeyFigure('.figures', 'Total Delivered (Number of Doses)', '', data['#capacity+doses+delivered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+delivered+total']));
 		createKeyFigure('.figures', 'Total Administered (Number of Doses)', '', data['#capacity+doses+administered+total']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+administered+total']));
+		console.log('---',data['#capacity+doses+administered+total'])
 	} 
 	//IPC
 	else if (currentIndicator.id=='#affected+food+p3plus+num') {
