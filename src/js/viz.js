@@ -21,6 +21,7 @@ var zoomLevel = 1.4;
 
 var hrpData = [];
 var globalCountryList = [];
+var comparisonList = [];
 var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};

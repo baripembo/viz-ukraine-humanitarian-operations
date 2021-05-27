@@ -114,13 +114,13 @@ label {
 }
 
 .btn-subscription {
-    background-color: #007CE1;
-    border: 0;
-    color: #FFF;
-    cursor: pointer;
-    border-radius: 0;
-    font-size: 12px;
-    margin: 10px 20px 20px;
+  background-color: #007CE1;
+  border: 0;
+  color: #FFF;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: 12px;
+  margin: 10px 20px 20px;
 	padding: 5px 10px;
 }
 
@@ -349,7 +349,8 @@ a:visited {
 	z-index: 101;
 }
 
-.modal-close-btn {
+.modal-close-btn,
+.panel-close-btn {
   cursor: pointer;
   position: absolute;
   right: 20px;
@@ -990,7 +991,7 @@ circle.swatch {
 }
 
 
-table {
+table.immunization-table {
 	font-size: 12px;
 	line-height: 14px;
 	th {
@@ -1290,6 +1291,73 @@ table {
 			text-align: right;
 		}
 	}
+}
+
+.comparison-panel {
+	background-color: #F5FBFC;
+  bottom: 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	height: 35px;
+  left: 0;
+  margin-left: 20px;
+  padding-top: 25px;
+	width: 500px;    
+	position: absolute;
+  z-index: 3;
+  &.expand {
+  	height: 205px;
+  }
+  .message {
+    left: 15px;
+  	position: absolute;
+    top: 10px;
+  }
+  .panel-close-btn,
+  .row-close-btn {
+  	color: #888;
+  	cursor: pointer;
+  	&:hover {
+  		color: #007CE1;
+  	}
+  }
+  .panel-close-btn {
+  	right: 15px;
+  	top: 10px;
+  }
+  .comparison-table {
+  	border-collapse: collapse;
+  	width: 100%;
+  	tr {
+  		border-bottom: 1px solid #CCC;
+  		td {
+  			padding: 2px 4px;
+  			text-align: right;
+  			&:first-child {
+  				padding-left: 15px;
+  				text-align: left;
+  			}
+  			&:last-child {
+  				padding-right: 15px;
+  			}
+  		}
+  	}
+  	thead {
+  		font-weight: 700;
+  		line-height: 15px;
+    	vertical-align: bottom;
+    	td {
+    		padding: 5px 4px;
+    	}
+  	}
+  	tbody {
+  		td {
+  			max-width: 100px;
+  			white-space: nowrap;
+			  overflow: hidden;
+			  text-overflow: ellipsis;
+  		}
+  	}
+  }
 }
 
 //accessibility helper class
