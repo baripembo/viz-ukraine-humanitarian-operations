@@ -22,7 +22,7 @@ function createComparison(object) {
           (country['#affected+tested+positive+pct']==undefined) ? 'No Data' : percentFormat(country['#affected+tested+positive+pct'])
         ];
 
-        $('.comparison-panel .message').remove();
+        $('.comparison-panel .message').hide();
 
         //add table headers
         if ($('.comparison-table').children().length<1) {
@@ -84,7 +84,8 @@ function removeRow(e) {
 }
 
 function resetComparison() {
-  $('.comparison-panel').hide();
+  $('.comparison-panel').removeClass('expand').hide();
+  $('.comparison-panel .message').show();
   $('.comparison-table').empty();
   comparisonList = [];
 }

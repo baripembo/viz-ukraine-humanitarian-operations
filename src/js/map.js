@@ -203,8 +203,9 @@ function createEvents() {
     var location = (layer==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layer;
     window.history.replaceState(null, null, location);
 
-    //reset comparison list
-    if (currentIndicator.id!=='#affected+infected+new+per100000+weekly') resetComparison();
+    //handle comparison list
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') $('.comparison-panel').show();
+    else resetComparison();
   });
 
   //global figures close button
