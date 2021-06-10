@@ -172,6 +172,12 @@ function deepLinkView() {
     var menuItem = $('.menu-indicators').find('li[data-layer="'+layer+'"]');
     menuItem = (menuItem.length<1) ? $('.menu-indicators').find('li[data-layer="covid-19_cases_and_deaths"]') : menuItem;
     selectLayer(menuItem);
+
+    //show/hide comparison table
+    if (layer=='covid-19_cases_and_deaths' || layer=='')
+      $('.comparison-panel').show();
+    else 
+      $('.comparison-panel').hide();
   }
 }
 
