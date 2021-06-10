@@ -216,7 +216,8 @@ a:visited {
 		.map-legend.global,
 		.secondary-panel,
 		.layer-description,
-		.tab-menubar {
+		.tab-menubar,
+		.comparison-panel {
 			display: none;
 		}
 		.map-legend.country {
@@ -1297,7 +1298,7 @@ table.immunization-table {
 	background-color: #F5FBFC;
   bottom: 0;
 	font-family: 'Source Sans Pro', sans-serif;
-	height: 35px;
+	height: 40px;
   left: 0;
   margin-left: 20px;
   padding-top: 25px;
@@ -1308,9 +1309,10 @@ table.immunization-table {
   	height: 205px;
   }
   .message {
+  	font-size: 15px;
     left: 15px;
   	position: absolute;
-    top: 10px;
+    top: 12px;
   }
   .panel-close-btn,
   .row-close-btn {
