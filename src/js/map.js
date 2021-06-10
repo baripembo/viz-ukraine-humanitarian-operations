@@ -172,6 +172,12 @@ function deepLinkView() {
     var menuItem = $('.menu-indicators').find('li[data-layer="'+layer+'"]');
     menuItem = (menuItem.length<1) ? $('.menu-indicators').find('li[data-layer="covid-19_cases_and_deaths"]') : menuItem;
     selectLayer(menuItem);
+
+    //show/hide comparison table
+    if (layer=='covid-19_cases_and_deaths' || layer=='')
+      $('.comparison-panel').show();
+    else 
+      $('.comparison-panel').hide();
   }
 }
 
@@ -197,8 +203,9 @@ function createEvents() {
     var location = (layer==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layer;
     window.history.replaceState(null, null, location);
 
-    //reset comparison list
-    if (currentIndicator.id!=='#affected+infected+new+per100000+weekly') resetComparison();
+    //handle comparison list
+    if (currentIndicator.id=='#affected+infected+new+per100000+weekly') $('.comparison-panel').show();
+    else resetComparison();
   });
 
   //global figures close button
