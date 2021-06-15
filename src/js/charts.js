@@ -210,7 +210,7 @@ function createTrendseries(array, div) {
         content += '<tr><td>New '+indicator+' per 100,000</td><td>' + d3.format('.1f')(currentArray[index]['new_per_capita']) + '</td></tr>';
         content += '<tr><td>Weekly Trend</td><td>' + numFormat(currentArray[index]['weekly_trend']) + '</td></tr>';
         content += '<tr><td>Weekly Trend in %</td><td>' + percentFormat(currentArray[index]['weekly_trend_pct']) + '</td></tr>';
-        //content += '<tr><td>Weekly Number of Cumulative '+indicator+'</td><td>' + numFormat(currentArray[index]['weekly_cumulative']) + '</td></tr>';
+        content += '<tr><td>Number of Cumulative '+indicator+'</td><td>' + numFormat(currentArray[index]['weekly_cumulative']) + '</td></tr>';
         content += '</table>';
         return content;
       }
