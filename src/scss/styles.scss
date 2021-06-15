@@ -533,15 +533,15 @@ a:visited {
 	width: auto;
 }
 
-.sorting-select-container {
-	align-items: center;
-	display: flex;
-	flex-wrap: nowrap;
-	margin-top: 10px;
-	p {
-		margin-right: 5px;
-	}
-}
+// .sorting-select-container {
+// 	align-items: center;
+// 	display: flex;
+// 	flex-wrap: nowrap;
+// 	margin-top: 10px;
+// 	p {
+// 		margin-right: 5px;
+// 	}
+// }
 
 .secondary-panel {
 	background-color: rgba(255, 255, 255, 0.9);
@@ -653,7 +653,8 @@ a:visited {
 			display: block;
 		}
 		.covid-select,
-		.vaccine-select {
+		.vaccine-select,
+		.inform-select {
 			display: none;
 		}
 	}
@@ -689,6 +690,21 @@ a:visited {
 					height: 30px;
 					white-space: pre-wrap;
 					width: 100%;
+				}
+			}
+		}
+	}
+	&.ranking-inform {
+		.ranking-select-container {
+			.default-select {
+				display: none;
+			}
+			.inform-select {
+				display: block;
+				.ranking-select {
+					height: 30px;
+					white-space: pre-wrap;
+					width: auto;
 				}
 			}
 		}

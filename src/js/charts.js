@@ -526,9 +526,12 @@ function createRankingChart() {
   //reset
   $('.ranking-container').removeClass('covid');
   $('.ranking-container').removeClass('ranking-vaccine');
+  $('.ranking-container').removeClass('ranking-inform');
 
   //set title
-  var rankingTitle = (currentIndicator.id=='#impact+type') ? 'Total Number of Affected Learners' : $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country'
+  var rankingTitle = $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country';
+  if (currentIndicator.id=='#impact+type') rankingTitle = 'Total Number of Affected Learners';
+  if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index by Country';
   $('.secondary-panel .ranking-title').text(rankingTitle);
 
   var indicator;
@@ -563,6 +566,10 @@ function createRankingChart() {
   }
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
     $('.ranking-chart').append('<p>Sort by:</p>');
+  }
+  else if (currentIndicator.id=='#severity+inform+type') {
+    $('.ranking-container').addClass('ranking-inform');
+    $('.ranking-select').val(indicator);
   }
   else {
     $('.ranking-select').val('descending');

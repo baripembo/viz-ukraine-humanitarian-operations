@@ -194,21 +194,21 @@
                     <option value='#capacity+doses+delivered+others'>Other Delivered</option>
                   </select>
                   <div class='vaccine-sorting-container'>
-                    <p>Sort by:</p>
+                  <label for='vaccineSortingSelect'>Sort by:</label>
                     <select id='vaccineSortingSelect' class='sorting-select'>
                       <option value='#country+name'>Country</option>
                       <option value='#meta+vaccine+funder'>Vaccine by source</option>
                     </select>
                   </div>
-                  <div class='inform-sorting-container'>
-                    <p>Filter by:</p>
-                    <select id='informSortingSelect' class='sorting-select'>
-                      <option value='#severity+inform+num'>All</option>
-                      <option value='increasing'>Increasing</option>
-                      <option value='decreasing'>Decreasing</option>
-                      <option value='stable'>Stable</option>
-                    </select>
-                  </div>
+                </div>
+                <div class='inform-select'>
+                  <label for='informSelect'>Sort by:</label>
+                  <select id='informSelect' class='ranking-select'>
+                    <option value='#severity+inform+num'>All</option>
+                    <option value='increasing'>Increasing</option>
+                    <option value='decreasing'>Decreasing</option>
+                    <option value='stable'>Stable</option>
+                  </select>
                 </div>
               </div>
               <div class='ranking-chart'></div>
