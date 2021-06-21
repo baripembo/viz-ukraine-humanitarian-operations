@@ -122,9 +122,9 @@ function getBeneficiaryText(data) {
   return beneficiaryText;
 }
 
-function createFootnote(target, text, indicator) {
-  var className = (indicator==undefined) ? 'footnote' : 'footnote footnote-indicator';
+function createFootnote(target, indicator, text) {
   var indicatorName = (indicator==undefined) ? '' : indicator;
+  var className = (indicatorName=='') ? 'footnote' : 'footnote footnote-indicator';
   var footnote = $('<p class="'+ className +'" data-indicator="'+ indicatorName +'">'+ truncateString(text, 65) +' <a href="#" class="expand">MORE</a></p>');
   $(target).append(footnote);
   footnote.click(function() {
