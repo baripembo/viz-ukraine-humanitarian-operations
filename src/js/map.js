@@ -317,7 +317,6 @@ function selectLayer(menuItem) {
     if (currentIndicator.id!='#value+food+num+ratio') {
       closeModal();
     }
-
     //reset vaccine sorting select
     if (currentIndicator.id!='#targeted+doses+delivered+pct') {
       $('.vaccine-sorting-container').show();
