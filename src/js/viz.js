@@ -281,6 +281,19 @@ $( document ).ready(function() {
       });
     });
 
+    //show/hide NEW label for monthly report
+    sourcesData.forEach(function(item) {
+      if (item['#indicator+name']=='#meta+monthly+report') {
+        var today = new Date();
+        var newDate = new Date(item['#date'])
+        newDate.setDate(newDate.getDate() + 7) //leave NEW tag up for 1 week
+        if (today > newDate)
+          $('.download-monthly').find('label').hide()
+        else
+          $('.download-monthly').find('label').show()
+      }
+    })
+
     //track monthly pdf download
     $('.download-monthly').on('click', function() {  
       mixpanel.track('link click', {
