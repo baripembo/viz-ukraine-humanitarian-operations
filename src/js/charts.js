@@ -529,7 +529,7 @@ function createRankingChart() {
   //set title
   var rankingTitle = $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country';
   if (currentIndicator.id=='#impact+type') rankingTitle = 'Total Number of Affected Learners';
-  if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index by Country';
+  if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index Trend (last 3 months) by Country';
   $('.secondary-panel .ranking-title').text(rankingTitle);
 
   var indicator;
