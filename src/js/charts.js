@@ -565,10 +565,10 @@ function createRankingChart() {
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
     $('.ranking-chart').append('<p>Sort by:</p>');
   }
-  // else if (currentIndicator.id=='#severity+inform+type') {
-  //   $('.ranking-container').addClass('ranking-inform');
-  //   $('.ranking-select').val(indicator);
-  // }
+  else if (currentIndicator.id=='#severity+inform+type') {
+    $('.ranking-container').addClass('ranking-inform');
+    $('.ranking-select').val(indicator);
+  }
   else {
     $('.ranking-select').val('descending');
   }
