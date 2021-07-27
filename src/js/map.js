@@ -795,8 +795,8 @@ function setGlobalLegend(scale) {
 
   //no data
   var noDataKey = $('.map-legend.global .no-data-key');
-  var specialKey = $('.map-legend.global .special-key');
-  specialKey.hide();
+  // var specialKey = $('.map-legend.global .special-key');
+  // specialKey.hide();
   if (currentIndicator.id=='#affected+inneed+pct') {
     noDataKey.find('.label').text('Refugee/IDP data only');
     noDataKey.find('rect').css('fill', '#E7E4E6');
@@ -810,11 +810,11 @@ function setGlobalLegend(scale) {
   }
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
     noDataKey.find('.label').text('Not Included');
-    noDataKey.find('rect').css('fill', '#FFF');
+    noDataKey.find('rect').css('fill', '#F2F2EF');
 
-    specialKey.css('display', 'block');
-    specialKey.find('.label').text('Allocations');
-    specialKey.find('rect').css('fill', '#DDD');
+    // specialKey.css('display', 'block');
+    // specialKey.find('.label').text('Allocations');
+    // specialKey.find('rect').css('fill', '#DDD');
   }
   else {
     noDataKey.find('.label').text('No Data');
@@ -1135,9 +1135,9 @@ function createMapTooltip(country_code, country_name, point) {
         else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
           if (val!='No Data') {
             //allocated data
-            var covaxAllocatedTotal = 0;
-            if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
-            var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
+            // var covaxAllocatedTotal = 0;
+            // if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
+            // var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
 
             //delivered data
             var funderArray = (country[0]['#meta+vaccine+funder']!=undefined) ? country[0]['#meta+vaccine+funder'].split('|') : [];
@@ -1147,12 +1147,12 @@ function createMapTooltip(country_code, country_name, point) {
 
             content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
             content += '<div class="table-display layer-covax">';
-            content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
-            allocatedArray.forEach(function(row, index) {
-              if (row.value!=undefined) {
-                content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
-              }
-            });
+            // content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
+            // allocatedArray.forEach(function(row, index) {
+            //   if (row.value!=undefined) {
+            //     content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
+            //   }
+            // });
             content += '<div class="table-row row-separator"><div>Delivered (doses)</div><div>'+ numFormat(totalDelivered) +'</div></div>';
             dosesArray.forEach(function(doses, index) {
               content += '<div class="table-row"><div>'+ funderArray[index] + ' – ' + producerArray[index] +'</div><div>'+ numFormat(doses) +'</div></div>';
