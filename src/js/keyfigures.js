@@ -110,7 +110,7 @@ function setKeyFigures() {
 	else if (currentIndicator.id=='#vaccination+postponed+num') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		var postponedNum = (data[indicator]==undefined) ? 0 : data[indicator];
-		createKeyFigure('.figures', 'Total number of immunization campaigns canceled or postponed due to COVID', '', postponedNum);
+		createKeyFigure('.figures', 'Total number of immunization campaigns postponed due to COVID', '', postponedNum);
 	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
