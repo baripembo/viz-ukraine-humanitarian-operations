@@ -1135,9 +1135,9 @@ function createMapTooltip(country_code, country_name, point) {
         else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
           if (val!='No Data') {
             //allocated data
-            // var covaxAllocatedTotal = 0;
-            // if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
-            // var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
+            var covaxAllocatedTotal = 0;
+            if (country[0]['#capacity+doses+forecast+covax']!=undefined) covaxAllocatedTotal += country[0]['#capacity+doses+forecast+covax'];
+            var allocatedArray = [{label: 'COVAX', value: covaxAllocatedTotal}];
 
             //delivered data
             var funderArray = (country[0]['#meta+vaccine+funder']!=undefined) ? country[0]['#meta+vaccine+funder'].split('|') : [];
@@ -1147,15 +1147,17 @@ function createMapTooltip(country_code, country_name, point) {
 
             content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
             content += '<div class="table-display layer-covax">';
-            // content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
-            // allocatedArray.forEach(function(row, index) {
-            //   if (row.value!=undefined) {
-            //     content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
-            //   }
-            // });
+            content += '<div class="table-row row-separator"><div>Allocated (doses)</div><div>'+ numFormat(covaxAllocatedTotal) +'</div></div>';
+            allocatedArray.forEach(function(row, index) {
+              if (row.value!=undefined) {
+                content += '<div class="table-row"><div>'+ row.label +'</div><div>'+ numFormat(row.value) +'</div></div>';
+              }
+            });
             content += '<div class="table-row row-separator"><div>Delivered (doses)</div><div>'+ numFormat(totalDelivered) +'</div></div>';
             dosesArray.forEach(function(doses, index) {
-              content += '<div class="table-row"><div>'+ funderArray[index] + ' – ' + producerArray[index] +'</div><div>'+ numFormat(doses) +'</div></div>';
+              content += '<div class="table-row"><div>'+ funderArray[index];
+              content += (producerArray[index] != '') ? ' – ' + producerArray[index] : '';
+              content += '</div><div>'+ numFormat(doses) +'</div></div>';
             });
             content += '</div>';
           }
