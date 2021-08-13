@@ -812,9 +812,9 @@ function setGlobalLegend(scale) {
     noDataKey.find('.label').text('Not Included');
     noDataKey.find('rect').css('fill', '#F2F2EF');
 
-    // specialKey.css('display', 'block');
-    // specialKey.find('.label').text('Allocations');
-    // specialKey.find('rect').css('fill', '#DDD');
+    specialKey.css('display', 'block');
+    specialKey.find('.label').text('Allocations');
+    specialKey.find('rect').css('fill', '#DDD');
   }
   else {
     noDataKey.find('.label').text('No Data');
