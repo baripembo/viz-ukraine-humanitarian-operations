@@ -58,7 +58,7 @@ function setKeyFigures() {
 		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
 		if (currentRegion=='') {
 			//hardcode global PIN to match OCHA data
-			affectedPIN = (d3.format('.4s'))(210369488.53);
+			affectedPIN = (d3.format('.4s'))(220173345);
 			totalCountries = 56;
 		}
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
