@@ -58,7 +58,7 @@ function setKeyFigures() {
 		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
 		if (currentRegion=='') {
 			//hardcode global PIN to match OCHA data
-			affectedPIN = (d3.format('.4s'))(210369488.53);
+			affectedPIN = (d3.format('.4s'))(220173345);
 			totalCountries = 56;
 		}
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
@@ -67,7 +67,7 @@ function setKeyFigures() {
 	//vaccine rollout
 	else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
-		createKeyFigure('.figures', 'COVAX First Allocations (Number of Doses)', '', data['#capacity+doses+forecast+covax']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+forecast+covax']));
+		createKeyFigure('.figures', 'COVAX Allocations (Number of Doses)', '', data['#capacity+doses+forecast+covax']==undefined ? 'NA' : shortenNumFormat(data['#capacity+doses+forecast+covax']));
 		var covaxDelivered = data['#capacity+doses+delivered+covax'];
 		covaxDelivered = (covaxDelivered > 0) ? shortenNumFormat(covaxDelivered) : covaxDelivered;
 		createKeyFigure('.figures', 'COVAX Delivered (Number of Doses)', '', covaxDelivered);
