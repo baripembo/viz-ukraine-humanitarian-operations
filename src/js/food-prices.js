@@ -133,8 +133,8 @@ function generateSparklines(results,adm0_code,adm0_name,adm0_URL){
     var curUnit = '';
     var topMonth = 0;
 
-    //var headerHtml = '<h5>'+adm0_name+' Food Market Prices – since '+ results[0].mp_year +' <span class="source small"><a href="" target="_blank" rel="noopener">DATA</a></span></h5>';
-    var headerHtml = '<h5>'+adm0_name+' Food Market Prices – since 2010 <span class="source small"><a href="" target="_blank" rel="noopener">DATA</a></span></h5>';
+    var minYear = results[0]['#date'].split('-')[0];
+    var headerHtml = '<h5>'+adm0_name+' Food Market Prices – since '+ minYear +' <span class="source small"><a href="" target="_blank" rel="noopener">DATA</a></span></h5>';
     $(targetHeader).html(headerHtml);
 
     var country_name = adm0_name.replace(/\s+/g, '-').toLowerCase();
@@ -234,25 +234,23 @@ function generateSparkline(numProd,data,topMonth){
 function crossfilterData(data){
   data.forEach(function(e){
     e.date = new Date(e.mp_year, e.month_num-1, 1);
-  });       
+  });
   
   var cf = crossfilter(data);
+  cf.byDate = cf.dimension(function(d){return d['#date'];});
+  cf.byAdm1 = cf.dimension(function(d){ return d['#adm1+name'];});
+  cf.byMkt = cf.dimension(function(d){return d['#loc+market+name'];});
   
-  cf.byDate = cf.dimension(function(d){return d.date;});
-  cf.byAdm1 = cf.dimension(function(d){return d.adm1_name;});
-  cf.byMkt = cf.dimension(function(d){return d.mkt_name;});
-  
-  cf.groupByDateSum = cf.byDate.group().reduceSum(function(d) {return d.mp_price;});
+  cf.groupByDateSum = cf.byDate.group().reduceSum(function(d) {return d['#value'];});
   cf.groupByDateCount = cf.byDate.group();
-  cf.groupByAdm1Sum = cf.byAdm1.group().reduceSum(function(d) {return d.mp_price;});
+  cf.groupByAdm1Sum = cf.byAdm1.group().reduceSum(function(d) {return d['#value'];});
   cf.groupByAdm1Count = cf.byAdm1.group();
-  cf.groupByMktSum = cf.byMkt.group().reduceSum(function(d) {return d.mp_price;});
-  cf.groupByMktCount = cf.byMkt.group(); 
+  cf.groupByMktSum = cf.byMkt.group().reduceSum(function(d) {return d['#value'];});
+  cf.groupByMktCount = cf.byMkt.group();
   return cf;
 }
 
 function generateChartView(cf,adm0,prod,unit,adm0_url){
-  console.log(cf,adm0,prod,unit,adm0_url)
   var targetDiv = '#charts';
   var targetHeader = '#header';
 
@@ -273,7 +271,6 @@ function generateChartView(cf,adm0,prod,unit,adm0_url){
     initCountry(adm0_url,adm0,adm0_url);
   });
 
-  console.log('--',cf.groupByAdm1Sum.all())
   generateBarChart(getAVG(cf.groupByAdm1Sum.all(),cf.groupByAdm1Count.all()),cf,prod,unit,adm0,'','',adm0_url);
   generateTimeCharts(getAVG(cf.groupByDateSum.all(),cf.groupByDateCount.all()),cf,title);
 }
@@ -400,15 +397,18 @@ function generateTimeCharts(data,cf,title){
     //             transitionBarChart(getAVG(cf.groupByMktSum.all(),cf.groupByMktCount.all()));
     //         }                        
     //     });
+
+    //convert date values to date objects
+    data.forEach(function(d){
+      d.key = new Date(d.key);
+    });
         
     var area = d3.area()
-        //.interpolate("monotone")
-        .x(function(d) { return x(d.key); })
+        .x(function(d,i) { return x(d.key); })
         .y0(height)
-        .y1(function(d) { return y(d.value); });
+        .y1(function(d,i) { return y(d.value); });
 
     var area2 = d3.area()
-        //.interpolate("monotone")
         .x(function(d) { return x2(d.key); })
         .y0(height2)
         .y1(function(d) { return y2(d.value); });
@@ -441,47 +441,47 @@ function generateTimeCharts(data,cf,title){
     y2.domain(y.domain());
     
     var price = main_chart.append("g")
-         .attr("class", "pricelabel")
-         .style("display", "none");
+       .attr("class", "pricelabel")
+       .style("display", "none");
 
-        price.append("circle")
-            .attr("cy",10)
-            .attr("r", 4)
-            .attr("fill","#ffffff")
-            .attr("stroke","#6fbfff");
+      price.append("circle")
+          .attr("cy",10)
+          .attr("r", 4)
+          .attr("fill","#ffffff")
+          .attr("stroke","#6fbfff");
 
-        price.append("text")
-            .attr("x", 9)
-            .attr("dy", ".35em")
-            .attr("class","wfplabel");    
+      price.append("text")
+          .attr("x", 9)
+          .attr("dy", ".35em")
+          .attr("class","wfplabel");    
 
     var bisectDate = d3.bisector(function(d) { return d.key; }).left;
 
     focus.append("path")
-        .datum(data)
-        .attr("class", "area")
-        .attr("d", area)
-        .on("mouseover", function() { price.style("display", null); })
-        .on("mouseout", function() { price.style("display", "none"); })
-        .on("mousemove",function(d){
-            var x0 = x.invert(d3.mouse(this)[0]),
-                i = bisectDate(data, x0),
-                d0 = data[i - 1],
-                d1 = data[i],
-                d = x0 - d0.key > d1.key - x0 ? d1 : d0;
-            price.attr("transform", "translate(" + (x(d.key)+margin.left) + "," + (y(d.value)+margin.top) + ")");
-            var value = d.value<100 ? d.value.toPrecision(3) : Math.round(d.value);
-            var m_names = new Array('Jan', 'Feb', 'Mar', 
-                'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
-                'Oct', 'Nov', 'Dec'); 
-            var date = m_names[d.key.getMonth()] + '-' + d.key.getFullYear();
-            price.select("text").text(date+": "+value);
-        });
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", area)
+      .on("mouseover", function() { price.style("display", null); })
+      .on("mouseout", function() { price.style("display", "none"); })
+      .on("mousemove",function(d){
+          var x0 = x.invert(d3.mouse(this)[0]),
+              i = bisectDate(data, x0),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.key > d1.key - x0 ? d1 : d0;
+          price.attr("transform", "translate(" + (x(d.key)+margin.left) + "," + (y(d.value)+margin.top) + ")");
+          var value = d.value<100 ? d.value.toPrecision(3) : Math.round(d.value);
+          var m_names = new Array('Jan', 'Feb', 'Mar', 
+              'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
+              'Oct', 'Nov', 'Dec'); 
+          var date = m_names[d.key.getMonth()] + '-' + d.key.getFullYear();
+          price.select("text").text(date+": "+value);
+      });
 
     var linedata = [];
     
     data.forEach(function(e){
-        linedata.push([{x:e.key,y:0},{x:e.key,y:e.value}]);
+      linedata.push([{x:e.key,y:0},{x:e.key,y:e.value}]);
     });
 
     var line = d3.line()
@@ -533,8 +533,8 @@ function generateTimeCharts(data,cf,title){
   
     $('#main_chart').append('<a id="mainchartdownload" href="">Download Data</a>');
     $('#mainchartdownload').click(function(event){
-        event.preventDefault();
-        downloadData(data,'Date',title);
+      event.preventDefault();
+      downloadData(data,'Date',title);
     });
 }
 
@@ -546,14 +546,14 @@ function downloadData(data,name,title){
     'April', 'May', 'June', 'July', 'August', 'September', 
     'October', 'November', 'December');    
     data.forEach(function(e, index){
-       if(name==='Date'){
-           var key = m_names[e.key.getMonth()] + '-' + e.key.getFullYear();
-       } else {
-           var key = e.key;
-       }
-           
-       var dataString = key+','+e.value;
-       csvContent += index < data.length ? dataString+ '\n' : dataString;
+     if(name==='Date'){
+         var key = m_names[e.key.getMonth()] + '-' + e.key.getFullYear();
+     } else {
+         var key = e.key;
+     }
+         
+     var dataString = key+','+e.value;
+     csvContent += index < data.length ? dataString+ '\n' : dataString;
     });
     var encodedUri = encodeURI(csvContent);
     var link = document.createElement('a');
@@ -563,7 +563,6 @@ function downloadData(data,name,title){
 }
 
 function generateBarChart(data,cf,prod,unit,adm0,adm0_code,adm1,adm0_url){
-  console.log('generateBarChart', data)    
   data.forEach(function(e){
     if(e.key.length>14){
       e.display = e.key.substring(0,14)+"...";
