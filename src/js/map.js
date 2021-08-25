@@ -461,7 +461,7 @@ function handleGlobalEvents(layer) {
         createComparison(country)
      
         if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
-          openModal(currentCountry.name);
+          openModal(currentCountry.code, currentCountry.name);
         }
       }
     }
