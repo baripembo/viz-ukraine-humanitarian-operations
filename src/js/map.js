@@ -538,6 +538,10 @@ function updateGlobalLayer() {
       if (currentIndicator.id=='#affected+infected+new+weekly') {
         color = (val==null) ? colorNoData : colorScale(val);
       }
+      else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+        if (val<0) val = 0; //hotfix for negative values
+        color = (val==null) ? colorNoData : colorScale(val);
+      }
       else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
@@ -614,6 +618,10 @@ function getGlobalLegendScale() {
     //set the max to at least 5
     max = (max>5) ? max : 5;
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+  }
+  else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+    scale = d3.scaleQuantize().domain([min, max]).range(colorRange);
+    console.log('----',min,max,scale(-0.02))
   }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic break']).range(schoolClosureColorRange);
