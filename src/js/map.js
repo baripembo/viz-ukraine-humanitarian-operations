@@ -621,7 +621,6 @@ function getGlobalLegendScale() {
   }
   else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
     scale = d3.scaleQuantize().domain([min, max]).range(colorRange);
-    console.log('----',min,max,scale(-0.02))
   }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic break']).range(schoolClosureColorRange);
