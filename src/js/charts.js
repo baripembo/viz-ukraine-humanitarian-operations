@@ -547,7 +547,7 @@ function createRankingChart() {
       indicator = '#vaccination+postponed+num';
       break;
     case '#food-prices':
-      indicator = '#value+food+num+ratio';
+      indicator = '#indicator+foodbasket+change+pct';
       break;
     default:
       indicator = currentIndicator.id;
