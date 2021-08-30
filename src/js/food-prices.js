@@ -38,7 +38,7 @@ function initCountry(adm0_code,adm0_name,adm0_URL){
 }
 
 function getCountryIDs() { 
-  let countryDataURL = 'https://feature.data-humdata-org.ahconu.org/dataset/c984f985-7cad-4f83-8bf1-6fd18cca7d84/resource/3b8d9122-6ff3-4845-aad3-f0d932d88d26/download/wfp_countries_global.csv'
+  let countryDataURL = 'https://data.humdata.org/dataset/31579af5-3895-4002-9ee3-c50857480785/resource/0f2ef8c4-353f-4af1-af97-9e48562ad5b1/download/wfp_countries_global.csv'
   let proxyURL = 'https://proxy.hxlstandard.org/data.json?dest=data_edit&strip-headers=on&url='+countryDataURL
 
   $.ajax({
