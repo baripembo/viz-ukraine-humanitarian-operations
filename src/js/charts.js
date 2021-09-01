@@ -524,7 +524,7 @@ function createTrendBarChart(data, div) {
 var rankingX, rankingY, rankingBars, rankingData, rankingBarHeight, valueFormat;
 function createRankingChart() {
   //reset
-  $('.ranking-container').removeClass('covid ranking-vaccine ranking-inform');
+  $('.ranking-container').removeClass('covid ranking-vaccine ranking-vaccine-financing ranking-inform');
 
   //set title
   var rankingTitle = $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country';
@@ -564,6 +564,10 @@ function createRankingChart() {
   }
   else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
     $('.ranking-chart').append('<p>Sort by:</p>');
+  }
+  else if (currentIndicator.id=='#value+financing+approved') {
+    $('.ranking-container').addClass('ranking-vaccine-financing');
+    $('.ranking-select').val(indicator);
   }
   else if (currentIndicator.id=='#severity+inform+type') {
     $('.ranking-container').addClass('ranking-inform');
