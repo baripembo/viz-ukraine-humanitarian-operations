@@ -1276,6 +1276,27 @@ function createMapTooltip(country_code, country_name, point) {
           var informTrend = country[0]['#severity+inform+trend'];
           content += 'INFORM Severity Index: <div><span class="stat">' + numVal + '</span> <span class="subtext inline">(' + informClass + ' / ' + informTrend + ')</span></div>';
         }
+        //Vaccine Financing layer
+        else if (currentIndicator.id=='#value+financing+approved') {
+          if (val!='No Data') {
+            var gaviDisbursed = (country[0]['#value+financing+gavi+disbursed']!=undefined) ? country[0]['#value+financing+gavi+disbursed'] : 0;
+            var gaviApproved = (country[0]['#value+financing+gavi+approved']!=undefined) ? country[0]['#value+financing+gavi+approved'] : 0;
+            var wbApproved = (country[0]['#value+financing+worldbank+approved']!=undefined) ? country[0]['#value+financing+worldbank+approved'] : 0;
+
+            content += currentIndicator.name + ':<div class="stat">' + formatValue(val) + '</div>';
+            content += '<div class="table-display layer-covax">';
+            content += '<div class="table-row row-separator"><div>Disbursed:</div></div>';
+            content += '<div class="table-row"><div>GAVI CDS (Early Access)</div><div>'+ d3.format('$,')(gaviDisbursed) +'</div></div>';
+
+            content += '<div class="table-row row-separator"><div>Approved:</div></div>';
+            content += '<div class="table-row"><div>GAVI CDS (Early Access)</div><div>'+ d3.format('$,')(gaviApproved) +'</div></div>';
+            content += '<div class="table-row"><div>World Bank</div><div>'+ d3.format('$,')(wbApproved) +'</div></div>';
+            content += '</div>';
+          }
+          else {
+            content += currentIndicator.name + ':<div class="stat">' + formatValue(val) + '</div>';
+          }
+        }
         //Humanitarian Funding Level layer
         else if (currentIndicator.id=='#value+funding+hrp+pct') {
           if (val!='No Data') {
