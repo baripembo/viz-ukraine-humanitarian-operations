@@ -112,6 +112,14 @@ function setKeyFigures() {
 		var postponedNum = (data[indicator]==undefined) ? 0 : data[indicator];
 		createKeyFigure('.figures', 'Total number of immunization campaigns postponed due to COVID', '', postponedNum);
 	}
+	//vaccine financing
+	else if (currentIndicator.id=='#value+financing+approved') {
+		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
+		createKeyFigure('.figures', 'Total Approved Funding (World Bank and GAVI)', '', formatValue(data['#value+financing+approved']));
+		createKeyFigure('.figures', 'GAVI CDS (Early Access / Approved)', '', formatValue(data['#value+financing+gavi+approved']));
+		createKeyFigure('.figures', 'GAVI CDS (Early Access / Disbursed)', '', formatValue(data['#value+financing+gavi+disbursed']));
+		createKeyFigure('.figures', 'World Bank (Approved)', '', formatValue(data['#value+financing+worldbank+approved']));
+	}
 	//humanitarian funding
 	else if (currentIndicator.id=='#value+funding+hrp+pct') {
 		var numCountries = 0;

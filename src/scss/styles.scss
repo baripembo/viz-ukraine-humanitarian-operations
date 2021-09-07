@@ -657,6 +657,7 @@ a:visited {
 		}
 		.covid-select,
 		.vaccine-select,
+		.vaccine-financing-select,
 		.inform-select {
 			display: none;
 		}
@@ -688,6 +689,24 @@ a:visited {
 				display: none;
 			}
 			.vaccine-select {
+				display: block;
+				.ranking-select {
+					height: 30px;
+					white-space: pre-wrap;
+					width: 100%;
+				}
+			}
+		}
+	}
+	&.ranking-vaccine-financing {
+		.ranking-title {
+			display: none;
+		}
+		.ranking-select-container {
+			.default-select {
+				display: none;
+			}
+			.vaccine-financing-select {
 				display: block;
 				.ranking-select {
 					height: 30px;
