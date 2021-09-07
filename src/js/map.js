@@ -314,7 +314,7 @@ function selectLayer(menuItem) {
     toggleSecondaryPanel(menuItem, 'open');
 
     //set food prices view
-    if (currentIndicator.id!='#value+food+num+ratio') {
+    if (currentIndicator.id!='#indicator+foodbasket+change+pct') {
       closeModal();
     }
     //reset vaccine sorting select
@@ -418,13 +418,13 @@ function selectCountry(features) {
 function handleGlobalEvents(layer) {
   map.on('mouseenter', globalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    if (currentIndicator.id!='#value+food+num+ratio') {
+    if (currentIndicator.id!='#indicator+foodbasket+change+pct') {
       tooltip.addTo(map);
     }
   });
 
   map.on('mousemove', function(e) {
-    if (currentIndicator.id!='#value+food+num+ratio') {
+    if (currentIndicator.id!='#indicator+foodbasket+change+pct') {
       var features = map.queryRenderedFeatures(e.point, { layers: [globalLayer, globalLabelLayer, globalMarkerLayer] });
       var target;
       features.forEach(function(feature) {
@@ -460,7 +460,7 @@ function handleGlobalEvents(layer) {
 
         createComparison(country)
      
-        if (currentIndicator.id=='#value+food+num+ratio' && country[0]['#value+food+num+ratio']!=undefined) {
+        if (currentIndicator.id=='#indicator+foodbasket+change+pct' && country[0]['#indicator+foodbasket+change+pct']!=undefined) {
           openModal(currentCountry.code, currentCountry.name);
         }
       }
@@ -536,6 +536,10 @@ function updateGlobalLayer() {
       var color = colorDefault;
       
       if (currentIndicator.id=='#affected+infected+new+weekly') {
+        color = (val==null) ? colorNoData : colorScale(val);
+      }
+      else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+        if (val<0) val = 0; //hotfix for negative values
         color = (val==null) ? colorNoData : colorScale(val);
       }
       else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
@@ -614,6 +618,9 @@ function getGlobalLegendScale() {
     //set the max to at least 5
     max = (max>5) ? max : 5;
     scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+  }
+  else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+    scale = d3.scaleQuantize().domain([min, max]).range(colorRange);
   }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic break']).range(schoolClosureColorRange);
@@ -699,7 +706,7 @@ function setGlobalLegend(scale) {
     //vacc footnote
     createFootnote('.map-legend.global', '#vaccination+postponed+num', 'Methodology: Information about interrupted immunization campaigns contains both official and unofficial information sources. The country ranking has been determined by calculating the ratio of total number of postponed campaigns and total immunization campaigns. Note: data collection is ongoing and may not reflect all the campaigns in every country.');
     //food prices footnote
-    createFootnote('.map-legend.global', '#value+food+num+ratio', 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.');
+    createFootnote('.map-legend.global', '#indicator+foodbasket+change+pct', 'Methodology: Information about food prices is collected from data during the last 6 month moving window. The country ranking for food prices has been determined by calculating the ratio of the number of commodities in alert, stress or crisis and the total number of commodities. The commodity status comes from <a href="https://dataviz.vam.wfp.org" target="_blank" rel="noopener">WFP’s model</a>.');
     //oxford footnote
     createFootnote('.map-legend.global', '#severity+stringency+num', 'Note: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)');
     //CERF footnote
@@ -757,7 +764,7 @@ function setGlobalLegend(scale) {
 
   //POPULATE
   var legendTitle = $('.menu-indicators').find('.selected').attr('data-legend');
-  if (currentIndicator.id=='#value+food+num+ratio') legendTitle += '<br>Click on a country to explore commodity prices';
+  if (currentIndicator.id=='#indicator+foodbasket+change+pct') legendTitle += '<br>Click on a country to explore commodity prices';
   $('.map-legend.global .indicator-title').html(legendTitle);
 
   //current indicator
