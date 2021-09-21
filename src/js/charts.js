@@ -104,13 +104,15 @@ function initTrendseries(countryCode) {
   //cases chart
   var casesArray = formatTrendseriesData(countryCode, 'infected');
   var latestVal = casesArray[casesArray.length-1]['weekly_new'];
-  $('.cases-title').html('<h6>Weekly Number of New Cases</h6><div class="num">'+numFormat(latestVal)+'</div>');
+  var latestCumulativeVal = casesArray[casesArray.length-1]['weekly_cumulative'];
+  $('.cases-title').html('<h6>Weekly Number of New Cases</h6><div class="num">'+numFormat(latestVal)+'</div><div class="cumulativeNum">Number of Cumulative Cases: '+numFormat(latestCumulativeVal)+'</div>');
   createTrendseries(casesArray, '.cases-trend-chart');
 
   //deaths chart
   var deathsArray = formatTrendseriesData(countryCode, 'killed');
-  var latestVal = deathsArray[deathsArray.length-1]['weekly_new'];
-  $('.deaths-title').html('<h6>Weekly Number of New Deaths</h6><div class="num">'+numFormat(latestVal)+'</div>');
+  var latestDeathVal = deathsArray[deathsArray.length-1]['weekly_new'];
+  var latestCumulativeDeathVal = deathsArray[deathsArray.length-1]['weekly_cumulative'];
+  $('.deaths-title').html('<h6>Weekly Number of New Deaths</h6><div class="num">'+numFormat(latestDeathVal)+'</div><div class="cumulativeNum">Number of Cumulative Deaths: '+numFormat(latestCumulativeDeathVal)+'</div>');
   createTrendseries(deathsArray, '.deaths-trend-chart');
 }
 
