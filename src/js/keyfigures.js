@@ -4,6 +4,9 @@ function setKeyFigures() {
 	secondaryPanel.find('.figures, .source-container, .ranking-chart').empty();
 	secondaryPanel.find('.source-container').show();
 
+	//title
+	secondaryPanel.find('.secondary-panel-title').html(currentIndicator.title);
+
 	//source
 	var indicator = currentIndicator.id;
 	if (indicator=='#affected+inneed+pct') indicator = '#affected+inneed';

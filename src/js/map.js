@@ -40,7 +40,7 @@ function displayMap() {
   }
 
   //set initial indicator
-  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend')};
+  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend'), title: $('.menu-indicators').find('.selected').text()};
 
   //init element events
   createEvents();
@@ -310,7 +310,7 @@ function selectLayer(menuItem) {
     toggleSecondaryPanel(menuItem);
   }
   else {
-    currentIndicator = {id: $(menuItem).attr('data-id'), name: $(menuItem).attr('data-legend')};
+    currentIndicator = {id: $(menuItem).attr('data-id'), name: $(menuItem).attr('data-legend'), title: $(menuItem).text()};
     toggleSecondaryPanel(menuItem, 'open');
 
     //set food prices view
