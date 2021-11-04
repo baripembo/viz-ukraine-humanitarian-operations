@@ -60,9 +60,9 @@ function setKeyFigures() {
 	if (currentIndicator.id=='#affected+inneed+pct') {
 		var affectedPIN = (data[indicator]==undefined) ? 0 : (d3.format('.4s'))(data[indicator]);
 		if (currentRegion=='') {
-			//hardcode global PIN to match OCHA data
-			affectedPIN = (d3.format('.4s'))(220173345);
-			totalCountries = 56;
+			//global stats
+			affectedPIN = (d3.format('.4s'))(data['#affected+inneed']);
+			totalCountries =  data['#meta+countries+inneed+num'];
 		}
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Total Number of People in Need', 'pin', affectedPIN);
