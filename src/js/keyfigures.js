@@ -132,14 +132,14 @@ function setKeyFigures() {
 			}
 		});
 		createKeyFigure('.figures', 'Number of Countries', '', numCountries);
-		createKeyFigure('.figures', 'Total Funding Required (GHO 2021)', '', formatValue(data['#value+funding+hrp+required+usd']));
+		createKeyFigure('.figures', 'Total Funding Required (GHO 2022)', '', formatValue(data['#value+funding+hrp+required+usd']));
 		createKeyFigure('.figures', 'Total Funding Level', '', percentFormat(data['#value+funding+hrp+pct']));
 	}
 	//CERF
 	else if (currentIndicator.id=='#value+cerf+funding+total+usd') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		if (data['#value+cerf+contributions+total+usd']!=undefined) createKeyFigure('.figures', 'Total Contribution', '', formatValue(data['#value+cerf+contributions+total+usd']));
-		createKeyFigure('.figures', 'Total CERF Funding 2021', 'total-funding', formatValue(data['#value+cerf+funding+total+usd']));
+		createKeyFigure('.figures', 'Total CERF Funding 2022', 'total-funding', formatValue(data['#value+cerf+funding+total+usd']));
 		if (data['#value+cerf+funding+total+usd'] > 0) {
 			var gmText = getGamText(data, 'cerf');
 			$('.figures .key-figure .inner .total-funding').append('<div class="small">'+ gmText +'</div>');
@@ -150,7 +150,7 @@ function setKeyFigures() {
 		//num countries
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		if (data['#value+cbpf+contributions+total+usd']!=undefined) createKeyFigure('.figures', 'Total Contribution', '', formatValue(data['#value+cbpf+contributions+total+usd']));
-		createKeyFigure('.figures', 'Total CBPF Funding 2021', 'total-funding', formatValue(data['#value+cbpf+funding+total+usd']));
+		createKeyFigure('.figures', 'Total CBPF Funding 2022', 'total-funding', formatValue(data['#value+cbpf+funding+total+usd']));
 		
 		//gam
 		if (data['#value+cbpf+funding+total+usd'] > 0) {

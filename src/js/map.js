@@ -710,9 +710,9 @@ function setGlobalLegend(scale) {
     //oxford footnote
     createFootnote('.map-legend.global', '#severity+stringency+num', 'Note: This is a composite measure based on nine response indicators including school closures, workplace closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest)');
     //CERF footnote
-    createFootnote('.map-legend.global', '#value+cerf+funding+total+usd', 'The Total CERF Funding 2021 figure refers to the Global CERF Allocations, including some non-GHO locations which are not listed on this dashboard.');
+    createFootnote('.map-legend.global', '#value+cerf+funding+total+usd', 'The Total CERF Funding 2022 figure refers to the Global CERF Allocations, including some non-GHO locations which are not listed on this dashboard.');
     //CBPF footnote
-    createFootnote('.map-legend.global', '#value+cbpf+funding+total+usd', 'The Total CBPF Funding 2021 figure refers to the Global CBPF Allocations, including some non-GHO locations which are not listed on this dashboard.');
+    createFootnote('.map-legend.global', '#value+cbpf+funding+total+usd', 'The Total CBPF Funding 2022 figure refers to the Global CBPF Allocations, including some non-GHO locations which are not listed on this dashboard.');
     //access footnote
     // createFootnote('.map-legend.global', '#event+year+todate+num', '1. Access data is collected by OCHA and is based on information provided by humanitarian partners. 2. CERF and CBPF access data is collected by OCHA at country level and includes all projects affected by security incidents, access constraints or other bureaucratic impediments. 3. In order to ensure coherence and consistency in the analysis of security incidents, a single source of information has been used (AWSD). OCHA acknowledges that other sources of information are available at country level to complement the security analysis.');
 
