@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckyw4l9z9002f14p3cyt9g2t0',//mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7',
+    style: 'mapbox://styles/humdata/ckyw4l9z9002f14p3cyt9g2t0',
     center: [-25, 0],
     minZoom: 1,
     zoom: zoomLevel,
