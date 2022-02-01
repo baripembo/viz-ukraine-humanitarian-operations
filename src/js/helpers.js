@@ -168,7 +168,7 @@ const countryCodeList = {
   MOZ: '5jojox7h',
   NER: '9gbs4a2a',
   NGA: '3ceksugh',
-  PAK: '94y0veay',
+  //PAK: '94y0veay',
   PSE: '1emy37d7',
   SDN: 'a2zw3leb',
   SOM: '3s7xeitz',
@@ -179,6 +179,6 @@ const countryCodeList = {
   UKR: 'adkwa0bw',
   VEN: '9vcajdlr',
   YEM: '3m20d1v8',
-  ZWE: '1ry8x8ul'
+  //ZWE: '1ry8x8ul'
 };
 

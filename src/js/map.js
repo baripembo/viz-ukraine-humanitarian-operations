@@ -1,11 +1,11 @@
 var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
-var adm0SourceLayer = '63_polbnda_int_uncs-29lk4r';
+var adm0SourceLayer = 'polbnda_int_uncs-6zgtye';
 var hoveredStateId = null;
 function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7',
+    style: 'mapbox://styles/humdata/ckyw4l9z9002f14p3cyt9g2t0',//mapbox://styles/humdata/ckb843tjb46fy1ilaw49redy7',
     center: [-25, 0],
     minZoom: 1,
     zoom: zoomLevel,
