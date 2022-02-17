@@ -1247,7 +1247,8 @@ function createMapTooltip(country_code, country_name, point) {
         //School closures layer
         else if (currentIndicator.id=='#impact+type') {
           content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
-          var tableArray = [{label: 'Number of learners enrolled from pre-primary to upper-secondary education', value: country[0]['#population+learners+pre_primary_to_secondary']},
+          var tableArray = [{label: 'Total duration of full and partial school closures (in weeks)', value: country[0]['#impact+full_partial+weeks']},
+                            {label: 'Number of learners enrolled from pre-primary to upper-secondary education', value: country[0]['#population+learners+pre_primary_to_secondary']},
                             {label: 'Number of learners enrolled in tertiary education programmes', value: country[0]['#population+learners+tertiary']}];
           content += '<div class="table-display">';
           tableArray.forEach(function(row) {
