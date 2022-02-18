@@ -119,8 +119,10 @@ function setKeyFigures() {
 	else if (currentIndicator.id=='#value+financing+approved') {
 		createKeyFigure('.figures', 'Number of Countries', '', totalCountries);
 		createKeyFigure('.figures', 'Total Approved Funding (World Bank and GAVI)', '', formatValue(data['#value+financing+approved']));
-		createKeyFigure('.figures', 'GAVI CDS (Early Access / Approved)', '', formatValue(data['#value+financing+gavi+approved']));
-		createKeyFigure('.figures', 'GAVI CDS (Early Access / Disbursed)', '', formatValue(data['#value+financing+gavi+disbursed']));
+		createKeyFigure('.figures', 'GAVI CDS (Early Access / Approved)', '', formatValue(data['#value+financing+gavi+earlyaccess+approved']));
+		createKeyFigure('.figures', 'GAVI CDS (Needs Based / Approved)', '', formatValue(data['#value+financing+gavi+needs+approved']));
+		createKeyFigure('.figures', 'GAVI CDS (Early Access / Disbursed)', '', formatValue(data['#value+financing+gavi+earlyaccess+disbursed']));
+		createKeyFigure('.figures', 'GAVI CDS (Needs Based / Disbursed)', '', formatValue(data['#value+financing+gavi+needs+disbursed']));
 		createKeyFigure('.figures', 'World Bank (Approved)', '', formatValue(data['#value+financing+worldbank+approved']));
 	}
 	//humanitarian funding
