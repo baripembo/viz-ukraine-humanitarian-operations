@@ -1,4 +1,5 @@
 function mpTrack(view, content) {
+  //mixpanel event
   mixpanel.track('viz interaction', {
     'page title': document.title,
     'embedded in': window.location.href,
@@ -7,6 +8,9 @@ function mpTrack(view, content) {
     'current view': view,
     'content': content
   });
+
+  //google analytics event
+  ga('send', 'event', 'viz interaction', 'switch viz', 'oad covid-19 / '+ view, content);
 }
 
 function getMonth(m) {
