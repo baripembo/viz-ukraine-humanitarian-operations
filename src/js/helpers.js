@@ -1,6 +1,6 @@
 function vizTrack(view, content) {
   mpTrack(view, content);
-  gaTrack('viz interaction', 'switch viz', view);
+  gaTrack('viz interaction', 'switch viz', 'oad covid-19 / '+view);
 }
 
 function mpTrack(view, content) {
