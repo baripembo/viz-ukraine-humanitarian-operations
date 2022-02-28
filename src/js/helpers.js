@@ -1,4 +1,4 @@
-function eventTrack(view, content) {
+function vizTrack(view, content) {
   mpTrack(view, content);
   gaTrack('viz interaction', 'switch viz', view);
 }
