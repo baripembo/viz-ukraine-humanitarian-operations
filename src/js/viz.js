@@ -268,7 +268,7 @@ $( document ).ready(function() {
       else {
         $('#chart-view').hide();
       }
-      mpTrack($(this).data('id'), currentIndicator.name);
+      vizTrack($(this).data('id'), currentIndicator.name);
     });
 
     //set daily download date
@@ -284,7 +284,7 @@ $( document ).ready(function() {
       });
 
       //google analytics event
-      ga('send', 'event', 'oad covid-19 link', $(this).attr('href'), 'download report', document.title);
+      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report');
     });
 
     //show/hide NEW label for monthly report
@@ -309,9 +309,9 @@ $( document ).ready(function() {
         'link type': 'download report',
         'page title': document.title
       });
-      
+
       //google analytics event
-      ga('send', 'event', 'oad covid-19 link', $(this).attr('href'), 'download report', document.title);
+      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report');
     });
 
     //load trenseries for global view

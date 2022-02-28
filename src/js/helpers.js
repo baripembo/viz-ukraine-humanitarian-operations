@@ -1,3 +1,8 @@
+function eventTrack(view, content) {
+  mpTrack(view, content);
+  gaTrack('viz interaction', 'switch viz', view);
+}
+
 function mpTrack(view, content) {
   //mixpanel event
   mixpanel.track('viz interaction', {
@@ -8,9 +13,14 @@ function mpTrack(view, content) {
     'current view': view,
     'content': content
   });
+}
 
-  //google analytics event
-  ga('send', 'event', 'viz interaction', 'switch viz', 'oad covid-19 / '+ view, content);
+function gaTrack(eventCategory, eventAction, eventLabel) {
+  ga('send', 'event', eventCategory, eventAction, eventLabel, {
+    hitCallback: function() {
+      console.log('Finishing sending click event to GA')
+    }
+  });
 }
 
 function getMonth(m) {

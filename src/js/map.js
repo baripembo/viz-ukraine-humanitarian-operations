@@ -297,7 +297,7 @@ function createEvents() {
     var selected = $('input[name="countryIndicators"]:checked');
     currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
     updateCountryLayer();
-    mpTrack(currentCountry.code, currentCountryIndicator.name);
+    vizTrack(currentCountry.code, currentCountryIndicator.name);
   });
 }
 
@@ -322,7 +322,7 @@ function selectLayer(menuItem) {
       $('.vaccine-sorting-container').show();
     }
 
-    mpTrack('wrl', $(menuItem).find('div').text());
+    vizTrack('wrl', $(menuItem).find('div').text());
     updateGlobalLayer();
   }
 
@@ -373,7 +373,7 @@ function selectRegion() {
     linear: true
   });
 
-  mpTrack(currentRegion, currentIndicator.name);
+  vizTrack(currentRegion, currentIndicator.name);
   updateGlobalLayer();
 }
 
@@ -405,7 +405,7 @@ function selectCountry(features) {
   });
 
   map.once('moveend', initCountryView);
-  mpTrack(currentCountry.code, currentCountryIndicator.name);
+  vizTrack(currentCountry.code, currentCountryIndicator.name);
 
   //append country code to url
   window.history.replaceState(null, null, '?c='+currentCountry.code);

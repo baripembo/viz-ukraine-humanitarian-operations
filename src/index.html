@@ -10,7 +10,11 @@
 
       var gaToken = 'UA-48221887-3';
       ga('create', gaToken, 'auto');
-      ga('send', 'pageview');
+      ga('send', 'pageview', {
+        hitCallback: function() {
+          console.log('Finishing sending click event to GA')
+        }
+      });
     </script>
     <!-- End Google Analytics -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
