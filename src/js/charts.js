@@ -534,7 +534,7 @@ function createRankingChart() {
 
   //set title
   var rankingTitle = $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country';
-  if (currentIndicator.id=='#impact+type') rankingTitle = 'Total Number of Affected Learners';
+  if (currentIndicator.id=='#impact+type') rankingTitle = 'Total duration of full and partial school closures (in weeks)';
   if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index Trend (last 3 months) by Country';
   $('.secondary-panel .ranking-title').text(rankingTitle);
 
@@ -547,7 +547,7 @@ function createRankingChart() {
       indicator = '#capacity+doses+delivered+total';
       break;
     case '#impact+type':
-      indicator = '#affected+learners';
+      indicator = '#impact+full_partial+weeks';
       break;
     case '#immunization-campaigns':
       indicator = '#vaccination+postponed+num';
