@@ -284,7 +284,7 @@ $( document ).ready(function() {
       });
 
       //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report');
+      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
     //show/hide NEW label for monthly report
@@ -311,7 +311,7 @@ $( document ).ready(function() {
       });
 
       //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report');
+      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
     //load trenseries for global view
