@@ -3101,7 +3101,7 @@ function initCountryLayer() {
     }
     else {
       map.getCanvas().style.cursor = '';
-      tooltip.remove();
+      //tooltip.remove();
     }
   });
      
@@ -3192,34 +3192,23 @@ function initCountryLayer() {
   });
 
   //refugee dots mouse events
-  const popup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: false
-  });
-   
-  map.on('mouseenter', 'refugee-counts-dots', (e) => {
-    // Change the cursor style as a UI indicator.
+  map.on('mouseenter', 'refugee-counts-dots', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-     
-    // Copy coordinates array.
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const description = `${e.features[0].properties.country}: ${numFormat(e.features[0].properties.count)}`;
-     
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-     
-    // Populate the popup and set its coordinates
-    // based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+    tooltip.addTo(map);
   });
-   
-  map.on('mouseleave', 'refugee-counts-dots', () => {
+
+  map.on('mousemove', 'refugee-counts-dots', function(e) {
+      map.getCanvas().style.cursor = 'pointer';
+      const content = `<h2>${e.features[0].properties.country}</h2>Refugees arrivals from Ukraine: <div class='stat'>${numFormat(e.features[0].properties.count)}</div>`;
+      tooltip.setHTML(content);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+  });
+     
+  map.on('mouseleave', 'refugee-counts-dots', function() {
     map.getCanvas().style.cursor = '';
-    popup.remove();
+    tooltip.remove();
   });
 
 }
