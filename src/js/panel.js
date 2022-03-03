@@ -10,18 +10,12 @@ function initCountryPanel() {
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
-
-  //covid
-  var covidDiv = $('.country-panel .covid .panel-inner');
-  covidDiv.children().remove();  
-  createFigure(covidDiv, {className: 'cases', title: 'Total Confirmed Cases', stat: numFormat(data['#affected+infected']), indicator: '#affected+infected'});
-  createFigure(covidDiv, {className: 'deaths', title: 'Total Confirmed Deaths', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
-  var covidData = covidTrendData[currentCountry.code];
-  var weeklyCases = covidData[covidData.length-1]['#affected+infected+new+weekly'];
-  var weeklyDeaths = covidData[covidData.length-1]['#affected+killed+new+weekly'];
-  createFigure(covidDiv, {className: 'weekly-cases', title: 'Weekly Number of New Cases', stat: numFormat(weeklyCases), indicator: '#affected+killed'});
-  createFigure(covidDiv, {className: 'weekly-deaths', title: 'Weekly Number of New Deaths', stat: numFormat(weeklyDeaths), indicator: '#affected+killed'});
-
+  
+  //refugees
+  var refugeesDiv = $('.country-panel .refugees .panel-inner');
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: numFormat(1045459), indicator: ''});
+  refugeesDiv.find('.figure-inner').append('<p class="small source"><span class="date">Mar 03, 2022</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/dataset/ukraine-refugee-situation" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  
   //hrp
   var hrpDiv = $('.country-panel .hrp .panel-inner');
   hrpDiv.children().remove();
@@ -39,5 +33,6 @@ function createFigure(div, obj) {
   if (obj.title != undefined) divInner.append('<h6 class="title">'+ obj.title +'</h6>');
   divInner.append('<p class="stat">'+ obj.stat +'</p>');
 
-  createSource(divInner, obj.indicator);
+  if (obj.indicator!='')
+    createSource(divInner, obj.indicator);
 }
