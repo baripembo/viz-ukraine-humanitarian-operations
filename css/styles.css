@@ -1844,14 +1844,20 @@ a:visited {
     cursor: pointer;
     display: none; }
   .map-legend .no-data-key,
-  .map-legend .special-key {
+  .map-legend .special-key,
+  .map-legend .border-crossing-key,
+  .map-legend .refugee-count-key {
     height: 20px; }
     .map-legend .no-data-key rect,
-    .map-legend .special-key rect {
+    .map-legend .special-key rect,
+    .map-legend .border-crossing-key rect,
+    .map-legend .refugee-count-key rect {
       fill: #FFF;
       stroke: #CCC; }
     .map-legend .no-data-key text,
-    .map-legend .special-key text {
+    .map-legend .special-key text,
+    .map-legend .border-crossing-key text,
+    .map-legend .refugee-count-key text {
       transform: translate(25px, 12.5px); }
   .map-legend .special-key {
     display: none; }

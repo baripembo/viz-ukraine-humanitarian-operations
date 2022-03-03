@@ -3349,6 +3349,34 @@ function createCountryLegend(scale) {
     .attr('class', 'label')
     .text('No Data');
 
+  //border crossing
+  var borderCrossing = div.append('svg')
+    .attr('class', 'border-crossing-key');
+  
+  borderCrossing.append('circle')
+    .attr('cx', 8)
+    .attr('cy', 7)
+    .attr('r', 7);
+
+  borderCrossing.append('text')
+    .attr('class', 'label')
+    .text('International border crossing');
+
+  //refugee count
+  var refugeeCount = div.append('svg')
+    .attr('class', 'refugee-count-key');
+  
+  refugeeCount.append('circle')
+    .attr('cx', 8)
+    .attr('cy', 7)
+    .attr('r', 7)
+    .style('fill', '#418FDE')
+    .style('opacity', 0.5);
+
+  refugeeCount.append('text')
+    .attr('class', 'label')
+    .text('Refugee Arrivals from Ukraine');
+
   //boundaries disclaimer
   createFootnote('.map-legend.country', '', 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.');
 
