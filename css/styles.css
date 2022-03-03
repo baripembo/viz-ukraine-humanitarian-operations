@@ -1,0 +1,2321 @@
+@font-face {
+  font-family: 'Gotham-Bold';
+  src: url("../assets/fonts/Gotham-Bold.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; }
+
+@font-face {
+  font-family: 'Gotham-Book';
+  src: url("../assets/fonts/Gotham-Book.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; }
+
+@font-face {
+  font-family: 'Gotham-Light';
+  src: url("../assets/fonts/Gotham-Light.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; }
+
+@font-face {
+  font-family: 'Humanitarian-Icons-v02';
+  src: url("../assets/fonts/Humanitarian-Icons-v02.eot?d5h7ar");
+  src: url("../assets/fonts/Humanitarian-Icons-v02.eot?d5h7ar#iefix") format("embedded-opentype"), url("../assets/fonts/Humanitarian-Icons-v02.ttf?d5h7ar") format("truetype"), url("../assets/fonts/Humanitarian-Icons-v02.woff?d5h7ar") format("woff"), url("../assets/fonts/Humanitarian-Icons-v02.svg?d5h7ar#Humanitarian-Icons-v02") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block; }
+
+[class^="humanitarianicons-"], [class*=" humanitarianicons-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'Humanitarian-Icons-v02' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.humanitarianicons-Covid-19:before {
+  content: "\ea4c"; }
+
+.humanitarianicons-Social-gh:before {
+  content: "\ea48"; }
+
+.humanitarianicons-Social-gh-hover:before {
+  content: "\ea49"; }
+
+.humanitarianicons-Social-mail:before {
+  content: "\ea4a"; }
+
+.humanitarianicons-Social-mail-hover:before {
+  content: "\ea4b"; }
+
+.humanitarianicons-Double-arrow-down:before {
+  content: "\ea3a"; }
+
+.humanitarianicons-Double-arrow-left:before {
+  content: "\ea3b"; }
+
+.humanitarianicons-Double-arrow-right:before {
+  content: "\ea3c"; }
+
+.humanitarianicons-Double-arrow-up:before {
+  content: "\ea3d"; }
+
+.humanitarianicons-Social-fb-hover:before {
+  content: "\ea3e"; }
+
+.humanitarianicons-Social-fb:before {
+  content: "\ea3f"; }
+
+.humanitarianicons-Social-ig-hover:before {
+  content: "\ea40"; }
+
+.humanitarianicons-Social-ig:before {
+  content: "\ea41"; }
+
+.humanitarianicons-Social-li-hover:before {
+  content: "\ea42"; }
+
+.humanitarianicons-Social-li:before {
+  content: "\ea43"; }
+
+.humanitarianicons-Social-tw-hover:before {
+  content: "\ea44"; }
+
+.humanitarianicons-Social-tw:before {
+  content: "\ea45"; }
+
+.humanitarianicons-Social-yt-hover:before {
+  content: "\ea46"; }
+
+.humanitarianicons-Social-yt:before {
+  content: "\ea47"; }
+
+.humanitarianicons-Abduction-kidnapping:before {
+  content: "\e900"; }
+
+.humanitarianicons-About:before {
+  content: "\e901"; }
+
+.humanitarianicons-Add:before {
+  content: "\e902"; }
+
+.humanitarianicons-Add-document:before {
+  content: "\e903"; }
+
+.humanitarianicons-Advocacy:before {
+  content: "\e904"; }
+
+.humanitarianicons-Affected-population:before {
+  content: "\e905"; }
+
+.humanitarianicons-Agriculture:before {
+  content: "\e906"; }
+
+.humanitarianicons-Airport:before {
+  content: "\e907"; }
+
+.humanitarianicons-Airport-affected:before {
+  content: "\e908"; }
+
+.humanitarianicons-Airport-destroyed:before {
+  content: "\e909"; }
+
+.humanitarianicons-Airport-military:before {
+  content: "\e90a"; }
+
+.humanitarianicons-Airport-not-affected:before {
+  content: "\e90b"; }
+
+.humanitarianicons-Alert:before {
+  content: "\e90c"; }
+
+.humanitarianicons-Analysis:before {
+  content: "\e90d"; }
+
+.humanitarianicons-Arrest-detention:before {
+  content: "\e90e"; }
+
+.humanitarianicons-Assault:before {
+  content: "\e90f"; }
+
+.humanitarianicons-Assembly-point:before {
+  content: "\e910"; }
+
+.humanitarianicons-Assessment:before {
+  content: "\e911"; }
+
+.humanitarianicons-Attack:before {
+  content: "\e912"; }
+
+.humanitarianicons-Blanket:before {
+  content: "\e913"; }
+
+.humanitarianicons-Blog:before {
+  content: "\e914"; }
+
+.humanitarianicons-Boat:before {
+  content: "\e915"; }
+
+.humanitarianicons-Bookmark:before {
+  content: "\e916"; }
+
+.humanitarianicons-Border-crossing:before {
+  content: "\e917"; }
+
+.humanitarianicons-Borehole:before {
+  content: "\e918"; }
+
+.humanitarianicons-Bottled-water:before {
+  content: "\e919"; }
+
+.humanitarianicons-Bridge:before {
+  content: "\e91a"; }
+
+.humanitarianicons-Bridge-affected:before {
+  content: "\e91b"; }
+
+.humanitarianicons-Bridge-destroyed:before {
+  content: "\e91c"; }
+
+.humanitarianicons-Bridge-not-affected:before {
+  content: "\e91d"; }
+
+.humanitarianicons-Bucket:before {
+  content: "\e91e"; }
+
+.humanitarianicons-Buddhist-temple:before {
+  content: "\e91f"; }
+
+.humanitarianicons-Building:before {
+  content: "\e920"; }
+
+.humanitarianicons-Building-facility-affected:before {
+  content: "\e921"; }
+
+.humanitarianicons-Building-facility-destroyed:before {
+  content: "\e922"; }
+
+.humanitarianicons-Building-facility-not-affected:before {
+  content: "\e923"; }
+
+.humanitarianicons-Bus:before {
+  content: "\e924"; }
+
+.humanitarianicons-Calendar:before {
+  content: "\e925"; }
+
+.humanitarianicons-Camp-Coordination-and-Camp-Management:before {
+  content: "\e926"; }
+
+.humanitarianicons-Car:before {
+  content: "\e927"; }
+
+.humanitarianicons-Carjacking:before {
+  content: "\e928"; }
+
+.humanitarianicons-Cash-transfer:before {
+  content: "\e929"; }
+
+.humanitarianicons-Cell-tower:before {
+  content: "\e92a"; }
+
+.humanitarianicons-Chart:before {
+  content: "\e92b"; }
+
+.humanitarianicons-Chat:before {
+  content: "\e92c"; }
+
+.humanitarianicons-Checkpoint:before {
+  content: "\e92d"; }
+
+.humanitarianicons-Child-care-child-friendly:before {
+  content: "\e92e"; }
+
+.humanitarianicons-Child-combatant:before {
+  content: "\e92f"; }
+
+.humanitarianicons-Child-protection:before {
+  content: "\e930"; }
+
+.humanitarianicons-Children:before {
+  content: "\e931"; }
+
+.humanitarianicons-Church:before {
+  content: "\e932"; }
+
+.humanitarianicons-Civil-military-coordination:before {
+  content: "\e933"; }
+
+.humanitarianicons-Clinic:before {
+  content: "\e934"; }
+
+.humanitarianicons-Clothing:before {
+  content: "\e935"; }
+
+.humanitarianicons-Cold-wave:before {
+  content: "\e936"; }
+
+.humanitarianicons-Communal-latrine:before {
+  content: "\e937"; }
+
+.humanitarianicons-Community-building:before {
+  content: "\e938"; }
+
+.humanitarianicons-Community-engagement:before {
+  content: "\e939"; }
+
+.humanitarianicons-Computer:before {
+  content: "\e93a"; }
+
+.humanitarianicons-Conflict:before {
+  content: "\e93b"; }
+
+.humanitarianicons-Coordinated-assessement:before {
+  content: "\e93c"; }
+
+.humanitarianicons-Coordination:before {
+  content: "\e93d"; }
+
+.humanitarianicons-Copy:before {
+  content: "\e93e"; }
+
+.humanitarianicons-Cyclone:before {
+  content: "\e93f"; }
+
+.humanitarianicons-Damaged-Affected:before {
+  content: "\e940"; }
+
+.humanitarianicons-Dangerous-area:before {
+  content: "\e941"; }
+
+.humanitarianicons-Data:before {
+  content: "\e942"; }
+
+.humanitarianicons-Dead:before {
+  content: "\e943"; }
+
+.humanitarianicons-Debris-management:before {
+  content: "\e944"; }
+
+.humanitarianicons-Deployment:before {
+  content: "\e945"; }
+
+.humanitarianicons-Destroyed:before {
+  content: "\e946"; }
+
+.humanitarianicons-Detergent:before {
+  content: "\e947"; }
+
+.humanitarianicons-Diplomatic-mission:before {
+  content: "\e948"; }
+
+.humanitarianicons-Distribution-site:before {
+  content: "\e949"; }
+
+.humanitarianicons-Document:before {
+  content: "\e94a"; }
+
+.humanitarianicons-Down:before {
+  content: "\e94b"; }
+
+.humanitarianicons-Download:before {
+  content: "\e94c"; }
+
+.humanitarianicons-Drought:before {
+  content: "\e94d"; }
+
+.humanitarianicons-Drowned:before {
+  content: "\e94e"; }
+
+.humanitarianicons-E-mail:before {
+  content: "\e94f"; }
+
+.humanitarianicons-Early-Recovery:before {
+  content: "\e950"; }
+
+.humanitarianicons-Earthmound:before {
+  content: "\e951"; }
+
+.humanitarianicons-Earthquake:before {
+  content: "\e952"; }
+
+.humanitarianicons-Education:before {
+  content: "\e953"; }
+
+.humanitarianicons-Elderly:before {
+  content: "\e954"; }
+
+.humanitarianicons-Emergency-Telecommunications:before {
+  content: "\e955"; }
+
+.humanitarianicons-Environment:before {
+  content: "\e956"; }
+
+.humanitarianicons-Epidemic:before {
+  content: "\e957"; }
+
+.humanitarianicons-Exit-Cancel:before {
+  content: "\e958"; }
+
+.humanitarianicons-Famine:before {
+  content: "\e959"; }
+
+.humanitarianicons-Favourite:before {
+  content: "\e95a"; }
+
+.humanitarianicons-Fax:before {
+  content: "\e95b"; }
+
+.humanitarianicons-Ferry:before {
+  content: "\e95c"; }
+
+.humanitarianicons-Film:before {
+  content: "\e95d"; }
+
+.humanitarianicons-Filter:before {
+  content: "\e95e"; }
+
+.humanitarianicons-Financing:before {
+  content: "\e95f"; }
+
+.humanitarianicons-Fire:before {
+  content: "\e960"; }
+
+.humanitarianicons-Fishery:before {
+  content: "\e961"; }
+
+.humanitarianicons-Flash-flood:before {
+  content: "\e962"; }
+
+.humanitarianicons-Flood:before {
+  content: "\e963"; }
+
+.humanitarianicons-Flour:before {
+  content: "\e964"; }
+
+.humanitarianicons-Folder:before {
+  content: "\e965"; }
+
+.humanitarianicons-Food:before {
+  content: "\e966"; }
+
+.humanitarianicons-Food-Security:before {
+  content: "\e967"; }
+
+.humanitarianicons-Food-warehouse:before {
+  content: "\e968"; }
+
+.humanitarianicons-Forced-entry:before {
+  content: "\e969"; }
+
+.humanitarianicons-Forced-recruitment:before {
+  content: "\e96a"; }
+
+.humanitarianicons-Fund:before {
+  content: "\e96b"; }
+
+.humanitarianicons-Gap-analysis:before {
+  content: "\e96c"; }
+
+.humanitarianicons-Gas-station:before {
+  content: "\e96d"; }
+
+.humanitarianicons-Go:before {
+  content: "\e96e"; }
+
+.humanitarianicons-Government-office:before {
+  content: "\e96f"; }
+
+.humanitarianicons-Group:before {
+  content: "\e970"; }
+
+.humanitarianicons-Harassment-intimidation:before {
+  content: "\e971"; }
+
+.humanitarianicons-Health:before {
+  content: "\e972"; }
+
+.humanitarianicons-Health-facility:before {
+  content: "\e973"; }
+
+.humanitarianicons-Health-facility-affected:before {
+  content: "\e974"; }
+
+.humanitarianicons-Health-facility-destroyed:before {
+  content: "\e975"; }
+
+.humanitarianicons-Health-facility-not-affected:before {
+  content: "\e976"; }
+
+.humanitarianicons-Health-post:before {
+  content: "\e977"; }
+
+.humanitarianicons-Heatwave:before {
+  content: "\e978"; }
+
+.humanitarianicons-Heavy-rain:before {
+  content: "\e979"; }
+
+.humanitarianicons-Helicopter:before {
+  content: "\e97a"; }
+
+.humanitarianicons-Helipad:before {
+  content: "\e97b"; }
+
+.humanitarianicons-Help:before {
+  content: "\e97c"; }
+
+.humanitarianicons-Hidden:before {
+  content: "\e97d"; }
+
+.humanitarianicons-Hindu-temple:before {
+  content: "\e97e"; }
+
+.humanitarianicons-Hospital:before {
+  content: "\e97f"; }
+
+.humanitarianicons-Hotel:before {
+  content: "\e980"; }
+
+.humanitarianicons-House:before {
+  content: "\e981"; }
+
+.humanitarianicons-House-affected:before {
+  content: "\e982"; }
+
+.humanitarianicons-House-burned:before {
+  content: "\e983"; }
+
+.humanitarianicons-House-destroyed:before {
+  content: "\e984"; }
+
+.humanitarianicons-House-not-affected:before {
+  content: "\e985"; }
+
+.humanitarianicons-Humanitarian-access:before {
+  content: "\e986"; }
+
+.humanitarianicons-Humanitarian-programme-cycle:before {
+  content: "\e987"; }
+
+.humanitarianicons-IDP-refugee-camp:before {
+  content: "\e988"; }
+
+.humanitarianicons-Infant:before {
+  content: "\e989"; }
+
+.humanitarianicons-Infant-formula:before {
+  content: "\e98a"; }
+
+.humanitarianicons-Information-management:before {
+  content: "\e98b"; }
+
+.humanitarianicons-Information-technology:before {
+  content: "\e98c"; }
+
+.humanitarianicons-Infrastructure:before {
+  content: "\e98d"; }
+
+.humanitarianicons-Injured:before {
+  content: "\e98e"; }
+
+.humanitarianicons-Innovation:before {
+  content: "\e98f"; }
+
+.humanitarianicons-Insect-infestation:before {
+  content: "\e990"; }
+
+.humanitarianicons-Internally-displaced:before {
+  content: "\e991"; }
+
+.humanitarianicons-Internet:before {
+  content: "\e992"; }
+
+.humanitarianicons-Kitchen-set:before {
+  content: "\e993"; }
+
+.humanitarianicons-Landslide-mudslide:before {
+  content: "\e994"; }
+
+.humanitarianicons-Laptop:before {
+  content: "\e995"; }
+
+.humanitarianicons-Latrine-cabin:before {
+  content: "\e996"; }
+
+.humanitarianicons-Leadership:before {
+  content: "\e997"; }
+
+.humanitarianicons-Learning:before {
+  content: "\e998"; }
+
+.humanitarianicons-Link:before {
+  content: "\e999"; }
+
+.humanitarianicons-Livelihood:before {
+  content: "\e99a"; }
+
+.humanitarianicons-Livestock:before {
+  content: "\e99b"; }
+
+.humanitarianicons-Location:before {
+  content: "\e99c"; }
+
+.humanitarianicons-Locust-infestation:before {
+  content: "\e99d"; }
+
+.humanitarianicons-Logistics:before {
+  content: "\e99e"; }
+
+.humanitarianicons-Map:before {
+  content: "\e99f"; }
+
+.humanitarianicons-Mattress:before {
+  content: "\e9a0"; }
+
+.humanitarianicons-Medical-supply:before {
+  content: "\e9a1"; }
+
+.humanitarianicons-Medicine:before {
+  content: "\e9a2"; }
+
+.humanitarianicons-Meeting:before {
+  content: "\e9a3"; }
+
+.humanitarianicons-Menu:before {
+  content: "\e9a4"; }
+
+.humanitarianicons-Military-gate:before {
+  content: "\e9a5"; }
+
+.humanitarianicons-Mine:before {
+  content: "\e9a6"; }
+
+.humanitarianicons-Missing:before {
+  content: "\e9a7"; }
+
+.humanitarianicons-Mobile-clinic:before {
+  content: "\e9a8"; }
+
+.humanitarianicons-Mobile-phone:before {
+  content: "\e9a9"; }
+
+.humanitarianicons-Monitor:before {
+  content: "\e9aa"; }
+
+.humanitarianicons-Monitoring:before {
+  content: "\e9ab"; }
+
+.humanitarianicons-More-options:before {
+  content: "\e9ac"; }
+
+.humanitarianicons-Mosque:before {
+  content: "\e9ad"; }
+
+.humanitarianicons-Mosquito-net:before {
+  content: "\e9ae"; }
+
+.humanitarianicons-Multi-cluster-sector:before {
+  content: "\e9af"; }
+
+.humanitarianicons-Murder:before {
+  content: "\e9b0"; }
+
+.humanitarianicons-NGO-office:before {
+  content: "\e9b1"; }
+
+.humanitarianicons-National-army:before {
+  content: "\e9b2"; }
+
+.humanitarianicons-Needs-assessment:before {
+  content: "\e9b3"; }
+
+.humanitarianicons-Next-item:before {
+  content: "\e9b4"; }
+
+.humanitarianicons-Non-food-items:before {
+  content: "\e9b5"; }
+
+.humanitarianicons-Non-food-items-2:before {
+  content: "\e9b6"; }
+
+.humanitarianicons-Not-affected:before {
+  content: "\e9b7"; }
+
+.humanitarianicons-Notification:before {
+  content: "\e9b8"; }
+
+.humanitarianicons-Nutrition:before {
+  content: "\e9b9"; }
+
+.humanitarianicons-Observation-tower:before {
+  content: "\e9ba"; }
+
+.humanitarianicons-Oil:before {
+  content: "\e9bb"; }
+
+.humanitarianicons-Out-of-platform:before {
+  content: "\e9bc"; }
+
+.humanitarianicons-Partnership:before {
+  content: "\e9bd"; }
+
+.humanitarianicons-Pause:before {
+  content: "\e9be"; }
+
+.humanitarianicons-Peacekeeping-force:before {
+  content: "\e9bf"; }
+
+.humanitarianicons-People-in-need:before {
+  content: "\e9c0"; }
+
+.humanitarianicons-People-targeted:before {
+  content: "\e9c1"; }
+
+.humanitarianicons-People-with-physical-impairments:before {
+  content: "\e9c2"; }
+
+.humanitarianicons-Permanent-camp:before {
+  content: "\e9c3"; }
+
+.humanitarianicons-Person-1:before {
+  content: "\e9c4"; }
+
+.humanitarianicons-Person-2:before {
+  content: "\e9c5"; }
+
+.humanitarianicons-Photo:before {
+  content: "\e9c6"; }
+
+.humanitarianicons-Physical-closure:before {
+  content: "\e9c7"; }
+
+.humanitarianicons-Plastic-sheeting:before {
+  content: "\e9c8"; }
+
+.humanitarianicons-Police-station:before {
+  content: "\e9c9"; }
+
+.humanitarianicons-Policy:before {
+  content: "\e9ca"; }
+
+.humanitarianicons-Population-growth:before {
+  content: "\e9cb"; }
+
+.humanitarianicons-Population-return:before {
+  content: "\e9cc"; }
+
+.humanitarianicons-Port:before {
+  content: "\e9cd"; }
+
+.humanitarianicons-Port-affected:before {
+  content: "\e9ce"; }
+
+.humanitarianicons-Port-destroyed:before {
+  content: "\e9cf"; }
+
+.humanitarianicons-Port-not-affected:before {
+  content: "\e9d0"; }
+
+.humanitarianicons-Potable-water:before {
+  content: "\e9d1"; }
+
+.humanitarianicons-Potable-water-source:before {
+  content: "\e9d2"; }
+
+.humanitarianicons-Power-electricity:before {
+  content: "\e9d3"; }
+
+.humanitarianicons-Power-electricity-affected:before {
+  content: "\e9d4"; }
+
+.humanitarianicons-Power-electricity-not-affected:before {
+  content: "\e9d5"; }
+
+.humanitarianicons-Power-outage:before {
+  content: "\e9d6"; }
+
+.humanitarianicons-Pregnant:before {
+  content: "\e9d7"; }
+
+.humanitarianicons-Preparedness:before {
+  content: "\e9d8"; }
+
+.humanitarianicons-Previous-item:before {
+  content: "\e9d9"; }
+
+.humanitarianicons-Print:before {
+  content: "\e9da"; }
+
+.humanitarianicons-Protection:before {
+  content: "\e9db"; }
+
+.humanitarianicons-Public-information:before {
+  content: "\e9dc"; }
+
+.humanitarianicons-Radio:before {
+  content: "\e9dd"; }
+
+.humanitarianicons-Rebel:before {
+  content: "\e9de"; }
+
+.humanitarianicons-Reconstruction:before {
+  content: "\e9df"; }
+
+.humanitarianicons-Refugee:before {
+  content: "\e9e0"; }
+
+.humanitarianicons-Registration:before {
+  content: "\e9e1"; }
+
+.humanitarianicons-Relief-goods:before {
+  content: "\e9e2"; }
+
+.humanitarianicons-Remove:before {
+  content: "\e9e3"; }
+
+.humanitarianicons-Remove-document:before {
+  content: "\e9e4"; }
+
+.humanitarianicons-Report:before {
+  content: "\e9e5"; }
+
+.humanitarianicons-Reporting:before {
+  content: "\e9e6"; }
+
+.humanitarianicons-Response:before {
+  content: "\e9e7"; }
+
+.humanitarianicons-Return:before {
+  content: "\e9e8"; }
+
+.humanitarianicons-Rice:before {
+  content: "\e9e9"; }
+
+.humanitarianicons-Road:before {
+  content: "\e9ea"; }
+
+.humanitarianicons-Road-affected:before {
+  content: "\e9eb"; }
+
+.humanitarianicons-Road-barrier:before {
+  content: "\e9ec"; }
+
+.humanitarianicons-Road-destroyed:before {
+  content: "\e9ed"; }
+
+.humanitarianicons-Road-not-affected:before {
+  content: "\e9ee"; }
+
+.humanitarianicons-Roadblock:before {
+  content: "\e9ef"; }
+
+.humanitarianicons-Robbery:before {
+  content: "\e9f0"; }
+
+.humanitarianicons-Rule-of-law-and-justice:before {
+  content: "\e9f1"; }
+
+.humanitarianicons-Rural:before {
+  content: "\e9f2"; }
+
+.humanitarianicons-Rural-exodus:before {
+  content: "\e9f3"; }
+
+.humanitarianicons-Safety-and-security:before {
+  content: "\e9f4"; }
+
+.humanitarianicons-Salt:before {
+  content: "\e9f5"; }
+
+.humanitarianicons-Sanitation:before {
+  content: "\e9f6"; }
+
+.humanitarianicons-Satellite-dish:before {
+  content: "\e9f7"; }
+
+.humanitarianicons-Save:before {
+  content: "\e9f8"; }
+
+.humanitarianicons-Scale-down-operation:before {
+  content: "\e9f9"; }
+
+.humanitarianicons-Scale-up-operation:before {
+  content: "\e9fa"; }
+
+.humanitarianicons-School:before {
+  content: "\e9fb"; }
+
+.humanitarianicons-School-affected:before {
+  content: "\e9fc"; }
+
+.humanitarianicons-School-destroyed:before {
+  content: "\e9fd"; }
+
+.humanitarianicons-School-not-affected:before {
+  content: "\e9fe"; }
+
+.humanitarianicons-Search:before {
+  content: "\e9ff"; }
+
+.humanitarianicons-See:before {
+  content: "\ea00"; }
+
+.humanitarianicons-Selected:before {
+  content: "\ea01"; }
+
+.humanitarianicons-Services-and-tools:before {
+  content: "\ea02"; }
+
+.humanitarianicons-Settings:before {
+  content: "\ea03"; }
+
+.humanitarianicons-Sexual-violence:before {
+  content: "\ea04"; }
+
+.humanitarianicons-Share:before {
+  content: "\ea05"; }
+
+.humanitarianicons-Shelter:before {
+  content: "\ea06"; }
+
+.humanitarianicons-Ship:before {
+  content: "\ea07"; }
+
+.humanitarianicons-Shower:before {
+  content: "\ea08"; }
+
+.humanitarianicons-Smartphone:before {
+  content: "\ea09"; }
+
+.humanitarianicons-Snow-avalanche:before {
+  content: "\ea0a"; }
+
+.humanitarianicons-Snowfall:before {
+  content: "\ea0b"; }
+
+.humanitarianicons-Soap:before {
+  content: "\ea0c"; }
+
+.humanitarianicons-Solid-waste:before {
+  content: "\ea0d"; }
+
+.humanitarianicons-Spontaneous-site:before {
+  content: "\ea0e"; }
+
+.humanitarianicons-Spring-water:before {
+  content: "\ea0f"; }
+
+.humanitarianicons-Staff-management:before {
+  content: "\ea10"; }
+
+.humanitarianicons-Stop:before {
+  content: "\ea11"; }
+
+.humanitarianicons-Storm:before {
+  content: "\ea12"; }
+
+.humanitarianicons-Storm-surge:before {
+  content: "\ea13"; }
+
+.humanitarianicons-Stove:before {
+  content: "\ea14"; }
+
+.humanitarianicons-Submersible-pump:before {
+  content: "\ea15"; }
+
+.humanitarianicons-Sugar:before {
+  content: "\ea16"; }
+
+.humanitarianicons-Table:before {
+  content: "\ea17"; }
+
+.humanitarianicons-Tarpaulin:before {
+  content: "\ea18"; }
+
+.humanitarianicons-Technological-disaster:before {
+  content: "\ea19"; }
+
+.humanitarianicons-Temporary-camp:before {
+  content: "\ea1a"; }
+
+.humanitarianicons-Tent:before {
+  content: "\ea1b"; }
+
+.humanitarianicons-Toilet:before {
+  content: "\ea1c"; }
+
+.humanitarianicons-Top-ranking:before {
+  content: "\ea1d"; }
+
+.humanitarianicons-Tornado:before {
+  content: "\ea1e"; }
+
+.humanitarianicons-Trade-and-market:before {
+  content: "\ea1f"; }
+
+.humanitarianicons-Train:before {
+  content: "\ea20"; }
+
+.humanitarianicons-Training:before {
+  content: "\ea21"; }
+
+.humanitarianicons-Transition-site:before {
+  content: "\ea22"; }
+
+.humanitarianicons-Trending:before {
+  content: "\ea23"; }
+
+.humanitarianicons-Truck:before {
+  content: "\ea24"; }
+
+.humanitarianicons-Tsunami:before {
+  content: "\ea25"; }
+
+.humanitarianicons-Tunnel:before {
+  content: "\ea26"; }
+
+.humanitarianicons-UN-compound-office:before {
+  content: "\ea27"; }
+
+.humanitarianicons-UN-vehicle:before {
+  content: "\ea28"; }
+
+.humanitarianicons-University:before {
+  content: "\ea29"; }
+
+.humanitarianicons-Up:before {
+  content: "\ea2a"; }
+
+.humanitarianicons-Upload:before {
+  content: "\ea2b"; }
+
+.humanitarianicons-Urban:before {
+  content: "\ea2c"; }
+
+.humanitarianicons-Urban-rural:before {
+  content: "\ea2d"; }
+
+.humanitarianicons-User:before {
+  content: "\ea2e"; }
+
+.humanitarianicons-Users:before {
+  content: "\ea2f"; }
+
+.humanitarianicons-Vaccine:before {
+  content: "\ea30"; }
+
+.humanitarianicons-Video:before {
+  content: "\ea31"; }
+
+.humanitarianicons-Violent-wind:before {
+  content: "\ea32"; }
+
+.humanitarianicons-Volcano:before {
+  content: "\ea33"; }
+
+.humanitarianicons-Walkie-talkie:before {
+  content: "\ea34"; }
+
+.humanitarianicons-Warning-Error:before {
+  content: "\ea35"; }
+
+.humanitarianicons-Water-Sanitation-and-Hygiene:before {
+  content: "\ea36"; }
+
+.humanitarianicons-Water-source:before {
+  content: "\ea37"; }
+
+.humanitarianicons-Water-trucking:before {
+  content: "\ea38"; }
+
+.humanitarianicons-ZIP-compressed:before {
+  content: "\ea39"; }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 30px;
+  grid-template-rows: auto;
+  margin: 0 auto;
+  max-width: 900px; }
+  .grid-container.center--vertical {
+    align-items: center; }
+
+.col-3 {
+  grid-column: span 3; }
+
+.col-4 {
+  grid-column: span 4; }
+
+.col-5 {
+  grid-column: span 5; }
+
+.col-6 {
+  grid-column: span 6; }
+
+.col-7 {
+  grid-column: span 7; }
+
+.col-8 {
+  grid-column: 3 / span 8; }
+
+.col-12 {
+  grid-column: span 12; }
+
+@media only screen and (max-width: 767px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 0; }
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8,
+  .col-12 {
+    grid-column: 1 / -1; } }
+
+.loader,
+.modal-loader {
+  color: #000;
+  font-size: 11px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3; }
+
+.modal-loader {
+  top: 55%; }
+
+.sp {
+  clear: both;
+  height: 32px;
+  margin: 0 auto 5px;
+  width: 32px; }
+
+/* Spinner Circle Rotation */
+.sp-circle {
+  border: 4px rgba(0, 0, 0, 0.25) solid;
+  border-top: 4px black solid;
+  border-radius: 50%;
+  -webkit-animation: spCircRot .6s infinite linear;
+  animation: spCircRot .6s infinite linear; }
+
+@-webkit-keyframes spCircRot {
+  from {
+    -webkit-transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(359deg); } }
+
+@keyframes spCircRot {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(359deg); } }
+
+@media only screen and (max-width: 1535px) {
+  .loader,
+  .modal-loader {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px; } }
+
+.food-prices .modal-content {
+  padding-left: 10px;
+  padding-right: 10px; }
+
+.food-prices #header h5 {
+  margin-top: 0; }
+
+.food-prices #charts {
+  padding: 0 4px; }
+
+.food-prices .chart-container {
+  display: flex; }
+
+.food-prices .chart-inner {
+  padding: 0 16px; }
+
+.food-prices .modal-subnav {
+  padding: 0 20px; }
+
+.food-prices .sparkline {
+  fill: none;
+  stroke-width: 2px;
+  stroke: #2a93fc; }
+
+.food-prices .sparkyearline {
+  fill: none;
+  stroke-width: 1px;
+  stroke: #eeeeee;
+  shape-rendering: crispEdges; }
+
+.food-prices .productsparkline {
+  border-width: 2px;
+  border-color: #fff;
+  border-style: solid;
+  padding: 0 15px;
+  width: 25%; }
+
+.food-prices .productsparkline:hover {
+  border-width: 2px;
+  border-color: #2a93fc;
+  border-style: solid;
+  cursor: pointer; }
+
+.food-prices .area {
+  fill: #2a93fc;
+  clip-path: url(#clip); }
+
+.food-prices .axis path,
+.food-prices .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.food-prices .axis {
+  font-size: 11px; }
+
+.food-prices .brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges; }
+
+.food-prices .bar {
+  fill: #2a93fc; }
+
+.food-prices .bar:hover {
+  cursor: pointer; }
+
+.food-prices #embedoptions {
+  display: none;
+  padding: 10px; }
+
+.food-prices #hdxembedoptions {
+  display: none;
+  padding: 10px; }
+
+.food-prices #hdxembed {
+  padding-top: 15px; }
+
+.food-prices .wfplabel {
+  font-size: 11px; }
+
+.food-prices .setbrush {
+  text-decoration: underline;
+  font-size: 10px;
+  color: #2a93fc;
+  margin-left: 5px; }
+
+.food-prices .setbrush:hover {
+  cursor: pointer; }
+
+* {
+  box-sizing: border-box; }
+
+*:before,
+*:after {
+  box-sizing: border-box; }
+
+body {
+  background-color: #FFF;
+  color: #000;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0; }
+
+main {
+  transition: 0.5s all ease; }
+
+h1, .h1 {
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 18px;
+  padding: 5px 5px 10px 20px; }
+
+h2 {
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0; }
+  h2 a {
+    text-decoration: none; }
+
+h3 {
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: normal;
+  margin: 0; }
+
+h4 {
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: 0.2px;
+  line-height: 16px;
+  margin: 0; }
+  h4.subtitle {
+    letter-spacing: 0;
+    margin: 10px 0 0 18px; }
+
+h5 {
+  background-color: #EDF6FD;
+  border-bottom: 1px solid #CCC;
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 50px;
+  margin: 20px 0;
+  padding: 0 20px; }
+
+h6 {
+  font-family: 'Gotham-Bold', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0; }
+
+label.label-small {
+  background-color: #F2645A;
+  color: #FFF;
+  font-family: 'Gotham-Bold', sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.01em;
+  line-height: 16px;
+  margin-right: 5px;
+  padding: 3px 5px;
+  margin-bottom: 3px; }
+
+.small {
+  color: #888;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  line-height: 14px;
+  margin: 0; }
+  .small.source {
+    margin-top: 2px; }
+
+.subtext {
+  color: #888;
+  text-transform: capitalize; }
+
+.btn-subscription {
+  background-color: #007CE1;
+  border: 0;
+  color: #FFF;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: 12px;
+  margin: 10px 20px 20px;
+  padding: 5px 10px; }
+
+.table-display {
+  margin: 5px 0 20px; }
+  .table-display .table-row {
+    align-items: center;
+    display: flex;
+    justify-content: space-between; }
+    .table-display .table-row > div:first-child {
+      padding-right: 20px; }
+    .table-display .table-row.row-separator {
+      border-bottom: 1px solid #CCC;
+      padding: 8px 0; }
+      .table-display .table-row.row-separator:first-child {
+        border-top: 1px solid #CCC; }
+  .table-display.layer-covax .table-row {
+    color: #888; }
+    .table-display.layer-covax .table-row.row-separator {
+      border-top: 0;
+      color: #000;
+      margin: 6px 0; }
+
+.stat {
+  font-family: 'Gotham-Light', sans-serif;
+  font-size: 29px;
+  line-height: 35px;
+  margin: 20px 0; }
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+  ul.horizontal {
+    display: flex; }
+
+a,
+a:visited {
+  color: #007CE1; }
+
+.footnote {
+  color: #888;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 10px;
+  font-style: italic;
+  line-height: 12px;
+  margin: 0;
+  padding-bottom: 10px; }
+  .footnote.gender-data {
+    margin-top: 10px; }
+
+.source + .footnote {
+  padding-top: 10px; }
+
+.content {
+  display: flex;
+  flex-flow: row; }
+  .content .content-left {
+    background-color: #FFF;
+    box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
+    display: flex;
+    flex-flow: column;
+    overflow: auto;
+    padding: 20px 0 10px;
+    min-width: 255px;
+    width: 255px;
+    z-index: 2; }
+  .content .content-right {
+    background-color: #99DAEA;
+    height: 100%;
+    position: relative;
+    z-index: 1; }
+  .content.country-view .description,
+  .content.country-view .country-label,
+  .content.country-view .map-legend.global,
+  .content.country-view .secondary-panel,
+  .content.country-view .layer-description,
+  .content.country-view .tab-menubar,
+  .content.country-view .comparison-panel {
+    display: none; }
+  .content.country-view .map-legend.country {
+    left: auto;
+    right: 24px;
+    opacity: 1;
+    z-index: 3; }
+  .content.country-view .country-panel {
+    left: 0;
+    transition: left 0.4s ease-out; }
+  .content.country-view .country-select {
+    top: 30px; }
+  .content.country-view .mapboxgl-ctrl-top-right {
+    top: 84px; }
+  .content.food-prices-view .map-legend.global,
+  .content.food-prices-view .count-marker {
+    display: none; }
+  .content.food-prices-view .layer-description {
+    display: block; }
+    .content.food-prices-view .layer-description svg {
+      height: 33px;
+      width: 200px; }
+  .content.tab-view .country-select {
+    top: 80px; }
+  .content.tab-view .mapboxgl-ctrl-top-right {
+    top: 134px; }
+
+.tab-menubar {
+  background-color: #FFF;
+  border-bottom: 3px solid #EEE;
+  display: flex;
+  flex-flow: row;
+  height: 50px;
+  left: 0;
+  opacity: 1;
+  padding: 0 30px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1; }
+  .tab-menubar .tab-button {
+    border-bottom: 3px solid #EEE;
+    color: #787878;
+    cursor: pointer;
+    font-family: 'Gotham-Bold', sans-serif;
+    font-size: 14px;
+    height: 50px;
+    padding: 14px 32px 0; }
+    .tab-menubar .tab-button.active, .tab-menubar .tab-button:hover {
+      border-color: #F05449;
+      color: #F05449; }
+
+.layer-description {
+  background-color: #FFF;
+  display: none;
+  bottom: 36px;
+  padding: 15px 15px 5px;
+  position: absolute;
+  right: 24px;
+  width: 240px;
+  z-index: 1; }
+  .layer-description .description-source {
+    padding-top: 10px; }
+  .layer-description .description-content {
+    padding-top: 5px; }
+    .layer-description .description-content .title {
+      padding-top: 30px; }
+    .layer-description .description-content p {
+      margin: 0; }
+    .layer-description .description-content a {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-size: 14px;
+      text-decoration: none; }
+  .layer-description .description-legend {
+    display: block;
+    margin-top: 10px; }
+  .layer-description .footnote {
+    padding-top: 10px; }
+
+.modal-bg-overlay {
+  background-color: rgba(51, 51, 51, 0.7);
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101; }
+
+.modal {
+  background-color: #FFF;
+  display: none;
+  left: 50%;
+  max-height: 90%;
+  min-height: 300px;
+  overflow: scroll;
+  padding: 0 4px 20px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 840px;
+  z-index: 101; }
+
+.modal-close-btn,
+.panel-close-btn {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 18px; }
+
+.org-logo {
+  display: flex;
+  padding-left: 15px; }
+  .org-logo a:first-child {
+    margin-right: 20px; }
+
+.logos {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  margin-top: auto;
+  padding: 20px 0; }
+  .logos img {
+    margin-top: 12px; }
+  .logos .footnote {
+    padding: 10px 20px; }
+
+.menu h4 {
+  padding: 0 20px 6px;
+  text-transform: uppercase; }
+
+.menu .global-menu {
+  display: block;
+  margin-top: 10px; }
+  .menu .global-menu h4 {
+    font-size: 11px;
+    line-height: 12px;
+    padding: 15px 0 10px 20px;
+    text-transform: uppercase; }
+
+.btn-subscription {
+  background-color: #007CE1;
+  border: 0;
+  color: #FFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 20px 10px;
+  padding: 5px 10px;
+  text-decoration: none; }
+  .btn-subscription:visited {
+    color: #FFF; }
+
+.download-link {
+  padding: 0 20px;
+  text-transform: uppercase; }
+  .download-link a {
+    display: flex;
+    line-height: 16px;
+    margin-bottom: 15px;
+    text-decoration: none;
+    width: 100%; }
+  .download-link i {
+    font-size: 16px;
+    margin-left: auto;
+    padding-top: 3px; }
+  .download-link .download-monthly label {
+    display: none; }
+
+.menu-indicators li {
+  color: #888;
+  cursor: pointer;
+  font-size: 14px; }
+  .menu-indicators li div {
+    align-items: center;
+    display: flex;
+    height: 60px;
+    padding: 0 54px 0 25px;
+    position: relative; }
+    .menu-indicators li div:after {
+      color: #CCC;
+      content: '\e96e';
+      font-family: 'Humanitarian-Icons-v02';
+      position: absolute;
+      right: 20px; }
+    .menu-indicators li div.expand:after {
+      content: '\e9e8'; }
+    .menu-indicators li div.no-expand:after {
+      content: ''; }
+  .menu-indicators li i {
+    flex: 0 0 18px;
+    font-size: 18px;
+    text-align: center;
+    margin: 0 14px 0 7px; }
+  .menu-indicators li:hover, .menu-indicators li.selected {
+    background-color: #F1F1F1;
+    color: #000;
+    font-weight: 700; }
+    .menu-indicators li:hover i, .menu-indicators li.selected i {
+      color: #007CE1; }
+
+.region-select,
+.country-select,
+.indicator-select,
+.ranking-select,
+.sorting-select,
+.trendseries-select {
+  background-color: #FFF;
+  border-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  font: 700 16px 'Source Sans Pro', sans-serif;
+  height: 48px;
+  padding: 0 20px;
+  width: 100%; }
+
+.region-select {
+  margin: 0 20px;
+  width: 82%; }
+
+.country-select {
+  right: 24px;
+  opacity: 0;
+  position: absolute;
+  top: 30px;
+  width: 215px;
+  z-index: 3; }
+
+.ranking-select,
+.sorting-select {
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: normal;
+  height: 30px;
+  margin-left: 4px;
+  padding: 0;
+  width: auto; }
+
+.vaccine-sorting-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px; }
+  .vaccine-sorting-container p {
+    margin-right: 5px; }
+
+.trendseries-select {
+  width: auto; }
+
+.secondary-panel {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
+  left: -255px;
+  overflow: auto;
+  padding: 20px 25px;
+  position: absolute;
+  top: 0;
+  width: 255px;
+  z-index: 4; }
+  .secondary-panel .close-btn {
+    cursor: pointer;
+    color: #888;
+    position: absolute;
+    right: 20px;
+    top: 20px; }
+  .secondary-panel .secondary-panel-title {
+    padding-left: 0;
+    padding-right: 18px; }
+  .secondary-panel .source-container .source {
+    padding-right: 50px; }
+  .secondary-panel .global-figures {
+    border-bottom: 1px solid #CCC;
+    line-height: 14px;
+    padding: 15px 0; }
+  .secondary-panel .figures {
+    padding-top: 10px; }
+    .secondary-panel .figures .key-figure {
+      padding-bottom: 10px; }
+      .secondary-panel .figures .key-figure .inner {
+        border-bottom: 1px solid #CCC;
+        padding-bottom: 10px; }
+        .secondary-panel .figures .key-figure .inner h3 {
+          color: #000;
+          font-size: 14px;
+          line-height: 16px;
+          margin: 10px 0; }
+        .secondary-panel .figures .key-figure .inner .num {
+          position: relative; }
+        .secondary-panel .figures .key-figure .inner svg {
+          bottom: 10px;
+          left: 125px;
+          position: absolute; }
+        .secondary-panel .figures .key-figure .inner .small + .small {
+          margin-top: 6px; }
+  .secondary-panel .date {
+    padding-bottom: 10px; }
+  .secondary-panel .num {
+    color: #000;
+    font-family: 'Gotham-Light', sans-serif;
+    font-size: 36px;
+    line-height: 40px;
+    padding: 5px 0; }
+    .secondary-panel .num span {
+      font-size: 26px; }
+  .secondary-panel .access-figures {
+    border-bottom: 1px solid #CCC;
+    margin: 10px 0;
+    padding-bottom: 10px; }
+    .secondary-panel .access-figures li {
+      display: flex;
+      font-size: 14px; }
+    .secondary-panel .access-figures .pct {
+      flex: 0 0 40px; }
+
+.ranking-container .ranking-chart {
+  margin-top: 20px;
+  min-height: 234px;
+  overflow: scroll; }
+  .ranking-container .ranking-chart .bar {
+    fill: #F2645B; }
+  .ranking-container .ranking-chart .name {
+    text-anchor: end; }
+  .ranking-container .ranking-chart .y.axis text {
+    display: none; }
+
+.ranking-container .ranking-title {
+  display: block; }
+
+.ranking-container .ranking-select-container {
+  display: block;
+  margin-top: 10px; }
+  .ranking-container .ranking-select-container .default-select {
+    display: block; }
+  .ranking-container .ranking-select-container .covid-select,
+  .ranking-container .ranking-select-container .vaccine-select,
+  .ranking-container .ranking-select-container .vaccine-financing-select,
+  .ranking-container .ranking-select-container .inform-select {
+    display: none; }
+
+.ranking-container.covid .ranking-title {
+  display: none; }
+
+.ranking-container.covid .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.covid .ranking-select-container .covid-select {
+  display: block; }
+  .ranking-container.covid .ranking-select-container .covid-select .ranking-select {
+    height: 50px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-vaccine .ranking-title {
+  display: none; }
+
+.ranking-container.ranking-vaccine .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-vaccine .ranking-select-container .vaccine-select {
+  display: block; }
+  .ranking-container.ranking-vaccine .ranking-select-container .vaccine-select .ranking-select {
+    height: 30px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-vaccine-financing .ranking-title {
+  display: none; }
+
+.ranking-container.ranking-vaccine-financing .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select {
+  display: block; }
+  .ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select .ranking-select {
+    height: 40px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-inform .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-inform .ranking-select-container .inform-select {
+  display: block; }
+  .ranking-container.ranking-inform .ranking-select-container .inform-select .ranking-select {
+    height: 30px;
+    white-space: pre-wrap;
+    width: auto; }
+
+.label-header {
+  display: block;
+  margin: 0;
+  padding-bottom: 0; }
+
+#global-map {
+  height: 100%;
+  width: 100%;
+  opacity: 0; }
+
+#static-map {
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2; }
+
+.map-legend {
+  background-color: #FFF;
+  color: #000;
+  fill: #000;
+  right: 24px;
+  opacity: 0;
+  padding: 15px 20px 5px;
+  position: absolute;
+  bottom: 30px;
+  width: 215px;
+  z-index: 3; }
+  .map-legend label {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    fill: #000;
+    font-family: 'Gotham Bold', sans-serif;
+    font-size: 12px;
+    line-height: 14px; }
+  .map-legend input {
+    margin: 0 6px 0 0; }
+  .map-legend svg {
+    margin-top: 5px;
+    width: 190px; }
+  .map-legend .toggle-icon:before {
+    color: #000;
+    content: '\e94b';
+    cursor: pointer;
+    font-family: 'Humanitarian-Icons-v02';
+    position: absolute;
+    right: 10px;
+    top: 9px; }
+  .map-legend .toggle-icon:hover:before {
+    color: #007CE1; }
+  .map-legend .indicator-title {
+    padding-right: 4px; }
+  .map-legend .collapsed-title {
+    cursor: pointer;
+    display: none; }
+  .map-legend .no-data-key,
+  .map-legend .special-key {
+    height: 20px; }
+    .map-legend .no-data-key rect,
+    .map-legend .special-key rect {
+      fill: #FFF;
+      stroke: #CCC; }
+    .map-legend .no-data-key text,
+    .map-legend .special-key text {
+      transform: translate(25px, 12.5px); }
+  .map-legend .special-key {
+    display: none; }
+  .map-legend.global {
+    display: block; }
+    .map-legend.global .legend-container {
+      height: 83px; }
+      .map-legend.global .legend-container.impact-type {
+        height: 68px; }
+    .map-legend.global .source-secondary {
+      margin-bottom: 10px;
+      margin-top: -8px; }
+    .map-legend.global h4 i {
+      font-size: 10px; }
+  .map-legend.country {
+    height: auto;
+    left: -215px;
+    opacity: 0;
+    padding-bottom: 5px;
+    z-index: -1; }
+    .map-legend.country label {
+      margin-top: 10px; }
+    .map-legend.country .legend-container {
+      height: 118px;
+      overflow: visible;
+      transform: translate(0px, 20px); }
+      .map-legend.country .legend-container .legendTitle {
+        font-family: 'Gotham-Bold', sans-serif;
+        letter-spacing: 0.2px; }
+      .map-legend.country .legend-container.no-data {
+        height: 20px; }
+        .map-legend.country .legend-container.no-data .legendCells {
+          display: none; }
+    .map-legend.country .source-container {
+      margin-left: 18px; }
+  .map-legend.collapsed {
+    height: 35px !important;
+    overflow-y: hidden;
+    padding-top: 12px; }
+    .map-legend.collapsed .collapsed-title {
+      display: block; }
+    .map-legend.collapsed .indicator-title {
+      opacity: 0; }
+    .map-legend.collapsed .toggle-icon:before {
+      content: '\ea2a'; }
+
+.country-label,
+.adm1-label,
+.health-label {
+  fill: #000;
+  font-size: 13px;
+  pointer-events: none;
+  text-anchor: middle;
+  width: 100px; }
+
+.country-label {
+  display: block; }
+
+.label-num {
+  fill: #000; }
+
+.health-marker,
+.count-marker,
+circle.swatch {
+  fill: #888;
+  stroke: #CCC; }
+
+.count-marker {
+  cursor: pointer;
+  display: block; }
+
+.health-marker {
+  cursor: pointer;
+  fill: #007ce1;
+  fill-opacity: 0.6;
+  stroke: #007ce1; }
+
+.health-layer {
+  display: none; }
+
+.mapboxgl-popup.map-tooltip {
+  max-width: 330px !important;
+  z-index: 4; }
+  .mapboxgl-popup.map-tooltip .mapboxgl-popup-content {
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 18px;
+    padding: 15px; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content h2 {
+      margin-bottom: 10px; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content h2 i {
+        font-size: 12px;
+        vertical-align: 1px; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container {
+      border-bottom: 1px solid #cdcdcd;
+      margin: 8px 0;
+      position: relative; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container .stat {
+        display: inline-block;
+        width: 70%; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container .sparkline-container {
+        display: inline-block;
+        width: 30%; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat {
+        align-items: center;
+        display: flex;
+        flex-flow: row;
+        padding-bottom: 8px; }
+        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .stat-title {
+          line-height: 16px;
+          width: 67%; }
+        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .stat {
+          font-family: 'Source Sans Pro', sans-serif;
+          font-size: 14px;
+          line-height: 14px;
+          margin: 0;
+          text-align: right;
+          width: 18%; }
+        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .sparkline-container {
+          width: 15%; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat {
+      font-size: 32px;
+      margin: 5px 0; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat > svg {
+        bottom: 8px;
+        left: 125px;
+        position: absolute; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat + span {
+      color: #888;
+      display: block;
+      margin-top: -10px;
+      margin-bottom: 10px; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat + span.inline {
+        display: inline-block; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total,
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .deaths-total {
+      color: #333;
+      font-size: 14px;
+      line-height: 15px;
+      margin-top: 2px; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total {
+      margin-top: 8px; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total .subtext {
+        display: block;
+        margin-bottom: 8px; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content ul {
+      color: #888;
+      list-style-type: disc;
+      margin-bottom: 10px; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content ul li {
+        margin-left: 30px; }
+    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .gam {
+      color: #888;
+      line-height: 16px;
+      margin-bottom: 15px; }
+      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .gam.small-pad {
+        margin-bottom: 6px; }
+
+.mapboxgl-ctrl-top-right {
+  top: 84px;
+  right: 16px; }
+
+table.immunization-table {
+  font-size: 12px;
+  line-height: 14px; }
+  table.immunization-table th {
+    text-align: left;
+    vertical-align: bottom; }
+  table.immunization-table tr td:first-child, table.immunization-table tr td:last-child {
+    font-weight: 700; }
+  table.immunization-table tr.covid-postpone td:first-child, table.immunization-table tr.covid-postpone td:last-child {
+    color: #F2645A; }
+
+.country-panel {
+  background-color: #FFF;
+  bottom: 0;
+  overflow: hidden;
+  padding: 20px 30px 30px;
+  position: absolute;
+  top: 0;
+  left: -416px;
+  width: 416px;
+  z-index: 3;
+  transition: left 0.3s ease-in; }
+  .country-panel .org-logo,
+  .country-panel h1 {
+    padding-left: 0; }
+  .country-panel h2 {
+    margin-top: 25px; }
+  .country-panel .panel-header {
+    background-color: #FFF;
+    padding: 30px 0 15px; }
+    .country-panel .panel-header .panel-title {
+      align-items: center;
+      display: flex;
+      margin-bottom: 20px; }
+    .country-panel .panel-header .flag {
+      height: 35px;
+      margin-right: 10px;
+      width: 35px; }
+    .country-panel .panel-header .download-link {
+      padding: 0; }
+    .country-panel .panel-header h4 {
+      padding: 0 0 6px;
+      text-transform: uppercase; }
+  .country-panel .panel-content {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll; }
+  .country-panel .source {
+    min-height: 28px; }
+  .country-panel .panel-inner {
+    padding-left: 20px; }
+  .country-panel .figure {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    vertical-align: top;
+    width: 50%; }
+    .country-panel .figure .figure-inner {
+      border-bottom: 1px solid #CCC;
+      padding-bottom: 15px; }
+      .country-panel .figure .figure-inner .title {
+        height: 36px; }
+    .country-panel .figure.risk-class .stat {
+      font-size: 32px; }
+  .country-panel .humanitarian-access .access-title {
+    margin: 20px 0 5px; }
+  .country-panel .humanitarian-access .access-row {
+    display: flex;
+    flex-flow: row;
+    font-size: 14px;
+    line-height: 24px; }
+  .country-panel .humanitarian-access .access-icon {
+    align-self: flex-start;
+    background-color: #888;
+    color: #FFF;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    height: 16px;
+    line-height: 16px;
+    margin: 5px 10px 0 0;
+    min-width: 36px;
+    text-align: center;
+    width: 36px; }
+    .country-panel .humanitarian-access .access-icon.yes {
+      background-color: #F2645A; }
+  .country-panel .humanitarian-access .source {
+    margin-top: 15px; }
+  .country-panel .projections {
+    margin-top: 20px; }
+  .country-panel .covid h5 {
+    margin-top: 0; }
+
+.cases-timeseries p {
+  margin-top: 0; }
+
+.country-timeseries-chart .timeseries-legend {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid #CCC;
+  left: 43px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 5px 10px 3px 0;
+  position: absolute;
+  top: 30px; }
+  .country-timeseries-chart .timeseries-legend > div {
+    cursor: pointer; }
+  .country-timeseries-chart .timeseries-legend span {
+    display: inline-block;
+    margin-left: 7px;
+    margin-right: 7px;
+    padding: 5px; }
+
+.country-timeseries-chart .timeseries-legend {
+  max-height: 150px; }
+
+.c3-title,
+.chart-title {
+  fill: #000;
+  font-family: 'Gotham-Book', sans-serif;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: normal;
+  margin-bottom: 0; }
+
+.c3-title {
+  font-family: 'Gotham-Bold', sans-serif; }
+
+.c3-legend-background {
+  stroke: none; }
+
+.c3-text {
+  fill: #000 !important;
+  font-family: 'Source Sans Pro', sans-serif; }
+
+.c3-axis .tick text {
+  fill: #000; }
+
+.c3-tooltip {
+  font-family: 'Source Sans Pro', sans-serif; }
+  .c3-tooltip th {
+    font-weight: normal;
+    padding-left: 6px; }
+  .c3-tooltip td > span {
+    display: none; }
+
+.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
+  stroke: #007CE1 !important; }
+
+.sparkline {
+  fill: none;
+  margin-left: 6px;
+  stroke: #F2645B;
+  stroke-width: 1px; }
+
+.mobile-message {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 5; }
+  .mobile-message .message {
+    color: #FFF;
+    padding: 20px;
+    text-align: center; }
+  .mobile-message .mobile-close-btn {
+    color: #FFF;
+    position: absolute;
+    right: 10px;
+    top: 10px; }
+
+#chart-view {
+  background-color: #FFF;
+  display: none;
+  left: 0;
+  overflow: auto;
+  padding: 15px 30px;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  z-index: 3; }
+  #chart-view .source-container {
+    margin-bottom: 20px; }
+  #chart-view .cases-title,
+  #chart-view .deaths-title {
+    border-top: 1px solid #CCC;
+    margin-top: 30px; }
+    #chart-view .cases-title h6,
+    #chart-view .deaths-title h6 {
+      margin-top: 25px; }
+    #chart-view .cases-title .num,
+    #chart-view .deaths-title .num {
+      color: #000;
+      font-family: 'Gotham-Light', sans-serif;
+      font-size: 42px;
+      line-height: 40px;
+      padding: 10px 0 3px; }
+  #chart-view .c3-bar._expanded_ {
+    fill: #F2645B !important;
+    fill-opacity: 1 !important; }
+
+.trendseries-tooltip {
+  background-color: #FFF;
+  border: 1px solid #E2E2E2;
+  border-collapse: collapse;
+  border-spacing: 0; }
+  .trendseries-tooltip th {
+    background-color: #B3B3B3;
+    border: 1px solid #B3B3B3;
+    color: #FFF;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 6px 6px; }
+  .trendseries-tooltip td {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 13px;
+    font-weight: normal !important;
+    padding: 4px 7px; }
+    .trendseries-tooltip td:last-child {
+      border-left: 1px solid #E2E2E2;
+      text-align: right; }
+
+.comparison-panel {
+  background-color: #F5FBFC;
+  bottom: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  height: 40px;
+  left: 0;
+  margin-left: 20px;
+  padding-top: 25px;
+  width: 500px;
+  position: absolute;
+  z-index: 3; }
+  .comparison-panel.expand {
+    height: 205px; }
+  .comparison-panel .message {
+    font-size: 15px;
+    left: 15px;
+    position: absolute;
+    top: 12px; }
+  .comparison-panel .panel-close-btn,
+  .comparison-panel .row-close-btn {
+    color: #888;
+    cursor: pointer; }
+    .comparison-panel .panel-close-btn:hover,
+    .comparison-panel .row-close-btn:hover {
+      color: #007CE1; }
+  .comparison-panel .panel-close-btn {
+    right: 15px;
+    top: 10px; }
+  .comparison-panel .comparison-table {
+    border-collapse: collapse;
+    width: 100%; }
+    .comparison-panel .comparison-table tr {
+      border-bottom: 1px solid #CCC; }
+      .comparison-panel .comparison-table tr td {
+        padding: 2px 4px;
+        text-align: right; }
+        .comparison-panel .comparison-table tr td:first-child {
+          padding-left: 15px;
+          text-align: left; }
+        .comparison-panel .comparison-table tr td:last-child {
+          padding-right: 15px; }
+    .comparison-panel .comparison-table thead {
+      font-weight: 700;
+      line-height: 15px;
+      vertical-align: bottom; }
+      .comparison-panel .comparison-table thead td {
+        padding: 5px 4px; }
+    .comparison-panel .comparison-table tbody td {
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
+
+@media only screen and (max-height: 850px) {
+  .map-legend {
+    max-height: 570px;
+    overflow-x: hidden;
+    overflow-y: auto; } }
+
+@media only screen and (max-height: 696px) {
+  .map-legend {
+    max-height: 440px;
+    overflow-x: hidden;
+    overflow-y: auto; } }
