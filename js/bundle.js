@@ -3130,12 +3130,12 @@ function initCountryLayer() {
     }
   });
 
-   //add refugee counts
+   //refugee count data
   let refugeeCounts = [];
   let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([2, 25]);
+    .range([5, 25]);
 
   for (let val of refugeeCountData) {
     refugeeCounts.push({
@@ -3155,14 +3155,31 @@ function initCountryLayer() {
     'type': 'FeatureCollection',
     'features': refugeeCounts
   };
-  console.log(refugeeCountGeoJson)
   map.addSource('refugee-counts', {
     type: 'geojson',
     data: refugeeCountGeoJson,
     generateId: true // This ensures that all features have unique IDs
   });
+
+
+  //add country labels
   map.addLayer({
-    id: 'refugee-counts-layer',
+    id: 'refugee-counts-labels',
+    type: 'symbol',
+    source: 'refugee-counts',
+    layout: {
+      'text-field': ["get", "country"],
+      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 12
+    },
+    paint: {
+      'text-color': '#333333'
+    }
+  });
+
+  //add refugee dots
+  map.addLayer({
+    id: 'refugee-counts-dots',
     type: 'circle',
     source: 'refugee-counts',
     paint: {
@@ -3174,27 +3191,36 @@ function initCountryLayer() {
     }
   });
 
-  // Add markers to the map.
-  // for (const marker of refugeeCountGeoJson.features) {
-  //   // Create a DOM element for each marker.
-  //   const el = document.createElement('div');
-  //   const width = marker.properties.iconSize;
-  //   const height = marker.properties.iconSize;
-  //   el.className = 'marker';
-  //   el.style.backgroundImage = `url(https://placekitten.com/g/${width}/${height}/)`;
-  //   el.style.width = `${width}px`;
-  //   el.style.height = `${height}px`;
-  //   el.style.backgroundSize = '100%';
+  //refugee dots mouse events
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+  });
+   
+  map.on('mouseenter', 'refugee-counts-dots', (e) => {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
      
-  //   el.addEventListener('click', () => {
-  //     console.log(marker.properties.count);
-  //   });
+    // Copy coordinates array.
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const description = `${e.features[0].properties.country}: ${numFormat(e.features[0].properties.count)}`;
      
-  //   // Add markers to the map.
-  //   new mapboxgl.Marker(el)
-  //     .setLngLat(marker.geometry.coordinates)
-  //     .addTo(map);
-  // }
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+     
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+  });
+   
+  map.on('mouseleave', 'refugee-counts-dots', () => {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+  });
 
 }
 
