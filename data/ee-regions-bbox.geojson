@@ -1,0 +1,6 @@
+{"type": "FeatureCollection", 
+"name": "ocha regions - bbox", 
+"crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}}, 
+"bbox": [14.14764, 43.62331, 40.17875, 56.16749], 
+"features": [{"type": "Feature", "properties": {"tbl_regcov_2020_ocha_Field3": "EE"}, 
+"bbox": [14.14764, 43.62331, 40.17875, 56.16749], "geometry": {"type": "Polygon", "coordinates": [[[40.17875, 43.62331], [40.17875, 56.16749], [14.14764, 56.16749], [14.14764, 43.62331], [40.17875, 43.62331]]]}}]}
