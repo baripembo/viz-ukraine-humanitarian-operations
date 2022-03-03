@@ -422,7 +422,7 @@ function createTimeSeries2(array, div) {
     padding: {
       bottom: 0,
       top: 10,
-      left: 35,
+      left: 50,
       right: 30
     },
     bindto: div,
@@ -459,13 +459,13 @@ function createTimeSeries2(array, div) {
     },
     legend: {
       show: false,
-      position: 'inset',
-      inset: {
-        anchor: 'top-left',
-        x: 10,
-        y: 0,
-        step: 8
-      }
+      // position: 'inset',
+      // inset: {
+      //   anchor: 'top-left',
+      //   x: 10,
+      //   y: 0,
+      //   step: 8
+      // }
     },
     tooltip: { grouped: false },
     transition: { duration: 300 }
@@ -2628,7 +2628,8 @@ function selectCountry(features) {
   var target = bbox.default(turfHelpers.featureCollection(features));
   var offset = 50;
   map.fitBounds(eeRegionBoundaryData[0].bbox, {
-    padding: {top: offset, right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) - offset},
+    offset: [ 0, -25],
+    padding: {right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) - offset},
     linear: true
   });
 
@@ -3167,9 +3168,18 @@ function initCountryLayer() {
     paint: {
       'circle-stroke-color': '#418FDE',
       'circle-stroke-width': 1,
-      'circle-color': '#418FDE',
+      //'circle-color': '#418FDE',
       'circle-radius': 20,
-      'circle-opacity': 0.5
+      'circle-opacity': 0.5,
+      "circle-color": [
+        "rgb",
+        // red is higher when feature.properties.temperature is higher
+        ["get", "iconSize"],
+        // green is always zero
+        0,
+        // blue is higher when feature.properties.temperature is lower
+        ["-", 100000, ["get", "iconSize"]]
+    ]
     }
   });
 
@@ -3294,11 +3304,7 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
-  createSource($('.map-legend.country .idps-source'), '#affected+idps+ind');
-  createSource($('.map-legend.country .food-security-source'), getIPCDataSource());
-  createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
-  createSource($('.map-legend.country .immunization-source'), '#population+ipv1+pct+vaccinated');
 
   var legend = d3.legendColor()
     .labelFormat(percentFormat)
@@ -3336,28 +3342,8 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  //update IPC source based on current country
-  updateSource($('.map-legend.country .food-security-source'), getIPCDataSource());
-  
-  //special case for IPC source date in legend
-  var data = dataByCountry[currentCountry.code][0];
-  if (data['#date+ipc+start']!=undefined && data['#date+ipc+end']!=undefined) {
-    var startDate = new Date(data['#date+ipc+start']);
-    var endDate = new Date(data['#date+ipc+end']);
-    startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
-    var dateRange = startDate +'-'+ d3.utcFormat('%b %Y')(endDate);
-    $('.map-legend.country').find('.food-security-source .source .date').text(dateRange);
-  }
-  else {
-    var sourceObj = getSource(getIPCDataSource());
-    var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
-    $('.map-legend.country').find('.food-security-source .source .date').text(date);
-  }
-
   var legendFormat;
-  if (currentCountryIndicator.id.indexOf('vaccinated')>-1)
-    legendFormat = d3.format('.0%');
-  else if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+idps+ind' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+num' || currentCountryIndicator.id=='#affected+ch+food+p3plus+num')
+  if (currentCountryIndicator.id=='#population')
     legendFormat = shortenNumFormat;
   else
     legendFormat = d3.format('.0f');

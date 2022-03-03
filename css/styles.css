@@ -1410,8 +1410,6 @@ a:visited {
     transition: left 0.4s ease-out; }
   .content.country-view .country-select {
     top: 30px; }
-  .content.country-view .mapboxgl-ctrl-top-right {
-    top: 84px; }
   .content.food-prices-view .map-legend.global,
   .content.food-prices-view .count-marker {
     display: none; }
@@ -2016,7 +2014,7 @@ circle.swatch {
         margin-bottom: 6px; }
 
 .mapboxgl-ctrl-top-right {
-  top: 84px;
+  top: 16px;
   right: 16px; }
 
 table.immunization-table {
@@ -2048,7 +2046,7 @@ table.immunization-table {
     margin-top: 25px; }
   .country-panel .panel-header {
     background-color: #FFF;
-    padding: 30px 0 15px; }
+    padding: 30px 0 0; }
     .country-panel .panel-header .panel-title {
       align-items: center;
       display: flex;
@@ -2118,6 +2116,7 @@ table.immunization-table {
 .country-timeseries-chart .timeseries-legend {
   background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid #CCC;
+  display: none;
   left: 43px;
   overflow-x: hidden;
   overflow-y: scroll;
