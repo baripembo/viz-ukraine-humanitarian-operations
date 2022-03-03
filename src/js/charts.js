@@ -419,7 +419,7 @@ function createTimeSeries2(array, div) {
     padding: {
       bottom: 0,
       top: 10,
-      left: 35,
+      left: 50,
       right: 30
     },
     bindto: div,
@@ -456,13 +456,13 @@ function createTimeSeries2(array, div) {
     },
     legend: {
       show: false,
-      position: 'inset',
-      inset: {
-        anchor: 'top-left',
-        x: 10,
-        y: 0,
-        step: 8
-      }
+      // position: 'inset',
+      // inset: {
+      //   anchor: 'top-left',
+      //   x: 10,
+      //   y: 0,
+      //   step: 8
+      // }
     },
     tooltip: { grouped: false },
     transition: { duration: 300 }

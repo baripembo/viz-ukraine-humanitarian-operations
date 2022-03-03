@@ -27,19 +27,10 @@ function initCountryPanel() {
   hrpDiv.children().remove();
   createFigure(hrpDiv, {className: 'funding-required', title: 'HRP Requirement', stat: formatValue(data['#value+funding+hrp+required+usd']), indicator: '#value+funding+hrp+required+usd'});
   createFigure(hrpDiv, {className: 'funding-covid-allocation', title: 'HRP Funding', stat: formatValue(data['#value+funding+hrp+total+usd']), indicator: '#value+funding+hrp+total+usd'});
+  createFigure(hrpDiv, {className: 'funding-appeal-required', title: `${data['#value+funding+other+plan_name']} Requirement`, stat: formatValue(data['#value+funding+other+required+usd']), indicator: '#value+funding+other+required+usd'});
+  createFigure(hrpDiv, {className: 'funding-appeal-allocation', title: `${data['#value+funding+other+plan_name']} Funding`, stat: formatValue(data['#value+funding+other+total+usd']), indicator: '#value+funding+other+total+usd'});
   createFigure(hrpDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation 2022', stat: formatValue(data['#value+cerf+funding+total+usd']), indicator: '#value+cerf+funding+total+usd'});
   createFigure(hrpDiv, {className: 'funding-cbpf-allocation', title: 'CBPF Allocation 2022', stat: formatValue(data['#value+cbpf+funding+total+usd']), indicator: '#value+cbpf+funding+total+usd'});
-
-  //inform
-  var informDiv = $('.country-panel .inform .panel-inner');
-  informDiv.children().remove();  
-  createFigure(informDiv, {className: 'risk-index', title: 'Risk Index<br>(1-10)', stat: data['#severity+inform+num'], indicator: '#severity+inform+num'});
-  createFigure(informDiv, {className: 'risk-class', title: 'Risk Class<br>(Very Low-Very High)', stat: data['#severity+inform+type'], indicator: '#severity+inform+num'});
-
-  //school
-  var schoolDiv = $('.country-panel .schools .panel-inner');
-  schoolDiv.children().remove();  
-  createFigure(schoolDiv, {className: 'school', stat: data['#impact+type'], indicator: '#impact+type'});
 }
 
 function createFigure(div, obj) {

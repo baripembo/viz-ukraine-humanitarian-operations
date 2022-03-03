@@ -14,7 +14,7 @@
       //   hitCallback: function() {
       //     console.log('Finishing sending click event to GA')
       //   }
-      });
+      //});
     </script>
     <!-- End Google Analytics -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -267,20 +267,8 @@
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
               <label>Population <input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
-              <label>IDPs (IOM-DTM) <input checked='true' name='countryIndicators' type='radio' value='#affected+idps+ind' id='idps'></label>
-              <div class='source-container idps-source'></div>
-              <label>Acute Food Insecurity<br> (population in IPC Phase 3+) <input name='countryIndicators' type='radio' value='#affected+food+ipc+p3plus+num' id='foodSecurity'></label>
-              <div class='source-container food-security-source'></div>
-              <label>Number of Organizations <input name='countryIndicators' type='radio' value='#org+count+num' id='orgs'></label>
-              <div class='source-container orgs-source'></div>
               <label>Health Facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
               <div class='source-container health-facilities-source'></div>
-              <h4 class='subtitle'>Immunization Coverage</h4>
-              <div class='source-container immunization-source'></div>
-              <label>Hepatitis B <input name='countryIndicators' type='radio' value='#population+hepb3+pct+vaccinated' id='hepb'></label>
-              <label>Inactivated Polio <input name='countryIndicators' type='radio' value='#population+ipv1+pct+vaccinated' id='ipv'></label>
-              <label>Polio <input name='countryIndicators' type='radio' value='#population+pct+pol3+vaccinated' id='pol'></label>
-              <label>Measles <input name='countryIndicators' type='radio' value='#population+mcv1+pct+vaccinated' id='mcv'></label>
             </div>
             <div class='layer-description'>
               <h4></h4>
@@ -329,11 +317,11 @@
 
         <div class='country-panel'>
           <div class='org-logo'>
-            <a href='https://data.humdata.org' target='_blank' rel='noopener'>
-              <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
-            </a>
             <a href='https://www.unocha.org' target='_blank' rel='noopener'>
               <img width='100' src='assets/logo-ocha-blue.png' alt='OCHA logo'>
+            </a>
+            <a href='https://data.humdata.org' target='_blank' rel='noopener'>
+              <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
             </a>
           </div>
 
@@ -345,34 +333,14 @@
               <img src="assets/flags/UKR.png" class='flag' alt='country flag' />
               <h3>Ukraine Data Explorer</h3>
             </div>
-            
-            <label for='indicatorSelect' class='visuallyhidden'>Select an indicator: </label>
-            <select id='indicatorSelect' class='indicator-select'>
-              <option value=''>Jump to Indicators</option>
-              <option value='covid'>COVID-19 Cases and Deaths</option>
-              <option value='hrp'>2022 HRP, CERF and CBPF Funding</option>
-              <option value='inform'>INFORM Severity Index</option>
-              <option value='schools'>School Closure</option>
-            </select>
           </div>
           <div class='panel-content'>
-            <div class='covid'>
-              <h5>COVID-19 Cases and Deaths</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='panel-inner cases-timeseries'>
-              <div class='country-timeseries-chart'></div>
+            <div class='cases-timeseries'>
+              <h5>Ukrainian Refugees and Asylum seekers</h5>
+              <div class='panel-inner country-timeseries-chart'></div>
             </div>
             <div class='hrp'>
               <h5>2022 HRP, CERF and CBPF Funding</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='inform'>
-              <h5>INFORM Severity Index</h5>
-              <div class='panel-inner'></div>
-            </div>
-            <div class='schools'>
-              <h5>School Closure</h5>
               <div class='panel-inner'></div>
             </div>
           </div>
