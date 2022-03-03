@@ -3168,18 +3168,9 @@ function initCountryLayer() {
     paint: {
       'circle-stroke-color': '#418FDE',
       'circle-stroke-width': 1,
-      //'circle-color': '#418FDE',
-      'circle-radius': 20,
+      'circle-color': '#418FDE',
       'circle-opacity': 0.5,
-      "circle-color": [
-        "rgb",
-        // red is higher when feature.properties.temperature is higher
-        ["get", "iconSize"],
-        // green is always zero
-        0,
-        // blue is higher when feature.properties.temperature is lower
-        ["-", 100000, ["get", "iconSize"]]
-    ]
+      "circle-radius": ["get", "iconSize"]
     }
   });
 
