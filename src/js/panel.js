@@ -9,7 +9,7 @@ function initCountryPanel() {
 
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
-  $('.country-panel h3').text(data['#country+name']);
+  $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
 
   //covid
   var covidDiv = $('.country-panel .covid .panel-inner');

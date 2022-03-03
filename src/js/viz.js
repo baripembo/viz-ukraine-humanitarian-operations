@@ -26,11 +26,13 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
+var refugeeTimeseriesData, refugeeCountData = '';
+
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
   //console.log(prod);
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJja2hnbWs5NzkxMXh2MnNvcmF6dXIxMWE0In0.0GfmJoEJyWFQ5UzNxl2WgA';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbDA5cWZmNjAwZzAyM3BtZ3U3OXNldW1hIn0.Tcs909e7BLLnpWBjM6tuvw';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
   viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
@@ -74,7 +76,9 @@ $( document ).ready(function() {
     console.log('Loading data...')
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
-      d3.json('data/ocha-regions-bbox.geojson')
+      d3.json('data/ocha-regions-bbox.geojson'),
+      d3.json('data/refugees-timeseries.json'),
+      d3.json('data/refugees-count.json')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -91,6 +95,10 @@ $( document ).ready(function() {
       sourcesData = allData.sources_data;
       covidTrendData = allData.who_covid_data;
       immunizationData = allData.vaccination_campaigns_data;
+
+      refugeeTimeseriesData = data[2].data.timeseries;
+      refugeeCountData = data[3].data;
+      console.log(refugeeCountData);
       
       //format data
       subnationalData.forEach(function(item) {

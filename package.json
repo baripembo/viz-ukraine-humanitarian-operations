@@ -1,8 +1,8 @@
 {
-  "name": "viz-covid19-humanitarian-operations",
+  "name": "viz-ukraine-humanitarian-operations",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/OCHA-DAP/viz-covid19-humanitarian-operations",
+  "homepage": "https://github.com/baripembo/viz-ukraine-humanitarian-operations",
   "main": " ",
   "scripts": {
     "start": "http-server ./dist -c-1 -p 3000",
@@ -29,15 +29,15 @@
   "dependencies": {
     "@turf/bbox": "^6.0.1",
     "@turf/helpers": "^6.1.4",
-    "browserify": "^16.5.2",
+    "browserify": "^16.2.3",
     "browserify-css": "^0.15.0",
     "concat": "^1.0.3",
     "gh-pages": "^2.2.0",
-    "http-server": "^0.12.3",
+    "http-server": "^14.1.0",
     "jquery": "^3.5.1",
-    "node-sass": "^7.0.1",
+    "node-sass": "^7.0.0",
     "npm-run-all": "^4.1.5",
-    "onchange": "^6.1.1",
+    "onchange": "^6.0.0",
     "uglify-es": "^3.3.9"
   }
 }

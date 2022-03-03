@@ -10,16 +10,16 @@
 
       var gaToken = 'UA-48221887-3';
       ga('create', gaToken, 'auto');
-      ga('send', 'pageview', {
-        hitCallback: function() {
-          console.log('Finishing sending click event to GA')
-        }
+      // ga('send', 'pageview', {
+      //   hitCallback: function() {
+      //     console.log('Finishing sending click event to GA')
+      //   }
       });
     </script>
     <!-- End Google Analytics -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="Description" content="The Centre for Humanitarian Data's Covid-19 data explorer pulls data from over 20 sources to help understand the progress of coronavirus and its impact on already vulnerable people in 63 countries that have a refugee or humanitarian operation.">
-    <title>COVID-19 Data Explorer</title>
+    <title>Ukraine Data Explorer</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <meta property="og:title" content="COVID-19 Data Explorer">
     <meta property="og:type" content="website">
@@ -61,7 +61,7 @@
 
     <main>
       
-      <div class='content tab-view'>
+      <div class='content country-view'>
         <div class='content-left'>
           <div class='menu'>
             <div class='org-logo'>
@@ -73,7 +73,7 @@
               </a>
             </div>
 
-            <h1>COVID-19 Data Explorer:<br>Global Humanitarian Operations</h1>
+            <h1>Ukraine Data Explorer:<br>Global Humanitarian Operations</h1>
             <h4>Download:</h4>
             <div class='download-link'>
               <a href='https://data.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
@@ -175,8 +175,8 @@
             <div id="charts"></div>
           </div>
 
-          <label for='countrySelect' class='visuallyhidden'>Select a country: </label>
-          <select id='countrySelect' class='country-select'></select>
+          <!-- <label for='countrySelect' class='visuallyhidden'>Select a country: </label>
+          <select id='countrySelect' class='country-select'></select> -->
 
           <div class='secondary-panel'>
             <div class='close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
@@ -337,13 +337,13 @@
             </a>
           </div>
 
-          <h1>COVID-19 Data Explorer</h1>
-          <h2 class='backtoGlobal'><a href='#'>< Back to Global View</a></h2>
+          <!-- <h1>COVID-19 Data Explorer</h1>
+          <h2 class='backtoGlobal'><a href='#'>< Back to Global View</a></h2> -->
 
           <div class='panel-header'>
             <div class='panel-title'>
-              <img src='' class='flag' alt='country flag' />
-              <h3></h3>
+              <img src="assets/flags/UKR.png" class='flag' alt='country flag' />
+              <h3>Ukraine Data Explorer</h3>
             </div>
             
             <label for='indicatorSelect' class='visuallyhidden'>Select an indicator: </label>

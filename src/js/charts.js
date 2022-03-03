@@ -264,7 +264,8 @@ function updateTrendseries(countryCode) {
 /****************************************/
 function initTimeseries(data, div) {
   var timeseriesArray = formatTimeseriesData(data);
-  createTimeSeries(timeseriesArray, div);
+  //createTimeSeries(timeseriesArray, div);
+  createTimeSeries2(refugeeTimeseriesData, div);
 }
 
 function formatTimeseriesData(data) {
@@ -393,6 +394,83 @@ function createTimeSeries(array, div) {
   createTimeseriesLegend(chart);
   countryTimeseriesChart = chart;
   createSource($('.cases-timeseries'), '#affected+infected');
+}
+
+function createTimeSeries2(array, div) {
+  var chartWidth = 336;
+  var chartHeight = 240;
+  var colorArray = ['#999'];
+
+  let dateArr = ['x'];
+  let refugeeArr = ['Ukraine'];
+  for (let val of array) {
+    let d = moment(val.data_date, ['YYYY-MM-DD']);
+    let date = new Date(d.year(), d.month(), d.date());
+    dateArr.push(date);
+    refugeeArr.push(val.individuals);
+  }
+  let data = [dateArr, refugeeArr];
+
+  var chart = c3.generate({
+    size: {
+      width: chartWidth,
+      height: chartHeight
+    },
+    padding: {
+      bottom: 0,
+      top: 10,
+      left: 35,
+      right: 30
+    },
+    bindto: div,
+    title: {
+      text: 'Refugee Arrivals from Ukraine Over Time',
+      position: 'upper-left',
+    },
+    data: {
+      x: 'x',
+      columns: data,
+      type: 'spline'
+    },
+    color: {
+      pattern: colorArray
+    },
+    spline: {
+      interpolation: {
+        type: 'basis'
+      }
+    },
+    point: { show: false },
+    axis: {
+      x: {
+        type: 'timeseries'
+      },
+      y: {
+        min: 0,
+        padding: { top:0, bottom:0 },
+        tick: { 
+          outer: false,
+          format: numFormat
+        }
+      }
+    },
+    legend: {
+      show: false,
+      position: 'inset',
+      inset: {
+        anchor: 'top-left',
+        x: 10,
+        y: 0,
+        step: 8
+      }
+    },
+    tooltip: { grouped: false },
+    transition: { duration: 300 }
+  });
+
+  // createTimeseriesLegend(chart);
+  countryTimeseriesChart = chart;
+  // createSource($('.cases-timeseries'), '#affected+infected');
 }
 
 
