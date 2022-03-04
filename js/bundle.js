@@ -3101,7 +3101,7 @@ function initCountryLayer() {
     }
     else {
       map.getCanvas().style.cursor = '';
-      //tooltip.remove();
+      tooltip.remove();
     }
   });
      
@@ -3113,21 +3113,24 @@ function initCountryLayer() {
 
 
   //add border crossing markers
-  map.addSource('border-crossings', {
-    type: 'geojson',
-    data: 'data/UKR_bordercrossing_points_010322.geojson',
-    generateId: true // This ensures that all features have unique IDs
-  });
-  map.addLayer({
-    id: 'border-crossings-layer',
-    type: 'circle',
-    source: 'border-crossings',
-    paint: {
-      'circle-stroke-color': '#000',
-      'circle-stroke-width': 1,
-      'circle-color': '#000',
-      'circle-radius': 4
-    }
+  map.loadImage('assets/marker-crossing.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('crossing', image);
+    map.addSource('border-crossings', {
+      type: 'geojson',
+      data: 'data/UKR_bordercrossing_points_010322.geojson',
+      generateId: true 
+    });
+    map.addLayer({
+      id: 'border-crossings-layer',
+      type: 'symbol',
+      source: 'border-crossings',
+      layout: {
+        'icon-image': 'crossing',
+        'icon-size': 0.6,
+        'icon-allow-overlap': true
+      }
+    });
   });
 
    //refugee count data
@@ -3135,7 +3138,7 @@ function initCountryLayer() {
   let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([5, 25]);
+    .range([5, 35]);
 
   for (let val of refugeeCountData) {
     refugeeCounts.push({
@@ -3158,7 +3161,7 @@ function initCountryLayer() {
   map.addSource('refugee-counts', {
     type: 'geojson',
     data: refugeeCountGeoJson,
-    generateId: true // This ensures that all features have unique IDs
+    generateId: true 
   });
 
 
@@ -3170,10 +3173,14 @@ function initCountryLayer() {
     layout: {
       'text-field': ["get", "country"],
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 12
+      'text-size': 14,
+      //'text-anchor': 'bottom'
     },
     paint: {
-      'text-color': '#333333'
+      'text-color': '#333333',
+      'text-halo-color': '#EEEEEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
     }
   });
 
@@ -3183,8 +3190,6 @@ function initCountryLayer() {
     type: 'circle',
     source: 'refugee-counts',
     paint: {
-      'circle-stroke-color': '#418FDE',
-      'circle-stroke-width': 1,
       'circle-color': '#418FDE',
       'circle-opacity': 0.5,
       "circle-radius": ["get", "iconSize"]
@@ -3341,11 +3346,11 @@ function createCountryLegend(scale) {
   //border crossing
   var borderCrossing = div.append('svg')
     .attr('class', 'border-crossing-key');
-  
-  borderCrossing.append('circle')
-    .attr('cx', 8)
-    .attr('cy', 7)
-    .attr('r', 7);
+
+  borderCrossing.append('image')
+    .attr('href', 'assets/marker-crossing.png')
+    .attr('height', 15)
+    .attr('width', 15);
 
   borderCrossing.append('text')
     .attr('class', 'label')
@@ -3996,7 +4001,8 @@ $( document ).ready(function() {
       d3.json('data/ocha-regions-bbox.geojson'),
       d3.json('data/refugees-timeseries.json'),
       d3.json('data/refugees-count.json'),
-      d3.json('data/ee-regions-bbox.geojson')
+      d3.json('data/ee-regions-bbox.geojson'),
+      d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg/pub?gid=0&single=true&output=csv')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -4017,6 +4023,9 @@ $( document ).ready(function() {
       refugeeTimeseriesData = data[2].data.timeseries;
       refugeeCountData = data[3].data;
       eeRegionBoundaryData = data[4].features;
+
+      let test = data[5];
+      console.log(test)
       
       //format data
       subnationalData.forEach(function(item) {
