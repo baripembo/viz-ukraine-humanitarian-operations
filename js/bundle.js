@@ -2240,9 +2240,9 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/ckyw4l9z9002f14p3cyt9g2t0',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
     center: [-25, 0],
-    minZoom: 1,
+    minZoom: 3,
     zoom: zoomLevel,
     attributionControl: false
   });
@@ -3354,7 +3354,7 @@ function createCountryLegend(scale) {
 
   borderCrossing.append('text')
     .attr('class', 'label')
-    .text('International border crossing');
+    .text('International Border Crossing');
 
   //refugee count
   var refugeeCount = div.append('svg')
@@ -3894,20 +3894,35 @@ function initCountryPanel() {
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
   
+  //data updated
+  let lastUpdate = moment(ukrKeyFigures['#date'], ['MM-DD-YYYY']).format('ll');
+
   //refugees
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
-  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: numFormat(1045459), indicator: ''});
-  refugeesDiv.find('.figure-inner').append('<p class="small source"><span class="date">Mar 03, 2022</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/dataset/ukraine-refugee-situation" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: shortenNumFormat(+ukrKeyFigures['#affected+refugees']), indicator: ''});
+  createFigure(refugeesDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(+ukrKeyFigures['#affected+inneed+total']), indicator: ''});
+  createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: ukrKeyFigures['#affected+killed'], indicator: ''});
+  createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: ukrKeyFigures['#affected+injured'], indicator: ''});
+  refugeesDiv.find('.figure-inner').append(`<p class="small source"><span class="date">${lastUpdate}</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/dataset/ukraine-refugee-situation" class="dataURL" target="_blank" rel="noopener">DATA</a></p>`);
   
-  //hrp
-  var hrpDiv = $('.country-panel .hrp .panel-inner');
-  hrpDiv.children().remove();
-  createFigure(hrpDiv, {className: 'funding-required', title: 'HRP Requirement', stat: formatValue(data['#value+funding+hrp+required+usd']), indicator: '#value+funding+hrp+required+usd'});
-  createFigure(hrpDiv, {className: 'funding-covid-allocation', title: 'HRP Funding', stat: formatValue(data['#value+funding+hrp+total+usd']), indicator: '#value+funding+hrp+total+usd'});
-  createFigure(hrpDiv, {className: 'funding-appeal-required', title: `${data['#value+funding+other+plan_name']} Requirement`, stat: formatValue(data['#value+funding+other+required+usd']), indicator: '#value+funding+other+required+usd'});
-  createFigure(hrpDiv, {className: 'funding-appeal-allocation', title: `${data['#value+funding+other+plan_name']} Funding`, stat: formatValue(data['#value+funding+other+total+usd']), indicator: '#value+funding+other+total+usd'});
-  createFigure(hrpDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation 2022', stat: formatValue(data['#value+cerf+funding+total+usd']), indicator: '#value+cerf+funding+total+usd'});
-  createFigure(hrpDiv, {className: 'funding-cbpf-allocation', title: 'CBPF Allocation 2022', stat: formatValue(data['#value+cbpf+funding+total+usd']), indicator: '#value+cbpf+funding+total+usd'});
+  //funding
+  var fundingDiv = $('.country-panel .funding .panel-inner');
+  fundingDiv.children().remove();
+  createFigure(fundingDiv, {className: 'funding-flash-required', title: 'Flash Appeal Requirement', stat: formatValue(ukrKeyFigures['#value+appeal+funding+required+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-flash-allocation', title: 'Flash Appeal Funding', stat: formatValue(ukrKeyFigures['#value+appeal+funding+total+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-required', title: 'HRP Requirement', stat: formatValue(data['#value+funding+hrp+required+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-allocation', title: 'HRP Funding', stat: formatValue(data['#value+funding+hrp+total+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-regional-required', title: 'Regional Refugee Response Plan Requirement', stat: formatValue(ukrKeyFigures['#value+funding+regional+required+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-regional-allocation', title: 'Regional Refugee Response Plan Funding', stat: formatValue(ukrKeyFigures['#value+funding+regional+total+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-cerf-required', title: 'CERF Contribution', stat: formatValue(ukrKeyFigures['#value+cerf+contribution+funding+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation', stat: formatValue(ukrKeyFigures['#value+allocation+cerf+funding+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-humanitarian-required', title: 'Humanitarian Fund Contribution', stat: formatValue(ukrKeyFigures['#value+contribution+funding+ukr+usd']), indicator: ''});
+  createFigure(fundingDiv, {className: 'funding-humanitarian-allocation', title: 'Humanitarian Fund Allocation', stat: formatValue(ukrKeyFigures['#value+funding+total+ukr+usd']), indicator: ''});
+  fundingDiv.find('.figure-inner').append(`<p class="small source"><span class="date">${lastUpdate}</span> | <span class="source-name">OCHA</span> | <a href="https://data.humdata.org/dataset/ukraine-key-figures-2022 " class="dataURL" target="_blank" rel="noopener">DATA</a></p>`);
+  // createFigure(hrpDiv, {className: 'funding-appeal-required', title: `${data['#value+funding+other+plan_name']} Requirement`, stat: formatValue(data['#value+funding+other+required+usd']), indicator: '#value+funding+other+required+usd'});
+  // createFigure(hrpDiv, {className: 'funding-appeal-allocation', title: `${data['#value+funding+other+plan_name']} Funding`, stat: formatValue(data['#value+funding+other+total+usd']), indicator: '#value+funding+other+total+usd'});
+  // createFigure(hrpDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation 2022', stat: formatValue(data['#value+cerf+funding+total+usd']), indicator: '#value+cerf+funding+total+usd'});
+  // createFigure(hrpDiv, {className: 'funding-cbpf-allocation', title: 'CBPF Allocation 2022', stat: formatValue(data['#value+cbpf+funding+total+usd']), indicator: '#value+cbpf+funding+total+usd'});
 }
 
 function createFigure(div, obj) {
@@ -3948,7 +3963,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, eeRegionBoundaryData = '';
+var refugeeTimeseriesData, refugeeCountData, eeRegionBoundaryData, ukrKeyFigures = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -3986,7 +4001,7 @@ $( document ).ready(function() {
 
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
-      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/ckyw4l9z9002f14p3cyt9g2t0/static/-25,0,'+zoomLevel+'/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
+      var staticURL = 'https://api.mapbox.com/styles/v1/humdata/cl0cqcpm4002014utgdbhcn4q/static/-25,0,'+zoomLevel+'/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
       $('#static-map').css('background-image', 'url('+staticURL+')');
     }
 
@@ -4002,7 +4017,7 @@ $( document ).ready(function() {
       d3.json('data/refugees-timeseries.json'),
       d3.json('data/refugees-count.json'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg/pub?gid=0&single=true&output=csv')
+      d3.json('https://proxy.hxlstandard.org/data.objects.json?tagger-match-all=on&tagger-01-header=total+population%28flash+appeal%29&tagger-01-tag=%23population%2Btotal&tagger-02-header=people+affected%28flash+appeal%29&tagger-02-tag=%23affected%2Btotal&tagger-03-header=people+affected+-+idps&tagger-03-tag=%23affected%2Bdisplaced&tagger-04-header=people+in+need%28flash+appeal%29&tagger-04-tag=%23affected%2Binneed%2Btotal&tagger-05-header=pin+-+idps&tagger-05-tag=%23affected%2Binneed%2Bdisplaced&tagger-06-header=people+targeted%28flash+appeal%29&tagger-06-tag=%23affected%2Btargeted%2Btotal&tagger-07-header=people+targeted+-+idps&tagger-07-tag=%23affected%2Btargeted%2Bdisplaced&tagger-08-header=requirements+%28us%24%29%28flash+appeal%29&tagger-08-tag=%23value%2Bfunding%2Brequired&tagger-09-header=projection+time+frame+%28flash+appeal%29&tagger-09-tag=%23time%2Bprojection&tagger-10-header=flash+appeal+url&tagger-10-tag=%23url%2Bappeal&tagger-11-header=refugees%28unhcr%29&tagger-11-tag=%23affected%2Brefugees&tagger-12-header=civilian+casualities%28unhcr%29+-+killed&tagger-12-tag=%23affected%2Bkilled&tagger-13-header=civilian+casualities%28unhcr%29+-+injured&tagger-13-tag=%23affected%2Binjured&tagger-14-header=date&tagger-14-tag=%23date&tagger-15-header=sitrep+url&tagger-15-tag=%23url%2Bsitrep&tagger-16-header=ukraine+flash+appeal+2022+-+required+%28us%24m%29&tagger-16-tag=%23value%2Bfunding%2Bappeal%2Brequired%2Busd&tagger-17-header=ukraine+flash+appeal+2022+-+funded+%28us%24m%29&tagger-17-tag=%23value%2Bfunding%2Bappeal%2Btotal%2Busd&tagger-18-header=ukraine+flash+appeal+2022+-+%25+coverage&tagger-18-tag=%23value%2Bfunding%2Bappeal%2Bpct&tagger-19-header=ukraine+humanitarian+response+plan+2022+-+required+%28us%24m%29&tagger-19-tag=%23value%2Bfunding%2Bhrp%2Brequired%2Busd&tagger-20-header=ukraine+humanitarian+response+plan+2022+-+funded+%28us%24m%29&tagger-20-tag=%23value%2Bfunding%2Bhrp%2Btotal%2Busd&tagger-21-header=ukraine+humanitarian+response+plan+2022+-+%25+coverage&tagger-21-tag=%23value%2Bfunding%2Bhrp%2Bpct&tagger-22-header=ukraine+regional+refugee+response+plan+2022+-+required+%28us%24m%29&tagger-22-tag=%23value%2Bfunding%2Bregional%2Brequired%2Busd&tagger-23-header=ukraine+regional+refugee+response+plan+2022+-+funded+%28us%24m%29&tagger-23-tag=%23value%2Bfunding%2Bregional%2Btotal%2Busd&tagger-24-header=ukraine+regional+refugee+response+plan+2022+-+%25+coverage&tagger-24-tag=%23value%2Bfunding%2Bregional%2Bpct&tagger-25-header=cerf+-+contributions+%28us%24m%29&tagger-25-tag=%23value%2Bcerf%2Bfunding%2Bcontribution%2Busd&tagger-26-header=cerf+-+allocations+%28us%24m%29&tagger-26-tag=%23value%2Bcerf%2Bfunding%2Ballocation%2Busd&tagger-27-header=ukraine+humanitarian+fund+-+contributions+%28us%24m%29&tagger-27-tag=%23value%2Bukr%2Bfunding%2Bcontribution%2Busd&tagger-28-header=ukraine+humanitarian+fund+-+allocations+%28us%24m%29&tagger-28-tag=%23value%2Bukr%2Bfunding%2Btotal%2Busd&tagger-29-header=fts+url&tagger-29-tag=%23url%2Bfts&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&header-row=2&dest=data_view')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -4023,9 +4038,7 @@ $( document ).ready(function() {
       refugeeTimeseriesData = data[2].data.timeseries;
       refugeeCountData = data[3].data;
       eeRegionBoundaryData = data[4].features;
-
-      let test = data[5];
-      console.log(test)
+      ukrKeyFigures = data[5][0];
       
       //format data
       subnationalData.forEach(function(item) {
