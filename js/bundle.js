@@ -3138,7 +3138,7 @@ function initCountryLayer() {
   let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([5, 35]);
+    .range([5, 55]);
 
   for (let val of refugeeCountData) {
     refugeeCounts.push({
