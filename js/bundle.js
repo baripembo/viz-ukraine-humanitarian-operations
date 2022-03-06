@@ -3172,8 +3172,8 @@ function initCountryLayer() {
     source: 'refugee-counts',
     layout: {
       'text-field': ["get", "country"],
-      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 14,
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 15,
       //'text-anchor': 'bottom'
     },
     paint: {
