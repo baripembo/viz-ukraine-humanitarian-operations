@@ -4038,7 +4038,7 @@ $( document ).ready(function() {
       refugeeTimeseriesData = data[2].data.timeseries;
       refugeeCountData = data[3].data;
       eeRegionBoundaryData = data[4].features;
-      ukrKeyFigures = data[5][0];
+      ukrKeyFigures = data[5][data[5].length-1];
       
       //format data
       subnationalData.forEach(function(item) {
