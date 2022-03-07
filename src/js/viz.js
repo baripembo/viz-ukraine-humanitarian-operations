@@ -6,7 +6,9 @@ var chartDateFormat = d3.utcFormat("%-m/%-d/%y");
 var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
-var populationColorRange = ['#FFE281','#FDB96D','#FA9059','#F27253','#E9554D'];
+//var populationColorRange = ['#FFE281','#FDB96D','#FA9059','#F27253','#E9554D'];
+var populationColorRange = ['#F7FCB9','#ADDD8E','#41ab5d','#238443','#005A32'];
+//#f7fcb9, #d9f0a3, #addd8e, #78c679, #41ab5d, #238443, #005a32
 var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
@@ -26,7 +28,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, eeRegionBoundaryData, ukrKeyFigures = '';
+var refugeeTimeseriesData, refugeeCountData, regionBoundaryData, ukrKeyFigures, townsData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -75,12 +77,12 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
-      d3.json('data/ocha-regions-bbox.geojson'),
-      d3.json('data/refugees-timeseries.json'),
-      d3.json('data/refugees-count.json'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
+      //d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('https://proxy.hxlstandard.org/data.objects.json?tagger-match-all=on&tagger-01-header=total+population%28flash+appeal%29&tagger-01-tag=%23population%2Btotal&tagger-02-header=people+affected%28flash+appeal%29&tagger-02-tag=%23affected%2Btotal&tagger-03-header=people+affected+-+idps&tagger-03-tag=%23affected%2Bdisplaced&tagger-04-header=people+in+need%28flash+appeal%29&tagger-04-tag=%23affected%2Binneed%2Btotal&tagger-05-header=pin+-+idps&tagger-05-tag=%23affected%2Binneed%2Bdisplaced&tagger-06-header=people+targeted%28flash+appeal%29&tagger-06-tag=%23affected%2Btargeted%2Btotal&tagger-07-header=people+targeted+-+idps&tagger-07-tag=%23affected%2Btargeted%2Bdisplaced&tagger-08-header=requirements+%28us%24%29%28flash+appeal%29&tagger-08-tag=%23value%2Bfunding%2Brequired&tagger-09-header=projection+time+frame+%28flash+appeal%29&tagger-09-tag=%23time%2Bprojection&tagger-10-header=flash+appeal+url&tagger-10-tag=%23url%2Bappeal&tagger-11-header=refugees%28unhcr%29&tagger-11-tag=%23affected%2Brefugees&tagger-12-header=civilian+casualities%28unhcr%29+-+killed&tagger-12-tag=%23affected%2Bkilled&tagger-13-header=civilian+casualities%28unhcr%29+-+injured&tagger-13-tag=%23affected%2Binjured&tagger-14-header=date&tagger-14-tag=%23date&tagger-15-header=sitrep+url&tagger-15-tag=%23url%2Bsitrep&tagger-16-header=ukraine+flash+appeal+2022+-+required+%28us%24m%29&tagger-16-tag=%23value%2Bfunding%2Bappeal%2Brequired%2Busd&tagger-17-header=ukraine+flash+appeal+2022+-+funded+%28us%24m%29&tagger-17-tag=%23value%2Bfunding%2Bappeal%2Btotal%2Busd&tagger-18-header=ukraine+flash+appeal+2022+-+%25+coverage&tagger-18-tag=%23value%2Bfunding%2Bappeal%2Bpct&tagger-19-header=ukraine+humanitarian+response+plan+2022+-+required+%28us%24m%29&tagger-19-tag=%23value%2Bfunding%2Bhrp%2Brequired%2Busd&tagger-20-header=ukraine+humanitarian+response+plan+2022+-+funded+%28us%24m%29&tagger-20-tag=%23value%2Bfunding%2Bhrp%2Btotal%2Busd&tagger-21-header=ukraine+humanitarian+response+plan+2022+-+%25+coverage&tagger-21-tag=%23value%2Bfunding%2Bhrp%2Bpct&tagger-22-header=ukraine+regional+refugee+response+plan+2022+-+required+%28us%24m%29&tagger-22-tag=%23value%2Bfunding%2Bregional%2Brequired%2Busd&tagger-23-header=ukraine+regional+refugee+response+plan+2022+-+funded+%28us%24m%29&tagger-23-tag=%23value%2Bfunding%2Bregional%2Btotal%2Busd&tagger-24-header=ukraine+regional+refugee+response+plan+2022+-+%25+coverage&tagger-24-tag=%23value%2Bfunding%2Bregional%2Bpct&tagger-25-header=cerf+-+contributions+%28us%24m%29&tagger-25-tag=%23value%2Bcerf%2Bfunding%2Bcontribution%2Busd&tagger-26-header=cerf+-+allocations+%28us%24m%29&tagger-26-tag=%23value%2Bcerf%2Bfunding%2Ballocation%2Busd&tagger-27-header=ukraine+humanitarian+fund+-+contributions+%28us%24m%29&tagger-27-tag=%23value%2Bukr%2Bfunding%2Bcontribution%2Busd&tagger-28-header=ukraine+humanitarian+fund+-+allocations+%28us%24m%29&tagger-28-tag=%23value%2Bukr%2Bfunding%2Btotal%2Busd&tagger-29-header=fts+url&tagger-29-tag=%23url%2Bfts&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&header-row=2&dest=data_view')
+      d3.json('data/refugees-count.json'),
+      d3.json('https://proxy.hxlstandard.org/data.objects.json?tagger-match-all=on&tagger-01-header=total+population%28flash+appeal%29&tagger-01-tag=%23population%2Btotal&tagger-02-header=people+affected%28flash+appeal%29&tagger-02-tag=%23affected%2Btotal&tagger-03-header=people+affected+-+idps&tagger-03-tag=%23affected%2Bdisplaced&tagger-04-header=people+in+need%28flash+appeal%29&tagger-04-tag=%23affected%2Binneed%2Btotal&tagger-05-header=pin+-+idps&tagger-05-tag=%23affected%2Binneed%2Bdisplaced&tagger-06-header=people+targeted%28flash+appeal%29&tagger-06-tag=%23affected%2Btargeted%2Btotal&tagger-07-header=people+targeted+-+idps&tagger-07-tag=%23affected%2Btargeted%2Bdisplaced&tagger-08-header=requirements+%28us%24%29%28flash+appeal%29&tagger-08-tag=%23value%2Bfunding%2Brequired&tagger-09-header=projection+time+frame+%28flash+appeal%29&tagger-09-tag=%23time%2Bprojection&tagger-10-header=flash+appeal+url&tagger-10-tag=%23url%2Bappeal&tagger-11-header=refugees%28unhcr%29&tagger-11-tag=%23affected%2Brefugees&tagger-12-header=civilian+casualities%28ohchr%29+-+killed&tagger-12-tag=%23affected%2Bkilled&tagger-13-header=civilian+casualities%28ohchr%29+-+injured&tagger-13-tag=%23affected%2Binjured&tagger-14-header=date&tagger-14-tag=%23date&tagger-15-header=sitrep+url&tagger-15-tag=%23url%2Bsitrep&tagger-16-header=ukraine+flash+appeal+2022+-+required+%28us%24m%29&tagger-16-tag=%23value%2Bfunding%2Bappeal%2Brequired%2Busd&tagger-17-header=ukraine+flash+appeal+2022+-+funded+%28us%24m%29&tagger-17-tag=%23value%2Bfunding%2Bappeal%2Btotal%2Busd&tagger-18-header=ukraine+flash+appeal+2022+-+%25+coverage&tagger-18-tag=%23value%2Bfunding%2Bappeal%2Bpct&tagger-19-header=ukraine+humanitarian+response+plan+2022+-+required+%28us%24m%29&tagger-19-tag=%23value%2Bfunding%2Bhrp%2Brequired%2Busd&tagger-20-header=ukraine+humanitarian+response+plan+2022+-+funded+%28us%24m%29&tagger-20-tag=%23value%2Bfunding%2Bhrp%2Btotal%2Busd&tagger-21-header=ukraine+humanitarian+response+plan+2022+-+%25+coverage&tagger-21-tag=%23value%2Bfunding%2Bhrp%2Bpct&tagger-22-header=ukraine+regional+refugee+response+plan+2022+-+required+%28us%24m%29&tagger-22-tag=%23value%2Bfunding%2Bregional%2Brequired%2Busd&tagger-23-header=ukraine+regional+refugee+response+plan+2022+-+funded+%28us%24m%29&tagger-23-tag=%23value%2Bfunding%2Bregional%2Btotal%2Busd&tagger-24-header=ukraine+regional+refugee+response+plan+2022+-+%25+coverage&tagger-24-tag=%23value%2Bfunding%2Bregional%2Bpct&tagger-25-header=cerf+-+contributions+%28us%24m%29&tagger-25-tag=%23value%2Bcerf%2Bfunding%2Bcontribution%2Busd&tagger-26-header=cerf+-+allocations+%28us%24m%29&tagger-26-tag=%23value%2Bcerf%2Bfunding%2Ballocation%2Busd&tagger-27-header=ukraine+humanitarian+fund+-+contributions+%28us%24m%29&tagger-27-tag=%23value%2Bukr%2Bfunding%2Bcontribution%2Busd&tagger-28-header=ukraine+humanitarian+fund+-+allocations+%28us%24m%29&tagger-28-tag=%23value%2Bukr%2Bfunding%2Btotal%2Busd&tagger-29-header=fts+url&tagger-29-tag=%23url%2Bfts&tagger-30-header=civilian+casualities%28unhcr%29+-+killed&tagger-30-tag=%23affected%2Bkilled&tagger-31-header=civilian+casualities%28unhcr%29+-+injured&tagger-31-tag=%23affected%2Binjured&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&dest=data_edit&strip-headers=on&header-row=2'),
+      d3.json('data/ukr_capp_sspe_itos.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -88,20 +90,18 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
-      worldData = allData.world_data[0];
       regionBoundaryData = data[1].features;
-      timeseriesData = allData.covid_series_data;
-      regionalData = allData.regional_data;
+      regionalData = allData.regional_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
+      refugeeTimeseriesData = allData.refugees_series_data;
       sourcesData = allData.sources_data;
-      covidTrendData = allData.who_covid_data;
-      immunizationData = allData.vaccination_campaigns_data;
 
-      refugeeTimeseriesData = data[2].data.timeseries;
-      refugeeCountData = data[3].data;
-      eeRegionBoundaryData = data[4].features;
-      ukrKeyFigures = data[5][0];
+      refugeeCountData = data[2].data;
+      ukrKeyFigures = data[3][data[3].length-1];
+
+      let test = data[4]
+      console.log(test)
       
       //format data
       subnationalData.forEach(function(item) {
@@ -112,37 +112,6 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
-        //normalize country names
-        if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
-        if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
-
-        //hardcode CBPF val for Turkey
-        if (item['#country+code']=='TUR') item['#value+cbpf+covid+funding+total+usd'] = 23000000;
-
-        //calculate and inject PIN percentage
-        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
-        
-        //store covid trend data
-        var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+pct+weekly'];
-        item['#affected+infected+new+per100000+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+per100000+weekly'];
-        item['#affected+infected+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
-        item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
-        item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
-
-        //create cases by gender indicator
-        item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
-        
-        //select CH vs IPC data
-        var ipcParams = ['+analysed+num','+p3+num','+p3plus+num','+p4+num','+p5+num']
-        var ipcPrefix = '#affected+food+ipc';
-        var chPrefix = '#affected+ch+food';
-        ipcParams.forEach(function(param) {
-          if (item[ipcPrefix+param] || item[chPrefix+param]) {
-            item['#affected+food'+param] = (item[chPrefix+param]) ? item[chPrefix+param] : item[ipcPrefix+param];
-          }
-        });
-
         //keep global list of countries
         globalCountryList.push({
           'name': item['#country+name'],
@@ -157,68 +126,17 @@ $( document ).ready(function() {
       dataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
         .object(nationalData);
+      console.log(dataByCountry)
 
       //consolidate subnational IPC data
       subnationalDataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
         .entries(subnationalData);
-      subnationalDataByCountry.forEach(function(country) {
-        var index = 0;
-        var ipcEmpty = false;
-        var chEmpty = false;
-        //check first two data points to choose btwn IPC and CH datasets
-        for (var i=0; i<2; i++) {
-          var ipcVal = country.values[i]['#affected+food+ipc+p3plus+num'];
-          var chVal = country.values[i]['#affected+ch+food+p3plus+num'];
-          if (i==0 && (!isVal(ipcVal) || isNaN(ipcVal))) {
-            ipcEmpty = true;
-          }
-          if (i==1 && ipcEmpty && isVal(ipcVal) && !isNaN(ipcVal)) {
-            ipcEmpty = false;
-          }
-          if (i==0 && (!isVal(chVal) || isNaN(chVal))) {
-            chEmpty = true;
-          }
-          if (i==1 && chEmpty && isVal(chVal) && !isNaN(chVal)) {
-            chEmpty = false;
-          }
-        }
-        //default to ipc source if both ipc and ch are empty
-        country['#ipc+source'] = (!ipcEmpty || chEmpty && ipcEmpty) ? '#affected+food+ipc+p3plus+num' : '#affected+ch+food+p3plus+num';
-
-        //exception for CAF, should default to ch
-        if (country.key=='CAF' && !chEmpty) country['#ipc+source'] = '#affected+ch+food+p3plus+num';
-      });
 
       //group countries by region    
       countriesByRegion = d3.nest()
         .key(function(d) { return d['#region+name']; })
         .object(nationalData);
-
-      //group immunization data by country    
-      immunizationDataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .entries(immunizationData);
-
-      //format dates and set overall status
-      immunizationDataByCountry.forEach(function(country) {
-        var postponed = 'On Track';
-        var isPostponed = false;
-        country.values.forEach(function(campaign) {
-          var d = moment(campaign['#date+start'], ['YYYY-MM','MM/DD/YYYY']);
-          var date = new Date(d.year(), d.month(), d.date());
-          campaign['#date+start'] = (isNaN(date.getTime())) ? campaign['#date+start'] : getMonth(date.getMonth()) + ' ' + date.getFullYear();
-          if (campaign['#status+name'].toLowerCase().indexOf('unknown')>-1 && !isPostponed) postponed = 'Unknown';
-          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) {
-            isPostponed = true;
-            postponed = 'Postponed / May postpone';
-          }
-        });
-
-        nationalData.forEach(function(item) {
-          if (item['#country+code'] == country.key) item['#immunization-campaigns'] = postponed;
-        });
-      });
 
       //console.log(nationalData)
       //console.log(covidTrendData)
@@ -325,12 +243,8 @@ $( document ).ready(function() {
       gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
-    //load trenseries for global view
-    createSource($('#chart-view .source-container'), '#affected+infected');
-    initTrendseries(globalCountryList[0].code);
-
     //load timeseries for country view 
-    initTimeseries(timeseriesData, '.country-timeseries-chart');
+    initTimeseries('', '.country-timeseries-chart');
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)

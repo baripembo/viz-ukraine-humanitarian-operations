@@ -785,6 +785,11 @@ a:visited {
 	svg {
 		margin-top: 5px;
 		width: 190px;
+		&.border-crossing-key,
+		&.refugee-count-key,
+		&.hostilities-key {
+			margin-top: 0;
+		}
 	}
 	.toggle-icon {
 		&:before {
@@ -812,7 +817,8 @@ a:visited {
 	.no-data-key,
 	.special-key,
 	.border-crossing-key,
-	.refugee-count-key {
+	.refugee-count-key,
+	.hostilities-key {
 		height: 20px;
 		rect {
 			fill: #FFF;
@@ -1174,6 +1180,12 @@ table.immunization-table {
 .cases-timeseries {
 	p {
 		margin-top: 0;
+	}
+}
+
+.refugees-timeseries {
+	.source {
+		padding-left: 20px;
 	}
 }
 

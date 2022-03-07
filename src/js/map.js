@@ -392,7 +392,7 @@ function selectCountry(features) {
 
   var target = bbox.default(turfHelpers.featureCollection(features));
   var offset = 50;
-  map.fitBounds(eeRegionBoundaryData[0].bbox, {
+  map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
     padding: {right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) - offset},
     linear: true
@@ -856,6 +856,7 @@ function initCountryLayer() {
 
   map.on('mousemove', countryLayer, function(e) {
     var f = map.queryRenderedFeatures(e.point)[0];
+    console.log(f.properties)
     if (f.properties.ADM0_REF=='State of Palestine' || f.properties.ADM0_REF=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_REF = currentCountry.name;
     if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
       map.getCanvas().style.cursor = 'pointer';
@@ -903,15 +904,18 @@ function initCountryLayer() {
   let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([5, 55]);
+    .range([5, 45]);
 
+  let countries = {'Slovakia': 'SVK', 'Hungary': 'HUN', 'Poland': 'POL', 'Romania': 'ROU', 'Belarus': 'BLR', 'Republic of Moldova': 'MDA', 'Russian Federation': 'RUS'};
   for (let val of refugeeCountData) {
+    let code = countries[val.geomaster_name];
+    let count = dataByCountry[code][0]['#affected+refugees'];
     refugeeCounts.push({
       'type': 'Feature',
       'properties': {
         'country': val.geomaster_name,
-        'count': val.individuals,
-        'iconSize': refugeeDotScale(val.individuals)
+        'count': count,
+        'iconSize': refugeeDotScale(count)
       },
       'geometry': { 
         'type': 'Point', 
@@ -930,6 +934,70 @@ function initCountryLayer() {
   });
 
 
+  //add hostilty markers
+  map.loadImage('assets/hostility.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('hostility', image);
+    map.addSource('hostility-data', {
+      type: 'geojson',
+      data: 'data/hostilities.geojson',
+      generateId: true 
+    });
+    map.addLayer({
+      id: 'hostilities-layer',
+      type: 'symbol',
+      source: 'hostility-data',
+      layout: {
+        'icon-image': 'hostility',
+        'icon-size': 1.2,
+        'icon-allow-overlap': true,
+        'icon-offset': [0, -5]
+      }
+    });
+    map.addLayer({
+      id: 'hostilities-labels',
+      type: 'symbol',
+      source: 'hostility-data',
+      layout: {
+        'text-field': ["get", "NAME"],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12,
+        'text-anchor': 'top'
+      },
+      paint: {
+        'text-color': '#333333',
+        'text-halo-color': '#EEEEEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1
+      }
+    });
+  });
+
+
+  //add town labels
+  map.addSource('town-data', {
+    type: 'geojson',
+    data: 'data/wrl_ukr_capp.geojson',
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'town-labels',
+    type: 'symbol',
+    source: 'town-data',
+    layout: {
+      'text-field': ["get", "CAPITAL"],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 14
+    },
+    paint: {
+      'text-color': '#666666',
+      'text-halo-color': '#EEEEEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  });
+
+
   //add country labels
   map.addLayer({
     id: 'refugee-counts-labels',
@@ -937,7 +1005,7 @@ function initCountryLayer() {
     source: 'refugee-counts',
     layout: {
       'text-field': ["get", "country"],
-      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
       'text-size': 14,
       //'text-anchor': 'bottom'
     },
@@ -948,6 +1016,7 @@ function initCountryLayer() {
       'text-halo-blur': 1
     }
   });
+
 
   //add refugee dots
   map.addLayer({
@@ -1108,18 +1177,18 @@ function createCountryLegend(scale) {
     .attr('class', 'label')
     .text('No Data');
 
-  //border crossing
-  var borderCrossing = div.append('svg')
-    .attr('class', 'border-crossing-key');
+  //hostilities
+  var hostilities = div.append('svg')
+    .attr('class', 'hostilities-key');
 
-  borderCrossing.append('image')
-    .attr('href', 'assets/marker-crossing.png')
+  hostilities.append('image')
+    .attr('href', 'assets/hostility.png')
     .attr('height', 15)
     .attr('width', 15);
 
-  borderCrossing.append('text')
+  hostilities.append('text')
     .attr('class', 'label')
-    .text('International Border Crossing');
+    .text('Hostilities');
 
   //refugee count
   var refugeeCount = div.append('svg')
@@ -1135,6 +1204,19 @@ function createCountryLegend(scale) {
   refugeeCount.append('text')
     .attr('class', 'label')
     .text('Refugee Arrivals from Ukraine');
+
+  //border crossing
+  var borderCrossing = div.append('svg')
+    .attr('class', 'border-crossing-key');
+
+  borderCrossing.append('image')
+    .attr('href', 'assets/marker-crossing.png')
+    .attr('height', 15)
+    .attr('width', 15);
+
+  borderCrossing.append('text')
+    .attr('class', 'label')
+    .text('International Border Crossing');
 
   //boundaries disclaimer
   createFootnote('.map-legend.country', '', 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.');

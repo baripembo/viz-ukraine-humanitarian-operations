@@ -263,7 +263,7 @@ function updateTrendseries(countryCode) {
 /*** COVID TIMESERIES CHART FUNCTIONS ***/
 /****************************************/
 function initTimeseries(data, div) {
-  var timeseriesArray = formatTimeseriesData(data);
+  //var timeseriesArray = formatTimeseriesData(data);
   //createTimeSeries(timeseriesArray, div);
   createTimeSeries2(refugeeTimeseriesData, div);
 }
@@ -403,11 +403,11 @@ function createTimeSeries2(array, div) {
 
   let dateArr = ['x'];
   let refugeeArr = ['Ukraine'];
-  for (let val of array) {
-    let d = moment(val.data_date, ['YYYY-MM-DD']);
+    for (let val of array) {
+    let d = moment(val['#affected+date+refugees'], ['YYYY-MM-DD']);
     let date = new Date(d.year(), d.month(), d.date());
     dateArr.push(date);
-    refugeeArr.push(val.individuals);
+    refugeeArr.push(val['#affected+refugees']);
   }
   let data = [dateArr, refugeeArr];
 
@@ -470,7 +470,7 @@ function createTimeSeries2(array, div) {
 
   // createTimeseriesLegend(chart);
   countryTimeseriesChart = chart;
-  // createSource($('.cases-timeseries'), '#affected+infected');
+  createSource($('.refugees-timeseries'), '#affected+refugees');
 }
 
 
