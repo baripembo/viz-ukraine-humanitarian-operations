@@ -856,11 +856,10 @@ function initCountryLayer() {
 
   map.on('mousemove', countryLayer, function(e) {
     var f = map.queryRenderedFeatures(e.point)[0];
-    console.log(f.properties)
-    if (f.properties.ADM0_REF=='State of Palestine' || f.properties.ADM0_REF=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_REF = currentCountry.name;
-    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
+    if (f.properties.ADM0_EN=='State of Palestine' || f.properties.ADM0_EN=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_EN = currentCountry.name;
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
       map.getCanvas().style.cursor = 'pointer';
-      createCountryMapTooltip(f.properties.ADM1_REF);
+      createCountryMapTooltip(f.properties.ADM1_EN);
       tooltip
         .addTo(map)
         .setLngLat(e.lngLat);
@@ -1211,8 +1210,8 @@ function createCountryLegend(scale) {
 
   borderCrossing.append('image')
     .attr('href', 'assets/marker-crossing.png')
-    .attr('height', 15)
-    .attr('width', 15);
+    .attr('height', 12)
+    .attr('width', 12);
 
   borderCrossing.append('text')
     .attr('class', 'label')
