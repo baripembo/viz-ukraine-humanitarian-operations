@@ -14,12 +14,19 @@ function initCountryPanel() {
   //data updated
   let lastUpdate = moment(ukrKeyFigures['#date'], ['MM-DD-YYYY']).format('ll');
 
+  let test = d3.sum(nationalData, d => +d['#affected+refugees'] );
+  console.log(test)
+
   //refugees
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
-  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: shortenNumFormat(1735068), indicator: '#affected+ind'});
-  createFigure(refugeesDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(data['#inneed+ind']), indicator: '#inneed+ind'});
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: shortenNumFormat(1735068), indicator: ''});
+  createFigure(refugeesDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(data['#inneed+ind']), indicator: ''});//#inneed+ind
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: ukrKeyFigures['#affected+killed'], indicator: ''});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: ukrKeyFigures['#affected+injured'], indicator: ''});
+  refugeesDiv.find('.refugees .figure-inner').append('<p class="small source"><span class="date">Mar 08, 2022</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/organization/unhcr" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  refugeesDiv.find('.pin .figure-inner').append('<p class="small source"><span class="date">Mar 08, 2022</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/organization/unhcr" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  refugeesDiv.find('.casualties-killed .figure-inner').append('<p class="small source"><span class="date">Mar 08, 2022</span> | <span class="source-name">OHCHR</span> | <a href="" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  refugeesDiv.find('.casualties-injured .figure-inner').append('<p class="small source"><span class="date">Mar 08, 2022</span> | <span class="source-name">OHCHR</span> | <a href="" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
   
   //funding
   var fundingDiv = $('.country-panel .funding .panel-inner');

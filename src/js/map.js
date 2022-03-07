@@ -845,7 +845,7 @@ function initCountryView() {
 function initCountryLayer() {
   //color scale
   var clrRange = (currentCountryIndicator.id=='#population') ? populationColorRange : colorRange;
-  var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(clrRange);
+  var countryColorScale = (currentCountryIndicator.id=='#population') ? d3.scaleOrdinal().domain(['0.1', '0.2', '0.5', '1', '2', '5', '10']).range(clrRange) : d3.scaleQuantize().domain([0, 1]).range(clrRange);
   createCountryLegend(countryColorScale);
 
   //mouse events
@@ -900,7 +900,7 @@ function initCountryLayer() {
 
    //refugee count data
   let refugeeCounts = [];
-  let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
+  let maxCount = d3.max(nationalData, function(d) { return +d['#affected+refugees']; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
     .range([5, 45]);
@@ -1075,6 +1075,7 @@ function updateCountryLayer() {
   }
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
+
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
   var expressionBoundary = ['match', ['get', 'ADM1_PCODE']];
@@ -1121,10 +1122,19 @@ function updateCountryLayer() {
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
   //hide color scale if no data
-  if (max!=undefined && max>0)
+  if (max!=undefined && max>0) {
+    if (currentCountryIndicator.id=='#population') {
+      $('.map-legend.country .legend-container').addClass('population');
+      countryColorScale = d3.scaleOrdinal().domain(['0.1', '0.2', '0.5', '1', '2', '5', '10']).range(clrRange)
+    }
+    else {
+      $('.map-legend.country .legend-container').removeClass('population');
+    }
     updateCountryLegend(countryColorScale);
-  else
+  }
+  else {
     $('.map-legend.country .legend-container').addClass('no-data');
+  }
 }
 
 function getIPCDataSource() {
@@ -1210,8 +1220,8 @@ function createCountryLegend(scale) {
 
   borderCrossing.append('image')
     .attr('href', 'assets/marker-crossing.png')
-    .attr('height', 12)
-    .attr('width', 12);
+    .attr('height', 15)
+    .attr('width', 15);
 
   borderCrossing.append('text')
     .attr('class', 'label')
