@@ -949,6 +949,7 @@ function initCountryLayer() {
       layout: {
         'icon-image': 'hostility',
         'icon-size': 1.2,
+        //'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 1, 15, 0.5]
         'icon-allow-overlap': true,
         'icon-offset': [0, -5]
       }
