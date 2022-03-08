@@ -859,14 +859,13 @@ a:visited {
 		label {
 			margin-top: 10px;
 		}
+		.legend-title {
+			margin-top: 20px;
+		}
 		.legend-container {
-			height: 118px;
+			height: 92px;
 			overflow: visible;
-			transform: translate(0px, 20px);
-			.legendTitle {
-				font-family: 'Gotham-Bold', sans-serif;
-		    letter-spacing: 0.2px;
-			}
+			transform: translate(0px, 5px);
 			&.no-data {
 				height: 20px;
 				.legendCells {
@@ -874,14 +873,28 @@ a:visited {
 				}
 			}
 			&.population {
-				height: 160px;
-			}
-			&.population + .no-data-key {
-				display: none;
+				height: 130px;
 			}
 		}
 		.source-container {
-			margin-left: 18px;
+			margin-left: 19px;
+		}
+		.legend-marker {
+			display: flex;
+			padding-top: 8px;
+			.marker {
+				margin-right: 6px; 
+				img {
+					height: 14px;
+					width: 14px;
+				}
+			}
+			label {
+				margin-top: 0;
+			}
+		}
+		.footnote {
+			margin-top: 15px;
 		}
 	}
 	&.collapsed {
@@ -1190,6 +1203,7 @@ table.immunization-table {
 }
 
 .refugees-timeseries {
+	display: none;
 	.source {
 		padding-left: 20px;
 	}

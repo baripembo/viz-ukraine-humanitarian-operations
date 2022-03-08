@@ -249,10 +249,24 @@
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <label>Population Density (people per sq km) <input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <label>Population<input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
-              <label>Health Facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
+              <label>Health Facilities<input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
               <div class='source-container health-facilities-source'></div>
+              <h4 class='legend-title'></h4>
+              <div class='legend-scale'></div>
+ 
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-hostility.png' /></div><label>Hostilities</label>
+              </div>
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-refugees.png' /></div><label>Refugee Arrivals from Ukraine</label>
+              </div>
+              <div class='source-container refugee-arrivals-source'></div>
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-crossing.png' /></div><label>International Border Crossing</label>
+              </div>
+              <div class="source-container border-crossing-source"><p class="small source"><span class="date">Mar 08, 2022</span> | <span class="source-name">OCHA</span> | <a href="https://data.humdata.org/dataset/ukraine-border-crossings" class="dataURL" target="_blank" rel="noopener">DATA</a></p></div>
             </div>
             <div class='layer-description'>
               <h4></h4>

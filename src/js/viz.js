@@ -28,7 +28,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -62,8 +62,6 @@ $( document ).ready(function() {
       zoomLevel = 1.4;
     }
 
-    //ckb843tjb46fy1ilaw49redy7
-
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
       var staticURL = 'https://api.mapbox.com/styles/v1/humdata/cl0cqcpm4002014utgdbhcn4q/static/-25,0,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
@@ -78,9 +76,9 @@ $( document ).ready(function() {
     console.log('Loading data...')
     Promise.all([
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
-      //d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json'),
+      d3.json('data/refugees-count.json')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -88,14 +86,15 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
-      regionBoundaryData = data[1].features;
       regionalData = allData.regional_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
       refugeeTimeseriesData = allData.refugees_series_data;
       sourcesData = allData.sources_data;
 
-      refugeeCountData = data[2].data;
+      borderCrossingData = data[1];
+      regionBoundaryData = data[2].features;
+      refugeeCountData = data[3].data;
       
       //format data
       subnationalData.forEach(function(item) {
