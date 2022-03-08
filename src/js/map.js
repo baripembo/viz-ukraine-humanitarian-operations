@@ -275,14 +275,14 @@ function createEvents() {
   // });
 
   //country panel indicator select event
-  d3.select('.indicator-select').on('change',function(e) {
-    var selected = d3.select('.indicator-select').node().value;
-    if (selected!='') {
-      var container = $('.panel-content');
-      var section = $('.'+selected);
-      container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop()}, 300);
-    }
-  });
+  // d3.select('.indicator-select').on('change',function(e) {
+  //   var selected = d3.select('.indicator-select').node().value;
+  //   if (selected!='') {
+  //     var container = $('.panel-content');
+  //     var section = $('.'+selected);
+  //     container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop()}, 300);
+  //   }
+  // });
 
   //country legend radio events
   $('input[type="radio"]').click(function(){
@@ -846,7 +846,7 @@ function initCountryView() {
 function initCountryLayer() {
   //color scale
   var clrRange = (currentCountryIndicator.id=='#population') ? populationColorRange : colorRange;
-  var countryColorScale = (currentCountryIndicator.id=='#population') ? d3.scaleOrdinal().domain(['0.1', '0.2', '0.5', '1', '2', '5', '10']).range(clrRange) : d3.scaleQuantize().domain([0, 1]).range(clrRange);
+  var countryColorScale = (currentCountryIndicator.id=='#population') ? d3.scaleOrdinal().domain(['0.1M', '0.2M', '0.5M', '1M', '2M', '5M', '10M']).range(clrRange) : d3.scaleQuantize().domain([0, 1]).range(clrRange);
   createCountryLegend(countryColorScale);
 
   //mouse events
@@ -1128,7 +1128,7 @@ function updateCountryLayer() {
   if (max!=undefined && max>0) {
     if (currentCountryIndicator.id=='#population') {
       $('.map-legend.country .legend-container').addClass('population');
-      countryColorScale = d3.scaleOrdinal().domain(['0.1', '0.2', '0.5', '1', '2', '5', '10']).range(clrRange)
+      countryColorScale = d3.scaleOrdinal().domain(['0.1M', '0.2M', '0.5M', '1M', '2M', '5M', '10M']).range(clrRange)
     }
     else {
       $('.map-legend.country .legend-container').removeClass('population');

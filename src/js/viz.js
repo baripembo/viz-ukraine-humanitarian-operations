@@ -204,9 +204,6 @@ $( document ).ready(function() {
         'link type': 'download report',
         'page title': document.title
       });
-
-      //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
     //show/hide NEW label for monthly report
@@ -231,9 +228,6 @@ $( document ).ready(function() {
         'link type': 'download report',
         'page title': document.title
       });
-
-      //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
     //load timeseries for country view 

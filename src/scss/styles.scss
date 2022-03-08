@@ -874,7 +874,10 @@ a:visited {
 				}
 			}
 			&.population {
-				height: 150px;
+				height: 160px;
+			}
+			&.population + .no-data-key {
+				display: none;
 			}
 		}
 		.source-container {
