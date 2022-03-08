@@ -836,6 +836,7 @@ function setGlobalLegend(scale) {
 /*** COUNTRY MAP FUNCTIONS ***/
 /*****************************/
 function initCountryView() {
+  console.log(map.getZoom())
   $('.content').removeClass('tab-view').addClass('country-view');
   $('.country-panel').scrollTop(0);
 
@@ -948,8 +949,7 @@ function initCountryLayer() {
       source: 'hostility-data',
       layout: {
         'icon-image': 'hostility',
-        'icon-size': 1.2,
-        //'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 1, 15, 0.5]
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
         'icon-allow-overlap': true,
         'icon-offset': [0, -5]
       }
@@ -961,11 +961,11 @@ function initCountryLayer() {
       layout: {
         'text-field': ["get", "NAME"],
         'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 12,
-        'text-anchor': 'top'
+        'text-anchor': 'top',
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12]
       },
       paint: {
-        'text-color': '#333333',
+        'text-color': '#000000',
         'text-halo-color': '#EEEEEE',
         'text-halo-width': 1,
         'text-halo-blur': 1
@@ -985,12 +985,12 @@ function initCountryLayer() {
     type: 'symbol',
     source: 'town-data',
     layout: {
-      'text-field': ["get", "CAPITAL"],
+      'text-field': ['get', 'CAPITAL'],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 14
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14]
     },
     paint: {
-      'text-color': '#666666',
+      'text-color': '#888888',
       'text-halo-color': '#EEEEEE',
       'text-halo-width': 1,
       'text-halo-blur': 1
@@ -1004,13 +1004,15 @@ function initCountryLayer() {
     type: 'symbol',
     source: 'refugee-counts',
     layout: {
-      'text-field': ["get", "country"],
+      'text-field': [
+        'format',
+        ['upcase', ['get', 'country']]
+      ],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 14,
-      //'text-anchor': 'bottom'
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14]
     },
     paint: {
-      'text-color': '#333333',
+      'text-color': '#000000',
       'text-halo-color': '#EEEEEE',
       'text-halo-width': 1,
       'text-halo-blur': 1
