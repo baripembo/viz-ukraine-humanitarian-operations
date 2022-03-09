@@ -13,7 +13,7 @@ function initCountryPanel() {
 
   //refugees
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
-  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
   createFigure(refugeesDiv, {className: 'pin', title: 'People in Need (estimated as of 1 March)', stat: shortenNumFormat(data['#inneed+ind']), indicator: '#inneed+ind'});
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: data['#affected+killed'], indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: data['#affected+injured'], indicator: '#affected+injured'});

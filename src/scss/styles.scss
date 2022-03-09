@@ -856,11 +856,16 @@ a:visited {
 		opacity: 0;
 		padding-bottom: 5px;
 		z-index: -1;
+		hr {
+			border: 1px solid #E0E0E0;
+			border-bottom: 0;
+			margin: 20px 0;
+		}
 		label {
 			margin-top: 10px;
 		}
 		.legend-title {
-			margin-top: 20px;
+			margin-top: 10px;
 		}
 		.legend-container {
 			height: 92px;
@@ -890,6 +895,7 @@ a:visited {
 				}
 			}
 			label {
+				flex-direction: column;
 				margin-top: 0;
 			}
 		}
@@ -1278,15 +1284,31 @@ table.immunization-table {
 	}
 }
 
-.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
-	stroke: #007CE1 !important;
-}
-
 .sparkline {
   fill: none;
   margin-left: 6px;
   stroke: #F2645B;
   stroke-width: 1px;
+}
+
+.country-timeseries-chart {
+	.c3-target.c3-focused .c3-lines .c3-line {
+		stroke: #007CE1 !important;
+	}
+	.c3-grid line {
+	  stroke: #F2F2F3;
+	  stroke-dasharray: 0;
+	}
+	.c3-axis .tick line,
+	.c3-axis-y path.domain {
+		display: none;
+	}
+	.c3-axis-x path.domain {
+		stroke: #888;
+	}
+	.c3-axis text {
+		fill: #888;
+	}
 }
 
 .mobile-message {    
