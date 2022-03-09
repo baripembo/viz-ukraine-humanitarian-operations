@@ -855,28 +855,18 @@ function initCountryLayer() {
 
   map.on('mousemove', countryLayer, function(e) {
     var f = map.queryRenderedFeatures(e.point)[0];
-    //if (f.layer.id=='adm1-fills') {
-      if (f.properties.ADM0_EN=='State of Palestine' || f.properties.ADM0_EN=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_EN = currentCountry.name;
-      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
-        map.getCanvas().style.cursor = 'pointer';
-        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
-        tooltip
-          .addTo(map)
-          .setLngLat(e.lngLat);
-      }
-      else {
-        map.getCanvas().style.cursor = '';
-        tooltip.remove();
-      }
-    // }
-    // else {
-    //   if (f.layer.id=='town-labels') {
-    //     console.log(f)
-    //   }
-    //   tooltip
-    //     .addTo(map)
-    //     .setLngLat(e.lngLat);
-    // }
+    if (f.properties.ADM0_EN=='State of Palestine' || f.properties.ADM0_EN=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_EN = currentCountry.name;
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+      map.getCanvas().style.cursor = 'pointer';
+      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+    }
+    else {
+      map.getCanvas().style.cursor = '';
+      tooltip.remove();
+    }
   });
      
   map.on('mouseleave', countryLayer, function() {
@@ -958,8 +948,7 @@ function initCountryLayer() {
       layout: {
         'icon-image': 'hostility',
         'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
-        'icon-allow-overlap': true,
-        'icon-offset': [0, -5]
+        'icon-allow-overlap': true
       }
     });
     map.addLayer({
@@ -969,8 +958,9 @@ function initCountryLayer() {
       layout: {
         'text-field': ["get", "NAME"],
         'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-anchor': 'top',
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12]
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.7
       },
       paint: {
         'text-color': '#000000',
@@ -994,10 +984,28 @@ function initCountryLayer() {
     source: 'town-data',
     paint: {
       'circle-color': '#777777',
-      'circle-radius': 3,
-      'circle-translate': [0, -10]
-    }
+      'circle-radius': 3
+    },
+    filter: ['==', 'TYPE', 'ADMIN 1']
   });
+
+  map.loadImage('assets/marker-capital.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('capital', image);
+    map.addLayer({
+      id: 'capital-dots',
+      type: 'symbol',
+      source: 'town-data',
+      layout: {
+        'icon-image': 'capital',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1, 6, 1],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      },
+      filter: ['==', 'TYPE', 'TERRITORY']
+    });
+  });
+
   map.addLayer({
     id: 'town-labels',
     type: 'symbol',
@@ -1005,7 +1013,9 @@ function initCountryLayer() {
     layout: {
       'text-field': ['get', 'CAPITAL'],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14]
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.5
     },
     paint: {
       'text-color': '#888888',
@@ -1154,8 +1164,8 @@ function updateCountryLayer() {
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'visible');
   }
   map.setPaintProperty(countryLayer, 'fill-color', expression);
-  map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
-  map.setPaintProperty(countryBoundaryLayer, 'line-color', expressionBoundary);
+  //map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
+  map.setPaintProperty(countryBoundaryLayer, 'line-color', '#C4C4C4');//expressionBoundary
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
   //hide color scale if no data
