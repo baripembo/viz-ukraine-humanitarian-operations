@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      var gaToken = 'UA-48221887-3';
+      ga('create', gaToken, 'auto');
+      ga('send', 'pageview', {
+        hitCallback: function() {
+          console.log('Finishing sending click event to GA')
+        }
+      });
+    </script>
+    <!-- End Google Analytics -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="Description" content="The OCHA HDX Ukraine data explorer brings together data from multiple partners on the humanitarian impact following the Russian Federation military offensive on 24 February 2022.">
     <title>Ukraine Data Explorer</title>
