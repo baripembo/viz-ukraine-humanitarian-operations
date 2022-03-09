@@ -847,34 +847,6 @@ function initCountryLayer() {
   var countryColorScale = (currentCountryIndicator.id=='#population') ? d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(clrRange) : d3.scaleQuantize().domain([0, 1]).range(clrRange);
   createCountryLegend(countryColorScale);
 
-  //mouse events
-  map.on('mouseenter', countryLayer, function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
-  });
-
-  map.on('mousemove', countryLayer, function(e) {
-    var f = map.queryRenderedFeatures(e.point)[0];
-    if (f.properties.ADM0_EN=='State of Palestine' || f.properties.ADM0_EN=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_EN = currentCountry.name;
-    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
-      map.getCanvas().style.cursor = 'pointer';
-      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
-    }
-    else {
-      map.getCanvas().style.cursor = '';
-      tooltip.remove();
-    }
-  });
-     
-  map.on('mouseleave', countryLayer, function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
-  });
-
-
 
   //add border crossing markers
   map.loadImage('assets/marker-crossing.png', (error, image) => {
@@ -932,101 +904,7 @@ function initCountryLayer() {
   });
 
 
-  //add hostilty markers
-  map.loadImage('assets/marker-hostility.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('hostility', image);
-    map.addSource('hostility-data', {
-      type: 'geojson',
-      data: 'data/hostilities.geojson',
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'hostilities-layer',
-      type: 'symbol',
-      source: 'hostility-data',
-      layout: {
-        'icon-image': 'hostility',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
-        'icon-allow-overlap': true
-      }
-    });
-    map.addLayer({
-      id: 'hostilities-labels',
-      type: 'symbol',
-      source: 'hostility-data',
-      layout: {
-        'text-field': ["get", "NAME"],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.7
-      },
-      paint: {
-        'text-color': '#000000',
-        'text-halo-color': '#EEEEEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1
-      }
-    });
-  });
-
-
-  //add town labels
-  map.addSource('town-data', {
-    type: 'geojson',
-    data: 'data/wrl_ukr_capp.geojson',
-    generateId: true 
-  });
-  map.addLayer({
-    id: 'town-dots',
-    type: 'circle',
-    source: 'town-data',
-    paint: {
-      'circle-color': '#777777',
-      'circle-radius': 3
-    },
-    filter: ['==', 'TYPE', 'ADMIN 1']
-  });
-
-  map.loadImage('assets/marker-capital.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('capital', image);
-    map.addLayer({
-      id: 'capital-dots',
-      type: 'symbol',
-      source: 'town-data',
-      layout: {
-        'icon-image': 'capital',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1, 6, 1],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true
-      },
-      filter: ['==', 'TYPE', 'TERRITORY']
-    });
-  });
-
-  map.addLayer({
-    id: 'town-labels',
-    type: 'symbol',
-    source: 'town-data',
-    layout: {
-      'text-field': ['get', 'CAPITAL'],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      'text-radial-offset': 0.5
-    },
-    paint: {
-      'text-color': '#888888',
-      'text-halo-color': '#EEEEEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
-  });
-
-
-  //add country labels
+  //add refugee country labels
   map.addLayer({
     id: 'refugee-counts-labels',
     type: 'symbol',
@@ -1060,18 +938,144 @@ function initCountryLayer() {
     }
   });
 
+
+  //add hostilty markers
+  map.loadImage('assets/marker-hostility.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('hostility', image);
+    map.addSource('hostility-data', {
+      type: 'geojson',
+      data: 'data/hostilities.geojson',
+      generateId: true 
+    });
+    map.addLayer({
+      id: 'hostilities-layer',
+      type: 'symbol',
+      source: 'hostility-data',
+      layout: {
+        'icon-image': 'hostility',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+        'text-field': ["get", "NAME"],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.7
+      },
+      paint: {
+        'text-color': '#000000',
+        'text-halo-color': '#EEEEEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1,
+      }
+    });
+  });
+
+
+  //add town circles, capital icons, and textlabels
+  map.addSource('town-data', {
+    type: 'geojson',
+    data: 'data/wrl_ukr_capp.geojson',
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'town-dots',
+    type: 'circle',
+    source: 'town-data',
+    filter: ['==', 'TYPE', 'ADMIN 1'],
+    paint: {
+      'circle-color': '#777777',
+      'circle-radius': 3
+    }
+  });
+
+  map.loadImage('assets/marker-capital.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('capital', image);
+    map.addLayer({
+      id: 'capital-dots',
+      type: 'symbol',
+      source: 'town-data',
+      filter: ['==', 'TYPE', 'TERRITORY'],
+      layout: {
+        'icon-image': 'capital',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      }
+    });
+  });
+
+  map.addLayer({
+    id: 'town-labels',
+    type: 'symbol',
+    source: 'town-data',
+    layout: {
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      //'text-radial-offset': 0.5,
+      'text-radial-offset': [
+        'match',
+        ['get', 'TYPE'],
+        'TERRITORY',
+        0.7,
+        'ADMIN 1',
+        0.4,
+        0.5
+      ]
+    },
+    paint: {
+      'text-color': '#888888',
+      'text-halo-color': '#EEEEEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  });
+
+
+
+  //mouse events
+  map.on('mouseenter', countryLayer, function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
+  });
+
+  map.on('mousemove', countryLayer, function(e) {
+    var f = map.queryRenderedFeatures(e.point)[0];
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+      map.getCanvas().style.cursor = 'pointer';
+      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+    }
+    else {
+      map.getCanvas().style.cursor = '';
+      tooltip.remove();
+    }
+  });
+     
+  map.on('mouseleave', countryLayer, function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+
+
   //refugee dots mouse events
   map.on('mouseenter', 'refugee-counts-dots', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     tooltip.addTo(map);
   });
   map.on('mousemove', 'refugee-counts-dots', function(e) {
-      map.getCanvas().style.cursor = 'pointer';
-      const content = `<h2>${e.features[0].properties.country}</h2>Refugees arrivals from Ukraine: <div class='stat'>${numFormat(e.features[0].properties.count)}</div>`;
-      tooltip.setHTML(content);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `<h2>${e.features[0].properties.country}</h2>Refugees arrivals from Ukraine: <div class='stat'>${numFormat(e.features[0].properties.count)}</div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
   });
   map.on('mouseleave', 'refugee-counts-dots', function() {
     map.getCanvas().style.cursor = '';
@@ -1084,12 +1088,12 @@ function initCountryLayer() {
     tooltip.addTo(map);
   });
   map.on('mousemove', 'border-crossings-layer', function(e) {
-      map.getCanvas().style.cursor = 'pointer';
-      const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2></div>`;
-      tooltip.setHTML(content);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2></div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
   });
   map.on('mouseleave', 'border-crossings-layer', function() {
     map.getCanvas().style.cursor = '';
