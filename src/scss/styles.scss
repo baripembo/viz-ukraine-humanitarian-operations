@@ -196,7 +196,7 @@ a:visited {
 	.content-left {
 		background-color: #FFF;
 		box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
-		display: flex;
+		display: none;//flex;
 		flex-flow: column;
 		overflow: auto;
 		padding: 20px 0 10px;

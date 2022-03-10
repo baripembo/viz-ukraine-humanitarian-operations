@@ -35,7 +35,7 @@ $( document ).ready(function() {
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbDA5cWZmNjAwZzAyM3BtZ3U3OXNldW1hIn0.Tcs909e7BLLnpWBjM6tuvw';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
-  viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
+  viewportWidth = (window.innerWidth<minWidth) ? minWidth : window.innerWidth;
   viewportHeight = window.innerHeight;
 
 
@@ -50,7 +50,7 @@ $( document ).ready(function() {
 
     //set content sizes based on viewport
     $('.secondary-panel').height(viewportHeight-40);
-    $('.content').width(viewportWidth + $('.content-left').innerWidth());
+    $('.content').width(viewportWidth);
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
@@ -76,8 +76,7 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json'),
-      d3.json('data/hostilities.geojson')
+      d3.json('data/refugees-count.json')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -94,9 +93,6 @@ $( document ).ready(function() {
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
-
-      let test = data[4]
-      console.log(test)
       
       //format data
       subnationalData.forEach(function(item) {
