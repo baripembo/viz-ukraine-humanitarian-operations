@@ -10,11 +10,11 @@
 
       var gaToken = 'UA-48221887-3';
       ga('create', gaToken, 'auto');
-      // ga('send', 'pageview', {
-      //   hitCallback: function() {
-      //     console.log('Finishing sending click event to GA')
-      //   }
-      //});
+      ga('send', 'pageview', {
+        hitCallback: function() {
+          console.log('Finishing sending click event to GA')
+        }
+      });
     </script>
     <!-- End Google Analytics -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -24,7 +24,7 @@
     <meta property="og:title" content="Ukraine Data Explorer">
     <meta property="og:type" content="website">
     <meta property="og:description" content="The OCHA HDX Ukraine data explorer brings together data from multiple partners on the humanitarian impact following the Russian Federation military offensive on 24 February 2022.">
-    <meta property="og:image" content="https://baripembo.github.io/viz-ukraine-humanitarian-operations/assets/preview_thumbnail.png" />
+    <meta property="og:image" content="https://ocha-dap.github.io/viz-ukraine-humanitarian-operations/assets/preview-thumbnail.png" />
     <link rel='icon' type='image/png' href='https://data.humdata.org/images/icons/hdx.ico' />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.css"/>
@@ -265,10 +265,26 @@
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <label>Population <input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <label>Population<input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
-              <label>Health Facilities <input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
+              <label>Health Facilities<input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
               <div class='source-container health-facilities-source'></div>
+              <hr>
+              <h4 class='indicator-title'>MAP LEGEND</h4>
+              <h4 class='legend-title'></h4>
+              <div class='legend-scale'></div>
+ 
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-hostility.png' /></div><label>Hostilities <span class='small'> (since Feb 25, 2022)</span></label>
+              </div>
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-refugees.png' /></div><label>Refugee Arrivals from Ukraine</label>
+              </div>
+              <div class='source-container refugee-arrivals-source'></div>
+              <div class='legend-marker'>
+                <div class='marker'><img src='assets/marker-crossing.png' /></div><label>International Border Crossing</label>
+              </div>
+              <div class="source-container border-crossing-source"></div>
             </div>
             <div class='layer-description'>
               <h4></h4>
@@ -359,6 +375,5 @@
     </script>
     <!-- End Mixpanel -->
     <script type='text/javascript' src='js/bundle.min.js'></script>
-    <script type="text/javascript" src="https://apiv2.popupsmart.com/api/Bundle/361624" async></script>
   </body>
 </html>

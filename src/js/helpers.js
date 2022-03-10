@@ -1,6 +1,6 @@
 function vizTrack(view, content) {
-  // mpTrack(view, content);
-  // gaTrack('viz interaction', 'switch viz', 'oad covid-19 / '+view, content);
+  mpTrack(view, content);
+  gaTrack('viz interaction', 'switch viz', 'ukr data explorer / '+view, content);
 }
 
 function mpTrack(view, content) {
@@ -9,7 +9,7 @@ function mpTrack(view, content) {
     'page title': document.title,
     'embedded in': window.location.href,
     'action': 'switch viz',
-    'viz type': 'oad covid-19',
+    'viz type': 'ukr data explorer',
     'current view': view,
     'content': content
   });

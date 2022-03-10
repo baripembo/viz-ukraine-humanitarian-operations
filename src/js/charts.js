@@ -419,7 +419,7 @@ function createTimeSeries2(array, div) {
     padding: {
       bottom: 0,
       top: 10,
-      left: 50,
+      left: 35,
       right: 30
     },
     bindto: div,
@@ -441,31 +441,43 @@ function createTimeSeries2(array, div) {
       }
     },
     point: { show: false },
+    grid: {
+      y: {
+        show: true
+      }
+    },
     axis: {
       x: {
-        type: 'timeseries'
+        type: 'timeseries',
+        tick: { 
+          outer: false
+        }
       },
       y: {
         min: 0,
-        padding: { top:0, bottom:0 },
+        padding: { top: 0, bottom: 0 },
         tick: { 
           outer: false,
-          format: numFormat
+          format: shortenNumFormat
         }
       }
     },
     legend: {
-      show: false,
-      // position: 'inset',
-      // inset: {
-      //   anchor: 'top-left',
-      //   x: 10,
-      //   y: 0,
-      //   step: 8
-      // }
+      show: false
     },
-    tooltip: { grouped: false },
-    transition: { duration: 300 }
+    transition: { duration: 300 },
+    tooltip: {
+      grouped: false,
+      format: {
+        title: function (d) { 
+          let date = new Date(d);
+          return moment(d).format('M/D/YY');
+        },
+        value: function (value, ratio, id) {
+          return numFormat(value);
+        }
+      }
+    }
   });
 
   // createTimeseriesLegend(chart);
@@ -502,10 +514,11 @@ function updateTimeseries(selected) {
   var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
-  countryTimeseriesChart.axis.max(maxValue*2);
+  countryTimeseriesChart.axis.max(maxValue*1.6);
   countryTimeseriesChart.focus(selected);
   $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
+  $('.refugees-timeseries').show();
 
   $('.country-timeseries-chart .timeseries-legend').remove();
   createTimeseriesLegend(countryTimeseriesChart, selected);

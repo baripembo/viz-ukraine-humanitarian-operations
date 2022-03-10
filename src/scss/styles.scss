@@ -856,26 +856,51 @@ a:visited {
 		opacity: 0;
 		padding-bottom: 5px;
 		z-index: -1;
+		hr {
+			border: 1px solid #E0E0E0;
+			border-bottom: 0;
+			margin: 20px 0;
+		}
 		label {
 			margin-top: 10px;
 		}
+		.legend-title {
+			margin-top: 10px;
+		}
 		.legend-container {
-			height: 118px;
+			height: 92px;
 			overflow: visible;
-			transform: translate(0px, 20px);
-			.legendTitle {
-				font-family: 'Gotham-Bold', sans-serif;
-		    letter-spacing: 0.2px;
-			}
+			transform: translate(0px, 5px);
 			&.no-data {
 				height: 20px;
 				.legendCells {
 					display: none;
 				}
 			}
+			&.population {
+				height: 130px;
+			}
 		}
 		.source-container {
-			margin-left: 18px;
+			margin-left: 19px;
+		}
+		.legend-marker {
+			display: flex;
+			padding-top: 8px;
+			.marker {
+				margin-right: 6px; 
+				img {
+					height: 14px;
+					width: 14px;
+				}
+			}
+			label {
+				flex-direction: column;
+				margin-top: 0;
+			}
+		}
+		.footnote {
+			margin-top: 15px;
 		}
 	}
 	&.collapsed {
@@ -1184,6 +1209,7 @@ table.immunization-table {
 }
 
 .refugees-timeseries {
+	display: none;
 	.source {
 		padding-left: 20px;
 	}
@@ -1258,15 +1284,31 @@ table.immunization-table {
 	}
 }
 
-.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
-	stroke: #007CE1 !important;
-}
-
 .sparkline {
   fill: none;
   margin-left: 6px;
   stroke: #F2645B;
   stroke-width: 1px;
+}
+
+.country-timeseries-chart {
+	.c3-target.c3-focused .c3-lines .c3-line {
+		stroke: #007CE1 !important;
+	}
+	.c3-grid line {
+	  stroke: #F2F2F3;
+	  stroke-dasharray: 0;
+	}
+	.c3-axis .tick line,
+	.c3-axis-y path.domain {
+		display: none;
+	}
+	.c3-axis-x path.domain {
+		stroke: #888;
+	}
+	.c3-axis text {
+		fill: #888;
+	}
 }
 
 .mobile-message {    
