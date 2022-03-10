@@ -56,12 +56,12 @@ function displayMap() {
       //     { hover: false }
       //   );
       //   break;
-      // case 'adm0-label':
-      //   globalLabelLayer = layer.id;
-      //   break;
-      // case 'adm0-centroids':
-      //   globalMarkerLayer = layer.id;
-      //   break;
+      case 'adm0-label':
+        globalLabelLayer = layer.id;
+        break;
+      case 'adm0-centroids':
+        globalMarkerLayer = layer.id;
+        break;
       case 'adm1-fills':
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
@@ -866,7 +866,7 @@ function initCountryLayer() {
         'icon-size': 0.6,
         'icon-allow-overlap': true
       }
-    });
+    }, globalLabelLayer);
   });
 
    //refugee count data
@@ -915,7 +915,8 @@ function initCountryLayer() {
         ['upcase', ['get', 'country']]
       ],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14]
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-allow-overlap': true
     },
     paint: {
       'text-color': '#000000',
@@ -1004,7 +1005,7 @@ function initCountryLayer() {
         'icon-allow-overlap': true,
         'icon-ignore-placement': true
       }
-    });
+    }, globalLabelLayer);
   });
 
   map.addLayer({
@@ -1016,7 +1017,6 @@ function initCountryLayer() {
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
       'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
       'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      //'text-radial-offset': 0.5,
       'text-radial-offset': [
         'match',
         ['get', 'TYPE'],
@@ -1033,7 +1033,7 @@ function initCountryLayer() {
       'text-halo-width': 1,
       'text-halo-blur': 1
     }
-  });
+  }, globalLabelLayer);
 
 
 
