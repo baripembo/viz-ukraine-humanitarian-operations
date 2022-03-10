@@ -1,0 +1,16 @@
+# This workflow will build and deploy the front end
+
+name: deploy
+
+on:
+  workflow_dispatch: # add run button in github
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the project
+      run: npm run build
+    - name: Deploy the project
+      run: npm run deploy
