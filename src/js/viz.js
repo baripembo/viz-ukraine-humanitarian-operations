@@ -76,7 +76,8 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json')
+      d3.json('data/refugees-count.json'),
+      d3.json('data/hostilities.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -93,6 +94,9 @@ $( document ).ready(function() {
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
+
+      let test = data[4]
+      console.log(test)
       
       //format data
       subnationalData.forEach(function(item) {

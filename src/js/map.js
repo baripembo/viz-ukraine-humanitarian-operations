@@ -939,6 +939,39 @@ function initCountryLayer() {
     }
   });
 
+  //town labels
+  map.addSource('town-data', {
+    type: 'geojson',
+    data: 'data/wrl_ukr_capp.geojson',
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'town-labels',
+    type: 'symbol',
+    source: 'town-data',
+    layout: {
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': [
+        'match',
+        ['get', 'TYPE'],
+        'TERRITORY',
+        0.7,
+        'ADMIN 1',
+        0.4,
+        0.5
+      ]
+    },
+    paint: {
+      'text-color': '#888888',
+      'text-halo-color': '#EEEEEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
 
   //add hostilty markers
   map.loadImage('assets/marker-hostility.png', (error, image) => {
@@ -955,7 +988,7 @@ function initCountryLayer() {
       source: 'hostility-data',
       layout: {
         'icon-image': 'hostility',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.3, 6, 1.8],
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
         'text-field': ["get", "NAME"],
@@ -970,16 +1003,11 @@ function initCountryLayer() {
         'text-halo-width': 1,
         'text-halo-blur': 1,
       }
-    });
+    }, globalLabelLayer);
   });
 
 
-  //add town circles, capital icons, and textlabels
-  map.addSource('town-data', {
-    type: 'geojson',
-    data: 'data/wrl_ukr_capp.geojson',
-    generateId: true 
-  });
+  //add town circles, capital icons
   map.addLayer({
     id: 'town-dots',
     type: 'circle',
@@ -1007,33 +1035,6 @@ function initCountryLayer() {
       }
     }, globalLabelLayer);
   });
-
-  map.addLayer({
-    id: 'town-labels',
-    type: 'symbol',
-    source: 'town-data',
-    layout: {
-      'text-field': ['get', 'CAPITAL'],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      'text-radial-offset': [
-        'match',
-        ['get', 'TYPE'],
-        'TERRITORY',
-        0.7,
-        'ADMIN 1',
-        0.4,
-        0.5
-      ]
-    },
-    paint: {
-      'text-color': '#888888',
-      'text-halo-color': '#EEEEEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
-  }, globalLabelLayer);
 
 
 
