@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
     minZoom: 3,
     zoom: zoomLevel,
@@ -1139,7 +1139,7 @@ function updateCountryLayer() {
 
       //turn off choropleth for population layer
       color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
-      
+
       layerOpacity = 1;
     }
     else {
