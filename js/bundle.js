@@ -266,7 +266,7 @@ function updateTrendseries(countryCode) {
 /*** COVID TIMESERIES CHART FUNCTIONS ***/
 /****************************************/
 function initTimeseries(data, div) {
-  var timeseriesArray = formatTimeseriesData(data);
+  //var timeseriesArray = formatTimeseriesData(data);
   //createTimeSeries(timeseriesArray, div);
   createTimeSeries2(refugeeTimeseriesData, div);
 }
@@ -406,11 +406,11 @@ function createTimeSeries2(array, div) {
 
   let dateArr = ['x'];
   let refugeeArr = ['Ukraine'];
-  for (let val of array) {
-    let d = moment(val.data_date, ['YYYY-MM-DD']);
+    for (let val of array) {
+    let d = moment(val['#affected+date+refugees'], ['YYYY-MM-DD']);
     let date = new Date(d.year(), d.month(), d.date());
     dateArr.push(date);
-    refugeeArr.push(val.individuals);
+    refugeeArr.push(val['#affected+refugees']);
   }
   let data = [dateArr, refugeeArr];
 
@@ -422,7 +422,7 @@ function createTimeSeries2(array, div) {
     padding: {
       bottom: 0,
       top: 10,
-      left: 50,
+      left: 35,
       right: 30
     },
     bindto: div,
@@ -444,36 +444,48 @@ function createTimeSeries2(array, div) {
       }
     },
     point: { show: false },
+    grid: {
+      y: {
+        show: true
+      }
+    },
     axis: {
       x: {
-        type: 'timeseries'
+        type: 'timeseries',
+        tick: { 
+          outer: false
+        }
       },
       y: {
         min: 0,
-        padding: { top:0, bottom:0 },
+        padding: { top: 0, bottom: 0 },
         tick: { 
           outer: false,
-          format: numFormat
+          format: shortenNumFormat
         }
       }
     },
     legend: {
-      show: false,
-      // position: 'inset',
-      // inset: {
-      //   anchor: 'top-left',
-      //   x: 10,
-      //   y: 0,
-      //   step: 8
-      // }
+      show: false
     },
-    tooltip: { grouped: false },
-    transition: { duration: 300 }
+    transition: { duration: 300 },
+    tooltip: {
+      grouped: false,
+      format: {
+        title: function (d) { 
+          let date = new Date(d);
+          return moment(d).format('M/D/YY');
+        },
+        value: function (value, ratio, id) {
+          return numFormat(value);
+        }
+      }
+    }
   });
 
   // createTimeseriesLegend(chart);
   countryTimeseriesChart = chart;
-  // createSource($('.cases-timeseries'), '#affected+infected');
+  createSource($('.refugees-timeseries'), '#affected+refugees');
 }
 
 
@@ -505,10 +517,11 @@ function updateTimeseries(selected) {
   var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
   if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
-  countryTimeseriesChart.axis.max(maxValue*2);
+  countryTimeseriesChart.axis.max(maxValue*1.6);
   countryTimeseriesChart.focus(selected);
   $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
+  $('.refugees-timeseries').show();
 
   $('.country-timeseries-chart .timeseries-legend').remove();
   createTimeseriesLegend(countryTimeseriesChart, selected);
@@ -1747,8 +1760,8 @@ function transitionBarChart(data){
 
 
 function vizTrack(view, content) {
-  // mpTrack(view, content);
-  // gaTrack('viz interaction', 'switch viz', 'oad covid-19 / '+view, content);
+  mpTrack(view, content);
+  gaTrack('viz interaction', 'switch viz', 'ukr data explorer / '+view, content);
 }
 
 function mpTrack(view, content) {
@@ -1757,7 +1770,7 @@ function mpTrack(view, content) {
     'page title': document.title,
     'embedded in': window.location.href,
     'action': 'switch viz',
-    'viz type': 'oad covid-19',
+    'viz type': 'ukr data explorer',
     'current view': view,
     'content': content
   });
@@ -1939,7 +1952,7 @@ const countryCodeList = {
   SLV: '77ydes06',
   SYR: '2qt39dhl',
   TCD: 'd6tya3am',
-  UKR: 'adkwa0bw',
+  UKR: '8lye0x4r',//'adkwa0bw',
   VEN: '9vcajdlr',
   YEM: '3m20d1v8',
   //ZWE: '1ry8x8ul'
@@ -2240,7 +2253,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
     minZoom: 3,
     zoom: zoomLevel,
@@ -2291,12 +2304,14 @@ function displayMap() {
       //     { hover: false }
       //   );
       //   break;
-      // case 'adm0-label':
-      //   globalLabelLayer = layer.id;
-      //   break;
-      // case 'adm0-centroids':
-      //   globalMarkerLayer = layer.id;
-      //   break;
+      case 'adm0-label':
+        globalLabelLayer = layer.id;
+        map.setLayoutProperty(globalLabelLayer, 'visibility', 'none');
+        break;
+      case 'adm0-centroids':
+        globalMarkerLayer = layer.id;
+        map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
+        break;
       case 'adm1-fills':
         countryLayer = layer.id;
         map.setLayoutProperty(countryLayer, 'visibility', 'none');
@@ -2510,21 +2525,21 @@ function createEvents() {
   // });
 
   //country panel indicator select event
-  d3.select('.indicator-select').on('change',function(e) {
-    var selected = d3.select('.indicator-select').node().value;
-    if (selected!='') {
-      var container = $('.panel-content');
-      var section = $('.'+selected);
-      container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop()}, 300);
-    }
-  });
+  // d3.select('.indicator-select').on('change',function(e) {
+  //   var selected = d3.select('.indicator-select').node().value;
+  //   if (selected!='') {
+  //     var container = $('.panel-content');
+  //     var section = $('.'+selected);
+  //     container.animate({scrollTop: section.offset().top - container.offset().top + container.scrollTop()}, 300);
+  //   }
+  // });
 
   //country legend radio events
   $('input[type="radio"]').click(function(){
     var selected = $('input[name="countryIndicators"]:checked');
     currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
     updateCountryLayer();
-    vizTrack(currentCountry.code, currentCountryIndicator.name);
+    vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
   });
 }
 
@@ -2627,14 +2642,14 @@ function selectCountry(features) {
 
   var target = bbox.default(turfHelpers.featureCollection(features));
   var offset = 50;
-  map.fitBounds(eeRegionBoundaryData[0].bbox, {
+  map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
     padding: {right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth() - $('.content-left').outerWidth()) - offset},
     linear: true
   });
 
   map.once('moveend', initCountryView);
-  vizTrack(currentCountry.code, currentCountryIndicator.name);
+  //vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
 
   //append country code to url
   //window.history.replaceState(null, null, '?c='+currentCountry.code);
@@ -3071,7 +3086,6 @@ function setGlobalLegend(scale) {
 /*** COUNTRY MAP FUNCTIONS ***/
 /*****************************/
 function initCountryView() {
-  $('.content').removeClass('tab-view').addClass('country-view');
   $('.country-panel').scrollTop(0);
 
   initCountryPanel();
@@ -3080,36 +3094,8 @@ function initCountryView() {
 function initCountryLayer() {
   //color scale
   var clrRange = (currentCountryIndicator.id=='#population') ? populationColorRange : colorRange;
-  var countryColorScale = d3.scaleQuantize().domain([0, 1]).range(clrRange);
+  var countryColorScale = (currentCountryIndicator.id=='#population') ? d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(clrRange) : d3.scaleQuantize().domain([0, 1]).range(clrRange);
   createCountryLegend(countryColorScale);
-
-  //mouse events
-  map.on('mouseenter', countryLayer, function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
-  });
-
-  map.on('mousemove', countryLayer, function(e) {
-    var f = map.queryRenderedFeatures(e.point)[0];
-    if (f.properties.ADM0_REF=='State of Palestine' || f.properties.ADM0_REF=='Venezuela (Bolivarian Republic of)') f.properties.ADM0_REF = currentCountry.name;
-    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
-      map.getCanvas().style.cursor = 'pointer';
-      createCountryMapTooltip(f.properties.ADM1_REF);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
-    }
-    else {
-      map.getCanvas().style.cursor = '';
-      tooltip.remove();
-    }
-  });
-     
-  map.on('mouseleave', countryLayer, function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
-  });
-
 
 
   //add border crossing markers
@@ -3118,7 +3104,7 @@ function initCountryLayer() {
     map.addImage('crossing', image);
     map.addSource('border-crossings', {
       type: 'geojson',
-      data: 'data/UKR_bordercrossing_points_010322.geojson',
+      data: borderCrossingData,
       generateId: true 
     });
     map.addLayer({
@@ -3135,18 +3121,21 @@ function initCountryLayer() {
 
    //refugee count data
   let refugeeCounts = [];
-  let maxCount = d3.max(refugeeCountData, function(d) { return +d.individuals; });
+  let maxCount = d3.max(nationalData, function(d) { return +d['#affected+refugees']; });
   let refugeeDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
     .range([5, 45]);
 
+  let countries = {'Slovakia': 'SVK', 'Hungary': 'HUN', 'Poland': 'POL', 'Romania': 'ROU', 'Belarus': 'BLR', 'Republic of Moldova': 'MDA', 'Russian Federation': 'RUS'};
   for (let val of refugeeCountData) {
+    let code = countries[val.geomaster_name];
+    let count = dataByCountry[code][0]['#affected+refugees'];
     refugeeCounts.push({
       'type': 'Feature',
       'properties': {
         'country': val.geomaster_name,
-        'count': val.individuals,
-        'iconSize': refugeeDotScale(val.individuals)
+        'count': count,
+        'iconSize': refugeeDotScale(count)
       },
       'geometry': { 
         'type': 'Point', 
@@ -3164,20 +3153,22 @@ function initCountryLayer() {
     generateId: true 
   });
 
-
-  //add country labels
+  //add refugee country labels
   map.addLayer({
     id: 'refugee-counts-labels',
     type: 'symbol',
     source: 'refugee-counts',
     layout: {
-      'text-field': ["get", "country"],
+      'text-field': [
+        'format',
+        ['upcase', ['get', 'country']]
+      ],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 15,
-      //'text-anchor': 'bottom'
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-allow-overlap': true
     },
     paint: {
-      'text-color': '#333333',
+      'text-color': '#000000',
       'text-halo-color': '#EEEEEE',
       'text-halo-width': 1,
       'text-halo-blur': 1
@@ -3196,22 +3187,163 @@ function initCountryLayer() {
     }
   });
 
+
+  //add hostilty markers
+  map.loadImage('assets/marker-hostility.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('hostility', image);
+    map.addSource('hostility-data', {
+      type: 'geojson',
+      data: 'data/hostilities.geojson',
+      generateId: true 
+    });
+    map.addLayer({
+      id: 'hostilities-layer',
+      type: 'symbol',
+      source: 'hostility-data',
+      layout: {
+        'icon-image': 'hostility',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.2, 6, 1.8],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+        'text-field': ["get", "NAME"],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.7
+      },
+      paint: {
+        'text-color': '#000000',
+        'text-halo-color': '#EEEEEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1,
+      }
+    });
+  });
+
+
+  //add town circles, capital icons, and textlabels
+  map.addSource('town-data', {
+    type: 'geojson',
+    data: 'data/wrl_ukr_capp.geojson',
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'town-dots',
+    type: 'circle',
+    source: 'town-data',
+    filter: ['==', 'TYPE', 'ADMIN 1'],
+    paint: {
+      'circle-color': '#777777',
+      'circle-radius': 3
+    }
+  });
+
+  map.loadImage('assets/marker-capital.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('capital', image);
+    map.addLayer({
+      id: 'capital-dots',
+      type: 'symbol',
+      source: 'town-data',
+      filter: ['==', 'TYPE', 'TERRITORY'],
+      layout: {
+        'icon-image': 'capital',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      }
+    }, globalLabelLayer);
+  });
+
+  map.addLayer({
+    id: 'town-labels',
+    type: 'symbol',
+    source: 'town-data',
+    layout: {
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': [
+        'match',
+        ['get', 'TYPE'],
+        'TERRITORY',
+        0.7,
+        'ADMIN 1',
+        0.4,
+        0.5
+      ]
+    },
+    paint: {
+      'text-color': '#888888',
+      'text-halo-color': '#EEEEEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
+
+
+  //mouse events
+  map.on('mouseenter', countryLayer, function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
+  });
+
+  map.on('mousemove', countryLayer, function(e) {
+    var f = map.queryRenderedFeatures(e.point)[0];
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+      map.getCanvas().style.cursor = 'pointer';
+      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+    }
+    else {
+      map.getCanvas().style.cursor = '';
+      tooltip.remove();
+    }
+  });
+     
+  map.on('mouseleave', countryLayer, function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+
+
   //refugee dots mouse events
   map.on('mouseenter', 'refugee-counts-dots', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     tooltip.addTo(map);
   });
-
   map.on('mousemove', 'refugee-counts-dots', function(e) {
-      map.getCanvas().style.cursor = 'pointer';
-      const content = `<h2>${e.features[0].properties.country}</h2>Refugees arrivals from Ukraine: <div class='stat'>${numFormat(e.features[0].properties.count)}</div>`;
-      tooltip.setHTML(content);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `<h2>${e.features[0].properties.country}</h2>Refugees arrivals from Ukraine: <div class='stat'>${numFormat(e.features[0].properties.count)}</div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
   });
-     
   map.on('mouseleave', 'refugee-counts-dots', function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+
+  //border crossing mouse events
+  map.on('mouseenter', 'border-crossings-layer', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
+  });
+  map.on('mousemove', 'border-crossings-layer', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2></div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
+  });
+  map.on('mouseleave', 'border-crossings-layer', function() {
     map.getCanvas().style.cursor = '';
     tooltip.remove();
   });
@@ -3242,6 +3374,7 @@ function updateCountryLayer() {
   }
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
+
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
   var expressionBoundary = ['match', ['get', 'ADM1_PCODE']];
@@ -3251,7 +3384,10 @@ function updateCountryLayer() {
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || !isVal(val) || isNaN(val)) ? colorNoData : countryColorScale(val);
-      boundaryColor = (currentCountryIndicator.id=='#population') ? '#FFF' : '#E0E0E0';
+
+      //turn off choropleth for population layer
+      color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
+
       layerOpacity = 1;
     }
     else {
@@ -3283,15 +3419,24 @@ function updateCountryLayer() {
     map.setLayoutProperty(id+'-popdensity', 'visibility', 'visible');
   }
   map.setPaintProperty(countryLayer, 'fill-color', expression);
-  map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
-  map.setPaintProperty(countryBoundaryLayer, 'line-color', expressionBoundary);
+  //map.setPaintProperty(countryBoundaryLayer, 'line-opacity', expressionOpacity);
+  map.setPaintProperty(countryBoundaryLayer, 'line-color', '#C4C4C4');//expressionBoundary
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
   //hide color scale if no data
-  if (max!=undefined && max>0)
+  if (max!=undefined && max>0) {
+    if (currentCountryIndicator.id=='#population') {
+      $('.map-legend.country .legend-container').addClass('population');
+      countryColorScale = d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(clrRange)
+    }
+    else {
+      $('.map-legend.country .legend-container').removeClass('population');
+    }
     updateCountryLegend(countryColorScale);
-  else
+  }
+  else {
     $('.map-legend.country .legend-container').addClass('no-data');
+  }
 }
 
 function getIPCDataSource() {
@@ -3315,15 +3460,19 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
+  createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
+  createSource($('.map-legend.country .border-crossing-source'), '#geojson');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
+
+  let title = (currentCountryIndicator.id=='#population') ? 'Population Density (people per sq km)' : 'Number of Health Facilities';
+  $('.legend-title').html(title);
 
   var legend = d3.legendColor()
     .labelFormat(percentFormat)
     .cells(colorRange.length)
-    .title('LEGEND')
     .scale(scale);
 
-  var div = d3.select('.map-legend.country');
+  var div = d3.select('.map-legend.country .legend-scale  ');
   var svg = div.append('svg')
     .attr('class', 'legend-container');
 
@@ -3331,45 +3480,17 @@ function createCountryLegend(scale) {
     .attr('class', 'scale')
     .call(legend);
 
-  //no data
-  var nodata = div.append('svg')
-    .attr('class', 'no-data-key');
+  // //no data
+  // var nodata = div.append('svg')
+  //   .attr('class', 'no-data-key');
 
-  nodata.append('rect')
-    .attr('width', 15)
-    .attr('height', 15);
+  // nodata.append('rect')
+  //   .attr('width', 15)
+  //   .attr('height', 15);
 
-  nodata.append('text')
-    .attr('class', 'label')
-    .text('No Data');
-
-  //border crossing
-  var borderCrossing = div.append('svg')
-    .attr('class', 'border-crossing-key');
-
-  borderCrossing.append('image')
-    .attr('href', 'assets/marker-crossing.png')
-    .attr('height', 15)
-    .attr('width', 15);
-
-  borderCrossing.append('text')
-    .attr('class', 'label')
-    .text('International Border Crossing');
-
-  //refugee count
-  var refugeeCount = div.append('svg')
-    .attr('class', 'refugee-count-key');
-  
-  refugeeCount.append('circle')
-    .attr('cx', 8)
-    .attr('cy', 7)
-    .attr('r', 7)
-    .style('fill', '#418FDE')
-    .style('opacity', 0.5);
-
-  refugeeCount.append('text')
-    .attr('class', 'label')
-    .text('Refugee Arrivals from Ukraine');
+  // nodata.append('text')
+  //   .attr('class', 'label')
+  //   .text('No Data');
 
   //boundaries disclaimer
   createFootnote('.map-legend.country', '', 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.');
@@ -3381,11 +3502,17 @@ function createCountryLegend(scale) {
 }
 
 function updateCountryLegend(scale) {
-  var legendFormat;
-  if (currentCountryIndicator.id=='#population')
+  var legendFormat, legendTitle;
+  if (currentCountryIndicator.id=='#population') {
     legendFormat = shortenNumFormat;
-  else
+    legendTitle = 'Population Density (people per sq km)';
+  }
+  else {
     legendFormat = d3.format('.0f');
+    legendTitle = 'Number of Health Facilities';
+  }
+
+  $('.map-legend.country .legend-title').html(legendTitle);
 
   var legend = d3.legendColor()
     .labelFormat(legendFormat)
@@ -3820,9 +3947,9 @@ function setTooltipPosition(point) {
 }
 
 
-function createCountryMapTooltip(adm1_name) {
+function createCountryMapTooltip(adm1_name, adm1_pcode) {
   var adm1 = subnationalData.filter(function(c) {
-    if (c['#adm1+name']==adm1_name && c['#country+code']==currentCountry.code)
+    if (c['#adm1+code']==adm1_pcode && c['#country+code']==currentCountry.code)
       return c;
   });
 
@@ -3832,13 +3959,12 @@ function createCountryMapTooltip(adm1_name) {
     //format content for tooltip
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
-      if (currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+food+ipc+p3plus+num' || currentCountryIndicator.id=='#affected+ch+food+p3plus+num') val = shortenNumFormat(val);
-      if (currentCountryIndicator.id=='#affected+idps+ind') val = numFormat(val);
+      if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
     }
     else {
       val = 'No Data';
     }
-    var content = '<h2>' + adm1_name + '</h2>' + currentCountryIndicator.name + ':<div class="stat">' + val + '</div>';
+    var content = `<h2>${adm1_name} Oblast</h2>${currentCountryIndicator.name}:<div class="stat">${val}</div>`;
 
     tooltip.setHTML(content);
   }
@@ -3893,38 +4019,23 @@ function initCountryPanel() {
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
-  
-  //data updated
-  let lastUpdate = moment(ukrKeyFigures['#date'], ['MM-DD-YYYY']).format('ll');
-
-  console.log(ukrKeyFigures);
 
   //refugees
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
-  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine', stat: shortenNumFormat(+ukrKeyFigures['#affected+refugees']), indicator: ''});
-  createFigure(refugeesDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(+ukrKeyFigures['#affected+inneed+total']), indicator: ''});
-  createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: ukrKeyFigures['#affected+killed'], indicator: ''});
-  createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: ukrKeyFigures['#affected+injured'], indicator: ''});
-  refugeesDiv.find('.figure-inner').append(`<p class="small source"><span class="date">${lastUpdate}</span> | <span class="source-name">OHCHR</span> | <a href="https://data.humdata.org/dataset/ukraine-refugee-situation" class="dataURL" target="_blank" rel="noopener">DATA</a></p>`);
-  refugeesDiv.find('.refugees .figure-inner .source').remove();
-  refugeesDiv.find('.refugees .figure-inner').append(`<p class="small source"><span class="date">${lastUpdate}</span> | <span class="source-name">UNCHR</span> | <a href="https://data.humdata.org/dataset/ukraine-refugee-situation" class="dataURL" target="_blank" rel="noopener">DATA</a></p>`);
-  
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  createFigure(refugeesDiv, {className: 'pin', title: 'People in Need (estimated)', stat: shortenNumFormat(data['#inneed+ind']), indicator: '#inneed+ind'});
+  createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: data['#affected+killed'], indicator: '#affected+killed'});
+  createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: data['#affected+injured'], indicator: '#affected+injured'});
+
   //funding
   var fundingDiv = $('.country-panel .funding .panel-inner');
   fundingDiv.children().remove();
-  createFigure(fundingDiv, {className: 'funding-flash-required', title: 'Flash Appeal Requirement', stat: formatValue(ukrKeyFigures['#value+appeal+funding+required+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-flash-allocation', title: 'Flash Appeal Funding', stat: formatValue(ukrKeyFigures['#value+appeal+funding+total+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-regional-required', title: 'Regional Refugee Response Plan Requirement', stat: formatValue(ukrKeyFigures['#value+funding+regional+required+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-regional-allocation', title: 'Regional Refugee Response Plan Funding', stat: formatValue(ukrKeyFigures['#value+funding+regional+total+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-cerf-required', title: 'CERF Contribution', stat: formatValue(ukrKeyFigures['#value+cerf+contribution+funding+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation', stat: formatValue(ukrKeyFigures['#value+allocation+cerf+funding+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-humanitarian-required', title: 'Humanitarian Fund Contribution', stat: formatValue(ukrKeyFigures['#value+contribution+funding+ukr+usd']), indicator: ''});
-  createFigure(fundingDiv, {className: 'funding-humanitarian-allocation', title: 'Humanitarian Fund Allocation', stat: formatValue(ukrKeyFigures['#value+funding+total+ukr+usd']), indicator: ''});
-  fundingDiv.find('.figure-inner').append(`<p class="small source"><span class="date">${lastUpdate}</span> | <span class="source-name">OCHA</span> | <a href="https://data.humdata.org/dataset/ukraine-key-figures-2022 " class="dataURL" target="_blank" rel="noopener">DATA</a></p>`);
-  // createFigure(hrpDiv, {className: 'funding-appeal-required', title: `${data['#value+funding+other+plan_name']} Requirement`, stat: formatValue(data['#value+funding+other+required+usd']), indicator: '#value+funding+other+required+usd'});
-  // createFigure(hrpDiv, {className: 'funding-appeal-allocation', title: `${data['#value+funding+other+plan_name']} Funding`, stat: formatValue(data['#value+funding+other+total+usd']), indicator: '#value+funding+other+total+usd'});
-  // createFigure(hrpDiv, {className: 'funding-cerf-allocation', title: 'CERF Allocation 2022', stat: formatValue(data['#value+cerf+funding+total+usd']), indicator: '#value+cerf+funding+total+usd'});
-  // createFigure(hrpDiv, {className: 'funding-cbpf-allocation', title: 'CBPF Allocation 2022', stat: formatValue(data['#value+cbpf+funding+total+usd']), indicator: '#value+cbpf+funding+total+usd'});
+  createFigure(fundingDiv, {className: 'funding-flash-required', title: 'Flash Appeal Requirement', stat: formatValue(data['#value+funding+other+required+usd']), indicator: '#value+funding+other+required+usd'});
+  createFigure(fundingDiv, {className: 'funding-flash-allocation', title: 'Flash Appeal Funding', stat: formatValue(data['#value+funding+other+total+usd']), indicator: '#value+funding+other+total+usd'});
+  createFigure(fundingDiv, {className: 'funding-regional-required', title: 'Regional Refugee Response Plan Requirement', stat: formatValue(regionalData['#value+funding+rrp+required+usd']), indicator: '#value+funding+rrp+required+usd'});
+  createFigure(fundingDiv, {className: 'funding-regional-allocation', title: 'Regional Refugee Response Plan Funding', stat: formatValue(regionalData['#value+funding+rrp+total+usd']), indicator: '#value+funding+rrp+total+usd'});
+  createFigure(fundingDiv, {className: 'funding-humanitarian-required', title: 'CERF Allocation', stat: formatValue(data['#value+cerf+funding+total+usd']), indicator: '#value+cerf+funding+total+usd'});
+  createFigure(fundingDiv, {className: 'funding-humanitarian-allocation', title: 'Humanitarian Fund Allocation', stat: formatValue(data['#value+funding+uhf+usd']), indicator: '#value+funding+uhf+usd'});
 }
 
 function createFigure(div, obj) {
@@ -3942,10 +4053,10 @@ var shortenNumFormat = d3.format('.2s');
 var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var chartDateFormat = d3.utcFormat("%-m/%-d/%y");
-var colorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
+var colorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D'];
 var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
 var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
-var populationColorRange = ['#FFE281','#FDB96D','#FA9059','#F27253','#E9554D'];
+var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D', '#238443', '#005A32'];
 var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
@@ -3965,7 +4076,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, eeRegionBoundaryData, ukrKeyFigures = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -3999,8 +4110,6 @@ $( document ).ready(function() {
       zoomLevel = 1.4;
     }
 
-    //ckb843tjb46fy1ilaw49redy7
-
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
       var staticURL = 'https://api.mapbox.com/styles/v1/humdata/cl0cqcpm4002014utgdbhcn4q/static/-25,0,2/'+viewportWidth+'x'+viewportHeight+'?access_token='+mapboxgl.accessToken;
@@ -4014,12 +4123,10 @@ $( document ).ready(function() {
   function getData() {
     console.log('Loading data...')
     Promise.all([
-      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json'),
-      d3.json('data/ocha-regions-bbox.geojson'),
-      d3.json('https://data2.unhcr.org/population/get/timeseries?widget_id=283577&sv_id=54&population_group=5457&frequency=day&fromDate=1900-01-01'),
-      d3.json('https://data2.unhcr.org/population/get/sublocation?geo_id=0&forcesublocation=1&widget_id=283573&sv_id=54&color=%233c8dbc&color2=%23303030&population_group=5460'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('https://proxy.hxlstandard.org/data.objects.json?dest=data_edit&strip-headers=on&tagger-match-all=on&tagger-01-header=total+population%28flash+appeal%29&tagger-01-tag=%23population%2Btotal&tagger-02-header=people+affected%28flash+appeal%29&tagger-02-tag=%23affected%2Btotal&tagger-03-header=people+affected+-+idps&tagger-03-tag=%23affected%2Bdisplaced&tagger-04-header=people+in+need%28flash+appeal%29&tagger-04-tag=%23affected%2Binneed%2Btotal&tagger-05-header=pin+-+idps&tagger-05-tag=%23affected%2Binneed%2Bdisplaced&tagger-06-header=people+targeted%28flash+appeal%29&tagger-06-tag=%23affected%2Btargeted%2Btotal&tagger-07-header=people+targeted+-+idps&tagger-07-tag=%23affected%2Btargeted%2Bdisplaced&tagger-08-header=requirements+%28us%24%29%28flash+appeal%29&tagger-08-tag=%23value%2Bfunding%2Brequired&tagger-09-header=projection+time+frame+%28flash+appeal%29&tagger-09-tag=%23time%2Bprojection&tagger-10-header=flash+appeal+url&tagger-10-tag=%23url%2Bappeal&tagger-11-header=refugees%28unhcr%29&tagger-11-tag=%23affected%2Brefugees&tagger-12-header=civilian+casualities%28ohchr%29+-+killed&tagger-12-tag=%23affected%2Bkilled&tagger-13-header=civilian+casualities%28ohchr%29+-+injured&tagger-13-tag=%23affected%2Binjured&tagger-14-header=date&tagger-14-tag=%23date&tagger-15-header=sitrep+url&tagger-15-tag=%23url%2Bsitrep&tagger-16-header=ukraine+flash+appeal+2022+-+required+%28us%24m%29&tagger-16-tag=%23value%2Bfunding%2Bappeal%2Brequired%2Busd&tagger-17-header=ukraine+flash+appeal+2022+-+funded+%28us%24m%29&tagger-17-tag=%23value%2Bfunding%2Bappeal%2Btotal%2Busd&tagger-18-header=ukraine+flash+appeal+2022+-+%25+coverage&tagger-18-tag=%23value%2Bfunding%2Bappeal%2Bpct&tagger-19-header=ukraine+humanitarian+response+plan+2022+-+required+%28us%24m%29&tagger-19-tag=%23value%2Bfunding%2Bhrp%2Brequired%2Busd&tagger-20-header=ukraine+humanitarian+response+plan+2022+-+funded+%28us%24m%29&tagger-20-tag=%23value%2Bfunding%2Bhrp%2Btotal%2Busd&tagger-21-header=ukraine+humanitarian+response+plan+2022+-+%25+coverage&tagger-21-tag=%23value%2Bfunding%2Bhrp%2Bpct&tagger-22-header=ukraine+regional+refugee+response+plan+2022+-+required+%28us%24m%29&tagger-22-tag=%23value%2Bfunding%2Bregional%2Brequired%2Busd&tagger-23-header=ukraine+regional+refugee+response+plan+2022+-+funded+%28us%24m%29&tagger-23-tag=%23value%2Bfunding%2Bregional%2Btotal%2Busd&tagger-24-header=ukraine+regional+refugee+response+plan+2022+-+%25+coverage&tagger-24-tag=%23value%2Bfunding%2Bregional%2Bpct&tagger-25-header=cerf+-+contributions+%28us%24m%29&tagger-25-tag=%23value%2Bcerf%2Bfunding%2Bcontribution%2Busd&tagger-26-header=cerf+-+allocations+%28us%24m%29&tagger-26-tag=%23value%2Bcerf%2Bfunding%2Ballocation%2Busd&tagger-27-header=ukraine+humanitarian+fund+-+contributions+%28us%24m%29&tagger-27-tag=%23value%2Bukr%2Bfunding%2Bcontribution%2Busd&tagger-28-header=ukraine+humanitarian+fund+-+allocations+%28us%24m%29&tagger-28-tag=%23value%2Bukr%2Bfunding%2Btotal%2Busd&tagger-29-header=fts+url&tagger-29-tag=%23url%2Bfts&tagger-30-header=civilian+casualities%28unhcr%29+-+killed&tagger-30-tag=%23affected%2Bkilled&tagger-31-header=civilian+casualities%28unhcr%29+-+injured&tagger-31-tag=%23affected%2Binjured&header-row=2&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vQIdedbZz0ehRC0b4fsWiP14R7MdtU1mpmwAkuXUPElSah2AWCURKGALFDuHjvyJUL8vzZAt3R1B5qg%2Fpub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv')
+      d3.json('data/refugees-count.json')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -4027,20 +4134,15 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
-      worldData = allData.world_data[0];
-      regionBoundaryData = data[1].features;
-      timeseriesData = allData.covid_series_data;
-      regionalData = allData.regional_data;
+      regionalData = allData.regional_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
+      refugeeTimeseriesData = allData.refugees_series_data;
       sourcesData = allData.sources_data;
-      covidTrendData = allData.who_covid_data;
-      immunizationData = allData.vaccination_campaigns_data;
 
-      refugeeTimeseriesData = data[2].data.timeseries;
+      borderCrossingData = data[1];
+      regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
-      eeRegionBoundaryData = data[4].features;
-      ukrKeyFigures = data[5][data[5].length-1];
       
       //format data
       subnationalData.forEach(function(item) {
@@ -4051,37 +4153,6 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
-        //normalize country names
-        if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
-        if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
-
-        //hardcode CBPF val for Turkey
-        if (item['#country+code']=='TUR') item['#value+cbpf+covid+funding+total+usd'] = 23000000;
-
-        //calculate and inject PIN percentage
-        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
-        
-        //store covid trend data
-        var covidByCountry = covidTrendData[item['#country+code']];
-        item['#covid+trend+pct'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+pct+weekly'];
-        item['#affected+infected+new+per100000+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+per100000+weekly'];
-        item['#affected+infected+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+infected+new+weekly'];
-        item['#affected+killed+new+weekly'] = (covidByCountry==undefined) ? null : covidByCountry[covidByCountry.length-1]['#affected+killed+new+weekly'];
-        item['#covid+total+cases+per+capita'] = (item['#affected+infected'] / item['#population']) * 100000;
-
-        //create cases by gender indicator
-        item['#affected+infected+sex+new+avg+per100000'] = (item['#affected+infected+m+pct']!=undefined || item['#affected+f+infected+pct']!=undefined) ? item['#affected+infected+new+per100000+weekly'] : null;
-        
-        //select CH vs IPC data
-        var ipcParams = ['+analysed+num','+p3+num','+p3plus+num','+p4+num','+p5+num']
-        var ipcPrefix = '#affected+food+ipc';
-        var chPrefix = '#affected+ch+food';
-        ipcParams.forEach(function(param) {
-          if (item[ipcPrefix+param] || item[chPrefix+param]) {
-            item['#affected+food'+param] = (item[chPrefix+param]) ? item[chPrefix+param] : item[ipcPrefix+param];
-          }
-        });
-
         //keep global list of countries
         globalCountryList.push({
           'name': item['#country+name'],
@@ -4101,63 +4172,11 @@ $( document ).ready(function() {
       subnationalDataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
         .entries(subnationalData);
-      subnationalDataByCountry.forEach(function(country) {
-        var index = 0;
-        var ipcEmpty = false;
-        var chEmpty = false;
-        //check first two data points to choose btwn IPC and CH datasets
-        for (var i=0; i<2; i++) {
-          var ipcVal = country.values[i]['#affected+food+ipc+p3plus+num'];
-          var chVal = country.values[i]['#affected+ch+food+p3plus+num'];
-          if (i==0 && (!isVal(ipcVal) || isNaN(ipcVal))) {
-            ipcEmpty = true;
-          }
-          if (i==1 && ipcEmpty && isVal(ipcVal) && !isNaN(ipcVal)) {
-            ipcEmpty = false;
-          }
-          if (i==0 && (!isVal(chVal) || isNaN(chVal))) {
-            chEmpty = true;
-          }
-          if (i==1 && chEmpty && isVal(chVal) && !isNaN(chVal)) {
-            chEmpty = false;
-          }
-        }
-        //default to ipc source if both ipc and ch are empty
-        country['#ipc+source'] = (!ipcEmpty || chEmpty && ipcEmpty) ? '#affected+food+ipc+p3plus+num' : '#affected+ch+food+p3plus+num';
-
-        //exception for CAF, should default to ch
-        if (country.key=='CAF' && !chEmpty) country['#ipc+source'] = '#affected+ch+food+p3plus+num';
-      });
 
       //group countries by region    
       countriesByRegion = d3.nest()
         .key(function(d) { return d['#region+name']; })
         .object(nationalData);
-
-      //group immunization data by country    
-      immunizationDataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .entries(immunizationData);
-
-      //format dates and set overall status
-      immunizationDataByCountry.forEach(function(country) {
-        var postponed = 'On Track';
-        var isPostponed = false;
-        country.values.forEach(function(campaign) {
-          var d = moment(campaign['#date+start'], ['YYYY-MM','MM/DD/YYYY']);
-          var date = new Date(d.year(), d.month(), d.date());
-          campaign['#date+start'] = (isNaN(date.getTime())) ? campaign['#date+start'] : getMonth(date.getMonth()) + ' ' + date.getFullYear();
-          if (campaign['#status+name'].toLowerCase().indexOf('unknown')>-1 && !isPostponed) postponed = 'Unknown';
-          if (campaign['#status+name'].toLowerCase().indexOf('postponed')>-1) {
-            isPostponed = true;
-            postponed = 'Postponed / May postpone';
-          }
-        });
-
-        nationalData.forEach(function(item) {
-          if (item['#country+code'] == country.key) item['#immunization-campaigns'] = postponed;
-        });
-      });
 
       //console.log(nationalData)
       //console.log(covidTrendData)
@@ -4232,9 +4251,6 @@ $( document ).ready(function() {
         'link type': 'download report',
         'page title': document.title
       });
-
-      //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
     //show/hide NEW label for monthly report
@@ -4259,17 +4275,10 @@ $( document ).ready(function() {
         'link type': 'download report',
         'page title': document.title
       });
-
-      //google analytics event
-      gaTrack('oad covid-19 link', $(this).attr('href'), 'download report', document.title);
     });
 
-    //load trenseries for global view
-    createSource($('#chart-view .source-container'), '#affected+infected');
-    initTrendseries(globalCountryList[0].code);
-
     //load timeseries for country view 
-    initTimeseries(timeseriesData, '.country-timeseries-chart');
+    initTimeseries('', '.country-timeseries-chart');
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)

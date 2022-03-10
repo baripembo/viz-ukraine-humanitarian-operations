@@ -1828,6 +1828,8 @@ a:visited {
   .map-legend svg {
     margin-top: 5px;
     width: 190px; }
+    .map-legend svg.border-crossing-key, .map-legend svg.refugee-count-key, .map-legend svg.hostilities-key {
+      margin-top: 0; }
   .map-legend .toggle-icon:before {
     color: #000;
     content: '\e94b';
@@ -1846,18 +1848,21 @@ a:visited {
   .map-legend .no-data-key,
   .map-legend .special-key,
   .map-legend .border-crossing-key,
-  .map-legend .refugee-count-key {
+  .map-legend .refugee-count-key,
+  .map-legend .hostilities-key {
     height: 20px; }
     .map-legend .no-data-key rect,
     .map-legend .special-key rect,
     .map-legend .border-crossing-key rect,
-    .map-legend .refugee-count-key rect {
+    .map-legend .refugee-count-key rect,
+    .map-legend .hostilities-key rect {
       fill: #FFF;
       stroke: #CCC; }
     .map-legend .no-data-key text,
     .map-legend .special-key text,
     .map-legend .border-crossing-key text,
-    .map-legend .refugee-count-key text {
+    .map-legend .refugee-count-key text,
+    .map-legend .hostilities-key text {
       transform: translate(25px, 12.5px); }
   .map-legend .special-key {
     display: none; }
@@ -1878,21 +1883,39 @@ a:visited {
     opacity: 0;
     padding-bottom: 5px;
     z-index: -1; }
+    .map-legend.country hr {
+      border: 1px solid #E0E0E0;
+      border-bottom: 0;
+      margin: 20px 0; }
     .map-legend.country label {
       margin-top: 10px; }
+    .map-legend.country .legend-title {
+      margin-top: 10px; }
     .map-legend.country .legend-container {
-      height: 118px;
+      height: 92px;
       overflow: visible;
-      transform: translate(0px, 20px); }
-      .map-legend.country .legend-container .legendTitle {
-        font-family: 'Gotham-Bold', sans-serif;
-        letter-spacing: 0.2px; }
+      transform: translate(0px, 5px); }
       .map-legend.country .legend-container.no-data {
         height: 20px; }
         .map-legend.country .legend-container.no-data .legendCells {
           display: none; }
+      .map-legend.country .legend-container.population {
+        height: 130px; }
     .map-legend.country .source-container {
-      margin-left: 18px; }
+      margin-left: 19px; }
+    .map-legend.country .legend-marker {
+      display: flex;
+      padding-top: 8px; }
+      .map-legend.country .legend-marker .marker {
+        margin-right: 6px; }
+        .map-legend.country .legend-marker .marker img {
+          height: 14px;
+          width: 14px; }
+      .map-legend.country .legend-marker label {
+        flex-direction: column;
+        margin-top: 0; }
+    .map-legend.country .footnote {
+      margin-top: 15px; }
   .map-legend.collapsed {
     height: 35px !important;
     overflow-y: hidden;
@@ -2119,6 +2142,11 @@ table.immunization-table {
 .cases-timeseries p {
   margin-top: 0; }
 
+.refugees-timeseries {
+  display: none; }
+  .refugees-timeseries .source {
+    padding-left: 20px; }
+
 .country-timeseries-chart .timeseries-legend {
   background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid #CCC;
@@ -2170,14 +2198,28 @@ table.immunization-table {
   .c3-tooltip td > span {
     display: none; }
 
-.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
-  stroke: #007CE1 !important; }
-
 .sparkline {
   fill: none;
   margin-left: 6px;
   stroke: #F2645B;
   stroke-width: 1px; }
+
+.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
+  stroke: #007CE1 !important; }
+
+.country-timeseries-chart .c3-grid line {
+  stroke: #F2F2F3;
+  stroke-dasharray: 0; }
+
+.country-timeseries-chart .c3-axis .tick line,
+.country-timeseries-chart .c3-axis-y path.domain {
+  display: none; }
+
+.country-timeseries-chart .c3-axis-x path.domain {
+  stroke: #888; }
+
+.country-timeseries-chart .c3-axis text {
+  fill: #888; }
 
 .mobile-message {
   background-color: rgba(0, 0, 0, 0.5);
