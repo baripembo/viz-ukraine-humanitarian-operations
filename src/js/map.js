@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
     center: [-25, 0],
     minZoom: 3,
     zoom: zoomLevel,
@@ -1136,7 +1136,10 @@ function updateCountryLayer() {
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
       color = (val<0 || !isVal(val) || isNaN(val)) ? colorNoData : countryColorScale(val);
-      boundaryColor = (currentCountryIndicator.id=='#population') ? '#C4C4C4' : '#E0E0E0';
+
+      //turn off choropleth for population layer
+      color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
+      
       layerOpacity = 1;
     }
     else {
