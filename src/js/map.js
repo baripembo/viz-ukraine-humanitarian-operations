@@ -973,40 +973,6 @@ function initCountryLayer() {
   }, globalLabelLayer);
 
 
-  //add hostilty markers
-  map.loadImage('assets/marker-hostility.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('hostility', image);
-    map.addSource('hostility-data', {
-      type: 'geojson',
-      data: 'data/hostilities.geojson',
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'hostilities-layer',
-      type: 'symbol',
-      source: 'hostility-data',
-      layout: {
-        'icon-image': 'hostility',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.3, 6, 1.8],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true,
-        'text-field': ["get", "NAME"],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.7
-      },
-      paint: {
-        'text-color': '#000000',
-        'text-halo-color': '#EEEEEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1,
-      }
-    }, globalLabelLayer);
-  });
-
-
   //add town circles, capital icons
   map.addLayer({
     id: 'town-dots',
@@ -1034,6 +1000,40 @@ function initCountryLayer() {
         'icon-ignore-placement': true
       }
     }, globalLabelLayer);
+  });
+
+
+  //add hostilty markers
+  map.loadImage('assets/marker-hostility.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('hostility', image);
+    map.addSource('hostility-data', {
+      type: 'geojson',
+      data: 'data/hostilities.geojson',
+      generateId: true 
+    });
+    map.addLayer({
+      id: 'hostilities-layer',
+      type: 'symbol',
+      source: 'hostility-data',
+      layout: {
+        'icon-image': 'hostility',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+        'text-field': ["get", "NAME"],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.7
+      },
+      paint: {
+        'text-color': '#000000',
+        'text-halo-color': '#EEEEEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1,
+      }
+    });
   });
 
 
