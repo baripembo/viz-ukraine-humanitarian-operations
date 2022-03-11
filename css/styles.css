@@ -1922,12 +1922,20 @@ a:visited {
       display: flex; }
     .map-legend.country.population .source-container.border-crossing {
       display: block; }
+    .map-legend.country .legendCells {
+      display: block; }
+    .map-legend.country .legendCells-events .legendCells {
+      display: none; }
     .map-legend.country.acled .legend-container {
       height: 112px; }
     .map-legend.country.acled .legend-marker.hostilities,
     .map-legend.country.acled .legend-marker.border-crossing,
     .map-legend.country.acled .source-container.border-crossing {
       display: none; }
+    .map-legend.country.acled .legendCells {
+      display: none; }
+    .map-legend.country.acled .legendCells-events .legendCells {
+      display: block; }
   .map-legend.collapsed {
     height: 35px !important;
     overflow-y: hidden;
