@@ -1051,7 +1051,6 @@ function initCountryLayer() {
   });
 
 
-
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
@@ -1155,42 +1154,70 @@ function acledEvents() {
   });
 
   //add acled dots
-  map.loadImage('assets/marker-events.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('marker-event', image, { 'sdf': true });
-    map.addLayer({
-      id: 'acled-dots',
-      type: 'symbol',
-      source: 'acled',
-      layout: {
-        'icon-image': 'marker-event',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1, 8, 1.5],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true
-      },
-      paint: {
-        'icon-color': [
-          'match',
-            ['get', 'event_type'],
-            'Explosions/Remote violence',
-            '#A67037',
-            'Battles',
-            '#A0A445',
-            'Protests',
-            '#7CA544',
-            'Violence against civilians',
-            '#4FA59F',
-            'Strategic developments',
-            '#724CA4',
-            'Riots',
-            '#A49169',
-            '#666'
-        ],
-        'icon-opacity': 0.6
-      }
-    });
-    map.setLayoutProperty('acled-dots', 'visibility', 'none');
+  // map.loadImage('assets/marker-events.png', (error, image) => {
+  //   if (error) throw error;
+  //   map.addImage('marker-event', image, { 'sdf': true });
+  //   map.addLayer({
+  //     id: 'acled-dots',
+  //     type: 'symbol',
+  //     source: 'acled',
+  //     layout: {
+  //       'icon-image': 'marker-event',
+  //       'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1, 8, 1.5],
+  //       'icon-allow-overlap': true,
+  //       'icon-ignore-placement': true
+  //     },
+  //     paint: {
+  //       'icon-color': [
+  //         'match',
+  //           ['get', 'event_type'],
+  //           'Explosions/Remote violence',
+  //           '#A67037',
+  //           'Battles',
+  //           '#A0A445',
+  //           'Protests',
+  //           '#7CA544',
+  //           'Violence against civilians',
+  //           '#4FA59F',
+  //           'Strategic developments',
+  //           '#724CA4',
+  //           'Riots',
+  //           '#A49169',
+  //           '#666'
+  //       ],
+  //       'icon-opacity': 0.6
+  //     }
+  //   });
+  //   map.setLayoutProperty('acled-dots', 'visibility', 'none');
+  // });
+
+  map.addLayer({
+    id: 'acled-dots',
+    type: 'circle',
+    source: 'acled',
+    paint: {
+      'circle-color': [
+        'match',
+          ['get', 'event_type'],
+          'Battles',
+          '#A0A445',
+          'Explosions/Remote violence',
+          '#A67037',
+          'Protests',
+          '#7CA544',
+          'Riots',
+          '#A49169',
+          'Strategic developments',
+          '#724CA4',
+          'Violence against civilians',
+          '#4FA59F',
+          '#666'
+      ],
+      'circle-opacity': 0.6,
+      "circle-radius": 5
+    }
   });
+  map.setLayoutProperty('acled-dots', 'visibility', 'none');
 
 
   //acled events mouse events
@@ -1312,8 +1339,9 @@ function updateCountryLayer() {
   }
   else if (currentCountryIndicator.id=='#acled+events') {
     $('.map-legend.country').addClass('acled');
-    var triangleU = d3.symbol().type(d3.symbolTriangle)();
-    countryColorScale = d3.scaleOrdinal().domain(['Explosions/Remote violence', 'Battles', 'Protests', 'Violence against civilians', 'Strategic developments', 'Riots']).range(eventColorRange);
+    countryColorScale = d3.scaleOrdinal()
+      .domain(['Battles', 'Explosions/Remote violence', 'Protests', 'Riots', 'Strategic developments', 'Violence against civilians'])
+      .range(eventColorRange);
   }
   else {}
   updateCountryLegend(countryColorScale);
@@ -1435,16 +1463,22 @@ function updateCountryLegend(scale) {
   }
   $('.map-legend.country .legend-title').html(legendTitle);
 
+  // var legend = d3.legendColor()
+  //   .labelFormat(legendFormat)
+  //   .cells(colorRange.length)
+  //   .scale(scale);
 
+  // var g = d3.select('.map-legend.country .scale');
+  // g.call(legend);
   if (currentCountryIndicator.id=='#acled+events') {
     if (d3.selectAll('.legendCells-events').empty()) {
       var svg = d3.select('.map-legend.country .scale');
       svg.append("g")
         .attr("class", "legendCells-events")
-        .attr("transform", "translate(8,10)");
+        .attr("transform", "translate(6,10)");
 
       var legendOrdinal = d3.legendColor()
-        .shape("path", d3.symbol().type(d3.symbolTriangle).size(90)())
+        .shape("path", d3.symbol().type(d3.symbolCircle).size(90)())
         .shapePadding(3)
         .scale(scale);
 
@@ -1461,7 +1495,6 @@ function updateCountryLegend(scale) {
     var g = d3.select('.map-legend.country .scale');
     g.call(legend);
   }
-
 }
 
 
