@@ -1463,13 +1463,38 @@ function updateCountryLegend(scale) {
   }
   $('.map-legend.country .legend-title').html(legendTitle);
 
-  var legend = d3.legendColor()
-    .labelFormat(legendFormat)
-    .cells(colorRange.length)
-    .scale(scale);
+  // var legend = d3.legendColor()
+  //   .labelFormat(legendFormat)
+  //   .cells(colorRange.length)
+  //   .scale(scale);
 
-  var g = d3.select('.map-legend.country .scale');
-  g.call(legend);
+  // var g = d3.select('.map-legend.country .scale');
+  // g.call(legend);
+  if (currentCountryIndicator.id=='#acled+events') {
+    if (d3.selectAll('.legendCells-events').empty()) {
+      var svg = d3.select('.map-legend.country .scale');
+      svg.append("g")
+        .attr("class", "legendCells-events")
+        .attr("transform", "translate(6,10)");
+
+      var legendOrdinal = d3.legendColor()
+        .shape("path", d3.symbol().type(d3.symbolCircle).size(90)())
+        .shapePadding(3)
+        .scale(scale);
+
+      svg.select(".legendCells-events")
+        .call(legendOrdinal);
+    }
+  }
+  else {
+    var legend = d3.legendColor()
+      .labelFormat(legendFormat)
+      .cells(colorRange.length)
+      .scale(scale);
+
+    var g = d3.select('.map-legend.country .scale');
+    g.call(legend);
+  }
 }
 
 

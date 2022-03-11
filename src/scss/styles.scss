@@ -911,6 +911,12 @@ a:visited {
 				display: block;
 			}
 		}		
+		.legendCells {
+			display: block;
+		}
+		.legendCells-events .legendCells {
+			display: none;
+		}
 		&.acled {
 			.legend-container {
 				height: 112px;
@@ -919,6 +925,12 @@ a:visited {
 			.legend-marker.border-crossing,
 			.source-container.border-crossing {
 				display: none;
+			}
+			.legendCells {
+				display: none;
+			}
+			.legendCells-events .legendCells {
+				display: block;
 			}
 		}
 	}
