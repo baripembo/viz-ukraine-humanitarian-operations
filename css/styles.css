@@ -1827,7 +1827,6 @@ a:visited {
   .map-legend input {
     margin: 0 6px 0 0; }
   .map-legend svg {
-    margin-top: 5px;
     width: 190px; }
     .map-legend svg.border-crossing-key, .map-legend svg.refugee-count-key, .map-legend svg.hostilities-key {
       margin-top: 0; }
@@ -1900,9 +1899,8 @@ a:visited {
         height: 20px; }
         .map-legend.country .legend-container.no-data .legendCells {
           display: none; }
-      .map-legend.country .legend-container.population {
-        height: 130px; }
     .map-legend.country .source-container {
+      display: block;
       margin-left: 19px; }
     .map-legend.country .legend-marker {
       display: flex;
@@ -1917,6 +1915,19 @@ a:visited {
         margin-top: 0; }
     .map-legend.country .footnote {
       margin-top: 15px; }
+    .map-legend.country.population .legend-container {
+      height: 130px; }
+    .map-legend.country.population .legend-marker.hostilities,
+    .map-legend.country.population .legend-marker.border-crossing {
+      display: flex; }
+    .map-legend.country.population .source-container.border-crossing {
+      display: block; }
+    .map-legend.country.acled .legend-container {
+      height: 112px; }
+    .map-legend.country.acled .legend-marker.hostilities,
+    .map-legend.country.acled .legend-marker.border-crossing,
+    .map-legend.country.acled .source-container.border-crossing {
+      display: none; }
   .map-legend.collapsed {
     height: 35px !important;
     overflow-y: hidden;
