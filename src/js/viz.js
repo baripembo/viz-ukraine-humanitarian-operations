@@ -10,6 +10,7 @@ var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D
 var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
+var eventColorRange = ['#ECA154','#E2E868','#A4D65E','#71DBD4','#9063CD','#D3BC8D'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -26,7 +27,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -35,7 +36,7 @@ $( document ).ready(function() {
   mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbDA5cWZmNjAwZzAyM3BtZ3U3OXNldW1hIn0.Tcs909e7BLLnpWBjM6tuvw';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
-  viewportWidth = (window.innerWidth<minWidth) ? minWidth - $('.content-left').innerWidth() : window.innerWidth - $('.content-left').innerWidth();
+  viewportWidth = (window.innerWidth<minWidth) ? minWidth : window.innerWidth;
   viewportHeight = window.innerHeight;
 
 
@@ -50,7 +51,7 @@ $( document ).ready(function() {
 
     //set content sizes based on viewport
     $('.secondary-panel').height(viewportHeight-40);
-    $('.content').width(viewportWidth + $('.content-left').innerWidth());
+    $('.content').width(viewportWidth);
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
@@ -76,7 +77,8 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json')
+      d3.json('data/refugees-count.json'),
+      d3.csv('data/2022-03-10.csv')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -93,6 +95,9 @@ $( document ).ready(function() {
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
+
+      acledData = data[4];
+      console.log(acledData);
       
       //format data
       subnationalData.forEach(function(item) {
