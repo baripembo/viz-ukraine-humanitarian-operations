@@ -783,7 +783,6 @@ a:visited {
 		margin: 0 6px 0 0;
 	}
 	svg {
-		margin-top: 5px;
 		width: 190px;
 		&.border-crossing-key,
 		&.refugee-count-key,
@@ -877,11 +876,9 @@ a:visited {
 					display: none;
 				}
 			}
-			&.population {
-				height: 130px;
-			}
-		}
+		}		
 		.source-container {
+			display: block;
 			margin-left: 19px;
 		}
 		.legend-marker {
@@ -901,6 +898,28 @@ a:visited {
 		}
 		.footnote {
 			margin-top: 15px;
+		}
+		&.population {
+			.legend-container {
+				height: 130px;
+			}
+			.legend-marker.hostilities,
+			.legend-marker.border-crossing {
+				display: flex;
+			}
+			.source-container.border-crossing {
+				display: block;
+			}
+		}
+		&.acled {
+			.legend-container {
+				height: 112px;
+			}
+			.legend-marker.hostilities,
+			.legend-marker.border-crossing,
+			.source-container.border-crossing {
+				display: none;
+			}
 		}
 	}
 	&.collapsed {
