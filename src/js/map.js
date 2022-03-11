@@ -1312,11 +1312,10 @@ function updateCountryLayer() {
   }
   else if (currentCountryIndicator.id=='#acled+events') {
     $('.map-legend.country').addClass('acled');
+    var triangleU = d3.symbol().type(d3.symbolTriangle)();
     countryColorScale = d3.scaleOrdinal().domain(['Explosions/Remote violence', 'Battles', 'Protests', 'Violence against civilians', 'Strategic developments', 'Riots']).range(eventColorRange);
   }
-  else {
-    
-  }
+  else {}
   updateCountryLegend(countryColorScale);
   // if (max!=undefined && max>0) {
   //   if (currentCountryIndicator.id=='#population') {
@@ -1380,12 +1379,13 @@ function createCountryLegend(scale) {
   //let title = (currentCountryIndicator.id=='#population') ? 'Population Density (people per sq km)' : 'Number of Health Facilities';
   //$('.legend-title').html(title);
 
+
   var legend = d3.legendColor()
     .labelFormat(percentFormat)
     .cells(colorRange.length)
     .scale(scale);
 
-  var div = d3.select('.map-legend.country .legend-scale  ');
+  var div = d3.select('.map-legend.country .legend-scale');
   var svg = div.append('svg')
     .attr('class', 'legend-container');
 
@@ -1436,13 +1436,32 @@ function updateCountryLegend(scale) {
   $('.map-legend.country .legend-title').html(legendTitle);
 
 
-  var legend = d3.legendColor()
-    .labelFormat(legendFormat)
-    .cells(colorRange.length)
-    .scale(scale);
+  if (currentCountryIndicator.id=='#acled+events') {
+    if (d3.selectAll('.legendCells-events').empty()) {
+      var svg = d3.select('.map-legend.country .scale');
+      svg.append("g")
+        .attr("class", "legendCells-events")
+        .attr("transform", "translate(8,10)");
 
-  var g = d3.select('.map-legend.country .scale');
-  g.call(legend);
+      var legendOrdinal = d3.legendColor()
+        .shape("path", d3.symbol().type(d3.symbolTriangle).size(90)())
+        .shapePadding(3)
+        .scale(scale);
+
+      svg.select(".legendCells-events")
+        .call(legendOrdinal);
+    }
+  }
+  else {
+    var legend = d3.legendColor()
+      .labelFormat(legendFormat)
+      .cells(colorRange.length)
+      .scale(scale);
+
+    var g = d3.select('.map-legend.country .scale');
+    g.call(legend);
+  }
+
 }
 
 
