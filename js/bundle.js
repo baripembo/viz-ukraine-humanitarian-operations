@@ -3355,7 +3355,7 @@ function initCountryLayer() {
 }
 
 function acledEvents() {
-  let acledEvents = new Set(acledData.map(d => d.event_type));
+  let acledEvents = new Set(acledData.map(d => d['#event+type']));
   console.log(acledEvents)
 
   let events = [];
@@ -3363,17 +3363,19 @@ function acledEvents() {
     events.push({
       'type': 'Feature',
       'properties': {
-        'adm1': e.admin1,
-        'adm3': e.admin3,
-        'event_type': e.event_type,
-        'date': e.event_date,
-        'fatalities': e.fatalities,
-        'notes': e.notes,
-        'sub_event_type': e.sub_event_type
+        'adm1': e['#adm1+name'],
+        'adm3': e['#adm3+name'],
+        'event_type': e['#event+type'],
+        'date': e['#date+occurred'],
+        'fatalities': e['#affected+killed'],
+        'notes': e['#description'],
+        'sub_event_type': e['#event+type+sub'],
+        'actor1': e['#group+name+first'],
+        'actor2': e['#group+name+second']
       },
       'geometry': { 
         'type': 'Point', 
-        'coordinates': [ Number(e.longitude), Number(e.latitude) ] 
+        'coordinates': [ Number(e['#geo+lon']), Number(e['#geo+lat']) ] 
       } 
     })
   }
@@ -3387,8 +3389,6 @@ function acledEvents() {
     generateId: true 
   });
 
-  console.log(eventsGeoJson)
-
   //add acled dots
   map.addLayer({
     id: 'acled-dots',
@@ -3399,20 +3399,20 @@ function acledEvents() {
         'match',
           ['get', 'event_type'],
           'Explosions/Remote violence',
-          '#810f7c',
+          '#A67037',
           'Battles',
-          '#8856a7',
+          '#A0A445',
           'Protests',
-          '#8c96c6',
+          '#7CA544',
           'Violence against civilians',
-          '#9ebcda',
+          '#4FA59F',
           'Strategic developments',
-          '#bfd3e6',
+          '#724CA4',
           'Riots',
-          '#edf8fb',
+          '#A49169',
           '#666'
       ],
-      'circle-opacity': 0.5,
+      'circle-opacity': 0.6,
       "circle-radius": 5
     }
   });
@@ -3425,12 +3425,14 @@ function acledEvents() {
   map.on('mousemove', 'acled-dots', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
-    let content = 'Location: '+ prop.adm3 + '<br>';
+    let content = 'ADM3: '+ prop.adm3 + '<br>';
     content += 'ADM1: ' + prop.adm1 + '<br>';
+    content += 'Date: ' + prop.date + '<br>';
     content += 'Event type: ' + prop.event_type + '<br>';
     content += 'Sub event type: ' + prop.sub_event_type + '<br>';
-    content += 'Date: ' + prop.date + '<br>';
     content += 'Fatalities: ' + prop.fatalities + '<br>';
+    content += 'Actor 1: ' + prop.actor1 + '<br>';
+    content += 'Actor 2: ' + prop.actor2 + '<br>';
     content += 'Notes: ' + prop.notes + '<br>';
     tooltip.setHTML(content);
     tooltip
@@ -3448,7 +3450,6 @@ function acledEvents() {
 
 function updateCountryLayer() {
   colorNoData = '#FFF';
-  if (currentCountryIndicator.id=='#affected+food+ipc+p3plus+num') currentCountryIndicator.id = getIPCDataSource();
   $('.map-legend.country .legend-container').removeClass('no-data');
 
   //max
@@ -3532,6 +3533,7 @@ function updateCountryLayer() {
   }
   else {
     $('.map-legend.country .legend-container').addClass('no-data');
+    updateCountryLegend(countryColorScale);
   }
 
 
@@ -3575,8 +3577,8 @@ function createCountryLegend(scale) {
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
 
-  let title = (currentCountryIndicator.id=='#population') ? 'Population Density (people per sq km)' : 'Number of Health Facilities';
-  $('.legend-title').html(title);
+  //let title = (currentCountryIndicator.id=='#population') ? 'Population Density (people per sq km)' : 'Number of Health Facilities';
+  //$('.legend-title').html(title);
 
   var legend = d3.legendColor()
     .labelFormat(percentFormat)
@@ -3614,16 +3616,32 @@ function createCountryLegend(scale) {
 
 function updateCountryLegend(scale) {
   var legendFormat, legendTitle;
+  switch(currentCountryIndicator.id) {
+    case '#population':
+      legendTitle = 'Population Density (people per sq km)';
+      legendFormat = shortenNumFormat;
+      break;
+    case '#loc+count+health':
+      legendTitle = 'Number of Health Facilities';
+      legendFormat = d3.format('.0f');
+      break;
+    case '#acled+events':
+      legendTitle = 'ACLED Conflict Event Type';
+      legendFormat = d3.format('.0f');
+      break;
+    default:
+      tilegendTitletle = '';
+  }
+  $('.map-legend.country .legend-title').html(legendTitle);
+
+  //set value format
   if (currentCountryIndicator.id=='#population') {
     legendFormat = shortenNumFormat;
-    legendTitle = 'Population Density (people per sq km)';
   }
   else {
     legendFormat = d3.format('.0f');
-    legendTitle = 'Number of Health Facilities';
   }
 
-  $('.map-legend.country .legend-title').html(legendTitle);
 
   var legend = d3.legendColor()
     .labelFormat(legendFormat)
@@ -4171,7 +4189,7 @@ var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D
 var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
-var eventColorRange = ['#ECA154','#E2E868','#A4D65E','#71DBD4','#9063CD','#D3BC8D'];
+var eventColorRange = ['#A67037','#A0A445','#7CA544','#4FA59F','#724CA4','#A49169'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -4251,13 +4269,13 @@ $( document ).ready(function() {
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
       refugeeTimeseriesData = allData.refugees_series_data;
+      acledData = allData.fatalities_data;
       sourcesData = allData.sources_data;
 
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
 
-      acledData = data[4];
       console.log(acledData);
       
       //format data
