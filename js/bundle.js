@@ -3562,8 +3562,8 @@ function initIDPLayer() {
   });
 
   //hide layers
-  map.setLayoutProperty('idp-dots', 'visibility', 'none');
-  map.setLayoutProperty('idp-labels', 'visibility', 'none');
+  // map.setLayoutProperty('idp-dots', 'visibility', 'none');
+  // map.setLayoutProperty('idp-labels', 'visibility', 'none');
 }
 
 
