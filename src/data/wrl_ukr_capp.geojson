@@ -32,7 +32,7 @@
     {
       "type": "Feature",
       "properties": {
-        "CAPITAL": "Rostov-on-Don",
+        "CAPITAL": "Rostov-na-Donu",
         "CNTRY": "Russian Federation",
         "ISO3": "RUS",
         "UN_STATUS": "Member State",
@@ -137,11 +137,11 @@
     {
       "type": "Feature",
       "properties": {
-        "CAPITAL": "Homyel",
+        "CAPITAL": "Homiel",
         "CNTRY": "Belarus",
         "ISO3": "BLR",
         "UN_STATUS": "Member State",
-        "ADMIN1": "Homyel",
+        "ADMIN1": "Homiel",
         "LONGITUDE": 30.999998201,
         "LATITUDE": 52.430032301,
         "TYPE": "ADMIN 1"
@@ -624,7 +624,7 @@
         "CNTRY": "Ukraine",
         "ISO3": "UKR",
         "UN_STATUS": "Member State",
-        "ADMIN1": "Dnipropetrovsk",
+        "ADMIN1": "Dnipro",
         "LONGITUDE": 34.971887,
         "LATITUDE": 48.429324,
         "TYPE": "ADMIN 1"
