@@ -1252,7 +1252,7 @@ function initIDPLayer() {
   let maxCount = d3.max(idpData, function(d) { console.log(d); return +d.value.count; });
   idpDotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([10, 25]);
+    .range([5, 25]);
   
   //format geojson
   let idpCounts = [];
@@ -1261,7 +1261,7 @@ function initIDPLayer() {
       'type': 'Feature',
       'properties': {
         'oblast': d.key,
-        'count': d3.format(".3s")(d.value.count),
+        'count': d.value.count,
         'iconSize': idpDotScale(d.value.count)
       },
       'geometry': { 
@@ -1288,34 +1288,58 @@ function initIDPLayer() {
     type: 'circle',
     source: 'idp-data',
     paint: {
-      'circle-color': '#ECA154',
+      'circle-color': '#D3BC8D',
       'circle-opacity': 0.8,
       'circle-radius': ['get', 'iconSize']
     }
   });
 
   //add idp count labels
-  map.addLayer({
-    id: 'idp-labels',
-    type: 'symbol',
-    source: 'idp-data',
-    layout: {
-      'text-field': ['get', 'count'],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-allow-overlap': true
-    },
-    paint: {
-      'text-color': '#000',
-      'text-halo-color': '#EEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
+  // map.addLayer({
+  //   id: 'idp-labels',
+  //   type: 'symbol',
+  //   source: 'idp-data',
+  //   layout: {
+  //     'text-field': ['get', 'count'],
+  //     'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+  //     'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+  //     'text-allow-overlap': true
+  //   },
+  //   paint: {
+  //     'text-color': '#000',
+  //     'text-halo-color': '#EEE',
+  //     'text-halo-width': 1,
+  //     'text-halo-blur': 1
+  //   }
+  // });
+
+  //layer events
+  map.on('mouseenter', 'idp-dots', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
   });
+  map.on('mousemove', 'idp-dots', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    let prop = e.features[0].properties;
+    let content = '<h2>'+ prop.oblast +'</h2>';
+    content += 'IDP Estimate:<br>';
+    content += '<span class="stat">'+ numFormat(prop.count) +'</span>';
+    // content += '<p>Fatalities: ' + prop.fatalities + '</p>';
+    // content += '<p>' + prop.notes + '</p>';
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
+  });
+  map.on('mouseleave', 'idp-dots', function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+
 
   //hide layers
   map.setLayoutProperty('idp-dots', 'visibility', 'none');
-  map.setLayoutProperty('idp-labels', 'visibility', 'none');
+  //map.setLayoutProperty('idp-labels', 'visibility', 'none');
 }
 
 
@@ -1450,15 +1474,14 @@ function updateCountryLayer() {
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
     map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
     map.setLayoutProperty('idp-dots', 'visibility', 'none');
-    map.setLayoutProperty('idp-labels', 'visibility', 'none');
+    map.setLayoutProperty('refugee-counts-dots', 'visibility', 'visible');
   }
   else if (currentCountryIndicator.id=='#idps') {
     map.setLayoutProperty('refugee-counts-dots', 'visibility', 'none');
     map.setLayoutProperty('acled-dots', 'visibility', 'none');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    //map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
     map.setLayoutProperty('idp-dots', 'visibility', 'visible');
-    map.setLayoutProperty('idp-labels', 'visibility', 'visible');
   }
   else {
     if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {  
@@ -1467,7 +1490,6 @@ function updateCountryLayer() {
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
       map.setLayoutProperty('acled-dots', 'visibility', 'none');
       map.setLayoutProperty('idp-dots', 'visibility', 'none');
-      map.setLayoutProperty('idp-labels', 'visibility', 'none');
     }
   }
 }
