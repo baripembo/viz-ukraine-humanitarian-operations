@@ -1480,7 +1480,7 @@ function updateCountryLayer() {
     map.setLayoutProperty('refugee-counts-dots', 'visibility', 'none');
     map.setLayoutProperty('acled-dots', 'visibility', 'none');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-    //map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
     map.setLayoutProperty('idp-dots', 'visibility', 'visible');
   }
   else {

@@ -1,63 +1,999 @@
 {
-"type": "FeatureCollection",
-"name": "wrl_ukr_capp",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "CAPITAL": "Krasnodar", "CNTRY": "Russian Federation", "ISO3": "RUS", "UN_STATUS": "Member State", "ADMIN1": "Krasnodar Krai", "LONGITUDE": 38.961, "LATITUDE": 45.037, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 38.961, 45.037, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Rostov-on-Don", "CNTRY": "Russian Federation", "ISO3": "RUS", "UN_STATUS": "Member State", "ADMIN1": "Rostov Oblast", "LONGITUDE": 39.688, "LATITUDE": 47.232, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 39.688, 47.232, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kursk", "CNTRY": "Russian Federation", "ISO3": "RUS", "UN_STATUS": "Member State", "ADMIN1": "Kursk Oblast", "LONGITUDE": 36.174, "LATITUDE": 51.742, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 36.174, 51.742, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Belgorod", "CNTRY": "Russian Federation", "ISO3": "RUS", "UN_STATUS": "Member State", "ADMIN1": "Belgorod Oblast", "LONGITUDE": 36.61, "LATITUDE": 50.597, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 36.61, 50.597, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Hrodna", "CNTRY": "Belarus", "ISO3": "BLR", "UN_STATUS": "Member State", "ADMIN1": "Hrodna", "LONGITUDE": 23.834079011, "LATITUDE": 53.677475539, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 23.834079011000028, 53.677475539000056, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Brest", "CNTRY": "Belarus", "ISO3": "BLR", "UN_STATUS": "Member State", "ADMIN1": "Brest", "LONGITUDE": 23.699978669, "LATITUDE": 52.100000766000001, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 23.699978669000075, 52.100000766000051, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Homyel", "CNTRY": "Belarus", "ISO3": "BLR", "UN_STATUS": "Member State", "ADMIN1": "Homyel", "LONGITUDE": 30.999998201, "LATITUDE": 52.430032300999997, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 30.999998201000039, 52.43003230100004, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Mahilëu", "CNTRY": "Belarus", "ISO3": "BLR", "UN_STATUS": "Member State", "ADMIN1": "Mahilëu", "LONGITUDE": 30.324638907000001, "LATITUDE": 53.898108066, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 30.324638907000065, 53.898108066000077, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Katowice", "CNTRY": "Poland", "ISO3": "POL", "UN_STATUS": "Member State", "ADMIN1": "Slaskie", "LONGITUDE": 19.022592014000001, "LATITUDE": 50.257799828000003, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 19.022592014000054, 50.257799828000032, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kraków", "CNTRY": "Poland", "ISO3": "POL", "UN_STATUS": "Member State", "ADMIN1": "Malopolskie", "LONGITUDE": 19.930397218, "LATITUDE": 50.05301151, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 19.930397218000053, 50.053011510000033, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Rzeszów", "CNTRY": "Poland", "ISO3": "POL", "UN_STATUS": "Member State", "ADMIN1": "Podkarpackie", "LONGITUDE": 22.009100009000001, "LATITUDE": 50.040030211999998, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 22.009100009000065, 50.040030212000033, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Lublin", "CNTRY": "Poland", "ISO3": "POL", "UN_STATUS": "Member State", "ADMIN1": "Lubelskie", "LONGITUDE": 22.583568349, "LATITUDE": 51.239350076000001, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 22.583568349000075, 51.239350076000051, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Nyíregyháza", "CNTRY": "Hungary", "ISO3": "HUN", "UN_STATUS": "Member State", "ADMIN1": "Szabolcs-Szatmár-Bereg", "LONGITUDE": 21.725359212000001, "LATITUDE": 47.951070027, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 21.725359212000058, 47.951070027000071, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Košice", "CNTRY": "Slovakia", "ISO3": "SVK", "UN_STATUS": "Member State", "ADMIN1": "Kosický kraj", "LONGITUDE": 21.265527672000001, "LATITUDE": 48.718903889000003, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 21.265527672000076, 48.718903889000046, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Baia Mare", "CNTRY": "Romania", "ISO3": "ROU", "UN_STATUS": "Member State", "ADMIN1": "Maramureș", "LONGITUDE": 23.584658529, "LATITUDE": 47.656756924, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 23.584658529000023, 47.656756924000035, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kyiv", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 30.503828, "LATITUDE": 50.453629, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 30.503828, 50.453629, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Lviv", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Lviv", "LONGITUDE": 24.042361, "LATITUDE": 49.810461, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 24.042361, 49.810461, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Rivne", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Rivne", "LONGITUDE": 26.245821, "LATITUDE": 50.632842, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 26.245821, 50.632842, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Zhytomyr", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Zhytomyr", "LONGITUDE": 28.680289, "LATITUDE": 50.240451, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 28.680289, 50.240451, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Chernihiv", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Chernihiv", "LONGITUDE": 31.323598, "LATITUDE": 51.505967, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 31.323598, 51.505967, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Khmelnytskyi", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Khmelnytskyi", "LONGITUDE": 26.995173, "LATITUDE": 49.417755, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 26.995173, 49.417755, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Vinnytsia", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Vinnytsia", "LONGITUDE": 28.487278, "LATITUDE": 49.220719, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 28.487278, 49.220719, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Chernivtsi", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Chernivtsi", "LONGITUDE": 25.893597, "LATITUDE": 48.292562, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 25.893597, 48.292562, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Poltava", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Poltava", "LONGITUDE": 34.562946, "LATITUDE": 49.595347, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 34.562946, 49.595347, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Cherkasy", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Cherkasy", "LONGITUDE": 32.066176, "LATITUDE": 49.434834, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 32.066176, 49.434834, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kropyvnytskyi", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Kirovohrad", "LONGITUDE": 32.245036, "LATITUDE": 48.52152, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 32.245036, 48.52152, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Zaporizhzhia", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Zaporizhia", "LONGITUDE": 35.215841, "LATITUDE": 47.824169, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 35.215841, 47.824169, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kherson", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Kherson", "LONGITUDE": 32.643146, "LATITUDE": 46.660342, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 32.643146, 46.660342, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Luhansk", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Luhansk", "LONGITUDE": 39.287353, "LATITUDE": 48.536257, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 39.287353, 48.536257, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Dnipro", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Dnipropetrovsk", "LONGITUDE": 34.971887, "LATITUDE": 48.429324, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 34.971887, 48.429324, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Donetsk", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Donetsk", "LONGITUDE": 37.696233, "LATITUDE": 48.002141, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 37.696233, 48.002141, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Simferopol", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Crimea", "LONGITUDE": 34.094894, "LATITUDE": 44.939378, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 34.094894, 44.939378, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Kharkiv", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Kharkiv", "LONGITUDE": 36.212298, "LATITUDE": 49.94807, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 36.212298, 49.94807, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Mykolaiv", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Mykolaiv", "LONGITUDE": 32.010158, "LATITUDE": 46.97262, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 32.010158, 46.97262, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Ivano-Frankivsk", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Ivano Frankivsk", "LONGITUDE": 24.714664, "LATITUDE": 48.911402, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 24.714664, 48.911402, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Uzhhorod", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Zakarpattia", "LONGITUDE": 22.298758, "LATITUDE": 48.618624, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 22.298758, 48.618624, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Lutsk", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Volyn", "LONGITUDE": 25.344083, "LATITUDE": 50.755025, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 25.344083, 50.755025, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Odesa", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Odessa", "LONGITUDE": 30.70256, "LATITUDE": 46.437, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 30.70256, 46.437, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Ternopil", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Ternopil", "LONGITUDE": 25.583147556, "LATITUDE": 49.54418249, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 25.583147556000029, 49.544182490000026, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Sumy", "CNTRY": "Ukraine", "ISO3": "UKR", "UN_STATUS": "Member State", "ADMIN1": "Sumy", "LONGITUDE": 34.816674869000003, "LATITUDE": 50.907828087, "TYPE": "ADMIN 1" }, "geometry": { "type": "Point", "coordinates": [ 34.816674869000053, 50.907828087000041, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Yerevan", "CNTRY": "Armenia", "ISO3": "ARM", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 44.508999, "LATITUDE": 40.15959, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 44.508999, 40.15959, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Vienna", "CNTRY": "Austria", "ISO3": "AUT", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 16.33511, "LATITUDE": 48.197088, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 16.33511, 48.197088, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Minsk", "CNTRY": "Belarus", "ISO3": "BLR", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 27.575569, "LATITUDE": 53.89994, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 27.575569, 53.89994, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Sofia", "CNTRY": "Bulgaria", "ISO3": "BGR", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 23.323827, "LATITUDE": 42.710543, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 23.323827, 42.710543, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Prague", "CNTRY": "Czechia", "ISO3": "CZE", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 14.442279, "LATITUDE": 50.078482, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 14.442279, 50.078482, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Tallinn", "CNTRY": "Estonia", "ISO3": "EST", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 24.734867, "LATITUDE": 59.431846, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 24.734867, 59.431846, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Helsinki", "CNTRY": "Finland", "ISO3": "FIN", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 24.952548, "LATITUDE": 60.160791, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 24.952548, 60.160791, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Tbilisi", "CNTRY": "Georgia", "ISO3": "GEO", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 44.792998, "LATITUDE": 41.709981, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 44.792998, 41.709981, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Budapest", "CNTRY": "Hungary", "ISO3": "HUN", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 19.08097, "LATITUDE": 47.490812, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 19.08097, 47.490812, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Riga", "CNTRY": "Latvia", "ISO3": "LVA", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 24.085987, "LATITUDE": 56.948311, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 24.085987, 56.948311, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Vilnius", "CNTRY": "Lithuania", "ISO3": "LTU", "UN_STATUS": "Member State", "ADMIN1": "Vilnius", "LONGITUDE": 25.283164, "LATITUDE": 54.681783, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 25.283164, 54.681783, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Chisinau", "CNTRY": "Moldova, Republic of", "ISO3": "MDA", "UN_STATUS": "Member State", "ADMIN1": "Chisinau", "LONGITUDE": 28.841551, "LATITUDE": 47.026859, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 28.841551, 47.026859, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Warsaw", "CNTRY": "Poland", "ISO3": "POL", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 21.011881, "LATITUDE": 52.244949, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 21.011881, 52.244949, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Bucharest", "CNTRY": "Romania", "ISO3": "ROU", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 26.12298, "LATITUDE": 44.430481, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 26.12298, 44.430481, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Moscow", "CNTRY": "Russian Federation", "ISO3": "RUS", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 37.631895, "LATITUDE": 55.746455, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 37.631895, 55.746455, 0.0 ] } },
-{ "type": "Feature", "properties": { "CAPITAL": "Bratislava", "CNTRY": "Slovakia", "ISO3": "SVK", "UN_STATUS": "Member State", "ADMIN1": null, "LONGITUDE": 17.129709, "LATITUDE": 48.153091, "TYPE": "TERRITORY" }, "geometry": { "type": "Point", "coordinates": [ 17.129709, 48.153091, 0.0 ] } }
-]
+  "type": "FeatureCollection",
+  "name": "wrl_ukr_capp",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Krasnodar",
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Krasnodar Krai",
+        "LONGITUDE": 38.961,
+        "LATITUDE": 45.037,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.961,
+          45.037,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Rostov-on-Don",
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Rostov Oblast",
+        "LONGITUDE": 39.688,
+        "LATITUDE": 47.232,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.688,
+          47.232,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kursk",
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Kursk Oblast",
+        "LONGITUDE": 36.174,
+        "LATITUDE": 51.742,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.174,
+          51.742,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Belgorod",
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Belgorod Oblast",
+        "LONGITUDE": 36.61,
+        "LATITUDE": 50.597,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.61,
+          50.597,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Hrodna",
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Hrodna",
+        "LONGITUDE": 23.834079011,
+        "LATITUDE": 53.677475539,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.83407901100003,
+          53.677475539000056,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Brest",
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Brest",
+        "LONGITUDE": 23.699978669,
+        "LATITUDE": 52.100000766,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.699978669000075,
+          52.10000076600005,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Homyel",
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Homyel",
+        "LONGITUDE": 30.999998201,
+        "LATITUDE": 52.430032301,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.99999820100004,
+          52.43003230100004,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Mahilëu",
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Mahilëu",
+        "LONGITUDE": 30.324638907,
+        "LATITUDE": 53.898108066,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.324638907000065,
+          53.89810806600008,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Katowice",
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Slaskie",
+        "LONGITUDE": 19.022592014,
+        "LATITUDE": 50.257799828,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.022592014000054,
+          50.25779982800003,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kraków",
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Malopolskie",
+        "LONGITUDE": 19.930397218,
+        "LATITUDE": 50.05301151,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.930397218000053,
+          50.05301151000003,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Rzeszów",
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Podkarpackie",
+        "LONGITUDE": 22.009100009,
+        "LATITUDE": 50.040030212,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.009100009000065,
+          50.04003021200003,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Lublin",
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Lubelskie",
+        "LONGITUDE": 22.583568349,
+        "LATITUDE": 51.239350076,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.583568349000075,
+          51.23935007600005,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Nyíregyháza",
+        "CNTRY": "Hungary",
+        "ISO3": "HUN",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Szabolcs-Szatmár-Bereg",
+        "LONGITUDE": 21.725359212,
+        "LATITUDE": 47.951070027,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.725359212000058,
+          47.95107002700007,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Košice",
+        "CNTRY": "Slovakia",
+        "ISO3": "SVK",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Kosický kraj",
+        "LONGITUDE": 21.265527672,
+        "LATITUDE": 48.718903889,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.265527672000076,
+          48.718903889000046,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Baia Mare",
+        "CNTRY": "Romania",
+        "ISO3": "ROU",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Maramureș",
+        "LONGITUDE": 23.584658529,
+        "LATITUDE": 47.656756924,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.584658529000023,
+          47.656756924000035,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kyiv",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 30.503828,
+        "LATITUDE": 50.453629,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.503828,
+          50.453629,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Lviv",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Lviv",
+        "LONGITUDE": 24.042361,
+        "LATITUDE": 49.810461,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.042361,
+          49.810461,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Rivne",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Rivne",
+        "LONGITUDE": 26.245821,
+        "LATITUDE": 50.632842,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.245821,
+          50.632842,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Zhytomyr",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Zhytomyr",
+        "LONGITUDE": 28.680289,
+        "LATITUDE": 50.240451,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.680289,
+          50.240451,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Chernihiv",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Chernihiv",
+        "LONGITUDE": 31.323598,
+        "LATITUDE": 51.505967,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.323598,
+          51.505967,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Khmelnytskyi",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Khmelnytskyi",
+        "LONGITUDE": 26.995173,
+        "LATITUDE": 49.417755,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.995173,
+          49.417755,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Vinnytsia",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Vinnytsia",
+        "LONGITUDE": 28.487278,
+        "LATITUDE": 49.220719,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.487278,
+          49.220719,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Chernivtsi",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Chernivtsi",
+        "LONGITUDE": 25.893597,
+        "LATITUDE": 48.292562,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.893597,
+          48.292562,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Poltava",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Poltava",
+        "LONGITUDE": 34.562946,
+        "LATITUDE": 49.595347,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.562946,
+          49.595347,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Cherkasy",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Cherkasy",
+        "LONGITUDE": 32.066176,
+        "LATITUDE": 49.434834,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.066176,
+          49.434834,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kropyvnytskyi",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Kirovohrad",
+        "LONGITUDE": 32.245036,
+        "LATITUDE": 48.52152,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.245036,
+          48.52152,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Zaporizhzhia",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Zaporizhia",
+        "LONGITUDE": 35.215841,
+        "LATITUDE": 47.824169,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.215841,
+          47.824169,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kherson",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Kherson",
+        "LONGITUDE": 32.643146,
+        "LATITUDE": 46.660342,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.643146,
+          46.660342,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Luhansk",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Luhansk",
+        "LONGITUDE": 39.287353,
+        "LATITUDE": 48.536257,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.287353,
+          48.536257,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Dnipro",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Dnipropetrovsk",
+        "LONGITUDE": 34.971887,
+        "LATITUDE": 48.429324,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.971887,
+          48.429324,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Donetsk",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Donetsk",
+        "LONGITUDE": 37.696233,
+        "LATITUDE": 48.002141,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.696233,
+          48.002141,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Simferopol",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Crimea",
+        "LONGITUDE": 34.094894,
+        "LATITUDE": 44.939378,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.094894,
+          44.939378,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Kharkiv",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Kharkiv",
+        "LONGITUDE": 36.212298,
+        "LATITUDE": 49.94807,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.212298,
+          49.94807,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Mykolaiv",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Mykolaiv",
+        "LONGITUDE": 32.010158,
+        "LATITUDE": 46.97262,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.010158,
+          46.97262,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Ivano-Frankivsk",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Ivano Frankivsk",
+        "LONGITUDE": 24.714664,
+        "LATITUDE": 48.911402,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.714664,
+          48.911402,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Uzhhorod",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Zakarpattia",
+        "LONGITUDE": 22.298758,
+        "LATITUDE": 48.618624,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.298758,
+          48.618624,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Lutsk",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Volyn",
+        "LONGITUDE": 25.344083,
+        "LATITUDE": 50.755025,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.344083,
+          50.755025,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Odesa",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Odessa",
+        "LONGITUDE": 30.70256,
+        "LATITUDE": 46.437,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.70256,
+          46.437,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Ternopil",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Ternopil",
+        "LONGITUDE": 25.583147556,
+        "LATITUDE": 49.54418249,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.58314755600003,
+          49.544182490000026,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Sumy",
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Sumy",
+        "LONGITUDE": 34.816674869,
+        "LATITUDE": 50.907828087,
+        "TYPE": "ADMIN 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.81667486900005,
+          50.90782808700004,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Minsk",
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 27.575569,
+        "LATITUDE": 53.89994,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.575569,
+          53.89994,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Budapest",
+        "CNTRY": "Hungary",
+        "ISO3": "HUN",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 19.08097,
+        "LATITUDE": 47.490812,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.08097,
+          47.490812,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Chisinau",
+        "CNTRY": "Moldova, Republic of",
+        "ISO3": "MDA",
+        "UN_STATUS": "Member State",
+        "ADMIN1": "Chisinau",
+        "LONGITUDE": 28.841551,
+        "LATITUDE": 47.026859,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.841551,
+          47.026859,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Warsaw",
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 21.011881,
+        "LATITUDE": 52.244949,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.011881,
+          52.244949,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Bucharest",
+        "CNTRY": "Romania",
+        "ISO3": "ROU",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 26.12298,
+        "LATITUDE": 44.430481,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.12298,
+          44.430481,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Moscow",
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 37.631895,
+        "LATITUDE": 55.746455,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.631895,
+          55.746455,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CAPITAL": "Bratislava",
+        "CNTRY": "Slovakia",
+        "ISO3": "SVK",
+        "UN_STATUS": "Member State",
+        "ADMIN1": null,
+        "LONGITUDE": 17.129709,
+        "LATITUDE": 48.153091,
+        "TYPE": "TERRITORY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.129709,
+          48.153091,
+          0
+        ]
+      }
+    }
+  ]
 }
