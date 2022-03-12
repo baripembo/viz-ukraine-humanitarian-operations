@@ -27,7 +27,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, idpData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -77,7 +77,8 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json')
+      d3.json('data/refugees-count.json'),
+      d3.csv('data/idps.csv')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -96,6 +97,20 @@ $( document ).ready(function() {
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
       
+      //get idp data and group by oblast
+      let idp = data[4];
+      idpData = d3.nest()
+        .key(function(d) { return d['admin1Name_eng']; })
+        .rollup(function(v) { return {
+            lon: v[0]['X Longitude'],
+            lat: v[0]['Y Latitude'],
+            count: d3.sum(v, function(d) { return d['IDP estimation']; }) 
+          }
+        })
+        .entries(idp);
+
+      console.log(idpData)
+            
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
