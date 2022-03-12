@@ -1932,8 +1932,8 @@ a:visited {
       display: block; }
     .map-legend.country .legendCells-events .legendCells {
       display: none; }
-    .map-legend.country.acled .legend-scale {
-      display: none; }
+    .map-legend.country.acled .legend-container {
+      height: 112px; }
     .map-legend.country.acled .legend-marker.hostilities,
     .map-legend.country.acled .legend-marker.border-crossing,
     .map-legend.country.acled .source-container.border-crossing {
@@ -1950,7 +1950,6 @@ a:visited {
       align-items: center; }
       .map-legend.country.idps .legend-marker.idps .marker {
         margin-top: 6px; }
-    .map-legend.country.idps .legend-marker.hostilities,
     .map-legend.country.idps .legend-marker.border-crossing,
     .map-legend.country.idps .source-container.border-crossing,
     .map-legend.country.idps .legend-marker.refugees,
