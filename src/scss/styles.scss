@@ -864,7 +864,11 @@ a:visited {
 			margin-top: 10px;
 		}
 		.legend-title {
+			display: block;
 			margin-top: 10px;
+		}
+		.legend-scale {
+			display: block;
 		}
 		.legend-container {
 			height: 92px;
@@ -886,6 +890,7 @@ a:visited {
 			padding-top: 8px;
 			.marker {
 				margin-right: 6px; 
+				margin-top: 0;
 				img {
 					height: 14px;
 					width: 14px;
@@ -894,6 +899,9 @@ a:visited {
 			label {
 				flex-direction: column;
 				margin-top: 0;
+			}
+			&.idps {
+				display: none;
 			}
 		}
 		.footnote {
@@ -918,8 +926,8 @@ a:visited {
 			display: none;
 		}
 		&.acled {
-			.legend-container {
-				height: 112px;
+			.legend-scale {
+				display: none;
 			}
 			.legend-marker.hostilities,
 			.legend-marker.border-crossing,
@@ -931,6 +939,29 @@ a:visited {
 			}
 			.legendCells-events .legendCells {
 				display: block;
+			}
+		}
+		&.idps {
+			.legend-title,
+			.legend-container {
+				display: none;
+			}
+			.legend-marker.idps {
+				display: flex;
+				align-items: center;
+				.marker {
+					margin-top: 6px;
+				}
+			}
+			.legend-marker.hostilities,
+			.legend-marker.border-crossing,
+			.source-container.border-crossing,
+			.legend-marker.refugees,
+			.source-container.refugees {
+				display: none;
+			}
+			.legendCells {
+				display: none;
 			}
 		}
 	}

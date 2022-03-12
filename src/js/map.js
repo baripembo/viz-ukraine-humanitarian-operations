@@ -1053,12 +1053,14 @@ function initCountryLayer() {
 
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
+    if (currentCountryIndicator.id!=='#acled+events' && currentCountryIndicator.id!=='#idps') {  
+      map.getCanvas().style.cursor = 'pointer';
+      tooltip.addTo(map);
+    }
   });
 
   map.on('mousemove', countryLayer, function(e) {
-    if (currentCountryIndicator.id!=='#acled+events') {    
+    if (currentCountryIndicator.id!=='#acled+events' && currentCountryIndicator.id!=='#idps') {    
       var f = map.queryRenderedFeatures(e.point)[0];
       if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
@@ -1116,10 +1118,11 @@ function initCountryLayer() {
     tooltip.remove();
   });
 
-  acledEvents();
+  initAcledEvents();
+  initIDPLayer();
 }
 
-function acledEvents() {
+function initAcledEvents() {
   let acledEvents = new Set(acledData.map(d => d['#event+type']));
 
   let events = [];
@@ -1244,6 +1247,78 @@ function acledEvents() {
   });
 }
 
+let idpDotScale;
+function initIDPLayer() {
+  let maxCount = d3.max(idpData, function(d) { console.log(d); return +d.value.count; });
+  idpDotScale = d3.scaleSqrt()
+    .domain([1, maxCount])
+    .range([10, 25]);
+  
+  //format geojson
+  let idpCounts = [];
+  for (let d of idpData) {
+    idpCounts.push({
+      'type': 'Feature',
+      'properties': {
+        'oblast': d.key,
+        'count': d3.format(".3s")(d.value.count),
+        'iconSize': idpDotScale(d.value.count)
+      },
+      'geometry': { 
+        'type': 'Point', 
+        'coordinates': [ d.value.lon, d.value.lat ] 
+      } 
+    })
+  }
+  let idpGeojson = {
+    'type': 'FeatureCollection',
+    'features': idpCounts
+  };
+
+  //init data source for idp layer
+  map.addSource('idp-data', {
+    type: 'geojson',
+    data: idpGeojson,
+    generateId: true 
+  });
+
+  //add idp dots
+  map.addLayer({
+    id: 'idp-dots',
+    type: 'circle',
+    source: 'idp-data',
+    paint: {
+      'circle-color': '#ECA154',
+      'circle-opacity': 0.8,
+      'circle-radius': ['get', 'iconSize']
+    }
+  });
+
+  //add idp count labels
+  map.addLayer({
+    id: 'idp-labels',
+    type: 'symbol',
+    source: 'idp-data',
+    layout: {
+      'text-field': ['get', 'count'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-allow-overlap': true
+    },
+    paint: {
+      'text-color': '#000',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  });
+
+  //hide layers
+  map.setLayoutProperty('idp-dots', 'visibility', 'none');
+  map.setLayoutProperty('idp-labels', 'visibility', 'none');
+}
+
+
 function updateCountryLayer() {
   colorNoData = '#F9F9F9';
   //$('.map-legend.country .legend-container').removeClass('no-data');
@@ -1333,6 +1408,7 @@ function updateCountryLayer() {
 
   $('.map-legend.country').removeClass('population');
   $('.map-legend.country').removeClass('acled');
+  $('.map-legend.country').removeClass('idps');
   if (currentCountryIndicator.id=='#population') {
     $('.map-legend.country').addClass('population');
     countryColorScale = d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(populationColorRange);
@@ -1342,6 +1418,10 @@ function updateCountryLayer() {
     countryColorScale = d3.scaleOrdinal()
       .domain(['Battles', 'Explosions/Remote violence', 'Protests', 'Riots', 'Strategic developments', 'Violence against civilians'])
       .range(eventColorRange);
+  }
+  else if (currentCountryIndicator.id=='#idps') {
+    $('.map-legend.country').addClass('idps');
+    countryColorScale = idpDotScale;
   }
   else {}
   updateCountryLegend(countryColorScale);
@@ -1369,12 +1449,25 @@ function updateCountryLayer() {
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
     map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    map.setLayoutProperty('idp-dots', 'visibility', 'none');
+    map.setLayoutProperty('idp-labels', 'visibility', 'none');
+  }
+  else if (currentCountryIndicator.id=='#idps') {
+    map.setLayoutProperty('refugee-counts-dots', 'visibility', 'none');
+    map.setLayoutProperty('acled-dots', 'visibility', 'none');
+    map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
+    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    map.setLayoutProperty('idp-dots', 'visibility', 'visible');
+    map.setLayoutProperty('idp-labels', 'visibility', 'visible');
   }
   else {
     if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {  
-      map.setLayoutProperty('acled-dots', 'visibility', 'none');
+      map.setLayoutProperty('refugee-counts-dots', 'visibility', 'visible');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
+      map.setLayoutProperty('acled-dots', 'visibility', 'none');
+      map.setLayoutProperty('idp-dots', 'visibility', 'none');
+      map.setLayoutProperty('idp-labels', 'visibility', 'none');
     }
   }
 }
@@ -1455,6 +1548,10 @@ function updateCountryLegend(scale) {
       break;
     case '#acled+events':
       legendTitle = 'Conflict Event Type';
+      legendFormat = d3.format('.0f');
+      break;
+    case '#idps':
+      legendTitle = '';
       legendFormat = d3.format('.0f');
       break;
     default:
