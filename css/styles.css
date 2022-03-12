@@ -1890,7 +1890,10 @@ a:visited {
     .map-legend.country label {
       margin-top: 10px; }
     .map-legend.country .legend-title {
+      display: block;
       margin-top: 10px; }
+    .map-legend.country .legend-scale {
+      display: block; }
     .map-legend.country .legend-container {
       height: 92px;
       overflow: visible;
@@ -1906,13 +1909,16 @@ a:visited {
       display: flex;
       padding-top: 8px; }
       .map-legend.country .legend-marker .marker {
-        margin-right: 6px; }
+        margin-right: 6px;
+        margin-top: 0; }
         .map-legend.country .legend-marker .marker img {
           height: 14px;
           width: 14px; }
       .map-legend.country .legend-marker label {
         flex-direction: column;
         margin-top: 0; }
+      .map-legend.country .legend-marker.idps {
+        display: none; }
     .map-legend.country .footnote {
       margin-top: 15px; }
     .map-legend.country.population .legend-container {
@@ -1926,8 +1932,8 @@ a:visited {
       display: block; }
     .map-legend.country .legendCells-events .legendCells {
       display: none; }
-    .map-legend.country.acled .legend-container {
-      height: 112px; }
+    .map-legend.country.acled .legend-scale {
+      display: none; }
     .map-legend.country.acled .legend-marker.hostilities,
     .map-legend.country.acled .legend-marker.border-crossing,
     .map-legend.country.acled .source-container.border-crossing {
@@ -1936,6 +1942,22 @@ a:visited {
       display: none; }
     .map-legend.country.acled .legendCells-events .legendCells {
       display: block; }
+    .map-legend.country.idps .legend-title,
+    .map-legend.country.idps .legend-container {
+      display: none; }
+    .map-legend.country.idps .legend-marker.idps {
+      display: flex;
+      align-items: center; }
+      .map-legend.country.idps .legend-marker.idps .marker {
+        margin-top: 6px; }
+    .map-legend.country.idps .legend-marker.hostilities,
+    .map-legend.country.idps .legend-marker.border-crossing,
+    .map-legend.country.idps .source-container.border-crossing,
+    .map-legend.country.idps .legend-marker.refugees,
+    .map-legend.country.idps .source-container.refugees {
+      display: none; }
+    .map-legend.country.idps .legendCells {
+      display: none; }
   .map-legend.collapsed {
     height: 35px !important;
     overflow-y: hidden;

@@ -267,26 +267,40 @@
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
               <label>Population<input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
               <div class='source-container population-source'></div>
+
               <label>Health Facilities<input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
               <div class='source-container health-facilities-source'></div>
+
               <label>Conflict Events<input name='countryIndicators' type='radio' value='#acled+events' id='acled'></label>
               <div class="source-container acled-source"><p class="small source"><span class="date">Feb 24 - Mar 4, 2022</span> | <span class="source-name">ACLED</span> | <a href="https://acleddata.com/ukraine-crisis/" class="dataURL" target="_blank" rel="noopener">DATA</a></p></div>
+
+
+              <label>IDPs<input name='countryIndicators' type='radio' value='#idps' id='idps'></label>
+              <div class="source-container idp-source"><p class="small source"><span class="date">Mar 12, 2022</span> | <span class="source-name">UNHCR</span> | <a href="https://data.humdata.org/dataset/ukraine-idp-estimates" class="dataURL" target="_blank" rel="noopener">DATA</a></p></div>
+
               <hr>
               <h4 class='indicator-title'>MAP LEGEND</h4>
               <h4 class='legend-title'></h4>
               <div class='legend-scale'></div>
  
+              <div class='legend-marker idps'>
+                <div class='marker'><img src='assets/marker-idps.png' /></div><label>Internally Displaced People</label>
+              </div>
+
               <div class='legend-marker hostilities'>
-                <div class='marker'><img src='assets/marker-hostility.png' /></div><label>Hostilities <span class='small'> (since Feb 25, 2022)</span></label>
+                <div class='marker'><img src='assets/marker-hostility.png' /></div><label>Hostilities <span class='small'> (since Feb 26, 2022)</span></label>
               </div>
-              <div class='legend-marker refugees'>
-                <div class='marker'><img src='assets/marker-refugees.png' /></div><label>Refugee Arrivals from Ukraine</label>
-              </div>
-              <div class='source-container refugees refugee-arrivals-source'></div>
+
               <div class='legend-marker border-crossing'>
                 <div class='marker'><img src='assets/marker-crossing.png' /></div><label>International Border Crossing</label>
               </div>
               <div class="source-container border-crossing border-crossing-source"></div>
+
+              <div class='legend-marker refugees'>
+                <div class='marker'><img src='assets/marker-refugees.png' /></div><label>Refugee Arrivals from Ukraine</label>
+              </div>
+              <div class='source-container refugees refugee-arrivals-source'></div>
+
             </div>
             <div class='layer-description'>
               <h4></h4>
