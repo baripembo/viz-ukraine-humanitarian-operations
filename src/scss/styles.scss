@@ -926,8 +926,8 @@ a:visited {
 			display: none;
 		}
 		&.acled {
-			.legend-scale {
-				display: none;
+			.legend-container {
+				height: 112px;
 			}
 			.legend-marker.hostilities,
 			.legend-marker.border-crossing,
@@ -953,7 +953,6 @@ a:visited {
 					margin-top: 6px;
 				}
 			}
-			.legend-marker.hostilities,
 			.legend-marker.border-crossing,
 			.source-container.border-crossing,
 			.legend-marker.refugees,
