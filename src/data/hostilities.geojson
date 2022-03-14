@@ -10,7 +10,7 @@
 { "type": "Feature", "properties": { "OBJECTID": 5, "NAME": "Maiupol", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.502820297000028, 47.124204533000068 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 6, "NAME": "Luhansk", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 39.287353, 48.536257 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 7, "NAME": "Donetsk", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.696233, 48.002141 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 8, "NAME": "Kyiv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.503828, 50.453629 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 8, "NAME": "Kyïv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.503828, 50.453629 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 9, "NAME": "Ivankiv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 29.89754, 50.93728 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 10, "NAME": "Hostomel", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.252039189000072, 50.595386293000047 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 11, "NAME": "Vorzel", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.148841, 50.544 ] } },
@@ -41,7 +41,13 @@
 { "type": "Feature", "properties": { "OBJECTID": 37, "NAME": "Dnipro", "DATE_ADDED": "2022-03-11", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 34.971887, 48.429324 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 38, "NAME": "Lutsk", "DATE_ADDED": "2022-03-11", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 25.344083, 50.755025 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 39, "NAME": "Ivano-Frankivsk", "DATE_ADDED": "2022-03-11", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 24.714664, 48.911402 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 40, "NAME": "Brovary", "DATE_ADDED": "2022-03-11", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.773, 50.498962 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 41, "NAME": "Vyshhorod", "DATE_ADDED": "2022-03-11", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.486, 50.583035 ] } }
+{ "type": "Feature", "properties": { "OBJECTID": 40, "NAME": "Brovary", "DATE_ADDED": "2022-03-12", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.773, 50.498962 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 41, "NAME": "Vyshhorod", "DATE_ADDED": "2022-03-12", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.486, 50.583035 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 42, "NAME": "Peremoha", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.825032, 50.542 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 43, "NAME": "Vasylkiv", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.317825, 50.177 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 44, "NAME": "Yavoriv", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 23.384, 49.937446 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 45, "NAME": "Sviatohirsk", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.571, 49.03953 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 46, "NAME": "Nizhyn", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 31.882, 51.037568 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 47, "NAME": "Popasna", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 38.376, 48.631021 ] } }
 ]
 }
