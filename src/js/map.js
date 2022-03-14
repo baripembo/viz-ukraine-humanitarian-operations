@@ -1349,7 +1349,7 @@ function initRefugeeLayer() {
 
   let refugeeIconScale = d3.scaleLinear()
     .domain([1, maxCount])
-    .range([0.7, 3]);
+    .range([0.2, 1]);
 
   // map.loadImage('assets/marker-arrow-head.png', (error, image) => {
   //   if (error) throw error;
@@ -1377,7 +1377,6 @@ function initRefugeeLayer() {
         'paint': {
           'line-color': '#E56A54',
           'line-width': refugeeLineScale(dataByCountry[iso][0]['#affected+refugees']),
-          //'line-opacity': 0.8
         }
       });
 
@@ -1409,7 +1408,7 @@ function initRefugeeLayer() {
       }
       else if (iso=='POL') {
         anchor = 'bottom-right';
-        offset = 1.5;
+        offset = 1.7;
       }
       else  {
         anchor = 'right';
