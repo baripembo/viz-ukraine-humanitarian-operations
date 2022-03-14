@@ -1933,7 +1933,7 @@ a:visited {
     .map-legend.country .legendCells-events .legendCells {
       display: none; }
     .map-legend.country.acled .legend-container {
-      height: 112px; }
+      height: 78px; }
     .map-legend.country.acled .legend-marker.hostilities,
     .map-legend.country.acled .legend-marker.border-crossing,
     .map-legend.country.acled .source-container.border-crossing {
@@ -1951,9 +1951,7 @@ a:visited {
       .map-legend.country.idps .legend-marker.idps .marker {
         margin-top: 6px; }
     .map-legend.country.idps .legend-marker.border-crossing,
-    .map-legend.country.idps .source-container.border-crossing,
-    .map-legend.country.idps .legend-marker.refugees,
-    .map-legend.country.idps .source-container.refugees {
+    .map-legend.country.idps .source-container.border-crossing {
       display: none; }
     .map-legend.country.idps .legendCells {
       display: none; }
