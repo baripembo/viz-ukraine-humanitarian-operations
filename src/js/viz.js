@@ -93,8 +93,6 @@ $( document ).ready(function() {
       acledData = allData.fatalities_data;
       sourcesData = allData.sources_data;
 
-      console.log(acledData)
-
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
