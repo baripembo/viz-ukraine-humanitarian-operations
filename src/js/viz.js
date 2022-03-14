@@ -108,8 +108,6 @@ $( document ).ready(function() {
           }
         })
         .entries(idp);
-
-      console.log(idpData)
             
       //format data
       subnationalData.forEach(function(item) {
