@@ -856,7 +856,7 @@ function initCountryLayer() {
       countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
       break;
     case '#acled+events':
-      countryColorScale = d3.scaleOrdinal().domain(['Explosions/Remote violence', 'Battles', 'Protests', 'Violence against civilians', 'Strategic developments<', 'Riots']).range(eventColorRange);
+      countryColorScale = d3.scaleOrdinal().domain(['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians']).range(eventColorRange);
       break;
     default:
       countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
@@ -1206,11 +1206,7 @@ function initAcledEvents() {
           '#A0A445',
           'Explosions/Remote violence',
           '#A67037',
-          'Protests',
-          '#7CA544',
           'Riots',
-          '#A49169',
-          'Strategic developments',
           '#724CA4',
           'Violence against civilians',
           '#4FA59F',
@@ -1365,20 +1361,6 @@ function updateCountryLayer() {
       clrRange = colorRange;
   }
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
-  // var countryColorScale;
-  // switch(currentIndicator.id) {
-  //   case '#population':
-  //     countryColorScale = d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(populationColorRange);
-  //     break;
-  //   case '##loc+count+health':
-  //     countryColorScale = d3.scaleQuantize().domain([0, max]).range(colorRange);
-  //     break;
-  //   case '#acled+events':
-  //     countryColorScale = d3.scaleOrdinal().domain(['Explosions/Remote violence', 'Battles', 'Protests', 'Violence against civilians', 'Strategic developments<', 'Riots']).range(eventColorRange);
-  //     break;
-  //   default:
-  //     countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
-  // }
 
   //data join
   var expression = ['match', ['get', 'ADM1_PCODE']];
@@ -1440,7 +1422,7 @@ function updateCountryLayer() {
   else if (currentCountryIndicator.id=='#acled+events') {
     $('.map-legend.country').addClass('acled');
     countryColorScale = d3.scaleOrdinal()
-      .domain(['Battles', 'Explosions/Remote violence', 'Protests', 'Riots', 'Strategic developments', 'Violence against civilians'])
+      .domain(['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians'])
       .range(eventColorRange);
   }
   else if (currentCountryIndicator.id=='#idps') {

@@ -10,7 +10,7 @@ var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D
 var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
-var eventColorRange = ['#A0A445','#A67037','#7CA544','#A49169','#724CA4','#4FA59F'];
+var eventColorRange = ['#A0A445','#A67037','#724CA4','#4FA59F'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -92,6 +92,8 @@ $( document ).ready(function() {
       refugeeTimeseriesData = allData.refugees_series_data;
       acledData = allData.fatalities_data;
       sourcesData = allData.sources_data;
+
+      console.log(acledData)
 
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
