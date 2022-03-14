@@ -251,36 +251,3 @@ function createKeyFigure(target, title, className, value) {
   return targetDiv.append("<div class='key-figure'><div class='inner'><h3>"+ title +"</h3><div class='num " + className + "'>"+ value +"</div></div></div></div>");
 }
 
-
-/************************/
-/*** SOURCE FUNCTIONS ***/
-/************************/
-function createSource(div, indicator) {
-  var sourceObj = getSource(indicator);
-  var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
-  var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
-  var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
-  div.append('<p class="small source"><span class="date">'+ date +'</span> | <span class="source-name">'+ sourceName +'</span> | <a href="'+ sourceURL +'" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
-}
-
-function updateSource(div, indicator) {
-  var sourceObj = getSource(indicator);
-  var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
-  var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
-  var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
-  div.find('.date').text(date);
-  div.find('.source-name').text(sourceName);
-  div.find('.dataURL').attr('href', sourceURL);
-}
-
-function getSource(indicator) {
-  var isGlobal = ($('.content').hasClass('country-view')) ? false : true;
-  var obj = {};
-  sourcesData.forEach(function(item) {
-    if (item['#indicator+name']==indicator) {
-      obj = item;
-    }
-  });
-  return obj;
-}
-

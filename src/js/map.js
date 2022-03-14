@@ -1515,9 +1515,12 @@ function getCountryIndicatorMax() {
 
 function createCountryLegend(scale) {
   createSource($('.map-legend.country .population-source'), '#population');
+  createSource($('.map-legend.country .idp-source'), '#affected+idps');
+  createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
+  
 
   //let title = (currentCountryIndicator.id=='#population') ? 'Population Density (people per sq km)' : 'Number of Health Facilities';
   //$('.legend-title').html(title);
