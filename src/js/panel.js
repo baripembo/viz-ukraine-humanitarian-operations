@@ -15,8 +15,8 @@ function initCountryPanel() {
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
   createFigure(refugeesDiv, {className: 'pin', title: 'People in Need (estimated)', stat: shortenNumFormat(data['#inneed+ind']), indicator: '#inneed+ind'});
-  createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: data['#affected+killed'], indicator: '#affected+killed'});
-  createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: data['#affected+injured'], indicator: '#affected+injured'});
+  createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
+  createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
 
   //funding
   var fundingDiv = $('.country-panel .funding .panel-inner');
@@ -37,4 +37,45 @@ function createFigure(div, obj) {
 
   if (obj.indicator!='')
     createSource(divInner, obj.indicator);
+}
+
+
+/************************/
+/*** SOURCE FUNCTIONS ***/
+/************************/
+function createSource(div, indicator) {
+  var sourceObj = getSource(indicator);
+  var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
+
+  //format date for acled source
+  if (indicator=='#date+latest+acled') {
+    sourceObj['#date+start'] = getSource('#date+start+conflict')['#date'];
+    let startDate = new Date(sourceObj['#date+start']);
+    date = `${d3.utcFormat("%b %d")(startDate)} - ${date}`;
+  }
+
+  var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
+  var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
+  div.append('<p class="small source"><span class="date">'+ date +'</span> | <span class="source-name">'+ sourceName +'</span> | <a href="'+ sourceURL +'" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+}
+
+function updateSource(div, indicator) {
+  var sourceObj = getSource(indicator);
+  var date = (sourceObj['#date']==undefined) ? '' : dateFormat(new Date(sourceObj['#date']));
+  var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
+  var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
+  div.find('.date').text(date);
+  div.find('.source-name').text(sourceName);
+  div.find('.dataURL').attr('href', sourceURL);
+}
+
+function getSource(indicator) {
+  var isGlobal = ($('.content').hasClass('country-view')) ? false : true;
+  var obj = {};
+  sourcesData.forEach(function(item) {
+    if (item['#indicator+name']==indicator) {
+      obj = item;
+    }
+  });
+  return obj;
 }
