@@ -1942,19 +1942,8 @@ a:visited {
       display: none; }
     .map-legend.country.acled .legendCells-events .legendCells {
       display: block; }
-    .map-legend.country.idps .legend-title,
     .map-legend.country.idps .legend-container {
-      display: none; }
-    .map-legend.country.idps .legend-marker.idps {
-      display: flex;
-      align-items: center; }
-      .map-legend.country.idps .legend-marker.idps .marker {
-        margin-top: 6px; }
-    .map-legend.country.idps .legend-marker.border-crossing,
-    .map-legend.country.idps .source-container.border-crossing {
-      display: none; }
-    .map-legend.country.idps .legendCells {
-      display: none; }
+      height: 93px; }
   .map-legend.collapsed {
     height: 35px !important;
     overflow-y: hidden;
