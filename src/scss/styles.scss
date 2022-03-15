@@ -942,25 +942,8 @@ a:visited {
 			}
 		}
 		&.idps {
-			.legend-title,
 			.legend-container {
-				display: none;
-			}
-			.legend-marker.idps {
-				display: flex;
-				align-items: center;
-				.marker {
-					margin-top: 6px;
-				}
-			}
-			.legend-marker.border-crossing,
-			.source-container.border-crossing,
-			.legend-marker.refugees,
-			.source-container.refugees {
-				display: none;
-			}
-			.legendCells {
-				display: none;
+				height: 93px;
 			}
 		}
 	}

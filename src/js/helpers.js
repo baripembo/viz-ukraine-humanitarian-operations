@@ -152,6 +152,26 @@ function createFootnote(target, indicator, text) {
   });
 }
 
+
+function getCurvedLine(start, end) {
+  // rhumb functions
+  const radius = turf.rhumbDistance(start, end);
+  const midpoint = turf.midpoint(start, end);
+  const bearing = turf.rhumbBearing(start, end) - 89; // <-- not 90˚
+  const origin = turf.rhumbDestination(midpoint, radius, bearing);
+
+  const curvedLine = turf.lineArc(
+    origin,
+    turf.distance(origin, start),
+    turf.bearing(origin, end),
+    turf.bearing(origin, start),
+    { steps: 128 }
+  );
+
+  return { line: curvedLine, bearing: bearing };
+}
+
+
 //regional id/name list
 const regionalList = [
   {id: 'HRPs', name: 'Humanitarian Response Plan Countries'},

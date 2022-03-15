@@ -11,6 +11,7 @@ var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
 var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
 var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
 var eventColorRange = ['#A0A445','#A67037','#724CA4','#4FA59F'];
+var idpColorRange = ['#d1e3ea','#bbd1e6','#adbce3','#b2b3e0','#a99bc6'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -27,7 +28,7 @@ var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, idpData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, idpData, refugeeLineData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -78,7 +79,8 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
       d3.json('data/refugees-count.json'),
-      d3.csv('data/idps.csv')
+      d3.csv('data/idps.csv'),
+      d3.json('data/ukr_refugee_lines.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -96,6 +98,7 @@ $( document ).ready(function() {
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
+      refugeeLineData = data[5];
       
       //get idp data and group by oblast
       let idp = data[4];

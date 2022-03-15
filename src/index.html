@@ -37,6 +37,7 @@
     <script src="https://alexmacy.github.io/crossfilter/crossfilter.v1.min.js" defer></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <!-- Hotjar Tracking Code for humdata.org -->
     <script>
       (function(h,o,t,j,a,r){
@@ -265,14 +266,14 @@
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <label>Population<input checked='true' name='countryIndicators' type='radio' value='#population' id='population'></label>
-              <div class='source-container population-source'></div>
-
-              <label>IDP Estimates<input name='countryIndicators' type='radio' value='#idps' id='idps'></label>
+              <label>IDP Estimates<input checked='true' name='countryIndicators' type='radio' value='#affected+idps' id='idps'></label>
               <div class="source-container idp-source"></div>
 
               <label>Conflict Events<input name='countryIndicators' type='radio' value='#acled+events' id='acled'></label>
               <div class="source-container acled-source"></div>
+
+              <label>Population<input name='countryIndicators' type='radio' value='#population' id='population'></label>
+              <div class='source-container population-source'></div>
 
               <label>Health Facilities<input name='countryIndicators' type='radio' value='#loc+count+health' id='healthFacilities'></label>
               <div class='source-container health-facilities-source'></div>
@@ -290,15 +291,15 @@
                 <div class='marker'><img src='assets/marker-hostility.png' /></div><label>Hostilities <span class='small'> (since Feb 26, 2022)</span></label>
               </div>
 
+              <div class='legend-marker refugees'>
+                <div class='marker'><img src='assets/marker-legend-arrow.png' /></div><label>Number of Refugees from Ukraine</label>
+              </div>
+              <div class='source-container refugees refugee-arrivals-source'></div>
+
               <div class='legend-marker border-crossing'>
                 <div class='marker'><img src='assets/marker-crossing.png' /></div><label>International Border Crossing</label>
               </div>
               <div class="source-container border-crossing border-crossing-source"></div>
-
-              <div class='legend-marker refugees'>
-                <div class='marker'><img src='assets/marker-refugees.png' /></div><label>Refugee Arrivals from Ukraine</label>
-              </div>
-              <div class='source-container refugees refugee-arrivals-source'></div>
 
             </div>
             <div class='layer-description'>
