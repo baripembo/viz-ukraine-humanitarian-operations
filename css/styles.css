@@ -1131,96 +1131,6 @@
     background-color: rgba(255, 255, 255, 0.9);
     padding: 10px 20px; } }
 
-.food-prices .modal-content {
-  padding-left: 10px;
-  padding-right: 10px; }
-
-.food-prices #header h5 {
-  margin-top: 0; }
-
-.food-prices #charts {
-  padding: 0 4px; }
-
-.food-prices .chart-container {
-  display: flex; }
-
-.food-prices .chart-inner {
-  padding: 0 16px; }
-
-.food-prices .modal-subnav {
-  padding: 0 20px; }
-
-.food-prices .sparkline {
-  fill: none;
-  stroke-width: 2px;
-  stroke: #2a93fc; }
-
-.food-prices .sparkyearline {
-  fill: none;
-  stroke-width: 1px;
-  stroke: #eeeeee;
-  shape-rendering: crispEdges; }
-
-.food-prices .productsparkline {
-  border-width: 2px;
-  border-color: #fff;
-  border-style: solid;
-  padding: 0 15px;
-  width: 25%; }
-
-.food-prices .productsparkline:hover {
-  border-width: 2px;
-  border-color: #2a93fc;
-  border-style: solid;
-  cursor: pointer; }
-
-.food-prices .area {
-  fill: #2a93fc;
-  clip-path: url(#clip); }
-
-.food-prices .axis path,
-.food-prices .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges; }
-
-.food-prices .axis {
-  font-size: 11px; }
-
-.food-prices .brush .extent {
-  stroke: #fff;
-  fill-opacity: .125;
-  shape-rendering: crispEdges; }
-
-.food-prices .bar {
-  fill: #2a93fc; }
-
-.food-prices .bar:hover {
-  cursor: pointer; }
-
-.food-prices #embedoptions {
-  display: none;
-  padding: 10px; }
-
-.food-prices #hdxembedoptions {
-  display: none;
-  padding: 10px; }
-
-.food-prices #hdxembed {
-  padding-top: 15px; }
-
-.food-prices .wfplabel {
-  font-size: 11px; }
-
-.food-prices .setbrush {
-  text-decoration: underline;
-  font-size: 10px;
-  color: #2a93fc;
-  margin-left: 5px; }
-
-.food-prices .setbrush:hover {
-  cursor: pointer; }
-
 * {
   box-sizing: border-box; }
 
@@ -1314,16 +1224,6 @@ label.label-small {
   color: #888;
   text-transform: capitalize; }
 
-.btn-subscription {
-  background-color: #007CE1;
-  border: 0;
-  color: #FFF;
-  cursor: pointer;
-  border-radius: 0;
-  font-size: 12px;
-  margin: 10px 20px 20px;
-  padding: 5px 10px; }
-
 .table-display {
   margin: 5px 0 20px; }
   .table-display .table-row {
@@ -1337,12 +1237,6 @@ label.label-small {
       padding: 8px 0; }
       .table-display .table-row.row-separator:first-child {
         border-top: 1px solid #CCC; }
-  .table-display.layer-covax .table-row {
-    color: #888; }
-    .table-display.layer-covax .table-row.row-separator {
-      border-top: 0;
-      color: #000;
-      margin: 6px 0; }
 
 .stat {
   font-family: 'Gotham-Light', sans-serif;
@@ -1393,14 +1287,6 @@ a:visited {
     height: 100%;
     position: relative;
     z-index: 1; }
-  .content.country-view .description,
-  .content.country-view .country-label,
-  .content.country-view .map-legend.global,
-  .content.country-view .secondary-panel,
-  .content.country-view .layer-description,
-  .content.country-view .tab-menubar,
-  .content.country-view .comparison-panel {
-    display: none; }
   .content.country-view .map-legend.country {
     left: auto;
     right: 24px;
@@ -1411,101 +1297,6 @@ a:visited {
     transition: left 0.4s ease-out; }
   .content.country-view .country-select {
     top: 30px; }
-  .content.food-prices-view .map-legend.global,
-  .content.food-prices-view .count-marker {
-    display: none; }
-  .content.food-prices-view .layer-description {
-    display: block; }
-    .content.food-prices-view .layer-description svg {
-      height: 33px;
-      width: 200px; }
-  .content.tab-view .country-select {
-    top: 80px; }
-  .content.tab-view .mapboxgl-ctrl-top-right {
-    top: 134px; }
-
-.tab-menubar {
-  background-color: #FFF;
-  border-bottom: 3px solid #EEE;
-  display: flex;
-  flex-flow: row;
-  height: 50px;
-  left: 0;
-  opacity: 1;
-  padding: 0 30px;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1; }
-  .tab-menubar .tab-button {
-    border-bottom: 3px solid #EEE;
-    color: #787878;
-    cursor: pointer;
-    font-family: 'Gotham-Bold', sans-serif;
-    font-size: 14px;
-    height: 50px;
-    padding: 14px 32px 0; }
-    .tab-menubar .tab-button.active, .tab-menubar .tab-button:hover {
-      border-color: #F05449;
-      color: #F05449; }
-
-.layer-description {
-  background-color: #FFF;
-  display: none;
-  bottom: 36px;
-  padding: 15px 15px 5px;
-  position: absolute;
-  right: 24px;
-  width: 240px;
-  z-index: 1; }
-  .layer-description .description-source {
-    padding-top: 10px; }
-  .layer-description .description-content {
-    padding-top: 5px; }
-    .layer-description .description-content .title {
-      padding-top: 30px; }
-    .layer-description .description-content p {
-      margin: 0; }
-    .layer-description .description-content a {
-      font-family: 'Source Sans Pro', sans-serif;
-      font-size: 14px;
-      text-decoration: none; }
-  .layer-description .description-legend {
-    display: block;
-    margin-top: 10px; }
-  .layer-description .footnote {
-    padding-top: 10px; }
-
-.modal-bg-overlay {
-  background-color: rgba(51, 51, 51, 0.7);
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 101; }
-
-.modal {
-  background-color: #FFF;
-  display: none;
-  left: 50%;
-  max-height: 90%;
-  min-height: 300px;
-  overflow: scroll;
-  padding: 0 4px 20px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 840px;
-  z-index: 101; }
-
-.modal-close-btn,
-.panel-close-btn {
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 18px; }
 
 .org-logo {
   display: flex;
@@ -1523,268 +1314,6 @@ a:visited {
     margin-top: 12px; }
   .logos .footnote {
     padding: 10px 20px; }
-
-.menu h4 {
-  padding: 0 20px 6px;
-  text-transform: uppercase; }
-
-.menu .global-menu {
-  display: block;
-  margin-top: 10px; }
-  .menu .global-menu h4 {
-    font-size: 11px;
-    line-height: 12px;
-    padding: 15px 0 10px 20px;
-    text-transform: uppercase; }
-
-.btn-subscription {
-  background-color: #007CE1;
-  border: 0;
-  color: #FFF;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 12px;
-  margin: 0 20px 10px;
-  padding: 5px 10px;
-  text-decoration: none; }
-  .btn-subscription:visited {
-    color: #FFF; }
-
-.download-link {
-  padding: 0 20px;
-  text-transform: uppercase; }
-  .download-link a {
-    display: flex;
-    line-height: 16px;
-    margin-bottom: 15px;
-    text-decoration: none;
-    width: 100%; }
-  .download-link i {
-    font-size: 16px;
-    margin-left: auto;
-    padding-top: 3px; }
-  .download-link .download-monthly label {
-    display: none; }
-
-.menu-indicators li {
-  color: #888;
-  cursor: pointer;
-  font-size: 14px; }
-  .menu-indicators li div {
-    align-items: center;
-    display: flex;
-    height: 60px;
-    padding: 0 54px 0 25px;
-    position: relative; }
-    .menu-indicators li div:after {
-      color: #CCC;
-      content: '\e96e';
-      font-family: 'Humanitarian-Icons-v02';
-      position: absolute;
-      right: 20px; }
-    .menu-indicators li div.expand:after {
-      content: '\e9e8'; }
-    .menu-indicators li div.no-expand:after {
-      content: ''; }
-  .menu-indicators li i {
-    flex: 0 0 18px;
-    font-size: 18px;
-    text-align: center;
-    margin: 0 14px 0 7px; }
-  .menu-indicators li:hover, .menu-indicators li.selected {
-    background-color: #F1F1F1;
-    color: #000;
-    font-weight: 700; }
-    .menu-indicators li:hover i, .menu-indicators li.selected i {
-      color: #007CE1; }
-
-.region-select,
-.country-select,
-.indicator-select,
-.ranking-select,
-.sorting-select,
-.trendseries-select {
-  background-color: #FFF;
-  border-color: #FFF;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  font: 700 16px 'Source Sans Pro', sans-serif;
-  height: 48px;
-  padding: 0 20px;
-  width: 100%; }
-
-.region-select {
-  margin: 0 20px;
-  width: 82%; }
-
-.country-select {
-  right: 24px;
-  opacity: 0;
-  position: absolute;
-  top: 30px;
-  width: 215px;
-  z-index: 3; }
-
-.ranking-select,
-.sorting-select {
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  font-size: 14px;
-  font-weight: normal;
-  height: 30px;
-  margin-left: 4px;
-  padding: 0;
-  width: auto; }
-
-.vaccine-sorting-container {
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
-  margin-top: 10px; }
-  .vaccine-sorting-container p {
-    margin-right: 5px; }
-
-.trendseries-select {
-  width: auto; }
-
-.secondary-panel {
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
-  left: -255px;
-  overflow: auto;
-  padding: 20px 25px;
-  position: absolute;
-  top: 0;
-  width: 255px;
-  z-index: 4; }
-  .secondary-panel .close-btn {
-    cursor: pointer;
-    color: #888;
-    position: absolute;
-    right: 20px;
-    top: 20px; }
-  .secondary-panel .secondary-panel-title {
-    padding-left: 0;
-    padding-right: 18px; }
-  .secondary-panel .source-container .source {
-    padding-right: 50px; }
-  .secondary-panel .global-figures {
-    border-bottom: 1px solid #CCC;
-    line-height: 14px;
-    padding: 15px 0; }
-  .secondary-panel .figures {
-    padding-top: 10px; }
-    .secondary-panel .figures .key-figure {
-      padding-bottom: 10px; }
-      .secondary-panel .figures .key-figure .inner {
-        border-bottom: 1px solid #CCC;
-        padding-bottom: 10px; }
-        .secondary-panel .figures .key-figure .inner h3 {
-          color: #000;
-          font-size: 14px;
-          line-height: 16px;
-          margin: 10px 0; }
-        .secondary-panel .figures .key-figure .inner .num {
-          position: relative; }
-        .secondary-panel .figures .key-figure .inner svg {
-          bottom: 10px;
-          left: 125px;
-          position: absolute; }
-        .secondary-panel .figures .key-figure .inner .small + .small {
-          margin-top: 6px; }
-  .secondary-panel .date {
-    padding-bottom: 10px; }
-  .secondary-panel .num {
-    color: #000;
-    font-family: 'Gotham-Light', sans-serif;
-    font-size: 36px;
-    line-height: 40px;
-    padding: 5px 0; }
-    .secondary-panel .num span {
-      font-size: 26px; }
-  .secondary-panel .access-figures {
-    border-bottom: 1px solid #CCC;
-    margin: 10px 0;
-    padding-bottom: 10px; }
-    .secondary-panel .access-figures li {
-      display: flex;
-      font-size: 14px; }
-    .secondary-panel .access-figures .pct {
-      flex: 0 0 40px; }
-
-.ranking-container .ranking-chart {
-  margin-top: 20px;
-  min-height: 234px;
-  overflow: scroll; }
-  .ranking-container .ranking-chart .bar {
-    fill: #F2645B; }
-  .ranking-container .ranking-chart .name {
-    text-anchor: end; }
-  .ranking-container .ranking-chart .y.axis text {
-    display: none; }
-
-.ranking-container .ranking-title {
-  display: block; }
-
-.ranking-container .ranking-select-container {
-  display: block;
-  margin-top: 10px; }
-  .ranking-container .ranking-select-container .default-select {
-    display: block; }
-  .ranking-container .ranking-select-container .covid-select,
-  .ranking-container .ranking-select-container .vaccine-select,
-  .ranking-container .ranking-select-container .vaccine-financing-select,
-  .ranking-container .ranking-select-container .inform-select {
-    display: none; }
-
-.ranking-container.covid .ranking-title {
-  display: none; }
-
-.ranking-container.covid .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.covid .ranking-select-container .covid-select {
-  display: block; }
-  .ranking-container.covid .ranking-select-container .covid-select .ranking-select {
-    height: 50px;
-    white-space: pre-wrap;
-    width: 100%; }
-
-.ranking-container.ranking-vaccine .ranking-title {
-  display: none; }
-
-.ranking-container.ranking-vaccine .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.ranking-vaccine .ranking-select-container .vaccine-select {
-  display: block; }
-  .ranking-container.ranking-vaccine .ranking-select-container .vaccine-select .ranking-select {
-    height: 30px;
-    white-space: pre-wrap;
-    width: 100%; }
-
-.ranking-container.ranking-vaccine-financing .ranking-title {
-  display: none; }
-
-.ranking-container.ranking-vaccine-financing .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select {
-  display: block; }
-  .ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select .ranking-select {
-    height: 40px;
-    white-space: pre-wrap;
-    width: 100%; }
-
-.ranking-container.ranking-inform .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.ranking-inform .ranking-select-container .inform-select {
-  display: block; }
-  .ranking-container.ranking-inform .ranking-select-container .inform-select .ranking-select {
-    height: 30px;
-    white-space: pre-wrap;
-    width: auto; }
 
 .label-header {
   display: block;
@@ -1846,37 +1375,18 @@ a:visited {
     cursor: pointer;
     display: none; }
   .map-legend .no-data-key,
-  .map-legend .special-key,
   .map-legend .border-crossing-key,
-  .map-legend .refugee-count-key,
   .map-legend .hostilities-key {
     height: 20px; }
     .map-legend .no-data-key rect,
-    .map-legend .special-key rect,
     .map-legend .border-crossing-key rect,
-    .map-legend .refugee-count-key rect,
     .map-legend .hostilities-key rect {
       fill: #FFF;
       stroke: #CCC; }
     .map-legend .no-data-key text,
-    .map-legend .special-key text,
     .map-legend .border-crossing-key text,
-    .map-legend .refugee-count-key text,
     .map-legend .hostilities-key text {
       transform: translate(25px, 12.5px); }
-  .map-legend .special-key {
-    display: none; }
-  .map-legend.global {
-    display: block; }
-    .map-legend.global .legend-container {
-      height: 83px; }
-      .map-legend.global .legend-container.impact-type {
-        height: 68px; }
-    .map-legend.global .source-secondary {
-      margin-bottom: 10px;
-      margin-top: -8px; }
-    .map-legend.global h4 i {
-      font-size: 10px; }
   .map-legend.country {
     height: auto;
     left: -215px;
@@ -1970,25 +1480,6 @@ a:visited {
 .label-num {
   fill: #000; }
 
-.health-marker,
-.count-marker,
-circle.swatch {
-  fill: #888;
-  stroke: #CCC; }
-
-.count-marker {
-  cursor: pointer;
-  display: block; }
-
-.health-marker {
-  cursor: pointer;
-  fill: #007ce1;
-  fill-opacity: 0.6;
-  stroke: #007ce1; }
-
-.health-layer {
-  display: none; }
-
 .mapboxgl-popup.map-tooltip {
   max-width: 330px !important;
   z-index: 4; }
@@ -2005,33 +1496,6 @@ circle.swatch {
       .mapboxgl-popup.map-tooltip .mapboxgl-popup-content h2 i {
         font-size: 12px;
         vertical-align: 1px; }
-    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container {
-      border-bottom: 1px solid #cdcdcd;
-      margin: 8px 0;
-      position: relative; }
-      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container .stat {
-        display: inline-block;
-        width: 70%; }
-      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container .sparkline-container {
-        display: inline-block;
-        width: 30%; }
-      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat {
-        align-items: center;
-        display: flex;
-        flex-flow: row;
-        padding-bottom: 8px; }
-        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .stat-title {
-          line-height: 16px;
-          width: 67%; }
-        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .stat {
-          font-family: 'Source Sans Pro', sans-serif;
-          font-size: 14px;
-          line-height: 14px;
-          margin: 0;
-          text-align: right;
-          width: 18%; }
-        .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat-container.condensed-stat .sparkline-container {
-          width: 15%; }
     .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat {
       font-size: 32px;
       margin: 5px 0; }
@@ -2046,44 +1510,16 @@ circle.swatch {
       margin-bottom: 10px; }
       .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .stat + span.inline {
         display: inline-block; }
-    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total,
-    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .deaths-total {
-      color: #333;
-      font-size: 14px;
-      line-height: 15px;
-      margin-top: 2px; }
-    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total {
-      margin-top: 8px; }
-      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .cases-total .subtext {
-        display: block;
-        margin-bottom: 8px; }
     .mapboxgl-popup.map-tooltip .mapboxgl-popup-content ul {
       color: #888;
       list-style-type: disc;
       margin-bottom: 10px; }
       .mapboxgl-popup.map-tooltip .mapboxgl-popup-content ul li {
         margin-left: 30px; }
-    .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .gam {
-      color: #888;
-      line-height: 16px;
-      margin-bottom: 15px; }
-      .mapboxgl-popup.map-tooltip .mapboxgl-popup-content .gam.small-pad {
-        margin-bottom: 6px; }
 
 .mapboxgl-ctrl-top-right {
   top: 16px;
   right: 16px; }
-
-table.immunization-table {
-  font-size: 12px;
-  line-height: 14px; }
-  table.immunization-table th {
-    text-align: left;
-    vertical-align: bottom; }
-  table.immunization-table tr td:first-child, table.immunization-table tr td:last-child {
-    font-weight: 700; }
-  table.immunization-table tr.covid-postpone td:first-child, table.immunization-table tr.covid-postpone td:last-child {
-    color: #F2645A; }
 
 .country-panel {
   background-color: #FFF;
@@ -2136,39 +1572,6 @@ table.immunization-table {
       padding-bottom: 15px; }
       .country-panel .figure .figure-inner .title {
         height: 36px; }
-    .country-panel .figure.risk-class .stat {
-      font-size: 32px; }
-  .country-panel .humanitarian-access .access-title {
-    margin: 20px 0 5px; }
-  .country-panel .humanitarian-access .access-row {
-    display: flex;
-    flex-flow: row;
-    font-size: 14px;
-    line-height: 24px; }
-  .country-panel .humanitarian-access .access-icon {
-    align-self: flex-start;
-    background-color: #888;
-    color: #FFF;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    height: 16px;
-    line-height: 16px;
-    margin: 5px 10px 0 0;
-    min-width: 36px;
-    text-align: center;
-    width: 36px; }
-    .country-panel .humanitarian-access .access-icon.yes {
-      background-color: #F2645A; }
-  .country-panel .humanitarian-access .source {
-    margin-top: 15px; }
-  .country-panel .projections {
-    margin-top: 20px; }
-  .country-panel .covid h5 {
-    margin-top: 0; }
-
-.cases-timeseries p {
-  margin-top: 0; }
 
 .refugees-timeseries {
   display: none; }
@@ -2226,12 +1629,6 @@ table.immunization-table {
   .c3-tooltip td > span {
     display: none; }
 
-.sparkline {
-  fill: none;
-  margin-left: 6px;
-  stroke: #F2645B;
-  stroke-width: 1px; }
-
 .country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
   stroke: #007CE1 !important; }
 
@@ -2266,112 +1663,6 @@ table.immunization-table {
     position: absolute;
     right: 10px;
     top: 10px; }
-
-#chart-view {
-  background-color: #FFF;
-  display: none;
-  left: 0;
-  overflow: auto;
-  padding: 15px 30px;
-  position: absolute;
-  top: 50px;
-  width: 100%;
-  z-index: 3; }
-  #chart-view .source-container {
-    margin-bottom: 20px; }
-  #chart-view .cases-title,
-  #chart-view .deaths-title {
-    border-top: 1px solid #CCC;
-    margin-top: 30px; }
-    #chart-view .cases-title h6,
-    #chart-view .deaths-title h6 {
-      margin-top: 25px; }
-    #chart-view .cases-title .num,
-    #chart-view .deaths-title .num {
-      color: #000;
-      font-family: 'Gotham-Light', sans-serif;
-      font-size: 42px;
-      line-height: 40px;
-      padding: 10px 0 3px; }
-  #chart-view .c3-bar._expanded_ {
-    fill: #F2645B !important;
-    fill-opacity: 1 !important; }
-
-.trendseries-tooltip {
-  background-color: #FFF;
-  border: 1px solid #E2E2E2;
-  border-collapse: collapse;
-  border-spacing: 0; }
-  .trendseries-tooltip th {
-    background-color: #B3B3B3;
-    border: 1px solid #B3B3B3;
-    color: #FFF;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0;
-    padding: 6px 6px; }
-  .trendseries-tooltip td {
-    font-family: 'Source Sans Pro', sans-serif;
-    font-size: 13px;
-    font-weight: normal !important;
-    padding: 4px 7px; }
-    .trendseries-tooltip td:last-child {
-      border-left: 1px solid #E2E2E2;
-      text-align: right; }
-
-.comparison-panel {
-  background-color: #F5FBFC;
-  bottom: 0;
-  font-family: 'Source Sans Pro', sans-serif;
-  height: 40px;
-  left: 0;
-  margin-left: 20px;
-  padding-top: 25px;
-  width: 500px;
-  position: absolute;
-  z-index: 3; }
-  .comparison-panel.expand {
-    height: 205px; }
-  .comparison-panel .message {
-    font-size: 15px;
-    left: 15px;
-    position: absolute;
-    top: 12px; }
-  .comparison-panel .panel-close-btn,
-  .comparison-panel .row-close-btn {
-    color: #888;
-    cursor: pointer; }
-    .comparison-panel .panel-close-btn:hover,
-    .comparison-panel .row-close-btn:hover {
-      color: #007CE1; }
-  .comparison-panel .panel-close-btn {
-    right: 15px;
-    top: 10px; }
-  .comparison-panel .comparison-table {
-    border-collapse: collapse;
-    width: 100%; }
-    .comparison-panel .comparison-table tr {
-      border-bottom: 1px solid #CCC; }
-      .comparison-panel .comparison-table tr td {
-        padding: 2px 4px;
-        text-align: right; }
-        .comparison-panel .comparison-table tr td:first-child {
-          padding-left: 15px;
-          text-align: left; }
-        .comparison-panel .comparison-table tr td:last-child {
-          padding-right: 15px; }
-    .comparison-panel .comparison-table thead {
-      font-weight: 700;
-      line-height: 15px;
-      vertical-align: bottom; }
-      .comparison-panel .comparison-table thead td {
-        padding: 5px 4px; }
-    .comparison-panel .comparison-table tbody td {
-      max-width: 100px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; }
 
 .visuallyhidden {
   border: 0;
