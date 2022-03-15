@@ -113,17 +113,6 @@ label {
 	text-transform: capitalize;
 }
 
-.btn-subscription {
-  background-color: #007CE1;
-  border: 0;
-  color: #FFF;
-  cursor: pointer;
-  border-radius: 0;
-  font-size: 12px;
-  margin: 10px 20px 20px;
-	padding: 5px 10px;
-}
-
 .table-display {
 	margin: 5px 0 20px;
 	.table-row {
@@ -138,16 +127,6 @@ label {
 			padding: 8px 0;
 			&:first-child {
 				border-top: 1px solid #CCC;
-			}
-		}
-	}
-	&.layer-covax {
-		.table-row {
-			color: #888;
-			&.row-separator {
-				border-top: 0;
-				color: #000;
-				margin: 6px 0;
 			}
 		}
 	}
@@ -211,15 +190,6 @@ a:visited {
 		z-index: 1;
 	}
 	&.country-view {
-		.description,
-		.country-label,
-		.map-legend.global,
-		.secondary-panel,
-		.layer-description,
-		.tab-menubar,
-		.comparison-panel {
-			display: none;
-		}
 		.map-legend.country {
 			left: auto;
 			right: 24px;
@@ -233,129 +203,7 @@ a:visited {
 		.country-select {
 			top: 30px;
 		}
-		.mapboxgl-ctrl-top-right {
-			//top: 84px;
-		}
 	}
-	&.food-prices-view {
-		.map-legend.global,
-		.count-marker {
-			display: none;
-		}
-		.layer-description {
-			display: block;
-			svg {
-				height: 33px;
-				width: 200px;
-			}
-		}
-	}
-	&.tab-view {
-		.country-select {
-			top: 80px;
-    }
-    .mapboxgl-ctrl-top-right {
-    	top: 134px;
-    }
-	}
-}
-
-.tab-menubar {
-	background-color: #FFF;
-	border-bottom: 3px solid #EEE;
-	display: flex;
-	flex-flow: row;
-	height: 50px;
-	left: 0;
-	opacity: 1;
-	padding: 0 30px;
-	position: absolute;
-	top: 0;
-	width: 100%;
-	z-index: 1;
-	.tab-button {
-		border-bottom: 3px solid #EEE;
-		color: #787878;
-		cursor: pointer;
-  	font-family: 'Gotham-Bold', sans-serif;
-		font-size: 14px;
-		height: 50px;
-		padding: 14px 32px 0;
-		&.active,
-		&:hover {
-			border-color: #F05449;
-			color: #F05449;
-		}
-	}
-}
-
-.layer-description {
-	background-color: #FFF;
-	display: none;
-	bottom: 36px;
-	padding: 15px 15px 5px;
-	position: absolute;
-	right: 24px;
-	width: 240px;
-	z-index: 1;
-	.description-source {
-		padding-top: 10px;
-	}
-	.description-content {
-		padding-top: 5px;
-		.title {
-			padding-top: 30px;
-		}
-		p {
-			margin: 0;
-		}
-		a {
-			font-family: 'Source Sans Pro', sans-serif;
-			font-size: 14px;
-			text-decoration: none;
-		}
-	}
-	.description-legend {
-		display: block;
-		margin-top: 10px;
-	}
-	.footnote {
-		padding-top: 10px;
-	}
-}
-
-.modal-bg-overlay {
-	background-color: rgba(51, 51, 51, 0.7);
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 101;
-}
-
-.modal {
-	background-color: #FFF;
-	display: none;
-	left: 50%;
-	max-height: 90%;
-	min-height: 300px;
-	overflow: scroll;
-	padding: 0 4px 20px;
-	position: absolute;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	width: 840px;
-	z-index: 101;
-}
-
-.modal-close-btn,
-.panel-close-btn {
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 18px;
 }
 
 .org-logo {
@@ -377,363 +225,6 @@ a:visited {
 	}
 	.footnote {
 		padding: 10px 20px;
-	}
-}
-
-.menu {
-	h4 {
-		padding: 0 20px 6px;
-		text-transform: uppercase;
-	}
-	.global-menu {
-		display: block;
-		margin-top: 10px;
-		h4 {
-			font-size: 11px;
-			line-height: 12px;
-			padding: 15px 0 10px 20px;
-			text-transform: uppercase;
-		}
-	}
-}
-
-.btn-subscription {
-  background-color: #007CE1;
-  border: 0;
-  color: #FFF;
-  cursor: pointer;  
-  display: inline-block;
-  font-size: 12px;
-  margin: 0 20px 10px;
-	padding: 5px 10px;
-  text-decoration: none;
-  &:visited {
-  	color: #FFF;
-  }
-}
-
-.download-link {
-	padding: 0 20px;
-	text-transform: uppercase;
-	a {
-		display: flex;
-		line-height: 16px;    
-		margin-bottom: 15px;
-		text-decoration: none;
-		width: 100%;
-	}
-	i {
-		font-size: 16px;
-		margin-left: auto;
-		padding-top: 3px;
-	}
-	.download-monthly label {
-		display: none;
-	}
-}
-
-.menu-indicators {
-	li {
-		color: #888;
-		cursor: pointer;
-		font-size: 14px;
-		div {
-			align-items: center;
-			display: flex;
-			height: 60px;
-			padding: 0 54px 0 25px;
-			position: relative;
-			&:after {
-				color: #CCC;
-				content: '\e96e';
-				font-family: 'Humanitarian-Icons-v02';
-				position: absolute;
-				right: 20px;
-			}
-			&.expand {
-				&:after {
-					content: '\e9e8';
-				}
-			}
-			&.no-expand {
-				&:after {
-					content: '';
-				}
-			}
-		}
-		i {
-			flex: 0 0 18px;
-			font-size: 18px;
-			//margin-right: 22px;
-			text-align: center;
-			margin: 0 14px 0 7px;
-		}
-		&:hover,
-		&.selected {
-			background-color: #F1F1F1;
-			color: #000;
-			font-weight: 700;
-			i {
-				color: #007CE1;
-			}
-		}
-	}
-}
-
-.region-select,
-.country-select,
-.indicator-select,
-.ranking-select,
-.sorting-select,
-.trendseries-select { 
-	background-color: #FFF;
-  border-color: #FFF;
-	border-radius: 8px;
-	box-shadow: 0 0 8px rgba(0,0,0,.3);
-	font: 700 16px 'Source Sans Pro', sans-serif;;
-	height: 48px;
-	padding: 0 20px;
-	width: 100%;
-}
-
-.region-select {
-	margin: 0 20px;
-	width: 82%;
-}
-
-.country-select {
-	right: 24px;
-	opacity: 0;
-	position: absolute;
-	top: 30px;
-	width: 215px;
-	z-index: 3;
-}
-
-.ranking-select,
-.sorting-select {
-	border-radius: 4px;
-	box-shadow: 0 2px 4px rgba(0,0,0,.5);
-	font-size: 14px;
-	font-weight: normal;
-	height: 30px;
-	margin-left: 4px;
-	padding: 0;
-	width: auto;
-}
-
-.vaccine-sorting-container {
-	align-items: center;
-	display: flex;
-	flex-wrap: nowrap;
-	margin-top: 10px;
-	p {
-		margin-right: 5px;
-	}
-}
-
-.trendseries-select {
-	width: auto;
-}
-
-// .sorting-select-container {
-// 	align-items: center;
-// 	display: flex;
-// 	flex-wrap: nowrap;
-// 	margin-top: 10px;
-// 	p {
-// 		margin-right: 5px;
-// 	}
-// }
-
-.secondary-panel {
-	background-color: rgba(255, 255, 255, 0.9);
-	box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
-	left: -255px;
-	overflow: auto;
-	padding: 20px 25px;
-	position: absolute;
-	top: 0;
-	width: 255px;
-	z-index: 4;
-	.close-btn {
-		cursor: pointer;
-		color: #888;
-		position: absolute;
-		right: 20px;
-		top: 20px;
-	}
-	.secondary-panel-title {
-		padding-left: 0;
-		padding-right: 18px;
-	}
-	.source-container {
-		.source {
-			padding-right: 50px;
-		}
-	}
-	.global-figures {
-		border-bottom: 1px solid #CCC;
-		line-height: 14px;
-		padding: 15px 0;
-	}
-	.figures {
-		padding-top: 10px;
-		.key-figure {
-			padding-bottom: 10px;
-			.inner {
-				border-bottom: 1px solid #CCC;
-				padding-bottom: 10px;
-				h3 {
-					color: #000;
-			    	font-size: 14px;
-			    	line-height: 16px;
-			    	margin: 10px 0;
-				}
-				.num {
-					position: relative;
-				}
-				svg {
-					bottom: 10px;
-					left: 125px;
-					position: absolute;
-				}
-				.small + .small {
-					margin-top: 6px;
-				}
-			}
-		}
-	}
-	.date {
-		padding-bottom: 10px;
-	}
-	.num {
-		color: #000;
-		font-family: 'Gotham-Light', sans-serif;
-		font-size: 36px;
-		line-height: 40px;
-		padding: 5px 0;
-		span {
-			font-size: 26px;
-		}
-	}
-	.access-figures {
-    border-bottom: 1px solid #CCC;
-		margin: 10px 0;
-    padding-bottom: 10px;
-		li {
-			display: flex;
-			font-size: 14px;
-		}
-		.pct {
-			flex: 0 0 40px;
-		}
-
-	}
-}
-
-.ranking-container {  
-	.ranking-chart {    
-		margin-top: 20px;
-		min-height: 234px;
-	  overflow: scroll;
-	  //overflow-x: hidden;
-		.bar {
-			fill: #F2645B;
-		}
-		.name {
-			text-anchor: end;
-		}
-		.y.axis {
-			text {
-				display: none;
-			}
-		}
-	}
-	.ranking-title {
-		display: block;
-	}
-	.ranking-select-container {
-		display: block;
-		margin-top: 10px;
-		.default-select {
-			display: block;
-		}
-		.covid-select,
-		.vaccine-select,
-		.vaccine-financing-select,
-		.inform-select {
-			display: none;
-		}
-	}
-	&.covid {
-		.ranking-title {
-			display: none;
-		}
-		.ranking-select-container {
-			.default-select {
-				display: none;
-			}
-			.covid-select {
-				display: block;
-				.ranking-select {
-					height: 50px;
-					white-space: pre-wrap;
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.ranking-vaccine {
-		.ranking-title {
-			display: none;
-		}
-		.ranking-select-container {
-			.default-select {
-				display: none;
-			}
-			.vaccine-select {
-				display: block;
-				.ranking-select {
-					height: 30px;
-					white-space: pre-wrap;
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.ranking-vaccine-financing {
-		.ranking-title {
-			display: none;
-		}
-		.ranking-select-container {
-			.default-select {
-				display: none;
-			}
-			.vaccine-financing-select {
-				display: block;
-				.ranking-select {
-					height: 40px;
-					white-space: pre-wrap;
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.ranking-inform {
-		.ranking-select-container {
-			.default-select {
-				display: none;
-			}
-			.inform-select {
-				display: block;
-				.ranking-select {
-					height: 30px;
-					white-space: pre-wrap;
-					width: auto;
-				}
-			}
-		}
 	}
 }
 
@@ -814,9 +305,7 @@ a:visited {
 		display: none;
 	}
 	.no-data-key,
-	.special-key,
 	.border-crossing-key,
-	.refugee-count-key,
 	.hostilities-key {
 		height: 20px;
 		rect {
@@ -825,28 +314,6 @@ a:visited {
 		}
 		text {
 			transform: translate(25px, 12.5px);
-		}
-	}
-	.special-key {
-		display: none;
-	}
-
-	&.global {
-		display: block;
-		.legend-container {
-			height: 83px;
-			&.impact-type {
-				height: 68px;
-			}
-		}
-		.source-secondary {
-			margin-bottom: 10px;
-			margin-top: -8px;
-		}
-		h4 {
-			i {
-				font-size: 10px;
-			}
 		}
 	}
 	&.country {
@@ -981,27 +448,6 @@ a:visited {
 	fill: #000;
 }
 
-.health-marker,
-.count-marker,
-circle.swatch {
-  fill: #888;
-  stroke: #CCC;
-}
-.count-marker {
-	cursor: pointer;
-	display: block;
-}
-.health-marker {
-	cursor: pointer;
-	fill: #007ce1;
-	fill-opacity: 0.6;
-  stroke: #007ce1;
-}
-
-.health-layer {
-	display: none;
-}
-
 .mapboxgl-popup.map-tooltip {
 	max-width: 330px !important;
 	z-index: 4;
@@ -1018,40 +464,6 @@ circle.swatch {
 			i {
 				font-size: 12px;
 				vertical-align: 1px;
-			}
-		}
-		.stat-container {
-			border-bottom: 1px solid #cdcdcd;
-			margin: 8px 0;
-			position: relative;
-			.stat {
-				display: inline-block;
-				width: 70%;
-			}
-			.sparkline-container {
-				display: inline-block;
-				width: 30%;
-			}
-			&.condensed-stat {
-				align-items: center;
-				display: flex;
-				flex-flow: row;
-				padding-bottom: 8px;
-				.stat-title {
-					line-height: 16px;
-					width: 67%;
-				}
-				.stat {
-					font-family: 'Source Sans Pro', sans-serif;
-					font-size: 14px;
-					line-height: 14px;
-					margin: 0;   
-    			text-align: right; 
-					width: 18%;
-				}
-				.sparkline-container {
-					width: 15%;
-				}
 			}
 		}
 		.stat {
@@ -1072,20 +484,6 @@ circle.swatch {
 				display: inline-block;
 			}
 		}
-		.cases-total,
-		.deaths-total {
-			color: #333;
-			font-size: 14px;
-			line-height: 15px;
-			margin-top: 2px;
-		}
-		.cases-total {
-			margin-top: 8px;
-			.subtext {
-				display: block;
-				margin-bottom: 8px;
-			}
-		}
 		ul {
 			color: #888;
 			list-style-type: disc;
@@ -1094,46 +492,12 @@ circle.swatch {
 			 	margin-left: 30px;
 			}
 		}
-		.gam {
-			color: #888;
-			line-height: 16px;
-			margin-bottom: 15px;
-			&.small-pad {
-				margin-bottom: 6px;
-			}
-		}
 	}
 }
 
 .mapboxgl-ctrl-top-right {
   top: 16px;
   right: 16px;
-}
-
-
-table.immunization-table {
-	font-size: 12px;
-	line-height: 14px;
-	th {
-		text-align: left;
-		vertical-align: bottom;
-	}
-	tr {
-		td {
-			&:first-child,
-			&:last-child {
-				font-weight: 700;
-			}
-		}
-		&.covid-postpone {
-			td {
-				&:first-child,
-				&:last-child {
-					color: #F2645A;
-				}
-			}
-		}
-	}
 }
 
 .country-panel {
@@ -1199,56 +563,6 @@ table.immunization-table {
 				height: 36px;
 			}
 		}
-		&.risk-class {
-			.stat {
-				font-size: 32px;
-			}
-		}
-	}
-	.humanitarian-access {
-		.access-title {
-			margin: 20px 0 5px;
-		}
-		.access-row {
-			display: flex;
-			flex-flow: row;
-			font-size: 14px;
-			line-height: 24px;
-		}
-		.access-icon {
-			align-self: flex-start;
-			background-color: #888;
-			color: #FFF;
-			font-family: 'Source Sans Pro', sans-serif;
-			font-size: 14px;
-			font-weight: 700;
-			height: 16px;
-			line-height: 16px;
-			margin: 5px 10px 0 0;
-			min-width: 36px;
-			text-align: center;
-			width: 36px;
-			&.yes {
-				background-color: #F2645A;
-			}
-		}
-		.source {
-			margin-top: 15px;
-		}
-	}
-	.projections {
-		margin-top: 20px;
-	}
-	.covid {
-		h5 {
-			margin-top: 0;
-		}
-	}
-}
-
-.cases-timeseries {
-	p {
-		margin-top: 0;
 	}
 }
 
@@ -1328,13 +642,6 @@ table.immunization-table {
 	}
 }
 
-.sparkline {
-  fill: none;
-  margin-left: 6px;
-  stroke: #F2645B;
-  stroke-width: 1px;
-}
-
 .country-timeseries-chart {
 	.c3-target.c3-focused .c3-lines .c3-line {
 		stroke: #007CE1 !important;
@@ -1376,134 +683,6 @@ table.immunization-table {
   }
 }
 
-#chart-view {
-	background-color: #FFF;
-	display: none;
-  left: 0;
-  overflow: auto;
-  padding: 15px 30px;
-	position: absolute;
-  top: 50px;
-  width: 100%;
-  z-index: 3;
-  .source-container {
-  	margin-bottom: 20px;
-  }
-  .cases-title,
-  .deaths-title {
-  	border-top: 1px solid #CCC;
-  	margin-top: 30px;
-  	h6 {
-  		margin-top: 25px;
-  	}
-  	.num {
-  		color: #000;
-	    font-family: 'Gotham-Light', sans-serif;
-	    font-size: 42px;
-	    line-height: 40px;
-	    padding: 10px 0 3px;
-  	}
-  }
-  .c3-bar._expanded_ {
-  	fill: #F2645B !important;
-  	fill-opacity: 1 !important;
-  }
-}
-
-.trendseries-tooltip {
-	background-color: #FFF;
-	border: 1px solid #E2E2E2;
-	border-collapse: collapse;
-  border-spacing: 0;
-	th {
-		background-color: #B3B3B3;
-		border: 1px solid #B3B3B3;
-		color: #FFF;
-		font-family: 'Source Sans Pro', sans-serif;
-		font-size: 16px;
-		font-weight: bold;
-		margin: 0;
-		padding: 6px 6px;
-	}
-	td {
-		font-family: 'Source Sans Pro', sans-serif;
-		font-size: 13px;
-		font-weight: normal !important;
-		padding: 4px 7px;
-		&:last-child {
-			border-left: 1px solid #E2E2E2;
-			text-align: right;
-		}
-	}
-}
-
-.comparison-panel {
-	background-color: #F5FBFC;
-  bottom: 0;
-	font-family: 'Source Sans Pro', sans-serif;
-	height: 40px;
-  left: 0;
-  margin-left: 20px;
-  padding-top: 25px;
-	width: 500px;    
-	position: absolute;
-  z-index: 3;
-  &.expand {
-  	height: 205px;
-  }
-  .message {
-  	font-size: 15px;
-    left: 15px;
-  	position: absolute;
-    top: 12px;
-  }
-  .panel-close-btn,
-  .row-close-btn {
-  	color: #888;
-  	cursor: pointer;
-  	&:hover {
-  		color: #007CE1;
-  	}
-  }
-  .panel-close-btn {
-  	right: 15px;
-  	top: 10px;
-  }
-  .comparison-table {
-  	border-collapse: collapse;
-  	width: 100%;
-  	tr {
-  		border-bottom: 1px solid #CCC;
-  		td {
-  			padding: 2px 4px;
-  			text-align: right;
-  			&:first-child {
-  				padding-left: 15px;
-  				text-align: left;
-  			}
-  			&:last-child {
-  				padding-right: 15px;
-  			}
-  		}
-  	}
-  	thead {
-  		font-weight: 700;
-  		line-height: 15px;
-    	vertical-align: bottom;
-    	td {
-    		padding: 5px 4px;
-    	}
-  	}
-  	tbody {
-  		td {
-  			max-width: 100px;
-  			white-space: nowrap;
-			  overflow: hidden;
-			  text-overflow: ellipsis;
-  		}
-  	}
-  }
-}
 
 //accessibility helper class
 .visuallyhidden {
