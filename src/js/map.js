@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/',
     center: [-25, 0],
     minZoom: 3,
     zoom: zoomLevel,
@@ -1107,7 +1107,7 @@ function initCountryLayer() {
   });
 
   initAcledLayer();
-  initIDPLayer();
+  //initIDPLayer();
   initRefugeeLayer();
 }
 
@@ -1288,7 +1288,7 @@ function initIDPLayer() {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
     let content = '<h2>'+ prop.oblast +'</h2>';
-    content += 'IDP Estimate:<br>';
+    content += 'Number of Internally Displaced People (estimated):<br>';
     content += '<span class="stat">'+ numFormat(prop.count) +'</span>';
     tooltip.setHTML(content);
     tooltip
