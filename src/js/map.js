@@ -1330,8 +1330,6 @@ function initRefugeeLayer() {
         'data': curve.line
       });
 
-      console.log(curve.line)
-
       map.addLayer({
         'id': `line-${iso}`,
         'type': 'line',
@@ -1518,26 +1516,24 @@ function updateCountryLayer() {
 
   //toggle layers
   if (currentCountryIndicator.id=='#acled+events') {
-    map.setLayoutProperty('acled-dots', 'visibility', 'visible');
-    map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
-    //map.setLayoutProperty('idp-dots', 'visibility', 'none');
-    //map.setLayoutProperty('refugee-counts-dots', 'visibility', 'visible');
+    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+      map.setLayoutProperty('acled-dots', 'visibility', 'visible');
+      map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
+      map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    }
   }
   else if (currentCountryIndicator.id=='#affected+idps') {
-    //map.setLayoutProperty('refugee-counts-dots', 'visibility', 'none');
-    map.setLayoutProperty('acled-dots', 'visibility', 'none');
-    map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
-    map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
-    //map.setLayoutProperty('idp-dots', 'visibility', 'visible');
+    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+      map.setLayoutProperty('acled-dots', 'visibility', 'none');
+      map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
+      map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
+    }
   }
   else {
-    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {  
-      //map.setLayoutProperty('refugee-counts-dots', 'visibility', 'visible');
+    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
       map.setLayoutProperty('acled-dots', 'visibility', 'none');
-      //map.setLayoutProperty('idp-dots', 'visibility', 'none');
     }
   }
 }
