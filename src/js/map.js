@@ -432,10 +432,15 @@ function initCountryLayer() {
 }
 
 function initAcledLayer() {
-  let acledEvents = new Set(acledData.map(d => d['#event+type']));
+  let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
+  let dotScale = d3.scaleSqrt()
+    .domain([1, maxCount])
+    .range([5, 15]);
+
+  let acledEvents = new Set(cleanedCoords.map(d => d['#event+type']));
 
   let events = [];
-  for (let e of acledData) {
+  for (let e of cleanedCoords) {
     events.push({
       'type': 'Feature',
       'properties': {
@@ -447,11 +452,12 @@ function initAcledLayer() {
         'notes': e['#description'],
         'sub_event_type': e['#event+type+sub'],
         'actor1': e['#group+name+first'],
-        'actor2': e['#group+name+second']
+        'actor2': e['#group+name+second'],
+        'iconSize': dotScale(e['#affected+killed'])
       },
       'geometry': { 
         'type': 'Point', 
-        'coordinates': [ Number(e['#geo+lon']), Number(e['#geo+lat']) ] 
+        'coordinates': e['#coords']
       } 
     })
   }
@@ -474,17 +480,31 @@ function initAcledLayer() {
         'match',
           ['get', 'event_type'],
           'Battles',
-          '#A0A445',
+          '#EEB598',
           'Explosions/Remote violence',
-          '#A67037',
+          '#CE7C7F',
           'Riots',
-          '#724CA4',
+          '#60A2A4',
           'Violence against civilians',
-          '#4FA59F',
+          '#91C4B7',
           '#666'
       ],
-      'circle-opacity': 0.6,
-      "circle-radius": 5
+      'circle-stroke-color': [
+        'match',
+          ['get', 'event_type'],
+          'Battles',
+          '#EEB598',
+          'Explosions/Remote violence',
+          '#CE7C7F',
+          'Riots',
+          '#60A2A4',
+          'Violence against civilians',
+          '#91C4B7',
+          '#666'
+      ],
+      'circle-opacity': 0.7,
+      'circle-radius': ['get', 'iconSize'],
+      'circle-stroke-width': 1,
     }
   });
   map.setLayoutProperty('acled-dots', 'visibility', 'none');
@@ -501,8 +521,8 @@ function initAcledLayer() {
     let date = new Date(prop.date);
     let content = '<span class="small">' + moment(date).format('MMM D, YYYY') + '</span>';
     content += '<h2>' + prop.event_type + '</h2>';
-    content += '<p>Fatalities: ' + prop.fatalities + '</p>';
     content += '<p>' + prop.notes + '</p>';
+    content += '<p>Fatalities: ' + prop.fatalities + '</p>';
     tooltip.setHTML(content);
     tooltip
       .addTo(map)

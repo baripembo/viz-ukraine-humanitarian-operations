@@ -5,8 +5,8 @@ var dateFormat = d3.utcFormat("%b %d, %Y");
 var chartDateFormat = d3.utcFormat("%-m/%-d/%y");
 var colorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D'];
 var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D', '#238443', '#005A32'];
-var eventColorRange = ['#A0A445','#A67037','#724CA4','#4FA59F'];
-var idpColorRange = ['#d1e3ea','#bbd1e6','#adbce3','#b2b3e0','#a99bc6'];
+var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
+var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, nationalData, subnationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
@@ -20,7 +20,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, refugeeLineData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, refugeeLineData, cleanedCoords = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -89,6 +89,32 @@ $( document ).ready(function() {
       refugeeCountData = data[3].data;
       refugeeLineData = data[4];
             
+      //process acled data
+      acledData.forEach(function(event) {
+        event['#coords'] = [+event['#geo+lon'], +event['#geo+lat']];
+      });
+
+      //group by coords
+      let coordGroups = d3.nest()
+        .key(function(d) { return d['#coords']; })
+        .entries(acledData);
+
+      cleanedCoords = [];
+      coordGroups.forEach(function(coords) {
+        if (coords.values.length>1)
+          coords.values.forEach(function(c) {
+            let origCoord = turf.point(c['#coords']);
+            let bearing = randomNumber(-180, 180);
+            let distance = randomNumber(2, 8);
+            let newCoord = turf.destination(origCoord, distance, bearing);
+            c['#coords'] = newCoord.geometry.coordinates;
+            cleanedCoords.push(c);
+          });
+        else {
+          cleanedCoords.push(coords.values[0]);
+        }
+      });
+
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];

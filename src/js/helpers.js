@@ -55,6 +55,9 @@ function isVal(value) {
   return (value===undefined || value===null || value==='') ? false : true;
 }
 
+function randomNumber(min, max) { 
+  return Math.random() * (max - min) + min;
+}
 
 function createFootnote(target, indicator, text) {
   var indicatorName = (indicator==undefined) ? '' : indicator;
