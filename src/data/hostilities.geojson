@@ -50,6 +50,10 @@
 { "type": "Feature", "properties": { "OBJECTID": 46, "NAME": "Nizhyn", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 31.882, 51.037568 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 47, "NAME": "Popasna", "DATE_ADDED": "2022-03-13", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 38.376, 48.631021 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 48, "NAME": "Avdiivka", "DATE_ADDED": "2022-03-14", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.745, 48.13542 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 49, "NAME": "Antopil", "DATE_ADDED": "2022-03-14", "NOTES": "TV tower", "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 26.42142, 50.599 ] } }
+{ "type": "Feature", "properties": { "OBJECTID": 49, "NAME": "Antopil", "DATE_ADDED": "2022-03-14", "NOTES": "TV tower", "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 26.42142, 50.599 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 50, "NAME": "Rubizhne", "DATE_ADDED": "2022-03-15", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 38.376, 49.023545 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 51, "NAME": "Shostka", "DATE_ADDED": "2022-03-15", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 33.495, 51.875223 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 52, "NAME": "Yasynuvata", "DATE_ADDED": "2022-03-15", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.876, 48.121306 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 53, "NAME": "Kramatorsk", "DATE_ADDED": "2022-03-15", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.584, 48.738826 ] } }
 ]
 }
