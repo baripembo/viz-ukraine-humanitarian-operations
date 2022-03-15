@@ -1423,6 +1423,7 @@ function initRefugeeLayer() {
 function updateCountryLayer() {
   colorNoData = '#F9F9F9';
   //$('.map-legend.country .legend-container').removeClass('no-data');
+  $('.no-data-key').hide();
 
   //max
   var max = getCountryIndicatorMax();
@@ -1458,6 +1459,7 @@ function updateCountryLayer() {
       .range(eventColorRange);
   }
   else if (currentCountryIndicator.id=='#affected+idps') {
+    $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
     countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange)
   }
@@ -1583,17 +1585,17 @@ function createCountryLegend(scale) {
     .attr('class', 'scale')
     .call(legend);
 
-  // //no data
-  // var nodata = div.append('svg')
-  //   .attr('class', 'no-data-key');
+  //no data
+  var nodata = div.append('svg')
+    .attr('class', 'no-data-key');
 
-  // nodata.append('rect')
-  //   .attr('width', 15)
-  //   .attr('height', 15);
+  nodata.append('rect')
+    .attr('width', 15)
+    .attr('height', 15);
 
-  // nodata.append('text')
-  //   .attr('class', 'label')
-  //   .text('No Data');
+  nodata.append('text')
+    .attr('class', 'label')
+    .text('No Data');
 
   //boundaries disclaimer
   createFootnote('.map-legend.country', '', 'The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.');
