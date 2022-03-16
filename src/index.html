@@ -34,7 +34,6 @@
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.js"></script>
-    <script src="https://alexmacy.github.io/crossfilter/crossfilter.v1.min.js" defer></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
@@ -63,205 +62,10 @@
     <main>
       
       <div class='content country-view'>
-        <div class='content-left'>
-          <div class='menu'>
-            <div class='org-logo'>
-              <a href='https://www.unocha.org' target='_blank' rel='noopener'>
-                <img width='100' src='assets/logo-ocha-blue.png' alt='OCHA logo'>
-              </a>
-              <a href='https://data.humdata.org' target='_blank' rel='noopener'>
-                <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
-              </a>
-            </div>
-
-            <h1>Ukraine Data Explorer:<br>Global Humanitarian Operations</h1>
-            <h4>Download:</h4>
-            <div class='download-link'>
-              <a href='https://data.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
-              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-monthly-report.pdf' target='_blank' rel='noopener' class='download-monthly'><span><b>MONTHLY HIGHLIGHTS</b><br><label class="label-small">NEW</label>(pdf)</span><i class='humanitarianicons-Download'></i></a>
-            </div>
-            <a href="https://mailchi.mp/humdata/c19-monthly" target="_blank" class='btn-subscription'>Sign up for the monthly report</a>
-
-            <div class='global-menu'>
-              <label for='regionSelect' class='visuallyhidden'>Select a region: </label>
-              <select id='regionSelect' class='region-select'>
-                <option value=''>All Regions</option>
-              </select>
-              
-              <h4>Vulnerability and Socio-Economic Risk</h4>
-              <ul class='menu-indicators'>
-                <li data-id='#affected+infected+new+per100000+weekly' data-legend='Weekly Number of New Cases per 100,000 People' data-layer='covid-19_cases_and_deaths' class='selected'>
-                  <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths</div>
-                </li>
-                <li data-id='#affected+infected+sex+new+avg+per100000' data-legend='Weekly Number of New Cases per 100,000 People' data-layer='covid-19_cases_and_deaths_(sex_disaggregated)'>
-                  <div><i class='humanitarianicons-Covid-19'></i>COVID-19 Cases and Deaths (Sex Disaggregated)</div>
-                </li>
-                <li data-id='#targeted+doses+delivered+pct' data-legend='Population coverage by Number of Delivered Doses (COVAX+Other; based on 2 doses)' data-layer='covid-19_vaccine_roll-out'>
-                  <div><i class='humanitarianicons-Vaccine'></i>COVID-19 Vaccine Roll-out</div>
-                </li>
-                <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)' data-layer='people_in_need_2022'>
-                  <div><i class='humanitarianicons-People-in-need'></i>People in Need 2022</div>
-                </li>
-                <!-- <li data-id='#event+year+todate+num' data-legend='Violent Security Incidents Against Aid Workers since Jan 2020'>
-                  <div><i class='humanitarianicons-Humanitarian-access'></i>Humanitarian Access</div>
-                </li> -->
-                <li data-id='#affected+food+p3plus+num' data-legend='IPC Acute Food Insecurity (population in IPC Phase 3+)' data-layer='ipc_acute_food_insecurity'>
-                  <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
-                </li>
-<!--                 <li data-id='#affected+children+sam' data-legend='Number of Children 6-59 Months Admitted for Treatment of Severe Acute Malnutrition (SAM)' data-layer='severe_acute_malnutrition'>
-                  <div><i class='humanitarianicons-Nutrition'></i>Severe Acute Malnutrition</div>
-                </li> -->
-                <li data-id='#vaccination+postponed+num' data-legend='Number of immunization campaigns postponed due to COVID' data-layer='immunization_campaign_status'>
-                  <div><i class='humanitarianicons-Vaccine'></i>Immunization campaign status</div>
-                </li>
-                <li data-id='#indicator+foodbasket+change+pct' data-legend='Food Price Change - Cost of the food basket' data-layer='food_market_prices'>
-                  <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
-                </li>
-                <li data-id='#impact+type' data-legend='COVID-19 School Closures' data-layer='school_closures'>
-                  <div><i class='humanitarianicons-School-affected'></i>School Closures</div>
-                </li>
-                <li data-id='#severity+stringency+num' data-legend='Oxford COVID-19 Government Stringency Index' data-layer='oxford_covid-19_government_stringency_index'>
-                  <div><i class='humanitarianicons-Analysis'></i>Oxford COVID-19 Government Stringency Index</div>
-                </li>
-                <li data-id='#severity+inform+type' data-legend='INFORM Severity Class' data-layer='inform_severity_index'>
-                  <div><i class='humanitarianicons-Analysis'></i>INFORM Severity Index</div>
-                </li>
-              </ul>
-
-              <h4>Humanitarian Funding and International Financing</h4>
-              <ul class='menu-indicators'>
-                <li data-id='#value+financing+approved' data-legend='Total Approved Funding (World Bank and GAVI)' data-layer='vaccine_financing'>
-                  <div> <i class='humanitarianicons-Financing'></i>Vaccine Financing</div>
-                </li>
-                <li data-id='#value+funding+hrp+pct' data-legend='Humanitarian Funding Level (HRP)' data-layer='humanitarian_funding_level'>
-                  <div><i class='humanitarianicons-Financing'></i>Humanitarian Funding Level</div>
-                </li>
-                <li data-id='#value+cerf+funding+total+usd' data-legend='CERF Allocations 2022' data-layer='cerf_allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CERF Allocations 2022</div>
-                </li>
-                <li data-id='#value+cbpf+funding+total+usd' data-legend='CBPF Allocations 2022' data-layer='cbpf_allocations'>
-                  <div><i class='humanitarianicons-Fund'></i>CBPF Allocations 2022</div>
-                </li>
-<!--                 <li data-id='#value+gdp+ifi+pct' data-legend='Total IFI Funding (% of GDP)' data-layer='ifi_financing_for_covid-19_response'>
-                  <div><i class='humanitarianicons-University'></i>IFI Financing for COVID-19 Response</div>
-                </li> -->
-              </ul>
-              
-            </div>
-          </div>
-
-          <div class='logos'>
-            <a href='mailto:hdx@un.org?subject=Feedback on COVID-19 Data Explorer'>Send us feedback</a>
-            <p class='footnote small'>The countries represented here have inter-agency plans that address the humanitarian needs of the most vulnerable, including refugees and migrants.</p>
-            <a href='https://centre.humdata.org' target='_blank' rel='noopener'>
-              <img src='assets/logo-centre-gray.png' alt='Centre for Humanitarian Data logo'>
-            </a>
-            <a href='https://www.unocha.org' target='_blank' rel='noopener'>
-              <img src='assets/logo-ocha-gray.png' alt='Office for the Coordination of Humanitarian Affairs logo'>
-            </a>
-          </div>
-
-        </div>
-
+        <div class='content-left'></div>
         <div class='content-right'>
-          <div class='modal-bg-overlay'></div>
-          <div class='modal food-prices'>
-            <div class='modal-close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
-            <div id='header'></div>
-            <div class='modal-subnav'></div>
-            <div class='modal-loader'>
-              <div class="sp sp-circle"></div>
-              Loading data...
-            </div>
-            <div id="charts"></div>
-          </div>
-
-          <!-- <label for='countrySelect' class='visuallyhidden'>Select a country: </label>
-          <select id='countrySelect' class='country-select'></select> -->
-
-          <div class='secondary-panel'>
-            <div class='close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
-            <div class="h1 secondary-panel-title"></div>
-            <div class='source-container'></div>
-            <div class='global-figures'></div>
-            <div class='figures'></div>
-            <div class='ranking-container'>
-              <h6 class='ranking-title'></h6>
-              <div class='ranking-select-container'>
-                <div class='default-select'>
-                  <label for='rankingSelect'>Sort by:</label>
-                  <select id='rankingSelect' class='ranking-select'>
-                    <option value='descending'>Highest to Lowest</option>
-                    <option value='ascending'>Lowest to Highest</option>
-                  </select>
-                </div>
-                <!-- custom covid data sorting -->
-                <div class='covid-select'>
-                  <label for='covidRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
-                  <select id='covidRankingSelect' class='ranking-select'>
-                    <option value='#affected+infected+new+per100000+weekly'>Weekly number of new cases per 100,000 people</option>
-                    <option value='#covid+total+cases+per+capita'>Total number of cases per 100,000 people</option>
-                    <option value='#affected+infected'>Total number of confirmed cases</option>
-                    <option value='#affected+killed'>Total number of confirmed deaths</option>
-                  </select>
-                </div>
-                <!-- custom vaccine data sorting -->
-                <div class='vaccine-select'>
-                  <label for='vaccineRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
-                  <select id='vaccineRankingSelect' class='ranking-select'>
-                    <option value='#capacity+doses+delivered+total'>Total Delivered</option>
-                    <option value='#capacity+doses+administered+total'>Total Administered</option> 
-                    <option value='#capacity+doses+forecast+covax'>COVAX Allocations</option>
-                    <option value='#capacity+doses+delivered+covax'>COVAX Delivered</option>
-                    <option value='#capacity+doses+delivered+others'>Other Delivered</option>
-                    <option value='#targeted+doses+delivered+pct'>Population Coverage</option>
-                  </select>
-                  <div class='vaccine-sorting-container'>
-                  <label for='vaccineSortingSelect'>Sort by:</label>
-                    <select id='vaccineSortingSelect' class='sorting-select'>
-                      <option value='#country+name'>Country</option>
-                      <option value='#meta+vaccine+funder'>Vaccine by source</option>
-                    </select>
-                  </div>
-                </div>
-                <!-- custom inform data sorting -->
-                <div class='inform-select'>
-                  <label for='informSelect'>Sort by:</label>
-                  <select id='informSelect' class='ranking-select'>
-                    <option value='#severity+inform+num'>All</option>
-                    <option value='increasing'>Increasing</option>
-                    <option value='decreasing'>Decreasing</option>
-                    <option value='stable'>Stable</option>
-                  </select>
-                </div>
-                <!-- custom vaccine financing data sorting -->
-                <div class='vaccine-financing-select'>
-                  <label for='vaccineFinancingRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
-                  <select id='vaccineFinancingRankingSelect' class='ranking-select'>
-                    <option value='#value+financing+approved'>Total Approved</option>
-                    <option value='#value+financing+gavi+earlyaccess+approved'>GAVI CDS (Early Access) Approved</option>
-                    <option value='#value+financing+gavi+needs+approved'>GAVI CDS (Needs Based) Approved</option>
-                    <option value='#value+financing+gavi+earlyaccess+disbursed'>GAVI CDS (Early Access) Disbursed</option>
-                    <option value='#value+financing+gavi+needs+disbursed'>GAVI CDS (Needs Based) Disbursed</option>
-                    <option value='#value+financing+worldbank+approved'>World Bank Approved</option>
-                  </select>
-                </div>
-              </div>
-              <div class='ranking-chart'></div>
-            </div>
-          </div>
             
           <div id='global-map'>
-            <div class='tab-menubar'>
-              <div class='tab-button active' data-id='map-view'>Map View</div>
-              <div class='tab-button' data-id='chart-view'>Chart View</div>
-            </div>
-            <div class='map-legend global'>
-              <div class='toggle-icon'></div>
-              <h4 class='collapsed-title'>MAP LEGEND</h4>
-              <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <div class='indicator-source'></div>
-            </div>
             <div class='map-legend country'>
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
@@ -298,44 +102,8 @@
               <div class="source-container border-crossing border-crossing-source"></div>
 
             </div>
-            <div class='layer-description'>
-              <h4></h4>
-              <div class='description-source'></div>
-              <div class='description-content'></div>
-              <div class='description-legend'>
-                <svg>
-                  <g class="scale">
-                    <g class="legendCells">
-                      <g class="cell" transform="translate(0, 0)">
-                        <rect class="swatch" height="15" width="15" style="fill: #007CE1;"></rect><text class="label" transform="translate( 25, 12.5)">Data Available</text>
-                      </g>
-                      <g class="cell" transform="translate(0, 17)">
-                        <rect class="swatch" height="15" width="15" style="fill: #FFF; stroke: #CCC;"></rect><text class="label" transform="translate( 25, 12.5)">No Data</text>
-                      </g>
-                    </g>
-                  </g>
-                </svg>
-              </div>
-            </div>
-            <div class='comparison-panel'>
-              <div class='panel-close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
-              <h4 class='message'>Click up to 5 countries to add to comparison table</h4>
-              <table class='comparison-table'>
-              </table>
-            </div>
           </div>
           <div id="static-map"></div>
-
-          <div id='chart-view'>
-            <div class='source-container'></div>
-            <div class='trendseries-container'>
-              <select id='trendseriesSelect' class='trendseries-select'></select>
-              <div class='cases-title'></div>
-              <div class='cases-trend-chart'></div>
-              <div class='deaths-title'></div>
-              <div class='deaths-trend-chart'></div>
-            </div>
-          </div>
 
           <div class='loader'>
             <div class="sp sp-circle"></div>
@@ -352,9 +120,6 @@
               <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
             </a>
           </div>
-
-          <!-- <h1>COVID-19 Data Explorer</h1>
-          <h2 class='backtoGlobal'><a href='#'>< Back to Global View</a></h2> -->
 
           <div class='panel-header'>
             <div class='panel-title'>

@@ -4,31 +4,23 @@ var percentFormat = d3.format('.1%');
 var dateFormat = d3.utcFormat("%b %d, %Y");
 var chartDateFormat = d3.utcFormat("%-m/%-d/%y");
 var colorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D'];
-var informColorRange = ['#FFE8DC','#FDCCB8','#FC8F6F','#F43C27','#961518'];
-var immunizationColorRange = ['#CCE5F9','#99CBF3','#66B0ED','#3396E7','#027CE1'];
 var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D', '#238443', '#005A32'];
-var accessColorRange = ['#79B89A','#F6B98E','#C74B4F'];
-var oxfordColorRange = ['#ffffd9','#c7e9b4','#41b6c4','#225ea8','#172976'];
-var schoolClosureColorRange = ['#D8EEBF','#FFF5C2','#F6BDB9','#CCCCCC'];
-var eventColorRange = ['#A0A445','#A67037','#724CA4','#4FA59F'];
-var idpColorRange = ['#d1e3ea','#bbd1e6','#adbce3','#b2b3e0','#a99bc6'];
+var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
+var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var regionBoundaryData, regionalData, worldData, nationalData, subnationalData, subnationalDataByCountry, immunizationData, timeseriesData, covidTrendData, dataByCountry, countriesByRegion, colorScale, viewportWidth, viewportHeight, currentRegion = '';
+var regionBoundaryData, regionalData, nationalData, subnationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var viewInitialized = false;
 var zoomLevel = 1.4;
 
-var hrpData = [];
 var globalCountryList = [];
-var comparisonList = [];
-var currentIndicator = {};
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, idpData, refugeeLineData = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, refugeeLineData, cleanedCoords = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -51,13 +43,11 @@ $( document ).ready(function() {
     });
 
     //set content sizes based on viewport
-    $('.secondary-panel').height(viewportHeight-40);
     $('.content').width(viewportWidth);
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
-    $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
-    $('.map-legend.global, .map-legend.country').css('max-height', viewportHeight - 200);
+    $('.map-legend.country').css('max-height', viewportHeight - 200);
     if (viewportHeight<696) {
       zoomLevel = 1.4;
     }
@@ -79,7 +69,6 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
       d3.json('data/refugees-count.json'),
-      d3.csv('data/idps.csv'),
       d3.json('data/ukr_refugee_lines.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
@@ -98,25 +87,38 @@ $( document ).ready(function() {
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
       refugeeCountData = data[3].data;
-      refugeeLineData = data[5];
-      
-      //get idp data and group by oblast
-      let idp = data[4];
-      idpData = d3.nest()
-        .key(function(d) { return d['admin1Name_eng']; })
-        .rollup(function(v) { return {
-            lon: v[0]['X Longitude'],
-            lat: v[0]['Y Latitude'],
-            count: d3.sum(v, function(d) { return d['IDP estimation']; }) 
-          }
-        })
-        .entries(idp);
+      refugeeLineData = data[4];
             
+      //process acled data
+      acledData.forEach(function(event) {
+        event['#coords'] = [+event['#geo+lon'], +event['#geo+lat']];
+      });
+
+      //group by coords
+      let coordGroups = d3.nest()
+        .key(function(d) { return d['#coords']; })
+        .entries(acledData);
+
+      cleanedCoords = [];
+      coordGroups.forEach(function(coords) {
+        if (coords.values.length>1)
+          coords.values.forEach(function(c) {
+            let origCoord = turf.point(c['#coords']);
+            let bearing = randomNumber(-180, 180);
+            let distance = randomNumber(2, 8);
+            let newCoord = turf.destination(origCoord, distance, bearing);
+            c['#coords'] = newCoord.geometry.coordinates;
+            cleanedCoords.push(c);
+          });
+        else {
+          cleanedCoords.push(coords.values[0]);
+        }
+      });
+
       //format data
       subnationalData.forEach(function(item) {
         var pop = item['#population'];
         if (item['#population']!=undefined) item['#population'] = parseInt(pop.replace(/,/g, ''), 10);
-        item['#org+count+num'] = +item['#org+count+num'];
       });
 
       //parse national data
@@ -141,14 +143,6 @@ $( document ).ready(function() {
         .key(function(d) { return d['#country+code']; })
         .entries(subnationalData);
 
-      //group countries by region    
-      countriesByRegion = d3.nest()
-        .key(function(d) { return d['#region+name']; })
-        .object(nationalData);
-
-      //console.log(nationalData)
-      //console.log(covidTrendData)
-
       dataLoaded = true;
       if (mapLoaded==true) displayMap();
       initView();
@@ -156,95 +150,6 @@ $( document ).ready(function() {
   }
 
   function initView() {
-    //create regional select
-    $('.region-select').empty();
-    var regionalSelect = d3.select('.region-select')
-      .selectAll('option')
-      .data(regionalList)
-      .enter().append('option')
-        .text(function(d) { return d.name; })
-        .attr('value', function (d) { return d.id; });
-    //insert default option    
-    $('.region-select').prepend('<option value="">All Regions</option>');
-    $('.region-select').val($('.region-select option:first').val());
-
-    //create hrp country select
-    var countryArray = Object.keys(countryCodeList);
-    hrpData = nationalData.filter((row) => countryArray.includes(row['#country+code']));
-    hrpData.sort(function(a, b){
-      return d3.ascending(a['#country+name'].toLowerCase(), b['#country+name'].toLowerCase());
-    })
-    var countrySelect = d3.select('.country-select')
-      .selectAll('option')
-      .data(hrpData)
-      .enter().append('option')
-        .text(function(d) { return d['#country+name']; })
-        .attr('value', function (d) { return d['#country+code']; });
-    //insert default option    
-    $('.country-select').prepend('<option value="">View Country Page</option>');
-    $('.country-select').val($('.country-select option:first').val());
-
-    //create chart view country select
-    var trendseriesSelect = d3.select('.trendseries-select')
-      .selectAll('option')
-      .data(globalCountryList)
-      .enter().append('option')
-        .text(function(d) { 
-          var name = (d.name=='oPt') ? 'Occupied Palestinian Territory' : d.name;
-          return name; 
-        })
-        .attr('value', function (d) { return d.code; });
-
-    //create tab events
-    $('.tab-menubar .tab-button').on('click', function() {
-      $('.tab-button').removeClass('active');
-      $(this).addClass('active');
-      if ($(this).data('id')=='chart-view') {
-        $('#chart-view').show();
-      }
-      else {
-        $('#chart-view').hide();
-      }
-      vizTrack($(this).data('id'), currentIndicator.name);
-    });
-
-    //set daily download date
-    var today = new Date();
-    $('.download-link .today-date').text(dateFormat(today));
-    $('.download-daily').on('click', function() {  
-      //mixpanel event
-      mixpanel.track('link click', {
-        'embedded in': window.location.href,
-        'destination url': $(this).attr('href'),
-        'link type': 'download report',
-        'page title': document.title
-      });
-    });
-
-    //show/hide NEW label for monthly report
-    sourcesData.forEach(function(item) {
-      if (item['#indicator+name']=='#meta+monthly+report') {
-        var today = new Date();
-        var newDate = new Date(item['#date'])
-        newDate.setDate(newDate.getDate() + 7) //leave NEW tag up for 1 week
-        if (today > newDate)
-          $('.download-monthly').find('label').hide()
-        else
-          $('.download-monthly').find('label').show()
-      }
-    })
-
-    //track monthly pdf download
-    $('.download-monthly').on('click', function() {  
-      //mixpanel event
-      mixpanel.track('link click', {
-        'embedded in': window.location.href,
-        'destination url': $(this).attr('href'),
-        'link type': 'download report',
-        'page title': document.title
-      });
-    });
-
     //load timeseries for country view 
     initTimeseries('', '.country-timeseries-chart');
 
