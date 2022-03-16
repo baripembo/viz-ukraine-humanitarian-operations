@@ -18,7 +18,7 @@
     "build:html": "mkdir -p dist && cp src/*.html dist/",
     "build:css": "mkdir -p dist/css && npm run scss",
     "build:js": "npm run concat:js && browserify -t browserify-css dist/js/bundle.js | uglifyjs > dist/js/bundle.min.js",
-    "build:assets": "mkdir -p dist/assets && cp -r src/assets/ dist/assets/",
+    "build:assets": "mkdir -p dist/assets && cp -r src/assets/* dist/assets/",
     "prebuild": "rm -rf ./dist",
     "build": "npm-run-all --parallel build:*",
     "predeploy": "npm run build",
