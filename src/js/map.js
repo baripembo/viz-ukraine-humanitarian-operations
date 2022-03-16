@@ -179,10 +179,9 @@ function selectCountry(features) {
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
   var target = bbox.default(turfHelpers.featureCollection(features));
-  var offset = 50;
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: $('.map-legend.country').outerWidth()+offset, bottom: offset, left: ($('.country-panel').outerWidth())-offset},
+    padding: {right: $('.map-legend.country').outerWidth()+50, bottom: 50, left: ($('.country-panel').outerWidth())-80},
     linear: true
   });
 
