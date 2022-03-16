@@ -429,7 +429,16 @@ function initAcledLayer() {
     .domain([1, maxCount])
     .range([5, 15]);
 
-  let acledEvents = new Set(cleanedCoords.map(d => d['#event+type']));
+  //get unique event types
+  let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
+  
+  //build expression for event dot circles
+  let eventTypeColorScale = ['match', ['get', 'event_type']];
+  for (const [index, event] of acledEvents.entries()) {
+    eventTypeColorScale.push(event);
+    eventTypeColorScale.push(eventColorRange[index]);
+  }
+  eventTypeColorScale.push('#666');
 
   let events = [];
   for (let e of cleanedCoords) {
@@ -465,32 +474,8 @@ function initAcledLayer() {
     type: 'circle',
     source: 'acled',
     paint: {
-      'circle-color': [
-        'match',
-          ['get', 'event_type'],
-          'Battles',
-          '#EEB598',
-          'Explosions/Remote violence',
-          '#CE7C7F',
-          'Riots',
-          '#60A2A4',
-          'Violence against civilians',
-          '#91C4B7',
-          '#666'
-      ],
-      'circle-stroke-color': [
-        'match',
-          ['get', 'event_type'],
-          'Battles',
-          '#EEB598',
-          'Explosions/Remote violence',
-          '#CE7C7F',
-          'Riots',
-          '#60A2A4',
-          'Violence against civilians',
-          '#91C4B7',
-          '#666'
-      ],
+      'circle-color': eventTypeColorScale,
+      'circle-stroke-color': eventTypeColorScale,
       'circle-opacity': 0.7,
       'circle-radius': ['get', 'iconSize'],
       'circle-stroke-width': 1,
@@ -508,10 +493,10 @@ function initAcledLayer() {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
     let date = new Date(prop.date);
-    let content = '<span class="small">' + moment(date).format('MMM D, YYYY') + '</span>';
-    content += '<h2>' + prop.event_type + '</h2>';
-    content += '<p>' + prop.notes + '</p>';
-    content += '<p>Fatalities: ' + prop.fatalities + '</p>';
+    let content = `<span class='small'>${moment(date).format('MMM D, YYYY')}</span>`;
+    content += `<h2>${prop.event_type}</h2>`;
+    content += `<p>'${prop.notes}</p>`;
+    content += `<p>Fatalities: ${prop.fatalities}</p>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
@@ -588,7 +573,7 @@ function initRefugeeLayer() {
           'icon-allow-overlap': true,
           'icon-ignore-placement': true,
           'icon-rotate': bearing+68,
-          'icon-offset': [0, -20.5]
+          'icon-offset': [1, -20.5]
         },
         paint: {
           'icon-color': '#0072BC',
@@ -747,6 +732,7 @@ function updateCountryLayer() {
 }
 
 function createCountryLegend(scale) {
+  //set data sources
   createSource($('.map-legend.country .idp-source'), '#affected+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .population-source'), '#population');
@@ -790,30 +776,14 @@ function createCountryLegend(scale) {
 
 
 function updateCountryLegend(scale) {
-  var legendFormat, legendTitle;
-  switch(currentCountryIndicator.id) {
-    case '#population':
-      legendTitle = 'Population Density (people per sq km)';
-      legendFormat = shortenNumFormat;
-      break;
-    case '#loc+count+health':
-      legendTitle = 'Number of Health Facilities';
-      legendFormat = d3.format('.0f');
-      break;
-    case '#acled+events':
-      legendTitle = 'Conflict Event Type';
-      legendFormat = d3.format('.0f');
-      break;
-    case '#affected+idps':
-      legendTitle = 'Estimated Number of Internally Displaced People';
-      legendFormat = shortenNumFormat;
-      break;
-    default:
-      tilegendTitletle = '';
-      legendFormat = d3.format('.0f');
-  }
+  //set format for legend format
+  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population') ? shortenNumFormat : d3.format('.0f');
+
+  //set legend title
+  let legendTitle = $('input[name="countryIndicators"]:checked').attr('data-legend');
   $('.map-legend.country .legend-title').html(legendTitle);
 
+  //update legend
   if (currentCountryIndicator.id=='#acled+events') {
     if (d3.selectAll('.legendCells-events').empty()) {
       var svg = d3.select('.map-legend.country .scale');
