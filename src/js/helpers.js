@@ -62,14 +62,14 @@ function randomNumber(min, max) {
 function createFootnote(target, indicator, text) {
   var indicatorName = (indicator==undefined) ? '' : indicator;
   var className = (indicatorName=='') ? 'footnote' : 'footnote footnote-indicator';
-  var footnote = $('<p class="'+ className +'" data-indicator="'+ indicatorName +'">'+ truncateString(text, 65) +' <a href="#" class="expand">MORE</a></p>');
+  var footnote = $(`<p class='${className}' data-indicator='${indicatorName}'>${truncateString(text, 65)}<a href='#' class='expand'>MORE</a></p>`);
   $(target).append(footnote);
   footnote.click(function() {
     if ($(this).find('a').hasClass('collapse')) {
-      $(this).html(truncateString(text, 65) + ' <a href="#" class="expand">MORE</a>');
+      $(this).html(`${truncateString(text, 65)}<a href='#' class='expand'>MORE</a>`);
     }
     else {
-      $(this).html(text + ' <a href="#" class="collapse">LESS</a>');
+      $(this).html(`${text}<a href='#' class='collapse'>LESS</a>`);
     }
   });
 }

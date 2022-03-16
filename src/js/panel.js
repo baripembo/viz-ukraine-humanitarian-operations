@@ -57,7 +57,7 @@ function createSource(div, indicator) {
 
   var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
   var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
-  div.append('<p class="small source"><span class="date">'+ date +'</span> | <span class="source-name">'+ sourceName +'</span> | <a href="'+ sourceURL +'" class="dataURL" target="_blank" rel="noopener">DATA</a></p>');
+  div.append(`<p class='small source'><span class='date'>${date}</span> | <span class='source-name'>${sourceName}</span> | <a href='${sourceURL}' class='dataURL' target='_blank' rel='noopener'>DATA</a></p>`);
 }
 
 function updateSource(div, indicator) {
