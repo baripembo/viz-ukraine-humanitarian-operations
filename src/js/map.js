@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
     center: [-25, 0],
     minZoom: 4,
     zoom: zoomLevel,
@@ -72,6 +72,9 @@ function displayMap() {
         //do nothing
     }
   });
+  // map.setLayoutProperty('Countries 6-8', 'visibility', 'none');
+  // map.setLayoutProperty('Countries 4-6', 'visibility', 'none');
+  // map.setLayoutProperty('Countries 2-4', 'visibility', 'none');
 
   mapFeatures = map.queryRenderedFeatures();
 
@@ -192,8 +195,8 @@ function initCountryLayer() {
   createCountryLegend(countryColorScale);
 
   initBorderCrossingLayer();
-  initLocationLabels();
   initHostilityLayer();
+  initLocationLabels();
   initAcledLayer();
   initRefugeeLayer();
 
@@ -272,115 +275,94 @@ function initBorderCrossingLayer() {
 
 
 function initLocationLabels() {
-   //refugee count data
-  let refugeeCounts = [];
-  let countries = {'Slovakia': 'SVK', 'Hungary': 'HUN', 'Poland': 'POL', 'Romania': 'ROU', 'Belarus': 'BLR', 'Republic of Moldova': 'MDA', 'Russian Federation': 'RUS'};
-  for (let val of refugeeCountData) {
-    let code = countries[val.geomaster_name];
-    let count = dataByCountry[code][0]['#affected+refugees'];
-    refugeeCounts.push({
-      'type': 'Feature',
-      'properties': {
-        'country': val.geomaster_name
-      },
-      'geometry': { 
-        'type': 'Point', 
-        'coordinates': [ val.centroid_lon, val.centroid_lat ] 
-      } 
-    })
-  }
-  let refugeeCountGeoJson = {
-    'type': 'FeatureCollection',
-    'features': refugeeCounts
-  };
-  map.addSource('refugee-counts', {
+  //location data
+  map.addSource('location-data', {
     type: 'geojson',
-    data: refugeeCountGeoJson,
+    data: locationData,
     generateId: true 
   });
 
-  //add refugee country labels
+  //country labels
   map.addLayer({
-    id: 'refugee-counts-labels',
+    id: 'country-labels',
     type: 'symbol',
-    source: 'refugee-counts',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'ADMIN 0'],
     layout: {
       'text-field': [
         'format',
-        ['upcase', ['get', 'country']]
+        ['upcase', ['get', 'CNTRY']]
       ],
       'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
       'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-allow-overlap': true
+      'text-allow-overlap': true,
+      'text-letter-spacing': 0.3
     },
     paint: {
-      'text-color': '#000000',
-      'text-halo-color': '#EEEEEE',
+      'text-color': '#666',
+      'text-halo-color': '#EEE',
       'text-halo-width': 1,
       'text-halo-blur': 1
     }
   });
 
-  //town labels
-  map.addSource('town-data', {
-    type: 'geojson',
-    data: 'data/wrl_ukr_capp.geojson',
-    generateId: true 
-  });
-  map.addLayer({
-    id: 'town-labels',
-    type: 'symbol',
-    source: 'town-data',
-    layout: {
-      'text-field': ['get', 'CAPITAL'],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      'text-radial-offset': [
-        'match',
-        ['get', 'TYPE'],
-        'TERRITORY',
-        0.7,
-        'ADMIN 1',
-        0.4,
-        0.5
-      ]
-    },
-    paint: {
-      'text-color': '#888888',
-      'text-halo-color': '#EEEEEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
-  }, globalLabelLayer);
+  //towm markers
+  map.loadImage('assets/marker-town.png', (error, image) => {
+    if (error) throw error;
+    map.addImage('town', image);
+    map.addLayer({
+      id: 'town-dots',
+      type: 'symbol',
+      source: 'location-data',
+      filter: ['==', 'TYPE', 'ADMIN 1'],
+      layout: {
+        'icon-image': 'town',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 1],
+        'icon-allow-overlap': true,
+        // 'icon-ignore-placement': true,
 
-
-  //add town circles
-  map.addLayer({
-    id: 'town-dots',
-    type: 'circle',
-    source: 'town-data',
-    filter: ['==', 'TYPE', 'ADMIN 1'],
-    paint: {
-      'circle-color': '#777777',
-      'circle-radius': 3
-    }
+        'text-field': ['get', 'CAPITAL'],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.4
+      },
+      paint: {
+        'text-color': '#888',
+        'text-halo-color': '#EEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1
+      }
+    }, globalLabelLayer);
   });
 
-  //add capital icons
+  //capital markers
   map.loadImage('assets/marker-capital.png', (error, image) => {
     if (error) throw error;
     map.addImage('capital', image);
     map.addLayer({
       id: 'capital-dots',
       type: 'symbol',
-      source: 'town-data',
+      source: 'location-data',
       filter: ['==', 'TYPE', 'TERRITORY'],
       layout: {
         'icon-image': 'capital',
         'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
         'icon-allow-overlap': true,
-        'icon-ignore-placement': true
+        'icon-ignore-placement': true,
+        'text-field': ['get', 'CAPITAL'],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.7,
+        'text-allow-overlap': true,
+        'text-ignore-placement': true
+      },
+      paint: {
+        'text-color': '#888',
+        'text-halo-color': '#EEE',
+        'text-halo-width': 1,
+        'text-halo-blur': 1
       }
     }, globalLabelLayer);
   });
@@ -394,7 +376,7 @@ function initHostilityLayer() {
     map.addImage('hostility', image);
     map.addSource('hostility-data', {
       type: 'geojson',
-      data: 'data/hostilities.geojson',
+      data: hostilityData,
       generateId: true 
     });
     map.addLayer({
@@ -413,8 +395,8 @@ function initHostilityLayer() {
         'text-radial-offset': 0.7
       },
       paint: {
-        'text-color': '#000000',
-        'text-halo-color': '#EEEEEE',
+        'text-color': '#000',
+        'text-halo-color': '#EEE',
         'text-halo-width': 1,
         'text-halo-blur': 1,
       }
@@ -530,6 +512,7 @@ function initRefugeeLayer() {
 
       map.addSource(`route-${iso}`, {
         'type': 'geojson',
+        'lineMetrics': true,
         'data': curve.line
       });
 
@@ -542,6 +525,13 @@ function initRefugeeLayer() {
           'line-color': '#0072BC',
           'line-opacity': 0.8,
           'line-width': refugeeLineScale(dataByCountry[iso][0]['#affected+refugees']),
+          'line-gradient': [
+            'interpolate',
+            ['linear'],
+            ['line-progress'],
+            0, "rgba(0, 114, 188, 1)",
+            1, "rgba(0, 114, 188, 0.2)"
+          ]
         }
       });
 
