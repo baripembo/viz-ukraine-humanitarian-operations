@@ -59,6 +59,9 @@
 { "type": "Feature", "properties": { "OBJECTID": 55, "NAME": "Lebedivka", "DATE_ADDED": "2022-03-16", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.146888, 45.826225 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 56, "NAME": "Sanzhiika", "DATE_ADDED": "2022-03-16", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.609, 46.231889 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 57, "NAME": "Zatoka", "DATE_ADDED": "2022-03-16", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.458, 46.068394 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 58, "NAME": "Bilenke", "DATE_ADDED": "2022-03-16", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.365, 46.053283 ] } }
+{ "type": "Feature", "properties": { "OBJECTID": 58, "NAME": "Bilenke", "DATE_ADDED": "2022-03-16", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.365, 46.053283 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 59, "NAME": "Verkhnotoretske", "DATE_ADDED": "2022-03-17", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.876, 48.215766 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 60, "NAME": "Bakhmut", "DATE_ADDED": "2022-03-17", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.999, 48.599134 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 61, "NAME": "Sarny", "DATE_ADDED": "2022-03-17", "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 26.605, 51.338288 ] } }
 ]
 }
