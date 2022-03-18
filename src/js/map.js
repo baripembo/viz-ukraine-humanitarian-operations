@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/',
     center: [-25, 0],
     minZoom: 4,
     zoom: zoomLevel,
@@ -319,8 +319,6 @@ function initLocationLabels() {
         'icon-image': 'town',
         'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 1],
         'icon-allow-overlap': true,
-        // 'icon-ignore-placement': true,
-
         'text-field': ['get', 'CAPITAL'],
         'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
         'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],

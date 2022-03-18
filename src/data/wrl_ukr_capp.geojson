@@ -49,15 +49,15 @@
       "properties": {
         "CNTRY": "Russian Federation",
         "ISO3": "RUS",
-        "LONGITUDE": 38.1556078125,
-        "LATITUDE": 51.488850139616,
+        "LONGITUDE": 39.1827392578125,
+        "LATITUDE": 51.84595933666335,
         "TYPE": "ADMIN 0"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          38.1556078125,
-          51.488850139616,
+          39.1827392578125,
+          51.84595933666335,
           0
         ]
       }
