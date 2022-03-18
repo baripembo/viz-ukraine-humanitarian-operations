@@ -9,7 +9,7 @@ var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
 var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var regionBoundaryData, regionalData, nationalData, subnationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
+var regionBoundaryData, regionalData, nationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
 var countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
@@ -20,7 +20,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, refugeeLineData, cleanedCoords = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -68,8 +68,9 @@ $( document ).ready(function() {
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/all.json'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Border_Crossings.geojson'),
       d3.json('data/ee-regions-bbox.geojson'),
-      d3.json('data/refugees-count.json'),
-      d3.json('data/ukr_refugee_lines.geojson')
+      d3.json('data/ukr_refugee_lines.geojson'),
+      d3.json('data/wrl_ukr_capp.geojson'),
+      d3.json('data/hostilities.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -86,8 +87,9 @@ $( document ).ready(function() {
 
       borderCrossingData = data[1];
       regionBoundaryData = data[2].features;
-      refugeeCountData = data[3].data;
-      refugeeLineData = data[4];
+      refugeeLineData = data[3];
+      locationData = data[4];
+      hostilityData = data[5];
             
       //process acled data
       acledData.forEach(function(event) {
@@ -99,13 +101,14 @@ $( document ).ready(function() {
         .key(function(d) { return d['#coords']; })
         .entries(acledData);
 
+      //nudge dots with duplicate coords
       cleanedCoords = [];
       coordGroups.forEach(function(coords) {
         if (coords.values.length>1)
           coords.values.forEach(function(c) {
             let origCoord = turf.point(c['#coords']);
-            let bearing = randomNumber(-180, 180);
-            let distance = randomNumber(2, 8);
+            let bearing = randomNumber(-180, 180); //randomly scatter around origin
+            let distance = randomNumber(2, 8); //randomly scatter by 2-8km from origin
             let newCoord = turf.destination(origCoord, distance, bearing);
             c['#coords'] = newCoord.geometry.coordinates;
             cleanedCoords.push(c);
@@ -114,6 +117,14 @@ $( document ).ready(function() {
           cleanedCoords.push(coords.values[0]);
         }
       });
+
+
+      //remove duplicate towns from location data if it exists in hostility data
+      locationData.features = locationData.features.filter(locationObj => hostilityData.features.every(function(hostilityObj) {
+        let isDuplicate = (locationObj.properties.TYPE!='TERRITORY') ? locationObj.properties.CAPITAL !== hostilityObj.properties.NAME : true;
+        return isDuplicate;
+      }));
+      
 
       //format data
       subnationalData.forEach(function(item) {
@@ -138,10 +149,6 @@ $( document ).ready(function() {
         .key(function(d) { return d['#country+code']; })
         .object(nationalData);
 
-      //consolidate subnational IPC data
-      subnationalDataByCountry = d3.nest()
-        .key(function(d) { return d['#country+code']; })
-        .entries(subnationalData);
 
       dataLoaded = true;
       if (mapLoaded==true) displayMap();
