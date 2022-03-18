@@ -7,7 +7,7 @@
 { "type": "Feature", "properties": { "OBJECTID": 2, "NAME": "Chernihiv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 31.323598, 51.505967 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 3, "NAME": "Mykolaiv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 32.014619029000073, 46.955298651000078 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 4, "NAME": "Kherson", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 32.643146, 46.660342 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 5, "NAME": "Maiupol", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.502820297000028, 47.124204533000068 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 5, "NAME": "Mariupol", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.502820297000028, 47.124204533000068 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 6, "NAME": "Luhansk", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 39.287353, 48.536257 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 7, "NAME": "Donetsk", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 37.696233, 48.002141 ] } },
 { "type": "Feature", "properties": { "OBJECTID": 8, "NAME": "Kyiv", "DATE_ADDED": null, "NOTES": null, "SOURCE": null }, "geometry": { "type": "Point", "coordinates": [ 30.503828, 50.453629 ] } },
