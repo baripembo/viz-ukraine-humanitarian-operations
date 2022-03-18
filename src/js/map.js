@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q?fresh=true',
     center: [-25, 0],
     minZoom: 4,
     zoom: zoomLevel,
@@ -233,25 +233,20 @@ function initCountryLayer() {
 
 
 function initBorderCrossingLayer() {
-  //add border crossing markers
-  map.loadImage('assets/marker-crossing.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('crossing', image);
-    map.addSource('border-crossings', {
-      type: 'geojson',
-      data: borderCrossingData,
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'border-crossings-layer',
-      type: 'symbol',
-      source: 'border-crossings',
-      layout: {
-        'icon-image': 'crossing',
-        'icon-size': 0.6,
-        'icon-allow-overlap': true
-      }
-    });
+  map.addSource('border-crossings', {
+    type: 'geojson',
+    data: borderCrossingData,
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'border-crossings-layer',
+    type: 'symbol',
+    source: 'border-crossings',
+    layout: {
+      'icon-image': 'marker-border-crossing',
+      'icon-size': 0.6,
+      'icon-allow-overlap': true
+    }
   });
 
   //mouse events
@@ -307,98 +302,88 @@ function initLocationLabels() {
   });
 
   //towm markers
-  map.loadImage('assets/marker-town.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('town', image);
-    map.addLayer({
-      id: 'town-dots',
-      type: 'symbol',
-      source: 'location-data',
-      filter: ['==', 'TYPE', 'ADMIN 1'],
-      layout: {
-        'icon-image': 'town',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 1],
-        'icon-allow-overlap': true,
-        'text-field': ['get', 'CAPITAL'],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.4
-      },
-      paint: {
-        'text-color': '#888',
-        'text-halo-color': '#EEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1
-      }
-    }, globalLabelLayer);
-  });
+  map.addLayer({
+    id: 'town-dots',
+    type: 'symbol',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'ADMIN 1'],
+    layout: {
+      'icon-image': 'marker-town',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 1],
+      'icon-allow-overlap': true,
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.4
+    },
+    paint: {
+      'text-color': '#888',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
 
   //capital markers
-  map.loadImage('assets/marker-capital.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('capital', image);
-    map.addLayer({
-      id: 'capital-dots',
-      type: 'symbol',
-      source: 'location-data',
-      filter: ['==', 'TYPE', 'TERRITORY'],
-      layout: {
-        'icon-image': 'capital',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true,
-        'text-field': ['get', 'CAPITAL'],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.7,
-        'text-allow-overlap': true,
-        'text-ignore-placement': true
-      },
-      paint: {
-        'text-color': '#888',
-        'text-halo-color': '#EEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1
-      }
-    }, globalLabelLayer);
-  });
+  map.addLayer({
+    id: 'marker-capital',
+    type: 'symbol',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'TERRITORY'],
+    layout: {
+      'icon-image': 'marker-capital',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.7,
+      'text-allow-overlap': true,
+      'text-ignore-placement': true
+    },
+    paint: {
+      'text-color': '#888',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
 }
 
 
 function initHostilityLayer() {
   //add hostilty markers
-  map.loadImage('assets/marker-hostility.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('hostility', image);
-    map.addSource('hostility-data', {
-      type: 'geojson',
-      data: hostilityData,
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'hostilities-layer',
-      type: 'symbol',
-      source: 'hostility-data',
-      layout: {
-        'icon-image': 'hostility',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true,
-        'text-field': ["get", "NAME"],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.7
-      },
-      paint: {
-        'text-color': '#000',
-        'text-halo-color': '#EEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1,
-      }
-    });
+  map.addSource('hostility-data', {
+    type: 'geojson',
+    data: hostilityData,
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'hostilities-layer',
+    type: 'symbol',
+    source: 'hostility-data',
+    layout: {
+      'icon-image': 'marker-hostility',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'text-field': ["get", "NAME"],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.7
+    },
+    paint: {
+      'text-color': '#000',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1,
+    }
   });
 }
 
@@ -705,7 +690,7 @@ function updateCountryLayer() {
 
 
   //toggle layers
-  if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+  //if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
     if (currentCountryIndicator.id=='#acled+events') {
       map.setLayoutProperty('acled-dots', 'visibility', 'visible');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
@@ -716,7 +701,7 @@ function updateCountryLayer() {
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
     }
-  }
+  //}
 }
 
 function createCountryLegend(scale) {
