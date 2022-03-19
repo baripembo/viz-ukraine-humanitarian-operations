@@ -482,7 +482,7 @@ function initRefugeeLayer() {
 
   let refugeeIconScale = d3.scaleLinear()
     .domain([1, maxCount])
-    .range([0.3, 1]);
+    .range([0.25, 1]);
 
     //draw directional curved arrows
     for (let d of refugeeLineData.features) {
