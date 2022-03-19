@@ -444,7 +444,7 @@ function initCountryLayer() {
 }
 
 function initIDPLayer() {
-  let max = 2585907;//d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
+  let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
   let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
 
   let temp = [];
@@ -462,7 +462,7 @@ function initIDPLayer() {
 
   map.addSource('macro-region-data', {
     type: 'geojson',
-    data: idpData//'data/macro-region.geojson'
+    data: idpData
   });
 
   map.addLayer({
@@ -917,7 +917,9 @@ function updateCountryLayer() {
   else if (currentCountryIndicator.id=='#affected+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
-    countryColorScale = d3.scaleQuantize().domain([0, 2585907]).range(idpColorRange)
+
+    let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
+    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
   }
   else {}
 
@@ -1130,7 +1132,7 @@ function initCountryPanel() {
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
   //createFigure(refugeesDiv, {className: 'pin', title: 'People in Need (estimated)', stat: shortenNumFormat(data['#inneed+ind']), indicator: '#inneed+ind'});
-  createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
+  createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(idpTotal), indicator: '#affected+idps'});//data['#affected+idps']
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
 
@@ -1217,7 +1219,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, idpTotal = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -1289,6 +1291,8 @@ $( document ).ready(function() {
       locationData = data[4];
       hostilityData = data[5];
       idpGeoJson = data[6];
+
+      idpTotal = d3.sum(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
             
       //process acled data
       acledData.forEach(function(event) {
