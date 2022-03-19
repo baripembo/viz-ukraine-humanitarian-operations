@@ -5,9 +5,9 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q?fresh=true',
     center: [-25, 0],
-    minZoom: 3,
+    minZoom: 4,
     zoom: zoomLevel,
     attributionControl: false
   });
@@ -28,16 +28,7 @@ function displayMap() {
 
   //remove loader and show vis
   $('.loader, #static-map').remove();
-  $('#global-map, .country-select, .map-legend, .tab-menubar').css('opacity', 1);
-
-  //position global figures
-  if (window.innerWidth>=1440) {
-    $('.menu-indicators li:first-child div').addClass('expand');
-    $('.tab-menubar, #chart-view, .comparison-panel').css('left', $('.secondary-panel').outerWidth());
-    $('.secondary-panel').animate({
-      left: 0
-    }, 200);
-  }
+  $('#global-map, .map-legend').css('opacity', 1);
 
   //init element events
   createEvents();
@@ -81,6 +72,9 @@ function displayMap() {
         //do nothing
     }
   });
+  // map.setLayoutProperty('Countries 6-8', 'visibility', 'none');
+  // map.setLayoutProperty('Countries 4-6', 'visibility', 'none');
+  // map.setLayoutProperty('Countries 2-4', 'visibility', 'none');
 
   mapFeatures = map.queryRenderedFeatures();
 
@@ -136,7 +130,6 @@ function deepLinkView() {
   }
 }
 
-
 function matchMapFeatures(country_code) {
   //loop through mapFeatures to find matches to currentCountry.code
   var selectedFeatures = [];
@@ -168,12 +161,11 @@ function selectCountry(features) {
 
   //reset panel
   $('.panel-content').animate({scrollTop: 0}, 300);
-  $('.indicator-select').val('');
 
   updateCountryLayer();
   // map.setLayoutProperty(globalLayer, 'visibility', 'none');
   // map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
-  map.setLayoutProperty(countryLayer, 'visibility', 'visible');
+  //map.setLayoutProperty(countryLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
@@ -181,7 +173,7 @@ function selectCountry(features) {
   var target = bbox.default(turfHelpers.featureCollection(features));
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: $('.map-legend.country').outerWidth()+50, bottom: 50, left: ($('.country-panel').outerWidth())-80},
+    padding: {right: $('.map-legend.country').outerWidth()+65, bottom: 50, left: ($('.country-panel').outerWidth())-80},
     linear: true
   });
 
@@ -194,7 +186,6 @@ function selectCountry(features) {
 /*****************************/
 function initCountryView() {
   $('.country-panel').scrollTop(0);
-
   initCountryPanel();
 }
 
@@ -203,183 +194,16 @@ function initCountryLayer() {
   countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
   createCountryLegend(countryColorScale);
 
-  //add border crossing markers
-  map.loadImage('assets/marker-crossing.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('crossing', image);
-    map.addSource('border-crossings', {
-      type: 'geojson',
-      data: borderCrossingData,
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'border-crossings-layer',
-      type: 'symbol',
-      source: 'border-crossings',
-      layout: {
-        'icon-image': 'crossing',
-        'icon-size': 0.6,
-        'icon-allow-overlap': true
-      }
-    });
-  });
-
-  //refugee count data
-  let refugeeCounts = [];
-  let maxCount = d3.max(nationalData, function(d) { return +d['#affected+refugees']; });
-  let refugeeDotScale = d3.scaleSqrt()
-    .domain([1, maxCount])
-    .range([5, 45]);
-
-  let countries = {'Slovakia': 'SVK', 'Hungary': 'HUN', 'Poland': 'POL', 'Romania': 'ROU', 'Belarus': 'BLR', 'Republic of Moldova': 'MDA', 'Russian Federation': 'RUS'};
-  for (let val of refugeeCountData) {
-    let code = countries[val.geomaster_name];
-    let count = dataByCountry[code][0]['#affected+refugees'];
-    refugeeCounts.push({
-      'type': 'Feature',
-      'properties': {
-        'country': val.geomaster_name,
-        'count': count,
-        'iconSize': refugeeDotScale(count)
-      },
-      'geometry': { 
-        'type': 'Point', 
-        'coordinates': [ val.centroid_lon, val.centroid_lat ] 
-      } 
-    })
-  }
-  let refugeeCountGeoJson = {
-    'type': 'FeatureCollection',
-    'features': refugeeCounts
-  };
-  map.addSource('refugee-counts', {
-    type: 'geojson',
-    data: refugeeCountGeoJson,
-    generateId: true 
-  });
-
-  //add refugee country labels
-  map.addLayer({
-    id: 'refugee-counts-labels',
-    type: 'symbol',
-    source: 'refugee-counts',
-    layout: {
-      'text-field': [
-        'format',
-        ['upcase', ['get', 'country']]
-      ],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-allow-overlap': true
-    },
-    paint: {
-      'text-color': '#000000',
-      'text-halo-color': '#EEEEEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
-  });
-
-  //town labels
-  map.addSource('town-data', {
-    type: 'geojson',
-    data: 'data/wrl_ukr_capp.geojson',
-    generateId: true 
-  });
-  map.addLayer({
-    id: 'town-labels',
-    type: 'symbol',
-    source: 'town-data',
-    layout: {
-      'text-field': ['get', 'CAPITAL'],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      'text-radial-offset': [
-        'match',
-        ['get', 'TYPE'],
-        'TERRITORY',
-        0.7,
-        'ADMIN 1',
-        0.4,
-        0.5
-      ]
-    },
-    paint: {
-      'text-color': '#888888',
-      'text-halo-color': '#EEEEEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1
-    }
-  }, globalLabelLayer);
-
-
-  //add town circles, capital icons
-  map.addLayer({
-    id: 'town-dots',
-    type: 'circle',
-    source: 'town-data',
-    filter: ['==', 'TYPE', 'ADMIN 1'],
-    paint: {
-      'circle-color': '#777777',
-      'circle-radius': 3
-    }
-  });
-
-  map.loadImage('assets/marker-capital.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('capital', image);
-    map.addLayer({
-      id: 'capital-dots',
-      type: 'symbol',
-      source: 'town-data',
-      filter: ['==', 'TYPE', 'TERRITORY'],
-      layout: {
-        'icon-image': 'capital',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true
-      }
-    }, globalLabelLayer);
-  });
-
-
-  //add hostilty markers
-  map.loadImage('assets/marker-hostility.png', (error, image) => {
-    if (error) throw error;
-    map.addImage('hostility', image);
-    map.addSource('hostility-data', {
-      type: 'geojson',
-      data: 'data/hostilities.geojson',
-      generateId: true 
-    });
-    map.addLayer({
-      id: 'hostilities-layer',
-      type: 'symbol',
-      source: 'hostility-data',
-      layout: {
-        'icon-image': 'hostility',
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true,
-        'text-field': ["get", "NAME"],
-        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
-        'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.7
-      },
-      paint: {
-        'text-color': '#000000',
-        'text-halo-color': '#EEEEEE',
-        'text-halo-width': 1,
-        'text-halo-blur': 1,
-      }
-    });
-  });
-
+  initIDPLayer();
+  initBorderCrossingLayer();
+  initHostilityLayer();
+  initLocationLabels();
+  initAcledLayer();
+  initRefugeeLayer();
 
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
+    console.log(e)
     if (currentCountryIndicator.id!=='#acled+events') {  
       map.getCanvas().style.cursor = 'pointer';
       tooltip.addTo(map);
@@ -407,8 +231,97 @@ function initCountryLayer() {
     map.getCanvas().style.cursor = '';
     tooltip.remove();
   });
+}
 
-  //border crossing mouse events
+function initIDPLayer() {
+  let max = 2585907;//d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
+  let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+
+  let temp = [];
+  idpGeoJson.features.forEach(function(f) {
+    if (f.properties.idpPresence!=undefined) {
+      f.properties.color = colorScale(f.properties.idpPresence);
+      temp.push(f);
+    }
+  });
+
+  let idpData = {
+    'type': 'FeatureCollection',
+    'features': temp
+  };
+
+  map.addSource('macro-region-data', {
+    type: 'geojson',
+    data: idpData//'data/macro-region.geojson'
+  });
+
+  map.addLayer({
+    id: 'macro-regions',
+    source: 'macro-region-data',
+    type: 'fill',
+    paint: {
+      'fill-color': ['get', 'color'],
+      'fill-outline-color': '#E0E0E0'
+    }
+  });
+
+  // map.addLayer({
+  //   id: 'macro-regions-labels',
+  //   source: 'macro-region-data',
+  //   type: 'symbol',
+  //   paint: {
+  //     'text-color': '#666',
+  //     'text-halo-color': '#EEE',
+  //     'text-halo-width': 1,
+  //     'text-halo-blur': 1
+  //   },
+  //   layout: {
+  //     'text-field': ['get', 'macroRegion'],
+  //     'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+  //     'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+  //     'text-allow-overlap': true,
+  //     'text-letter-spacing': 0.3
+  //   }
+  // });
+
+  //mouse events
+  map.on('mouseenter', 'macro-regions', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
+  });
+  map.on('mousemove', 'macro-regions', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `<h2>${e.features[0].properties.macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
+  });
+  map.on('mouseleave', 'macro-regions', function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+}
+
+
+function initBorderCrossingLayer() {
+  map.addSource('border-crossings', {
+    type: 'geojson',
+    data: borderCrossingData,
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'border-crossings-layer',
+    type: 'symbol',
+    source: 'border-crossings',
+    layout: {
+      'icon-image': 'marker-border-crossing',
+      'icon-size': 0.6,
+      'icon-allow-overlap': true
+    }
+  });
+
+  //mouse events
   map.on('mouseenter', 'border-crossings-layer', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     tooltip.addTo(map);
@@ -425,10 +338,127 @@ function initCountryLayer() {
     map.getCanvas().style.cursor = '';
     tooltip.remove();
   });
-
-  initAcledLayer();
-  initRefugeeLayer();
 }
+
+
+function initLocationLabels() {
+  //location data
+  map.addSource('location-data', {
+    type: 'geojson',
+    data: locationData,
+    generateId: true 
+  });
+
+  //country labels
+  map.addLayer({
+    id: 'country-labels',
+    type: 'symbol',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'ADMIN 0'],
+    layout: {
+      'text-field': [
+        'format',
+        ['upcase', ['get', 'CNTRY']]
+      ],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-allow-overlap': true,
+      'text-letter-spacing': 0.3
+    },
+    paint: {
+      'text-color': '#666',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  });
+
+  //towm markers
+  map.addLayer({
+    id: 'town-dots',
+    type: 'symbol',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'ADMIN 1'],
+    layout: {
+      'icon-image': 'marker-town',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 1],
+      'icon-allow-overlap': true,
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.4
+    },
+    paint: {
+      'text-color': '#888',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
+
+  //capital markers
+  map.addLayer({
+    id: 'marker-capital',
+    type: 'symbol',
+    source: 'location-data',
+    filter: ['==', 'TYPE', 'TERRITORY'],
+    layout: {
+      'icon-image': 'marker-capital',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 0.9],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'text-field': ['get', 'CAPITAL'],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.7,
+      'text-allow-overlap': true,
+      'text-ignore-placement': true
+    },
+    paint: {
+      'text-color': '#888',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1
+    }
+  }, globalLabelLayer);
+
+}
+
+
+function initHostilityLayer() {
+  //add hostilty markers
+  map.addSource('hostility-data', {
+    type: 'geojson',
+    data: hostilityData,
+    generateId: true 
+  });
+  map.addLayer({
+    id: 'hostilities-layer',
+    type: 'symbol',
+    source: 'hostility-data',
+    layout: {
+      'icon-image': 'marker-hostility',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'text-field': ["get", "NAME"],
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': 0.7
+    },
+    paint: {
+      'text-color': '#000',
+      'text-halo-color': '#EEE',
+      'text-halo-width': 1,
+      'text-halo-blur': 1,
+    }
+  });
+}
+
 
 function initAcledLayer() {
   let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
@@ -436,7 +466,16 @@ function initAcledLayer() {
     .domain([1, maxCount])
     .range([5, 15]);
 
-  let acledEvents = new Set(cleanedCoords.map(d => d['#event+type']));
+  //get unique event types
+  let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
+  
+  //build expression for event dot circles
+  let eventTypeColorScale = ['match', ['get', 'event_type']];
+  for (const [index, event] of acledEvents.entries()) {
+    eventTypeColorScale.push(event);
+    eventTypeColorScale.push(eventColorRange[index]);
+  }
+  eventTypeColorScale.push('#666');
 
   let events = [];
   for (let e of cleanedCoords) {
@@ -449,9 +488,6 @@ function initAcledLayer() {
         'date': e['#date+occurred'],
         'fatalities': e['#affected+killed'],
         'notes': e['#description'],
-        'sub_event_type': e['#event+type+sub'],
-        'actor1': e['#group+name+first'],
-        'actor2': e['#group+name+second'],
         'iconSize': dotScale(e['#affected+killed'])
       },
       'geometry': { 
@@ -475,32 +511,8 @@ function initAcledLayer() {
     type: 'circle',
     source: 'acled',
     paint: {
-      'circle-color': [
-        'match',
-          ['get', 'event_type'],
-          'Battles',
-          '#EEB598',
-          'Explosions/Remote violence',
-          '#CE7C7F',
-          'Riots',
-          '#60A2A4',
-          'Violence against civilians',
-          '#91C4B7',
-          '#666'
-      ],
-      'circle-stroke-color': [
-        'match',
-          ['get', 'event_type'],
-          'Battles',
-          '#EEB598',
-          'Explosions/Remote violence',
-          '#CE7C7F',
-          'Riots',
-          '#60A2A4',
-          'Violence against civilians',
-          '#91C4B7',
-          '#666'
-      ],
+      'circle-color': eventTypeColorScale,
+      'circle-stroke-color': eventTypeColorScale,
       'circle-opacity': 0.7,
       'circle-radius': ['get', 'iconSize'],
       'circle-stroke-width': 1,
@@ -518,10 +530,10 @@ function initAcledLayer() {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
     let date = new Date(prop.date);
-    let content = '<span class="small">' + moment(date).format('MMM D, YYYY') + '</span>';
-    content += '<h2>' + prop.event_type + '</h2>';
-    content += '<p>' + prop.notes + '</p>';
-    content += '<p>Fatalities: ' + prop.fatalities + '</p>';
+    let content = `<span class='small'>${moment(date).format('MMM D, YYYY')}</span>`;
+    content += `<h2>${prop.event_type}</h2>`;
+    content += `<p>'${prop.notes}</p>`;
+    content += `<p>Fatalities: ${prop.fatalities}</p>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
@@ -542,7 +554,7 @@ function initRefugeeLayer() {
 
   let refugeeIconScale = d3.scaleLinear()
     .domain([1, maxCount])
-    .range([0.3, 1]);
+    .range([0.25, 1]);
 
     //draw directional curved arrows
     for (let d of refugeeLineData.features) {
@@ -555,9 +567,11 @@ function initRefugeeLayer() {
 
       map.addSource(`route-${iso}`, {
         'type': 'geojson',
+        'lineMetrics': true,
         'data': curve.line
       });
 
+      //draw line
       map.addLayer({
         'id': `line-${iso}`,
         'type': 'line',
@@ -566,10 +580,17 @@ function initRefugeeLayer() {
           'line-color': '#0072BC',
           'line-opacity': 0.8,
           'line-width': refugeeLineScale(dataByCountry[iso][0]['#affected+refugees']),
+          'line-gradient': [
+            'interpolate',
+            ['linear'],
+            ['line-progress'],
+            0, "rgba(0, 114, 188, 1)",
+            1, "rgba(0, 114, 188, 0.2)"
+          ]
         }
       });
 
-      //get geometry for arrow head and label
+      //get geo for arrow head and label
       map.addSource(`point-${iso}`, {
         'type': 'geojson',
         'data': {
@@ -597,7 +618,7 @@ function initRefugeeLayer() {
           'icon-allow-overlap': true,
           'icon-ignore-placement': true,
           'icon-rotate': bearing+68,
-          'icon-offset': [0, -20.5]
+          'icon-offset': [1, -20.5]
         },
         paint: {
           'icon-color': '#0072BC',
@@ -614,8 +635,8 @@ function initRefugeeLayer() {
       map.on('mousemove', `arrow-${iso}`, function(e) {
         map.getCanvas().style.cursor = 'pointer';
         let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
-        content += 'Number of Refugees from Ukraine:<br>';
-        content += '<span class="stat">'+ numFormat(dataByCountry[iso][0]['#affected+refugees']) +'</span>';
+        content += `Number of Refugees from Ukraine:<br>`;
+        content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
         tooltip.setHTML(content);
         tooltip
           .addTo(map)
@@ -634,8 +655,8 @@ function initRefugeeLayer() {
       map.on('mousemove', `line-${iso}`, function(e) {
         map.getCanvas().style.cursor = 'pointer';
         let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
-        content += 'Number of Refugees from Ukraine:<br>';
-        content += '<span class="stat">'+ numFormat(dataByCountry[iso][0]['#affected+refugees']) +'</span>';
+        content += `Number of Refugees from Ukraine:<br>`;
+        content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
         tooltip.setHTML(content);
         tooltip
           .addTo(map)
@@ -655,7 +676,7 @@ function updateCountryLayer() {
   //max
   var max = getCountryIndicatorMax();
   if (currentCountryIndicator.id.indexOf('pct')>0 && max>0) max = 1;
-  if (currentCountryIndicator.id=='#org+count+num' || currentCountryIndicator.id=='#loc+count+health') max = roundUp(max, 10);
+  if (currentCountryIndicator.id=='#loc+count+health') max = roundUp(max, 100);
 
   //color scale
   var clrRange;
@@ -672,9 +693,7 @@ function updateCountryLayer() {
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
 
 
-  $('.map-legend.country').removeClass('population');
-  $('.map-legend.country').removeClass('acled');
-  $('.map-legend.country').removeClass('idps');
+  $('.map-legend.country').removeClass('population acled idps');
   if (currentCountryIndicator.id=='#population') {
     $('.map-legend.country').addClass('population');
     countryColorScale = d3.scaleOrdinal().domain(['<1', '1-2', '2-5', '5-10', '10-25', '25-50', '>50']).range(populationColorRange);
@@ -688,9 +707,10 @@ function updateCountryLayer() {
   else if (currentCountryIndicator.id=='#affected+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
-    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange)
+    countryColorScale = d3.scaleQuantize().domain([0, 2585907]).range(idpColorRange)
   }
   else {}
+
   updateCountryLegend(countryColorScale);
 
   //data join
@@ -701,12 +721,11 @@ function updateCountryLayer() {
     var color, boundaryColor, layerOpacity, markerSize;
     if (d['#country+code']==currentCountry.code) {
       var val = +d[currentCountryIndicator.id];
+      layerOpacity = 1;
       color = (val<0 || !isVal(val) || isNaN(val)) ? colorNoData : countryColorScale(val);
 
       //turn off choropleth for population layer
       color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
-
-      layerOpacity = 1;
     }
     else {
       color = colorDefault;
@@ -718,11 +737,11 @@ function updateCountryLayer() {
     expressionBoundary.push(d['#adm1+code'], boundaryColor);
     expressionOpacity.push(d['#adm1+code'], layerOpacity);
   });
+  //set expression defaults
   expression.push(colorDefault);
   expressionBoundary.push('#E0E0E0');
   expressionOpacity.push(0);
 
-  
   //hide all pop density rasters
   var countryList = Object.keys(countryCodeList);
   countryList.forEach(function(country_code) {
@@ -742,47 +761,37 @@ function updateCountryLayer() {
   map.setPaintProperty(countryLabelLayer, 'text-opacity', expressionOpacity);
 
 
-
   //toggle layers
-  if (currentCountryIndicator.id=='#acled+events') {
-    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+  //if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+    if (currentCountryIndicator.id=='#acled+events') {
       map.setLayoutProperty('acled-dots', 'visibility', 'visible');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+      map.setLayoutProperty('macro-regions', 'visibility', 'none');
+      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
     }
-  }
-  else if (currentCountryIndicator.id=='#affected+idps') {
-    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
+    else if (currentCountryIndicator.id=='#affected+idps') {
+      map.setLayoutProperty('macro-regions', 'visibility', 'visible');
+      map.setLayoutProperty(countryLayer, 'visibility', 'none')
+    }
+    else {
+      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
       map.setLayoutProperty('acled-dots', 'visibility', 'none');
+      map.setLayoutProperty('macro-regions', 'visibility', 'none');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
     }
-  }
-  else {
-    if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
-      map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
-      map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
-      map.setLayoutProperty('acled-dots', 'visibility', 'none');
-    }
-  }
-}
-
-function getCountryIndicatorMax() {
-  var max =  d3.max(subnationalData, function(d) { 
-    if (d['#country+code']==currentCountry.code) {
-      return +d[currentCountryIndicator.id]; 
-    }
-  });
-  return max;
+  //}
 }
 
 function createCountryLegend(scale) {
-  createSource($('.map-legend.country .population-source'), '#population');
+  //set data sources
   createSource($('.map-legend.country .idp-source'), '#affected+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
+  createSource($('.map-legend.country .population-source'), '#population');
+  createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
-  createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
 
   var legend = d3.legendColor()
     .labelFormat(percentFormat)
@@ -818,31 +827,16 @@ function createCountryLegend(scale) {
   });
 }
 
+
 function updateCountryLegend(scale) {
-  var legendFormat, legendTitle;
-  switch(currentCountryIndicator.id) {
-    case '#population':
-      legendTitle = 'Population Density (people per sq km)';
-      legendFormat = shortenNumFormat;
-      break;
-    case '#loc+count+health':
-      legendTitle = 'Number of Health Facilities';
-      legendFormat = d3.format('.0f');
-      break;
-    case '#acled+events':
-      legendTitle = 'Conflict Event Type';
-      legendFormat = d3.format('.0f');
-      break;
-    case '#affected+idps':
-      legendTitle = 'Estimated Number of Internally Displaced People';
-      legendFormat = shortenNumFormat;
-      break;
-    default:
-      tilegendTitletle = '';
-      legendFormat = d3.format('.0f');
-  }
+  //set format for legend format
+  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population') ? shortenNumFormat : d3.format('.0f');
+
+  //set legend title
+  let legendTitle = $('input[name="countryIndicators"]:checked').attr('data-legend');
   $('.map-legend.country .legend-title').html(legendTitle);
 
+  //update legend
   if (currentCountryIndicator.id=='#acled+events') {
     if (d3.selectAll('.legendCells-events').empty()) {
       var svg = d3.select('.map-legend.country .scale');
@@ -868,6 +862,16 @@ function updateCountryLegend(scale) {
     var g = d3.select('.map-legend.country .scale');
     g.call(legend);
   }
+}
+
+
+function getCountryIndicatorMax() {
+  var max =  d3.max(subnationalData, function(d) { 
+    if (d['#country+code']==currentCountry.code) {
+      return +d[currentCountryIndicator.id]; 
+    }
+  });
+  return max;
 }
 
 

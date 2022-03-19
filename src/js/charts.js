@@ -94,40 +94,12 @@ function createTimeSeries(array, div) {
 }
 
 
-function createTimeseriesLegend(chart, country) {
-  var element = $(chart.element).attr('class');
-  var names = [];
-  chart.data.shown().forEach(function(d) {
-    if (d.id==country || country==undefined)
-      names.push(d.id)
-  });
-
-  //custom legend
-  d3.select(chart.element).insert('div').attr('class', 'timeseries-legend').selectAll('div')
-    .data(names)
-    .enter().append('div')
-    .attr('data-id', function(id) {
-      return id;
-    })
-    .html(function(id) {
-      return '<span></span>'+id;
-    })
-    .each(function(id) {
-      var color = '#007CE1';
-      d3.select(this).select('span').style('background-color', color);
-    })
-}
-
 function updateTimeseries(selected) {
   var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
-  if (selected=='Venezuela (Bolivarian Republic of)') selected = 'Venezuela';
 
   countryTimeseriesChart.axis.max(maxValue*1.6);
   countryTimeseriesChart.focus(selected);
   $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
   $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
   $('.refugees-timeseries').show();
-
-  $('.country-timeseries-chart .timeseries-legend').remove();
-  createTimeseriesLegend(countryTimeseriesChart, selected);
 }
