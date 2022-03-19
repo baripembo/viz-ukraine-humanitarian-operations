@@ -234,7 +234,7 @@ function initCountryLayer() {
 }
 
 function initIDPLayer() {
-  let max = 2585907;//d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
+  let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
   let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
 
   let temp = [];
@@ -252,7 +252,7 @@ function initIDPLayer() {
 
   map.addSource('macro-region-data', {
     type: 'geojson',
-    data: idpData//'data/macro-region.geojson'
+    data: idpData
   });
 
   map.addLayer({
@@ -707,7 +707,9 @@ function updateCountryLayer() {
   else if (currentCountryIndicator.id=='#affected+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
-    countryColorScale = d3.scaleQuantize().domain([0, 2585907]).range(idpColorRange)
+
+    let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
+    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
   }
   else {}
 
