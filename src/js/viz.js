@@ -20,7 +20,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, idpTotal = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -92,6 +92,8 @@ $( document ).ready(function() {
       locationData = data[4];
       hostilityData = data[5];
       idpGeoJson = data[6];
+
+      idpTotal = d3.sum(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
             
       //process acled data
       acledData.forEach(function(event) {
