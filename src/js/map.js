@@ -165,7 +165,7 @@ function selectCountry(features) {
   updateCountryLayer();
   // map.setLayoutProperty(globalLayer, 'visibility', 'none');
   // map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
-  map.setLayoutProperty(countryLayer, 'visibility', 'visible');
+  //map.setLayoutProperty(countryLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
@@ -194,6 +194,7 @@ function initCountryLayer() {
   countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
   createCountryLegend(countryColorScale);
 
+  initIDPLayer();
   initBorderCrossingLayer();
   initHostilityLayer();
   initLocationLabels();
@@ -202,6 +203,7 @@ function initCountryLayer() {
 
   //mouse events
   map.on('mouseenter', countryLayer, function(e) {
+    console.log(e)
     if (currentCountryIndicator.id!=='#acled+events') {  
       map.getCanvas().style.cursor = 'pointer';
       tooltip.addTo(map);
@@ -226,6 +228,76 @@ function initCountryLayer() {
   });
      
   map.on('mouseleave', countryLayer, function() {
+    map.getCanvas().style.cursor = '';
+    tooltip.remove();
+  });
+}
+
+function initIDPLayer() {
+  let max = 2585907;//d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
+  let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+
+  let temp = [];
+  idpGeoJson.features.forEach(function(f) {
+    if (f.properties.idpPresence!=undefined) {
+      f.properties.color = colorScale(f.properties.idpPresence);
+      temp.push(f);
+    }
+  });
+
+  let idpData = {
+    'type': 'FeatureCollection',
+    'features': temp
+  };
+
+  map.addSource('macro-region-data', {
+    type: 'geojson',
+    data: idpData//'data/macro-region.geojson'
+  });
+
+  map.addLayer({
+    id: 'macro-regions',
+    source: 'macro-region-data',
+    type: 'fill',
+    paint: {
+      'fill-color': ['get', 'color'],
+      'fill-outline-color': '#E0E0E0'
+    }
+  });
+
+  // map.addLayer({
+  //   id: 'macro-regions-labels',
+  //   source: 'macro-region-data',
+  //   type: 'symbol',
+  //   paint: {
+  //     'text-color': '#666',
+  //     'text-halo-color': '#EEE',
+  //     'text-halo-width': 1,
+  //     'text-halo-blur': 1
+  //   },
+  //   layout: {
+  //     'text-field': ['get', 'macroRegion'],
+  //     'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
+  //     'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
+  //     'text-allow-overlap': true,
+  //     'text-letter-spacing': 0.3
+  //   }
+  // });
+
+  //mouse events
+  map.on('mouseenter', 'macro-regions', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    tooltip.addTo(map);
+  });
+  map.on('mousemove', 'macro-regions', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    const content = `<h2>${e.features[0].properties.macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
+  });
+  map.on('mouseleave', 'macro-regions', function() {
     map.getCanvas().style.cursor = '';
     tooltip.remove();
   });
@@ -635,7 +707,7 @@ function updateCountryLayer() {
   else if (currentCountryIndicator.id=='#affected+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
-    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange)
+    countryColorScale = d3.scaleQuantize().domain([0, 2585907]).range(idpColorRange)
   }
   else {}
 
@@ -695,9 +767,17 @@ function updateCountryLayer() {
       map.setLayoutProperty('acled-dots', 'visibility', 'visible');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+      map.setLayoutProperty('macro-regions', 'visibility', 'none');
+      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
+    }
+    else if (currentCountryIndicator.id=='#affected+idps') {
+      map.setLayoutProperty('macro-regions', 'visibility', 'visible');
+      map.setLayoutProperty(countryLayer, 'visibility', 'none')
     }
     else {
+      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
       map.setLayoutProperty('acled-dots', 'visibility', 'none');
+      map.setLayoutProperty('macro-regions', 'visibility', 'none');
       map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
       map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
     }
