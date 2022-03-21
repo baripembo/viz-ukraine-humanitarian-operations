@@ -219,17 +219,24 @@ function initCountryLayer() {
 
 
 function initIDPLayer() {
-  let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
-  let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+  const max = d3.max(idpMacroData, function(d) { return +d['#affected+idps']; });
+  const colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
 
+  //match macro region features with idp data
   idpGeoJson.features.forEach(function(f) {
-    if (f.properties.idpPresence==undefined) {
-      f.properties.idpPresence = '';
-      f.properties.color = '#FFF';
-    }
-    else {
-      f.properties.color = colorScale(f.properties.idpPresence);
-    }
+    let prop = f.properties;
+    idpMacroData.forEach(function(d) {
+      if (prop.macroRegion!==null) {
+        if (prop.macroRegion.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
+          prop.idpPresence = d['#affected+idps'];
+          prop.color = colorScale(d['#affected+idps']);
+        }
+      }
+      else {
+        prop.idpPresence = '';
+        prop.color = '#FFF';
+      }
+    });
   });
 
   map.addSource('macro-region-data', {
@@ -502,105 +509,105 @@ function initRefugeeLayer() {
     .domain([1, maxCount])
     .range([0.25, 1]);
 
-    //draw directional curved arrows
-    for (let d of refugeeLineData.features) {
-      const iso = d.properties.ISO_3;
-      const start = d.geometry.coordinates[0];
-      const end = d.geometry.coordinates[1];
+  //draw directional curved arrows
+  for (let d of refugeeLineData.features) {
+    const iso = d.properties.ISO_3;
+    const start = d.geometry.coordinates[0];
+    const end = d.geometry.coordinates[1];
 
-      const curve = getCurvedLine(start, end);
-      const bearing = curve.bearing;
+    const curve = getCurvedLine(start, end);
+    const bearing = curve.bearing;
 
-      map.addSource(`route-${iso}`, {
-        'type': 'geojson',
-        'lineMetrics': true,
-        'data': curve.line
-      });
+    map.addSource(`route-${iso}`, {
+      'type': 'geojson',
+      'lineMetrics': true,
+      'data': curve.line
+    });
 
-      //draw line
-      map.addLayer({
-        'id': `line-${iso}`,
-        'type': 'line',
-        'source': `route-${iso}`,
-        'paint': {
-          'line-color': '#0072BC',
-          'line-opacity': 0.8,
-          'line-width': refugeeLineScale(dataByCountry[iso][0]['#affected+refugees']),
-          'line-gradient': [
-            'interpolate',
-            ['linear'],
-            ['line-progress'],
-            0, "rgba(0, 114, 188, 1)",
-            1, "rgba(0, 114, 188, 0.2)"
-          ]
-        }
-      });
+    //draw line
+    map.addLayer({
+      'id': `line-${iso}`,
+      'type': 'line',
+      'source': `route-${iso}`,
+      'paint': {
+        'line-color': '#0072BC',
+        'line-opacity': 0.8,
+        'line-width': refugeeLineScale(dataByCountry[iso][0]['#affected+refugees']),
+        'line-gradient': [
+          'interpolate',
+          ['linear'],
+          ['line-progress'],
+          0, "rgba(0, 114, 188, 1)",
+          1, "rgba(0, 114, 188, 0.2)"
+        ]
+      }
+    });
 
-      //get geo for arrow head and label
-      map.addSource(`point-${iso}`, {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': [
-            {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Point',
-                'coordinates': end
-              }
+    //get geo for arrow head and label
+    map.addSource(`point-${iso}`, {
+      'type': 'geojson',
+      'data': {
+        'type': 'FeatureCollection',
+        'features': [
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': end
             }
-          ]
-        }
-      });
+          }
+        ]
+      }
+    });
 
-      //attach arrow head
-      map.addLayer({
-        id: `arrow-${iso}`,
-        type: 'symbol',
-        source: `point-${iso}`,
-        layout: {
-          'icon-image': 'marker-arrowhead-blue',
-          'icon-size': refugeeIconScale(dataByCountry[iso][0]['#affected+refugees']),
-          'icon-allow-overlap': true,
-          'icon-ignore-placement': true,
-          'icon-rotate': bearing+68,
-          'icon-offset': [1, -20.5]
-        },
-        paint: {
-          'icon-color': '#0072BC',
-          'icon-opacity': 0.8
-        }
-      });
-
-
-      //mouse events
-      map.on('mouseenter', `arrow-${iso}`, onMouseEnter);
-      map.on('mouseleave', `arrow-${iso}`, onMouseLeave);
-      map.on('mousemove', `arrow-${iso}`, function(e) {
-        map.getCanvas().style.cursor = 'pointer';
-        let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
-        content += `Number of Refugees from Ukraine:<br>`;
-        content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
-        tooltip.setHTML(content);
-        tooltip
-          .addTo(map)
-          .setLngLat(e.lngLat);
-      });
+    //attach arrow head
+    map.addLayer({
+      id: `arrow-${iso}`,
+      type: 'symbol',
+      source: `point-${iso}`,
+      layout: {
+        'icon-image': 'marker-arrowhead-blue',
+        'icon-size': refugeeIconScale(dataByCountry[iso][0]['#affected+refugees']),
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+        'icon-rotate': bearing+68,
+        'icon-offset': [1, -20.5]
+      },
+      paint: {
+        'icon-color': '#0072BC',
+        'icon-opacity': 0.8
+      }
+    });
 
 
-      map.on('mouseenter', `line-${iso}`, onMouseEnter);
-      map.on('mouseleave', `line-${iso}`, onMouseLeave);
-      map.on('mousemove', `line-${iso}`, function(e) {
-        map.getCanvas().style.cursor = 'pointer';
-        let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
-        content += `Number of Refugees from Ukraine:<br>`;
-        content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
-        tooltip.setHTML(content);
-        tooltip
-          .addTo(map)
-          .setLngLat(e.lngLat);
-      });
-    }
+    //mouse events
+    map.on('mouseenter', `arrow-${iso}`, onMouseEnter);
+    map.on('mouseleave', `arrow-${iso}`, onMouseLeave);
+    map.on('mousemove', `arrow-${iso}`, function(e) {
+      map.getCanvas().style.cursor = 'pointer';
+      let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
+      content += `Number of Refugees from Ukraine:<br>`;
+      content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
+      tooltip.setHTML(content);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+    });
+
+
+    map.on('mouseenter', `line-${iso}`, onMouseEnter);
+    map.on('mouseleave', `line-${iso}`, onMouseLeave);
+    map.on('mousemove', `line-${iso}`, function(e) {
+      map.getCanvas().style.cursor = 'pointer';
+      let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
+      content += `Number of Refugees from Ukraine:<br>`;
+      content += `<span class="stat">${numFormat(dataByCountry[iso][0]['#affected+refugees'])}</span>`;
+      tooltip.setHTML(content);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
+    });
+  }
 }
 
 function updateCountryLayer() {
