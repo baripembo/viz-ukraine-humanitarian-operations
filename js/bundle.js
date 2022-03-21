@@ -282,9 +282,6 @@ function displayMap() {
         //do nothing
     }
   });
-  // map.setLayoutProperty('Countries 6-8', 'visibility', 'none');
-  // map.setLayoutProperty('Countries 4-6', 'visibility', 'none');
-  // map.setLayoutProperty('Countries 2-4', 'visibility', 'none');
 
   mapFeatures = map.queryRenderedFeatures();
 
@@ -412,57 +409,42 @@ function initCountryLayer() {
   initRefugeeLayer();
 
   //mouse events
-  map.on('mouseenter', countryLayer, function(e) {
-    console.log(e)
-    if (currentCountryIndicator.id!=='#acled+events') {  
+  map.on('mouseenter', countryLayer, onMouseEnter);
+  map.on('mouseleave', countryLayer, onMouseLeave);
+  map.on('mousemove', countryLayer, function(e) {  
+    var f = map.queryRenderedFeatures(e.point)[0];
+    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
       map.getCanvas().style.cursor = 'pointer';
-      tooltip.addTo(map);
+      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+      tooltip
+        .addTo(map)
+        .setLngLat(e.lngLat);
     }
-  });
-
-  map.on('mousemove', countryLayer, function(e) {
-    if (currentCountryIndicator.id!=='#acled+events') {    
-      var f = map.queryRenderedFeatures(e.point)[0];
-      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
-        map.getCanvas().style.cursor = 'pointer';
-        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
-        tooltip
-          .addTo(map)
-          .setLngLat(e.lngLat);
-      }
-      else {
-        map.getCanvas().style.cursor = '';
-        tooltip.remove();
-      }
+    else {
+      map.getCanvas().style.cursor = '';
+      tooltip.remove();
     }
-  });
-     
-  map.on('mouseleave', countryLayer, function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
-  });
+  });    
 }
+
 
 function initIDPLayer() {
   let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
   let colorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
 
-  let temp = [];
   idpGeoJson.features.forEach(function(f) {
-    if (f.properties.idpPresence!=undefined) {
+    if (f.properties.idpPresence==undefined) {
+      f.properties.idpPresence = '';
+      f.properties.color = '#FFF';
+    }
+    else {
       f.properties.color = colorScale(f.properties.idpPresence);
-      temp.push(f);
     }
   });
 
-  let idpData = {
-    'type': 'FeatureCollection',
-    'features': temp
-  };
-
   map.addSource('macro-region-data', {
     type: 'geojson',
-    data: idpData
+    data: idpGeoJson
   });
 
   map.addLayer({
@@ -473,43 +455,19 @@ function initIDPLayer() {
       'fill-color': ['get', 'color'],
       'fill-outline-color': '#E0E0E0'
     }
-  });
-
-  // map.addLayer({
-  //   id: 'macro-regions-labels',
-  //   source: 'macro-region-data',
-  //   type: 'symbol',
-  //   paint: {
-  //     'text-color': '#666',
-  //     'text-halo-color': '#EEE',
-  //     'text-halo-width': 1,
-  //     'text-halo-blur': 1
-  //   },
-  //   layout: {
-  //     'text-field': ['get', 'macroRegion'],
-  //     'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-  //     'text-size': ['interpolate', ['linear'], ['zoom'], 0, 12, 4, 14],
-  //     'text-allow-overlap': true,
-  //     'text-letter-spacing': 0.3
-  //   }
-  // });
+  }, globalLabelLayer);
 
   //mouse events
-  map.on('mouseenter', 'macro-regions', function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
-  });
+  map.on('mouseenter', 'macro-regions', onMouseEnter);
+  map.on('mouseleave', 'macro-regions', onMouseLeave);
   map.on('mousemove', 'macro-regions', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    const content = `<h2>${e.features[0].properties.macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
+    const macroRegion = e.features[0].properties.macroRegion;
+    const content = (macroRegion=='null') ? 'IDP Estimate:<div class="stat">No Data</div>' : `<h2>${macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
       .setLngLat(e.lngLat);
-  });
-  map.on('mouseleave', 'macro-regions', function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
   });
 }
 
@@ -532,10 +490,8 @@ function initBorderCrossingLayer() {
   });
 
   //mouse events
-  map.on('mouseenter', 'border-crossings-layer', function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
-  });
+  map.on('mouseenter', 'border-crossings-layer', onMouseEnter);
+  map.on('mouseleave', 'border-crossings-layer', onMouseLeave);
   map.on('mousemove', 'border-crossings-layer', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2>`;
@@ -543,10 +499,6 @@ function initBorderCrossingLayer() {
     tooltip
       .addTo(map)
       .setLngLat(e.lngLat);
-  });
-  map.on('mouseleave', 'border-crossings-layer', function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
   });
 }
 
@@ -732,10 +684,8 @@ function initAcledLayer() {
 
 
   //acled events mouse events
-  map.on('mouseenter', 'acled-dots', function(e) {
-    map.getCanvas().style.cursor = 'pointer';
-    tooltip.addTo(map);
-  });
+  map.on('mouseenter', 'acled-dots', onMouseEnter);
+  map.on('mouseleave', 'acled-dots', onMouseLeave);
   map.on('mousemove', 'acled-dots', function(e) {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
@@ -748,10 +698,6 @@ function initAcledLayer() {
     tooltip
       .addTo(map)
       .setLngLat(e.lngLat);
-  });
-  map.on('mouseleave', 'acled-dots', function() {
-    map.getCanvas().style.cursor = '';
-    tooltip.remove();
   });
 }
 
@@ -838,10 +784,8 @@ function initRefugeeLayer() {
 
 
       //mouse events
-      map.on('mouseenter', `arrow-${iso}`, function(e) {
-        map.getCanvas().style.cursor = 'pointer';
-        tooltip.addTo(map);
-      });
+      map.on('mouseenter', `arrow-${iso}`, onMouseEnter);
+      map.on('mouseleave', `arrow-${iso}`, onMouseLeave);
       map.on('mousemove', `arrow-${iso}`, function(e) {
         map.getCanvas().style.cursor = 'pointer';
         let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
@@ -852,16 +796,10 @@ function initRefugeeLayer() {
           .addTo(map)
           .setLngLat(e.lngLat);
       });
-      map.on('mouseleave', `arrow-${iso}`, function() {
-        map.getCanvas().style.cursor = '';
-        tooltip.remove();
-      });
 
 
-      map.on('mouseenter', `line-${iso}`, function(e) {
-        map.getCanvas().style.cursor = 'pointer';
-        tooltip.addTo(map);
-      });
+      map.on('mouseenter', `line-${iso}`, onMouseEnter);
+      map.on('mouseleave', `line-${iso}`, onMouseLeave);
       map.on('mousemove', `line-${iso}`, function(e) {
         map.getCanvas().style.cursor = 'pointer';
         let content = `<h2>${dataByCountry[iso][0]['#country+name']}</h2>`;
@@ -871,10 +809,6 @@ function initRefugeeLayer() {
         tooltip
           .addTo(map)
           .setLngLat(e.lngLat);
-      });
-      map.on('mouseleave', `line-${iso}`, function() {
-        map.getCanvas().style.cursor = '';
-        tooltip.remove();
       });
     }
 }
@@ -974,27 +908,32 @@ function updateCountryLayer() {
 
 
   //toggle layers
-  //if (map.getLayer('hostilities-layer') && map.getLayer('border-crossings-layer')) {
-    if (currentCountryIndicator.id=='#acled+events') {
-      map.setLayoutProperty('acled-dots', 'visibility', 'visible');
-      map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-      map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
-      map.setLayoutProperty('macro-regions', 'visibility', 'none');
-      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
-    }
-    else if (currentCountryIndicator.id=='#affected+idps') {
-      map.setLayoutProperty('macro-regions', 'visibility', 'visible');
-      map.setLayoutProperty(countryLayer, 'visibility', 'none')
-    }
-    else {
-      map.setLayoutProperty(countryLayer, 'visibility', 'visible')
-      map.setLayoutProperty('acled-dots', 'visibility', 'none');
-      map.setLayoutProperty('macro-regions', 'visibility', 'none');
-      map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
-      map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
-    }
-  //}
+  if (currentCountryIndicator.id=='#acled+events') {
+    resetLayers();
+    map.setLayoutProperty(countryLayer, 'visibility', 'none');
+    map.setLayoutProperty('acled-dots', 'visibility', 'visible');
+    map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
+    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+  }
+  else if (currentCountryIndicator.id=='#affected+idps') {
+    resetLayers();
+    map.setLayoutProperty(countryLayer, 'visibility', 'none');
+    map.setLayoutProperty('macro-regions', 'visibility', 'visible');
+  }
+  else {
+    resetLayers();
+  }
 }
+
+
+function resetLayers() {
+  map.setLayoutProperty(countryLayer, 'visibility', 'visible')
+  map.setLayoutProperty('acled-dots', 'visibility', 'none');
+  map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
+  map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
+  map.setLayoutProperty('macro-regions', 'visibility', 'none');
+}
+
 
 function createCountryLegend(scale) {
   //set data sources
@@ -1084,6 +1023,17 @@ function getCountryIndicatorMax() {
     }
   });
   return max;
+}
+
+
+//mouse event/leave events
+function onMouseEnter(e) {
+  map.getCanvas().style.cursor = 'pointer';
+  tooltip.addTo(map);
+}
+function onMouseLeave(e) {
+  map.getCanvas().style.cursor = '';
+  tooltip.remove();
 }
 
 
