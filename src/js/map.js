@@ -773,7 +773,10 @@ function updateCountryLayer() {
       map.setLayoutProperty(countryLayer, 'visibility', 'visible')
     }
     else if (currentCountryIndicator.id=='#affected+idps') {
+      map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
+      map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
       map.setLayoutProperty('macro-regions', 'visibility', 'visible');
+      map.setLayoutProperty('acled-dots', 'visibility', 'none');
       map.setLayoutProperty(countryLayer, 'visibility', 'none')
     }
     else {
