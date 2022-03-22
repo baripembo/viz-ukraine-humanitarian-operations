@@ -204,7 +204,7 @@ function getCurvedLine(start, end) {
 
 //country codes and raster ids
 const countryCodeList = {
-  UKR: '8lye0x4r'
+  UKR: '5rg490nv'//'8lye0x4r'
 };
 
 
@@ -412,17 +412,19 @@ function initCountryLayer() {
   map.on('mouseenter', countryLayer, onMouseEnter);
   map.on('mouseleave', countryLayer, onMouseLeave);
   map.on('mousemove', countryLayer, function(e) {  
-    var f = map.queryRenderedFeatures(e.point)[0];
-    if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
-      map.getCanvas().style.cursor = 'pointer';
-      createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
-      tooltip
-        .addTo(map)
-        .setLngLat(e.lngLat);
-    }
-    else {
-      map.getCanvas().style.cursor = '';
-      tooltip.remove();
+    if (currentCountryIndicator.id!='#acled+events') {
+      var f = map.queryRenderedFeatures(e.point)[0];
+      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+        map.getCanvas().style.cursor = 'pointer';
+        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+        tooltip
+          .addTo(map)
+          .setLngLat(e.lngLat);
+      }
+      else {
+        map.getCanvas().style.cursor = '';
+        tooltip.remove();
+      }
     }
   });    
 }
@@ -878,7 +880,7 @@ function updateCountryLayer() {
       color = (val<0 || !isVal(val) || isNaN(val)) ? colorNoData : countryColorScale(val);
 
       //turn off choropleth for population layer
-      color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
+      color = (currentCountryIndicator.id=='#population') ? '#F7FCB9' : color;
     }
     else {
       color = colorDefault;
@@ -917,7 +919,6 @@ function updateCountryLayer() {
   //toggle layers
   if (currentCountryIndicator.id=='#acled+events') {
     resetLayers();
-    map.setLayoutProperty(countryLayer, 'visibility', 'none');
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
     map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
