@@ -228,8 +228,9 @@ function initIDPLayer() {
   idpGeoJson.features.forEach(function(f) {
     let prop = f.properties;
     idpMacroData.forEach(function(d) {
-      if (prop.macroRegion!==null) {
-        if (prop.macroRegion.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
+      console.log(prop.macroRegion)
+      if (prop.ADM1_EN!=='') {
+        if (prop.ADM1_EN.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
           prop.idpPresence = d['#affected+idps'];
           prop.color = colorScale(d['#affected+idps']);
         }
@@ -261,8 +262,8 @@ function initIDPLayer() {
   map.on('mouseleave', 'macro-regions', onMouseLeave);
   map.on('mousemove', 'macro-regions', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    const macroRegion = e.features[0].properties.macroRegion;
-    const content = (macroRegion=='null') ? 'IDP Estimate:<div class="stat">No Data</div>' : `<h2>${macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
+    const macroRegion = e.features[0].properties.ADM1_EN;
+    const content = (macroRegion=='') ? 'IDP Estimate:<div class="stat">No Data</div>' : `<h2>${macroRegion} Region</h2>IDP Estimate:<div class="stat">${numFormat(e.features[0].properties.idpPresence)}</div>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
