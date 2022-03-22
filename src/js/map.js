@@ -670,7 +670,7 @@ function updateCountryLayer() {
       color = (val<0 || !isVal(val) || isNaN(val)) ? colorNoData : countryColorScale(val);
 
       //turn off choropleth for population layer
-      color = (currentCountryIndicator.id=='#population') ? colorDefault : color;
+      color = (currentCountryIndicator.id=='#population') ? '#F7FCB9' : color;
     }
     else {
       color = colorDefault;
