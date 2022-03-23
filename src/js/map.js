@@ -228,7 +228,6 @@ function initIDPLayer() {
   idpGeoJson.features.forEach(function(f) {
     let prop = f.properties;
     idpMacroData.forEach(function(d) {
-      console.log(prop.macroRegion)
       if (prop.ADM1_EN!=='') {
         if (prop.ADM1_EN.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
           prop.idpPresence = d['#affected+idps'];
