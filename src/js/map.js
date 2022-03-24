@@ -859,7 +859,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
       if (currentCountryIndicator.id=='#affected+idps') val = numFormat(val);
-      if (currentCountryIndicator.id=='#org+count+num') label = $('input[name="countryIndicators"]:checked').attr('data-legend');
+      if (currentCountryIndicator.id=='#org+count+num') label = 'Humanitarian organizations present';
     }
     else {
       val = 'No Data';
