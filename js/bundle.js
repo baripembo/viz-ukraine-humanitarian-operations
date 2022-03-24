@@ -832,7 +832,7 @@ function updateCountryLayer() {
   if (currentCountryIndicator.id=='#loc+count+health') max = roundUp(max, 100);
 
   //color scale
-  var clrRange;
+  var clrRange = colorRange;
   switch(currentCountryIndicator.id) {
     case '#population':
       clrRange = populationColorRange;
@@ -840,11 +840,12 @@ function updateCountryLayer() {
     case '#affected+idps':
       clrRange = idpColorRange;
       break;
+    case '#org+count+num':
+      clrRange = orgsRange;
     default:
-      clrRange = colorRange;
+      //
   }
   var countryColorScale = d3.scaleQuantize().domain([0, max]).range(clrRange);
-
 
   $('.map-legend.country').removeClass('population acled idps');
   if (currentCountryIndicator.id=='#population') {
@@ -863,6 +864,10 @@ function updateCountryLayer() {
 
     let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
     countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+  }
+  else if (currentCountryIndicator.id=='#org+count+num') {
+    $('.no-data-key').show();
+    //$('.map-legend.country').addClass('idps');
   }
   else {}
 
@@ -947,6 +952,7 @@ function createCountryLegend(scale) {
   //set data sources
   createSource($('.map-legend.country .idp-source'), '#affected+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
+  createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .population-source'), '#population');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
@@ -1056,17 +1062,19 @@ function createCountryMapTooltip(adm1_name, adm1_pcode) {
 
   if (adm1[0]!=undefined) {
     var val = adm1[0][currentCountryIndicator.id];
+    var label = currentCountryIndicator.name;
 
     //format content for tooltip
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
       if (currentCountryIndicator.id=='#affected+idps') val = numFormat(val);
+      if (currentCountryIndicator.id=='#org+count+num') label = $('input[name="countryIndicators"]:checked').attr('data-legend');
     }
     else {
       val = 'No Data';
     }
-    var content = `<h2>${adm1_name} Oblast</h2>${currentCountryIndicator.name}:<div class="stat">${val}</div>`;
+    var content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${val}</div>`;
 
     tooltip.setHTML(content);
   }
@@ -1165,6 +1173,7 @@ var colorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D'];
 var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D', '#238443', '#005A32'];
 var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
 var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
+var orgsRange = ['#d5efe6','#c5e1db','#91c4bb','#81aaa4','#6b8883'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, nationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
