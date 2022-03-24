@@ -642,7 +642,7 @@ function initAcledLayer() {
   
   //build expression for event dot circles
   let eventTypeColorScale = ['match', ['get', 'event_type']];
-  for (const [index, event] of acledEvents.entries()) {
+  for (const [index, event] of acledEvents.sort().entries()) {
     eventTypeColorScale.push(event);
     eventTypeColorScale.push(eventColorRange[index]);
   }
