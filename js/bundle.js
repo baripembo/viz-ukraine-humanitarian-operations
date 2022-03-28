@@ -391,7 +391,7 @@ function selectCountry(features) {
     };
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: -200},
+    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: mapPadding.left},
     linear: true
   });
 
