@@ -7,7 +7,7 @@ function initTimeseries(data, div) {
 
 function createTimeSeries(array, div) {
   var chartWidth = 336;
-  var chartHeight = 240;
+  var chartHeight = (isMobile) ? 180 : 240;
   var colorArray = ['#999'];
 
   let dateArr = ['x'];

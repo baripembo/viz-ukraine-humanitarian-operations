@@ -7,7 +7,7 @@ function initMap() {
     container: 'global-map',
     style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
-    minZoom: 4,
+    minZoom: minZoom,
     zoom: zoomLevel,
     attributionControl: false
   });
@@ -167,10 +167,21 @@ function selectCountry(features) {
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
-  var target = bbox.default(turfHelpers.featureCollection(features));
+  let target = bbox.default(turfHelpers.featureCollection(features));
+  let mapPadding = (isMobile) ?
+    {
+        right: -100,
+        left: -200,
+        bottom: 0
+    } :
+    { 
+      right: $('.map-legend.country').outerWidth()+65,
+      left: $('.country-panel').outerWidth()-80,
+      bottom: 50
+    };
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: $('.map-legend.country').outerWidth()+65, bottom: 50, left: ($('.country-panel').outerWidth())-80},
+    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: -200},
     linear: true
   });
 
