@@ -10,7 +10,7 @@ function initTimeseries(data, div) {
 
 function createTimeSeries(array, div) {
   var chartWidth = 336;
-  var chartHeight = 240;
+  var chartHeight = (isMobile) ? 180 : 240;
   var colorArray = ['#999'];
 
   let dateArr = ['x'];
@@ -217,7 +217,7 @@ function initMap() {
     container: 'global-map',
     style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
-    minZoom: 4,
+    minZoom: minZoom,
     zoom: zoomLevel,
     attributionControl: false
   });
@@ -377,10 +377,21 @@ function selectCountry(features) {
   map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
   map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
 
-  var target = bbox.default(turfHelpers.featureCollection(features));
+  let target = bbox.default(turfHelpers.featureCollection(features));
+  let mapPadding = (isMobile) ?
+    {
+        right: -100,
+        left: -200,
+        bottom: 0
+    } :
+    { 
+      right: $('.map-legend.country').outerWidth()+65,
+      left: $('.country-panel').outerWidth()-80,
+      bottom: 50
+    };
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: $('.map-legend.country').outerWidth()+65, bottom: 50, left: ($('.country-panel').outerWidth())-80},
+    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: -200},
     linear: true
   });
 
@@ -1181,7 +1192,9 @@ var countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
 var viewInitialized = false;
+var isMobile = false;
 var zoomLevel = 1.4;
+var minZoom = 4;
 
 var globalCountryList = [];
 var currentCountryIndicator = {};
@@ -1204,6 +1217,9 @@ $( document ).ready(function() {
     //detect mobile users
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       $('.mobile-message').show();
+      isMobile = true;
+      minZoom = 1;
+      zoomLevel = 3;
     }
     $('.mobile-message').on('click', function() {
       $(this).remove();

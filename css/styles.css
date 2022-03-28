@@ -1656,6 +1656,55 @@ a:visited {
   position: absolute;
   width: 1px; }
 
+@media only screen and (max-width: 767px) {
+  h3 {
+    font-size: 18px; }
+  h5 {
+    font-size: 14px;
+    line-height: 45px;
+    margin: 15px 0;
+    padding: 0 20px; }
+  .mapboxgl-ctrl-top-right {
+    top: 0;
+    right: 0; }
+  .content {
+    width: 100% !important; }
+  #global-map {
+    height: 50%;
+    position: absolute;
+    top: 50%; }
+  .content.country-view .map-legend.country {
+    max-height: 60% !important;
+    bottom: 10px;
+    right: 10px; }
+  .small {
+    font-size: 10px;
+    line-height: 14px; }
+  .country-panel {
+    height: 50%;
+    overflow-y: scroll;
+    padding: 10px 0 0;
+    width: 100%; }
+    .country-panel .org-logo {
+      justify-content: flex-end; }
+      .country-panel .org-logo img {
+        width: 75px; }
+    .country-panel .panel-header {
+      padding: 10px 20px 0; }
+      .country-panel .panel-header .panel-title {
+        margin-bottom: 0; }
+    .country-panel .figure {
+      width: 33%; }
+      .country-panel .figure .figure-inner .title {
+        font-size: 12px;
+        line-height: 14px; }
+        .country-panel .figure .figure-inner .title .small {
+          font-size: 11px;
+          line-height: 15px; }
+  .stat {
+    font-size: 24px;
+    margin: 15px 0; } }
+
 @media only screen and (max-height: 850px) {
   .map-legend {
     max-height: 570px;
