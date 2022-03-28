@@ -39,7 +39,7 @@ $( document ).ready(function() {
   function init() {
     //detect mobile users
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-      //$('.mobile-message').show();
+      $('.mobile-message').show();
       isMobile = true;
       minZoom = 1;
       zoomLevel = 3;

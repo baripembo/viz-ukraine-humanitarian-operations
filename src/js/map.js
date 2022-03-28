@@ -170,8 +170,8 @@ function selectCountry(features) {
   let target = bbox.default(turfHelpers.featureCollection(features));
   let mapPadding = (isMobile) ?
     {
-        right: 0,
-        left: 0,
+        right: -100,
+        left: -200,
         bottom: 0
     } :
     { 
@@ -181,7 +181,7 @@ function selectCountry(features) {
     };
   map.fitBounds(regionBoundaryData[0].bbox, {
     offset: [ 0, -25],
-    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: mapPadding.left},
+    padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: -200},
     linear: true
   });
 

@@ -671,8 +671,18 @@ a:visited {
 }
 
 @media only screen and (max-width: 767px) {
-	.mobile-message {
-		display: none !important;
+	h3 {
+		font-size: 18px;
+	}
+	h5 {
+		font-size: 14px;
+		line-height: 45px;
+		margin: 15px 0;
+		padding: 0 20px;
+	}
+	.mapboxgl-ctrl-top-right {
+    top: 0;
+    right: 0;
 	}
 	.content {
 		width: 100% !important;
@@ -686,8 +696,8 @@ a:visited {
 		.map-legend {
 			&.country {
 				max-height: 60% !important;
-				bottom: 20px;
-				right: 20px;
+				bottom: 10px;
+				right: 10px;
 			}
 		}
 	}
@@ -698,15 +708,26 @@ a:visited {
 	.country-panel {
 		height: 50%;
     overflow-y: scroll;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 10px 0 0;
     width: 100%;
+    .org-logo {
+    	justify-content: flex-end;
+    	img {
+    		width: 75px;
+    	}
+    }
+    .panel-header {
+    	padding: 10px 20px 0;
+    	.panel-title {
+    		margin-bottom: 0;
+    	}
+    }
 		.figure {
 			width: 33%;
 			.figure-inner {
 				.title {
 					font-size: 12px;
-					line-height: 16px;
+					line-height: 14px;
 					.small {
 						font-size: 11px;
 						line-height: 15px;
