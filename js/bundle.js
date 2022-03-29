@@ -1,6 +1,43 @@
 window.$ = window.jQuery = require('jquery');
 var bbox = require('@turf/bbox');
 var turfHelpers = require('@turf/helpers');
+/******************/
+/*** SPARKLINES ***/
+/******************/
+function createSparkline(data, div, size) {
+  var width = 65;
+  var height = 20;
+  var x = d3.scaleLinear().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+  var parseDate = d3.timeParse("%Y-%m-%d");
+  var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.value); })
+    .curve(d3.curveBasis);
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.value; }));
+
+  var svg = d3.select(div)
+    .append('svg')
+    .attr('class', 'sparkline')
+    .attr('width', width)
+    .attr('height', height+5)
+    .append('g')
+      .attr('transform', 'translate(0,4)');
+    
+  svg.append('path')
+   .datum(data)
+   .attr('class', 'sparkline')
+   .attr('d', line);
+}
+
+
 /****************************************/
 /*** TIMESERIES CHART FUNCTIONS ***/
 /****************************************/
@@ -1100,15 +1137,24 @@ function initCountryPanel() {
   var data = dataByCountry[currentCountry.code][0];
 
   //timeseries
-  updateTimeseries(data['#country+name']);
+  //updateTimeseries(data['#country+name']);
 
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
 
-  //refugees
+  //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee Arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  
+  //refugee trendline
+  var sparklineArray = [];
+  refugeeTimeseriesData.forEach(function(d) {
+    var obj = {date: d['#affected+date+refugees'], value: d['#affected+refugees']};
+    sparklineArray.push(obj);
+  });
+  createSparkline(sparklineArray, '.figure.refugees .stat');
+
   createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
@@ -1352,7 +1398,7 @@ $( document ).ready(function() {
 
   function initView() {
     //load timeseries for country view 
-    initTimeseries('', '.country-timeseries-chart');
+    //initTimeseries('', '.country-timeseries-chart');
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)
