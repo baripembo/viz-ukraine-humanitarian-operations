@@ -1,3 +1,40 @@
+/******************/
+/*** SPARKLINES ***/
+/******************/
+function createSparkline(data, div, size) {
+  var width = 65;
+  var height = 20;
+  var x = d3.scaleLinear().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+  var parseDate = d3.timeParse("%Y-%m-%d");
+  var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.value); })
+    .curve(d3.curveBasis);
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.value; }));
+
+  var svg = d3.select(div)
+    .append('svg')
+    .attr('class', 'sparkline')
+    .attr('width', width)
+    .attr('height', height+5)
+    .append('g')
+      .attr('transform', 'translate(0,4)');
+    
+  svg.append('path')
+   .datum(data)
+   .attr('class', 'sparkline')
+   .attr('d', line);
+}
+
+
 /****************************************/
 /*** TIMESERIES CHART FUNCTIONS ***/
 /****************************************/

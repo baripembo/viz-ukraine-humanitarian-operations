@@ -167,7 +167,7 @@ $( document ).ready(function() {
 
   function initView() {
     //load timeseries for country view 
-    initTimeseries('', '.country-timeseries-chart');
+    //initTimeseries('', '.country-timeseries-chart');
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)

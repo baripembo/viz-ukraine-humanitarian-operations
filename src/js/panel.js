@@ -5,15 +5,24 @@ function initCountryPanel() {
   var data = dataByCountry[currentCountry.code][0];
 
   //timeseries
-  updateTimeseries(data['#country+name']);
+  //updateTimeseries(data['#country+name']);
 
   //set panel header
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
 
-  //refugees
+  //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee Arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  
+  //refugee trendline
+  var sparklineArray = [];
+  refugeeTimeseriesData.forEach(function(d) {
+    var obj = {date: d['#affected+date+refugees'], value: d['#affected+refugees']};
+    sparklineArray.push(obj);
+  });
+  createSparkline(sparklineArray, '.figure.refugees .stat');
+
   createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});

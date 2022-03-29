@@ -616,6 +616,13 @@ a:visited {
 	}
 }
 
+.sparkline {
+  fill: none;
+  margin-left: 10px;
+  stroke: #007CE1;
+  stroke-width: 1px;
+}
+
 .country-timeseries-chart {
 	.c3-target.c3-focused .c3-lines .c3-line {
 		stroke: #007CE1 !important;
