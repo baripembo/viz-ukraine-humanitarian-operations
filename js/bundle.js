@@ -965,6 +965,7 @@ function createCountryLegend(scale) {
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .population-source'), '#population');
+  createSource($('.map-legend.country .hostilities-source'), '#event+loc');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
@@ -1149,10 +1150,17 @@ function createSource(div, indicator) {
     let startDate = new Date(sourceObj['#date+start']);
     date = `${d3.utcFormat("%b %d")(startDate)} - ${date}`;
   }
+  //dont show data link for hostilities, sent to undefined
+  if (indicator=='#event+loc') {
+    sourceObj['#meta+url'] = undefined;
+  }
 
   var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
   var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
-  div.append(`<p class='small source'><span class='date'>${date}</span> | <span class='source-name'>${sourceName}</span> | <a href='${sourceURL}' class='dataURL' target='_blank' rel='noopener'>DATA</a></p>`);
+  let sourceContent = `<p class='small source'><span class='date'>${date}</span> | <span class='source-name'>${sourceName}</span>`;
+  if (sourceURL!=='#') sourceContent += ` | <a href='${sourceURL}' class='dataURL' target='_blank' rel='noopener'>DATA</a>`;
+  sourceContent += `</p>`;
+  div.append(sourceContent);
 }
 
 function updateSource(div, indicator) {

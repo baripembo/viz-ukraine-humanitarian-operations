@@ -1374,18 +1374,12 @@ a:visited {
   .map-legend .collapsed-title {
     cursor: pointer;
     display: none; }
-  .map-legend .no-data-key,
-  .map-legend .border-crossing-key,
-  .map-legend .hostilities-key {
+  .map-legend .no-data-key {
     height: 20px; }
-    .map-legend .no-data-key rect,
-    .map-legend .border-crossing-key rect,
-    .map-legend .hostilities-key rect {
+    .map-legend .no-data-key rect {
       fill: #FFF;
       stroke: #CCC; }
-    .map-legend .no-data-key text,
-    .map-legend .border-crossing-key text,
-    .map-legend .hostilities-key text {
+    .map-legend .no-data-key text {
       transform: translate(25px, 12.5px); }
   .map-legend.country {
     height: auto;
@@ -1412,9 +1406,6 @@ a:visited {
         height: 20px; }
         .map-legend.country .legend-container.no-data .legendCells {
           display: none; }
-    .map-legend.country .source-container {
-      display: block;
-      margin-left: 19px; }
     .map-legend.country .legend-marker {
       display: flex;
       padding-top: 8px; }
@@ -1427,8 +1418,6 @@ a:visited {
       .map-legend.country .legend-marker label {
         flex-direction: column;
         margin-top: 0; }
-      .map-legend.country .legend-marker.idps {
-        display: none; }
     .map-legend.country .footnote {
       margin-top: 15px; }
     .map-legend.country.population .legend-container {
