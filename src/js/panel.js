@@ -55,10 +55,17 @@ function createSource(div, indicator) {
     let startDate = new Date(sourceObj['#date+start']);
     date = `${d3.utcFormat("%b %d")(startDate)} - ${date}`;
   }
+  //dont show data link for hostilities, sent to undefined
+  if (indicator=='#event+loc') {
+    sourceObj['#meta+url'] = undefined;
+  }
 
   var sourceName = (sourceObj['#meta+source']==undefined) ? '' : sourceObj['#meta+source'];
   var sourceURL = (sourceObj['#meta+url']==undefined) ? '#' : sourceObj['#meta+url'];
-  div.append(`<p class='small source'><span class='date'>${date}</span> | <span class='source-name'>${sourceName}</span> | <a href='${sourceURL}' class='dataURL' target='_blank' rel='noopener'>DATA</a></p>`);
+  let sourceContent = `<p class='small source'><span class='date'>${date}</span> | <span class='source-name'>${sourceName}</span>`;
+  if (sourceURL!=='#') sourceContent += ` | <a href='${sourceURL}' class='dataURL' target='_blank' rel='noopener'>DATA</a>`;
+  sourceContent += `</p>`;
+  div.append(sourceContent);
 }
 
 function updateSource(div, indicator) {

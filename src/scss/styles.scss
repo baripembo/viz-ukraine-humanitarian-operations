@@ -303,9 +303,7 @@ a:visited {
 		cursor: pointer;
 		display: none;
 	}
-	.no-data-key,
-	.border-crossing-key,
-	.hostilities-key {
+	.no-data-key {
 		height: 20px;
 		rect {
 			fill: #FFF;
@@ -346,10 +344,6 @@ a:visited {
 					display: none;
 				}
 			}
-		}		
-		.source-container {
-			display: block;
-			margin-left: 19px;
 		}
 		.legend-marker {
 			display: flex;
@@ -365,9 +359,6 @@ a:visited {
 			label {
 				flex-direction: column;
 				margin-top: 0;
-			}
-			&.idps {
-				display: none;
 			}
 		}
 		.footnote {
