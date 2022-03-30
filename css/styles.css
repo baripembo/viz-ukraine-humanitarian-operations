@@ -1566,6 +1566,7 @@ a:visited {
     overflow-x: hidden;
     overflow-y: scroll; }
   .country-panel .source {
+    margin-left: 0;
     min-height: 28px; }
   .country-panel .panel-inner {
     padding-left: 20px; }
