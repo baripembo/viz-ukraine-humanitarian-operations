@@ -24,7 +24,7 @@
     <meta property="og:title" content="Ukraine Data Explorer">
     <meta property="og:type" content="website">
     <meta property="og:description" content="The OCHA HDX Ukraine data explorer brings together data from multiple partners on the humanitarian impact following the Russian Federation military offensive on 24 February 2022.">
-    <meta property="og:image" content="https://ocha-dap.github.io/viz-ukraine-humanitarian-operations/assets/preview-thumb-img.png" />
+    <meta property="og:image" content="https://ocha-dap.github.io/viz-ukraine-humanitarian-operations/assets/preview-thumb.png" />
     <link rel='icon' type='image/png' href='https://data.humdata.org/images/icons/hdx.ico' />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.11/c3.min.css"/>
@@ -37,6 +37,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="https://kit.fontawesome.com/39e5643f1a.js" crossorigin="anonymous"></script>
     <!-- Hotjar Tracking Code for humdata.org -->
     <script>
       (function(h,o,t,j,a,r){
@@ -70,7 +71,7 @@
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
               <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <label>Humanitarian Presence<input checked='true' name='countryIndicators' type='radio' value='#org+count+num' id='orgs' data-legend='Number of Humanitarian Organizations Present'></label>
+              <label>Humanitarian Operations<input checked='true' name='countryIndicators' type='radio' value='#org+count+num' id='orgs' data-legend='Number of Humanitarian Organizations Present'></label>
               <div class='source-container orgs-source'></div>
               
               <label>IDP Estimates<input name='countryIndicators' type='radio' value='#affected+idps' id='idps' data-legend='Estimated Number of Internally Displaced People'></label>

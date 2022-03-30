@@ -113,7 +113,7 @@ label {
 }
 
 .table-display {
-	margin: 5px 0 20px;
+	margin: 5px 0 0;
 	.table-row {
 		align-items: center;
 		display: flex;
@@ -123,9 +123,30 @@ label {
 		}
 		&.row-separator {
 			border-bottom: 1px solid #CCC;
-			padding: 8px 0;
+			padding: 2px 0 8px;
 			&:first-child {
 				border-top: 1px solid #CCC;
+			}
+		}
+	}
+	&.layer-orgs {
+		.table-row {
+			>div:first-child {
+				min-width: 220px;
+			}
+			&.row-separator {
+				border-top: 0;
+				color: #000;
+				margin-bottom: 6px;
+			}
+			&.breakdown {
+				color: #888;
+			}
+			i {
+				color: #418FDE;
+    		display: inline-block;
+    		text-align: center;
+				width: 22px;
 			}
 		}
 	}
