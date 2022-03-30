@@ -607,6 +607,13 @@ a:visited {
 	}
 }
 
+.sparkline {
+  fill: none;
+  margin-left: 10px;
+  stroke: #007CE1;
+  stroke-width: 1px;
+}
+
 .country-timeseries-chart {
 	.c3-target.c3-focused .c3-lines .c3-line {
 		stroke: #007CE1 !important;
@@ -686,7 +693,7 @@ a:visited {
 	.content.country-view {
 		.map-legend {
 			&.country {
-				max-height: 60% !important;
+				max-height: 39% !important;
 				bottom: 10px;
 				right: 10px;
 			}
@@ -731,6 +738,9 @@ a:visited {
 	.stat {
 		font-size: 24px;
 		margin: 20px 0 5px;
+	}
+	.sparkline {
+		margin-left: 6px;
 	}
 }
 
