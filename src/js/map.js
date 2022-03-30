@@ -888,9 +888,9 @@ function createCountryMapTooltip(adm1_name, adm1_pcode) {
       });
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
-      content += `<div class="table-row"><div>${label}:</div><div>${val}</div></div>`;
       content += `<div class="table-row"><div>People reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
-      content += `<div class="table-row"><div>Clusters present:</div><div>${filteredSectors.length}</div></div>`;
+      content += `<div class="table-row"><div>${label}:</div><div>${val}</div></div>`;
+      content += `<div class="table-row row-separator"><div>Clusters present:</div><div>${filteredSectors.length}</div></div>`;
       //content += `<div class="table-row breakdown">`;
       filteredSectors.forEach(function(sector, index) {
         content += `<div class="table-row breakdown"><div><i class="${humIcons[sector]}"></i> ${sector}</div></div>`;
