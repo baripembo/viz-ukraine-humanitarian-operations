@@ -23,7 +23,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson = '';
+var refugeeTimeseriesData, refugeeCountData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -153,10 +153,26 @@ $( document ).ready(function() {
         });
       });
 
+
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
         .object(nationalData);
+
+
+      //map humanitarian icons to sector clusters
+      humIcons = {
+        'Coordination and Common Services': 'humanitarianicons-Coordination',
+        'Education': 'humanitarianicons-Education',
+        'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
+        'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
+        'Health': 'humanitarianicons-Health',
+        'Multi-purpose Cash': 'humanitarianicons-Fund',
+        'Nutrition': 'fa-solid fa-person-breastfeeding',
+        'Protection': 'humanitarianicons-Protection',
+        'Shelter/NFI': 'humanitarianicons-Shelter',
+        'WASH': 'humanitarianicons-Water-Sanitation-and-Hygiene',
+      };
 
 
       dataLoaded = true;
