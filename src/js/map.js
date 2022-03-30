@@ -217,7 +217,7 @@ function initCountryLayer() {
       var f = map.queryRenderedFeatures(e.point)[0];
       if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
-        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE);
+        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE, e.point);
         tooltip
           .addTo(map)
           .setLngLat(e.lngLat);
@@ -856,7 +856,7 @@ function onMouseLeave(e) {
 /*************************/
 /*** TOOLTIP FUNCTIONS ***/
 /*************************/
-function createCountryMapTooltip(adm1_name, adm1_pcode) {
+function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
   var adm1 = subnationalData.filter(function(c) {
     if (c['#adm1+code']==adm1_pcode && c['#country+code']==currentCountry.code)
       return c;
@@ -876,9 +876,39 @@ function createCountryMapTooltip(adm1_name, adm1_pcode) {
     else {
       val = 'No Data';
     }
-    var content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${val}</div>`;
-
+    let content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${val}</div>`;
     tooltip.setHTML(content);
+
+    if (!isMobile) setTooltipPosition(point)
+  }
+}
+
+function setTooltipPosition(point) {
+  var tooltipWidth = $('.map-tooltip').width();
+  var tooltipHeight = $('.map-tooltip').height();
+  var anchorDirection = (point.x + tooltipWidth > viewportWidth) ? 'right' : 'left';
+  var yOffset = 0;
+  if (point.y + tooltipHeight/2 > viewportHeight) yOffset = viewportHeight - (point.y + tooltipHeight/2);
+  if (point.y - tooltipHeight/2 < 0) yOffset = tooltipHeight/2 - point.y;
+  var popupOffsets = {
+    'right': [0, yOffset],
+    'left': [0, yOffset]
+  };
+  tooltip.options.offset = popupOffsets;
+  tooltip.options.anchor = anchorDirection;
+
+  if (yOffset>0) {
+    $('.mapboxgl-popup-tip').css('align-self', 'flex-start');
+    $('.mapboxgl-popup-tip').css('margin-top', point.y);
+  }
+  else if (yOffset<0)  {
+    $('.mapboxgl-popup-tip').css('align-self', 'flex-end');
+    $('.mapboxgl-popup-tip').css('margin-bottom', viewportHeight-point.y-10);
+  }
+  else {
+    $('.mapboxgl-popup-tip').css('align-self', 'center');
+    $('.mapboxgl-popup-tip').css('margin-top', 0);
+    $('.mapboxgl-popup-tip').css('margin-bottom', 0);
   }
 }
 
