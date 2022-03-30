@@ -104,6 +104,7 @@ label {
 	line-height: 14px;
 	margin: 0;
 	&.source {
+		margin-left: 19px;
 		margin-top: 2px;
 	}
 }
@@ -355,6 +356,9 @@ a:visited {
 					height: 14px;
 					width: 14px;
 				}
+			}
+			.source {
+				margin-left: 0;
 			}
 			label {
 				flex-direction: column;
