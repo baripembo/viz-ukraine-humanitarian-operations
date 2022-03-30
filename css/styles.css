@@ -1669,7 +1669,7 @@ a:visited {
     position: absolute;
     top: 50%; }
   .content.country-view .map-legend.country {
-    max-height: 60% !important;
+    max-height: 39% !important;
     bottom: 10px;
     right: 10px; }
   .small {
@@ -1699,7 +1699,9 @@ a:visited {
           line-height: 15px; }
   .stat {
     font-size: 24px;
-    margin: 20px 0 5px; } }
+    margin: 20px 0 5px; }
+  .sparkline {
+    margin-left: 6px; } }
 
 @media only screen and (max-height: 850px) {
   .map-legend {

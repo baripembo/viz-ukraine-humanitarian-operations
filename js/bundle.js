@@ -5,7 +5,7 @@ var turfHelpers = require('@turf/helpers');
 /*** SPARKLINES ***/
 /******************/
 function createSparkline(data, div, size) {
-  var width = 65;
+  var width = (isMobile) ? 30 : 65;
   var height = 20;
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
@@ -542,7 +542,7 @@ function initBorderCrossingLayer() {
     layout: {
       'icon-image': 'marker-border-crossing',
       'icon-size': 0.6,
-      'icon-allow-overlap': true
+      'icon-allow-overlap': isMobile ? false : true
     }
   });
 
