@@ -702,7 +702,7 @@ a:visited {
 	.content.country-view {
 		.map-legend {
 			&.country {
-				max-height: 60% !important;
+				max-height: 39% !important;
 				bottom: 10px;
 				right: 10px;
 			}
@@ -747,6 +747,9 @@ a:visited {
 	.stat {
 		font-size: 24px;
 		margin: 20px 0 5px;
+	}
+	.sparkline {
+		margin-left: 6px;
 	}
 }
 
