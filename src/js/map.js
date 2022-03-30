@@ -295,7 +295,7 @@ function initBorderCrossingLayer() {
     layout: {
       'icon-image': 'marker-border-crossing',
       'icon-size': 0.6,
-      'icon-allow-overlap': true
+      'icon-allow-overlap': isMobile ? false : true
     }
   });
 
