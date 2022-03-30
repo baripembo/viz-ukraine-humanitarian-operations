@@ -1218,6 +1218,7 @@ label.label-small {
   line-height: 14px;
   margin: 0; }
   .small.source {
+    margin-left: 19px;
     margin-top: 2px; }
 
 .subtext {
@@ -1428,6 +1429,8 @@ a:visited {
         .map-legend.country .legend-marker .marker img {
           height: 14px;
           width: 14px; }
+      .map-legend.country .legend-marker .source {
+        margin-left: 0; }
       .map-legend.country .legend-marker label {
         flex-direction: column;
         margin-top: 0; }
