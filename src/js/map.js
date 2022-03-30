@@ -878,7 +878,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode) {
     }
 
     let content = '';
-    if (currentCountryIndicator.id=='#org+count+num') {
+    if (val!='No Data' && currentCountryIndicator.id=='#org+count+num') {
       //humanitarian presence layer
       let sectors = adm1[0]['#sector+cluster+names'].split(',').sort();
       let filteredSectors = [];
