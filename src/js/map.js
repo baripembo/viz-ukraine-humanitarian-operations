@@ -791,6 +791,7 @@ function createCountryLegend(scale) {
   //expand/collapse functionality
   $('.map-legend.country .toggle-icon, .map-legend.country .collapsed-title').on('click', function() {
     $(this).parent().toggleClass('collapsed');
+    $('.legend-gradient').toggleClass('collapsed');
   });
 }
 
