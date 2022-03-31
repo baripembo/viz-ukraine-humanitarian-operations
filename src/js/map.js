@@ -882,17 +882,12 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     if (val!='No Data' && currentCountryIndicator.id=='#org+count+num') {
       //humanitarian presence layer
       let sectors = adm1[0]['#sector+cluster+names'].split(',').sort();
-      let filteredSectors = [];
-      sectors.forEach(function(sector, i) {
-        if (sector=='Protection: Protection') sector = 'Protection';
-        if (!sector.includes('Protection: ')) filteredSectors.push(sector)
-      });
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
       content += `<div class="table-row"><div>People reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
       content += `<div class="table-row"><div>${label}:</div><div>${val}</div></div>`;
-      content += `<div class="table-row row-separator"><div>Clusters present:</div><div>${filteredSectors.length}</div></div>`;
-      filteredSectors.forEach(function(sector, index) {
+      content += `<div class="table-row row-separator"><div>Clusters present:</div><div>${sectors.length}</div></div>`;
+      sectors.forEach(function(sector, index) {
         content += `<div class="table-row breakdown"><div><i class="${humIcons[sector]}"></i> ${sector}</div></div>`;
       });
       content += `</div>`;
