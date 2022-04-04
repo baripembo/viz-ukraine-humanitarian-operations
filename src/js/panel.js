@@ -26,10 +26,32 @@ function initCountryPanel() {
   createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
-  createFigure(refugeesDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: numFormat(data['#reached+ind']), indicator: '#reached+ind'});
+  createFigure(refugeesDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: shortenNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
   createFigure(refugeesDiv, {className: 'orgs', title: 'Humanitarian orgs present within Ukraine (total)', stat: numFormat(data['#org+count+num']), indicator: '#org+count+num'});
   createFigure(refugeesDiv, {className: 'attacks-health', title: 'Attacks on Health Care', stat: numFormat(data['#indicator+attacks+healthcare+num']), indicator: '#indicator+attacks+healthcare+num'});
   createFigure(refugeesDiv, {className: 'attacks-education', title: 'Attacks on Education Facilities', stat: numFormat(data['#indicator+attacks+education+num']), indicator: '#indicator+attacks+education+num'});
+
+  //refugee sparkline
+  var sparklineArray = [];
+  refugeeTimeseriesData.forEach(function(d) {
+    var obj = {date: d['#affected+date+refugees'], value: d['#affected+refugees']};
+    sparklineArray.push(obj);
+  });
+  createSparkline(sparklineArray, '.figure.refugees .stat');
+
+  //casualty sparklines
+  let killedArray = [];
+  let injuredArray = [];
+  casualtiesTimeseriesData.forEach(function(d) {
+    let killedObj = {date: d['#date'], value: d['#affected+killed']};
+    killedArray.push(killedObj);
+
+    let injuredObj = {date: d['#date'], value: d['#affected+injured']};
+    injuredArray.push(injuredObj);
+  });
+  createSparkline(killedArray, '.figure.casualties-killed .stat');
+  createSparkline(injuredArray, '.figure.casualties-injured .stat');
+
 
   //funding
   var fundingDiv = $('.country-panel .funding .panel-inner');
