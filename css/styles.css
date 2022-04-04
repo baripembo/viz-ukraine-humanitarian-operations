@@ -1235,7 +1235,7 @@ label.label-small {
       padding-right: 20px; }
     .table-display .table-row.row-separator {
       border-bottom: 1px solid #CCC;
-      padding: 2px 0 8px; }
+      padding-bottom: 8px; }
       .table-display .table-row.row-separator:first-child {
         border-top: 1px solid #CCC; }
   .table-display.layer-orgs .table-row > div:first-child {
@@ -1470,6 +1470,18 @@ a:visited {
     .map-legend.collapsed .toggle-icon:before {
       content: '\ea2a'; }
 
+.legend-gradient {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+  bottom: 30px;
+  height: 25px;
+  pointer-events: none;
+  position: fixed;
+  right: 24px;
+  width: 215px;
+  z-index: 3; }
+  .legend-gradient.collapsed {
+    display: none; }
+
 .country-label,
 .adm1-label,
 .health-label {
@@ -1687,6 +1699,9 @@ a:visited {
     top: 50%; }
   .content.country-view .map-legend.country {
     max-height: 39% !important;
+    bottom: 10px;
+    right: 10px; }
+  .content.country-view .legend-gradient {
     bottom: 10px;
     right: 10px; }
   .small {
