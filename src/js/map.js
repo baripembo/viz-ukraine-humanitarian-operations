@@ -217,14 +217,21 @@ function initCountryLayer() {
       var f = map.queryRenderedFeatures(e.point)[0];
       if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
-        createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE, e.point);
+        if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE, e.point);
         tooltip
           .addTo(map)
           .setLngLat(e.lngLat);
       }
       else {
-        map.getCanvas().style.cursor = '';
-        tooltip.remove();
+        if (f.layer.id!='hostilities-layer') {
+          map.getCanvas().style.cursor = '';
+          tooltip.remove();
+        }
+        else {
+          tooltip
+            .addTo(map)
+            .setLngLat(e.lngLat);
+        } 
       }
     }
   });    
