@@ -131,13 +131,13 @@ function createTimeSeries(data, div) {
     },
     transition: { duration: 300 },
     tooltip: {
-      contents: function (d) {
+      contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
         let date = new Date(d[0].x);
         let total = 0;
         let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
         d.forEach(function(event, index) {
-          total += event.index;
-          html += `<tr><td><span class='key' style='background-color: ${eventColorRange[index]}'></span>${event.name}</td><td>${event.index}</td></tr>`;
+          total += event.value;
+          html += `<tr><td><span class='key' style='background-color: ${color(d[index].id)}'></span>${event.name}</td><td>${event.value}</td></tr>`;
         });
         html += `<tr><td>Total</td><td>${total}</td></tr></table>`;
         return html;
