@@ -1306,9 +1306,6 @@ a:visited {
     right: 24px;
     opacity: 1;
     z-index: 3; }
-  .content.country-view .country-panel {
-    left: 0;
-    transition: left 0.4s ease-out; }
   .content.country-view .country-select {
     top: 30px; }
 
@@ -1535,7 +1532,7 @@ a:visited {
         margin-left: 30px; }
 
 .mapboxgl-ctrl-top-right {
-  top: 16px;
+  top: 60px;
   right: 16px; }
 
 .mapboxgl-ctrl-bottom-left {
@@ -1543,12 +1540,13 @@ a:visited {
 
 .country-panel {
   background-color: #FFF;
+  box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
   bottom: 0;
   overflow: hidden;
   padding: 20px 30px 30px;
   position: absolute;
   top: 0;
-  left: -416px;
+  left: 0;
   width: 416px;
   z-index: 3;
   transition: left 0.3s ease-in; }
@@ -1599,6 +1597,70 @@ a:visited {
   .refugees-timeseries .source {
     padding-left: 20px; }
 
+.tab-menubar {
+  background-color: #FFF;
+  border-bottom: 3px solid #EEE;
+  display: flex;
+  flex-flow: row;
+  height: 50px;
+  left: 416px;
+  opacity: 1;
+  padding: 0 30px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1; }
+  .tab-menubar .tab-button {
+    border-bottom: 3px solid #EEE;
+    color: #787878;
+    cursor: pointer;
+    font-family: 'Gotham-Bold', sans-serif;
+    font-size: 14px;
+    height: 50px;
+    padding: 14px 32px 0; }
+    .tab-menubar .tab-button.active, .tab-menubar .tab-button:hover {
+      border-color: #F05449;
+      color: #F05449; }
+
+#chart-view {
+  background-color: #FFF;
+  display: none;
+  left: 0;
+  overflow: auto;
+  padding: 15px 30px 15px 446px;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  z-index: 3; }
+  #chart-view .source-container {
+    margin-bottom: 20px; }
+    #chart-view .source-container .source {
+      margin-left: 0; }
+  #chart-view .trendseries-title {
+    border-top: 1px solid #CCC;
+    margin-top: 30px; }
+    #chart-view .trendseries-title h6 {
+      margin-top: 25px; }
+    #chart-view .trendseries-title .num {
+      color: #000;
+      font-family: 'Gotham-Light', sans-serif;
+      font-size: 42px;
+      line-height: 40px;
+      padding: 10px 0 3px; }
+  #chart-view .c3-bar._expanded_ {
+    fill: #F2645B !important;
+    fill-opacity: 1 !important; }
+
+.trendseries-select {
+  background-color: #FFF;
+  border-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  font: 700 16px 'Source Sans Pro', sans-serif;
+  height: 48px;
+  padding: 0 20px;
+  width: auto; }
+
 .c3-title,
 .chart-title {
   fill: #000;
@@ -1626,8 +1688,6 @@ a:visited {
   .c3-tooltip th {
     font-weight: normal;
     padding-left: 6px; }
-  .c3-tooltip td > span {
-    display: none; }
 
 .sparkline {
   fill: none;
@@ -1635,21 +1695,21 @@ a:visited {
   stroke: #007CE1;
   stroke-width: 1px; }
 
-.country-timeseries-chart .c3-target.c3-focused .c3-lines .c3-line {
-  stroke: #007CE1 !important; }
+.trendseries-chart .c3-line {
+  stroke-width: 2; }
 
-.country-timeseries-chart .c3-grid line {
+.trendseries-chart .c3-grid line {
   stroke: #F2F2F3;
   stroke-dasharray: 0; }
 
-.country-timeseries-chart .c3-axis .tick line,
-.country-timeseries-chart .c3-axis-y path.domain {
+.trendseries-chart .c3-axis .tick line,
+.trendseries-chart .c3-axis-y path.domain {
   display: none; }
 
-.country-timeseries-chart .c3-axis-x path.domain {
+.trendseries-chart .c3-axis-x path.domain {
   stroke: #888; }
 
-.country-timeseries-chart .c3-axis text {
+.trendseries-chart .c3-axis text {
   fill: #888; }
 
 .mobile-message {
