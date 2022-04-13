@@ -1557,7 +1557,8 @@ $( document ).ready(function() {
       .data(subnationalData)
       .enter().append('option')
         .text(function(d) {
-          return d['#adm1+name']; 
+          let name = (d['#adm1+code']=='UA80') ? d['#adm1+name'] + ' (city)' : d['#adm1+name'];
+          return name; 
         })
         .attr('value', function (d) { return d['#adm1+code']; });
 
