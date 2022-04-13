@@ -151,6 +151,7 @@ function createEvents() {
   d3.select('.trendseries-select').on('change',function(e) {
     var selected = d3.select('.trendseries-select').node().value;
     updateTimeseries(selected);
+    vizTrack(`chart ${currentCountry.code} view`, selected);
   });
 }
 

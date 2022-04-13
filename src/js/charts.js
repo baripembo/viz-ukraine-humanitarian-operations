@@ -76,7 +76,7 @@ function formatData(data) {
 
 function createTimeSeries(data, div) {
   const chartWidth = viewportWidth - $('.country-panel').width() - 150;
-  const chartHeight = (isMobile) ? 180 : 280;
+  const chartHeight = 280;
   let colorArray = eventColorRange;
 
   var chart = c3.generate({
@@ -85,10 +85,10 @@ function createTimeSeries(data, div) {
       height: chartHeight
     },
     padding: {
-      bottom: 0,
+      bottom: (isMobile) ? 60 : 0,
       top: 10,
-      left: 35,
-      right: 200
+      left: (isMobile) ? 30 : 35,
+      right: (isMobile) ? 140 : 200
     },
     bindto: div,
     data: {
@@ -119,7 +119,10 @@ function createTimeSeries(data, div) {
       },
       y: {
         min: 0,
-        padding: { top: 50, bottom: 0 },
+        padding: { 
+          top: (isMobile) ? 20 : 50, 
+          bottom: 0 
+        },
         tick: { 
           outer: false,
           //format: d3.format('d')
@@ -127,7 +130,13 @@ function createTimeSeries(data, div) {
       }
     },
     legend: {
-      position: 'right'
+      position: (isMobile) ? 'inset' : 'right',      
+      inset: {
+          anchor: 'top-right',
+          x: -20,
+          y: 200,
+          step: 2
+      }
     },
     transition: { duration: 300 },
     tooltip: {
@@ -139,7 +148,7 @@ function createTimeSeries(data, div) {
           total += event.value;
           html += `<tr><td><span class='key' style='background-color: ${color(d[index].id)}'></span>${event.name}</td><td>${event.value}</td></tr>`;
         });
-        html += `<tr><td>Total</td><td>${total}</td></tr></table>`;
+        html += `<tr><td><b>Total</b></td><td><b>${total}</b></td></tr></table>`;
         return html;
       }
     },

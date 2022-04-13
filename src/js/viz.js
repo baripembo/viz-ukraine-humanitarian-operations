@@ -202,7 +202,7 @@ $( document ).ready(function() {
       else {
         $('#chart-view').hide();
       }
-      //vizTrack($(this).data('id'), currentIndicator.name);
+      vizTrack($(this).data('id'), currentCountryIndicator.name);
     });
 
     //create chart view country select
