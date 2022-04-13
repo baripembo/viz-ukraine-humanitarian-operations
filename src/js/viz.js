@@ -57,6 +57,7 @@ $( document ).ready(function() {
     if (viewportHeight<696) {
       zoomLevel = 1.4;
     }
+    $('#chart-view').height(viewportHeight-$('.tab-menubar').outerHeight()-30);
 
     //load static map -- will only work for screens smaller than 1280
     if (viewportWidth<=1280) {
@@ -182,13 +183,38 @@ $( document ).ready(function() {
     });
   }
 
+
   function initView() {
     //load timeseries for country view 
-    //initTimeseries('', '.country-timeseries-chart');
+    initTimeseries(acledData, '.trendseries-chart');
 
     //check map loaded status
     if (mapLoaded==true && viewInitialized==false)
       deepLinkView();
+
+    //create tab events
+    $('.tab-menubar .tab-button').on('click', function() {
+      $('.tab-button').removeClass('active');
+      $(this).addClass('active');
+      if ($(this).data('id')=='chart-view') {
+        $('#chart-view').show();
+      }
+      else {
+        $('#chart-view').hide();
+      }
+      //vizTrack($(this).data('id'), currentIndicator.name);
+    });
+
+    //create chart view country select
+    $('.trendseries-select').append($('<option value="All">All Oblasts</option>')); 
+    var trendseriesSelect = d3.select('.trendseries-select')
+      .selectAll('option')
+      .data(subnationalData)
+      .enter().append('option')
+        .text(function(d) {
+          return d['#adm1+name']; 
+        })
+        .attr('value', function (d) { return d['#adm1+name']; });
 
     viewInitialized = true;
   }

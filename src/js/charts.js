@@ -39,23 +39,45 @@ function createSparkline(data, div, size) {
 /*** TIMESERIES CHART FUNCTIONS ***/
 /****************************************/
 function initTimeseries(data, div) {
-  createTimeSeries(refugeeTimeseriesData, div);
+  let formattedData = formatData(data);
+  $('.trendseries-title').html('<h6>Total Number of Conflict Events</h6><div class="num">'+numFormat(data.length)+'</div>');
+  createTimeSeries(formattedData, div);
 }
 
-function createTimeSeries(array, div) {
-  var chartWidth = 336;
-  var chartHeight = (isMobile) ? 180 : 240;
-  var colorArray = ['#999'];
+function formatData(data) {
+  let events = d3.nest()
+    .key(function(d) { return d['#event+type']; })
+    .key(function(d) { return d['#date+occurred']; })
+    .rollup(function(leaves) { return leaves.length; })
+    .entries(data);
+  events.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
-  let dateArr = ['x'];
-  let refugeeArr = ['Ukraine'];
-    for (let val of array) {
-    let d = moment(val['#affected+date+refugees'], ['YYYY-MM-DD']);
-    let date = new Date(d.year(), d.month(), d.date());
-    dateArr.push(date);
-    refugeeArr.push(val['#affected+refugees']);
-  }
-  let data = [dateArr, refugeeArr];
+  let dates = [... new Set(acledData.map((d) => d['#date+occurred']))];
+
+  let dataArray = [];
+  events.forEach(function(event) {
+    let array = [];
+    array.push(event.key);
+    dates.forEach(function(date) {
+      let val = 0;
+      event.values.forEach(function(e) {
+        if (e.key==date)
+          val = e.value;
+      });
+      array.push(val);
+    });
+    dataArray.push(array);
+  });
+  dates.unshift('x');
+  dataArray.unshift(dates);
+  return dataArray;
+}
+
+
+function createTimeSeries(data, div) {
+  var chartWidth = viewportWidth - $('.country-panel').width() - 150;
+  var chartHeight = (isMobile) ? 180 : 280;
+  var colorArray = eventColorRange;
 
   var chart = c3.generate({
     size: {
@@ -66,13 +88,9 @@ function createTimeSeries(array, div) {
       bottom: 0,
       top: 10,
       left: 35,
-      right: 30
+      right: 200
     },
     bindto: div,
-    title: {
-      text: 'Refugee Arrivals from Ukraine Over Time',
-      position: 'upper-left',
-    },
     data: {
       x: 'x',
       columns: data,
@@ -81,11 +99,11 @@ function createTimeSeries(array, div) {
     color: {
       pattern: colorArray
     },
-    spline: {
-      interpolation: {
-        type: 'basis'
-      }
-    },
+    // spline: {
+    //   interpolation: {
+    //     type: 'cardinal'
+    //   }
+    // },
     point: { show: false },
     grid: {
       y: {
@@ -104,39 +122,40 @@ function createTimeSeries(array, div) {
         padding: { top: 0, bottom: 0 },
         tick: { 
           outer: false,
-          format: shortenNumFormat
+          //format: shortenNumFormat
         }
       }
     },
     legend: {
-      show: false
+      position: 'right'
     },
     transition: { duration: 300 },
-    tooltip: {
-      grouped: false,
-      format: {
-        title: function (d) { 
-          let date = new Date(d);
-          return moment(d).format('M/D/YY');
-        },
-        value: function (value, ratio, id) {
-          return numFormat(value);
-        }
-      }
-    }
+    // tooltip: {
+    //   grouped: false,
+    //   format: {
+    //     title: function (d) { 
+    //       let date = new Date(d);
+    //       return moment(d).format('M/D/YY');
+    //     },
+    //     value: function (value, ratio, id) {
+    //       return numFormat(value);
+    //     }
+    //   }
+    // }
   });
 
   countryTimeseriesChart = chart;
-  createSource($('.refugees-timeseries'), '#affected+refugees');
+  createSource($('#chart-view .source-container'), '#date+latest+acled');
 }
 
 
 function updateTimeseries(selected) {
-  var maxValue = d3.max(countryTimeseriesChart.data(selected)[0].values, function(d) { return +d.value; });
+  let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+name'] == 'Donetsk') : acledData;
+  let data = formatData(filteredData);
+  $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
-  countryTimeseriesChart.axis.max(maxValue*1.6);
-  countryTimeseriesChart.focus(selected);
-  $('.country-timeseries-chart .c3-chart-lines .c3-line').css('stroke', '#999');
-  $('.country-timeseries-chart .c3-chart-lines .c3-line-'+selected).css('stroke', '#007CE1');
-  $('.refugees-timeseries').show();
+  countryTimeseriesChart.load({
+    columns: data,
+    unload: ['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians']
+  });
 }

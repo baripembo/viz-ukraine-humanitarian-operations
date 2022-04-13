@@ -146,6 +146,12 @@ function createEvents() {
     updateCountryLayer();
     vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
   });
+
+  //chart view trendseries select event
+  d3.select('.trendseries-select').on('change',function(e) {
+    var selected = d3.select('.trendseries-select').node().value;
+    updateTimeseries(selected);
+  });
 }
 
 function selectCountry(features) {
@@ -180,7 +186,7 @@ function selectCountry(features) {
       bottom: 50
     };
   map.fitBounds(regionBoundaryData[0].bbox, {
-    offset: [ 0, -25],
+    offset: [ 0, 25],
     padding: {right: mapPadding.right, bottom: mapPadding.bottom, left: mapPadding.left},
     linear: true
   });
@@ -223,7 +229,7 @@ function initCountryLayer() {
           .setLngLat(e.lngLat);
       }
       else {
-        if (f.layer.id!='hostilities-layer') {
+        if (f.layer.id!='hostilities-layer' && f.layer.id!='country-labels' && f.layer.id!='adm1-label' && f.layer.id!='town-dots') {
           map.getCanvas().style.cursor = '';
           tooltip.remove();
         }
