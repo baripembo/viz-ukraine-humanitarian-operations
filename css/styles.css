@@ -1770,14 +1770,28 @@ a:visited {
     margin: 15px 0;
     padding: 0 20px; }
   .mapboxgl-ctrl-top-right {
-    top: 0;
+    top: 50px;
     right: 0; }
   .content {
     width: 100% !important; }
+  .tab-menubar {
+    left: 0;
+    top: 50%; }
   #global-map {
     height: 50%;
     position: absolute;
     top: 50%; }
+  #chart-view {
+    height: 50%;
+    margin-top: 50px;
+    padding: 15px 20px;
+    position: absolute;
+    top: 50%; }
+    #chart-view .trendseries-title h6 {
+      font-size: 12px; }
+    #chart-view .trendseries-title .num {
+      font-size: 24px;
+      padding: 0; }
   .content.country-view .map-legend.country {
     max-height: 39% !important;
     bottom: 10px;
@@ -1789,7 +1803,6 @@ a:visited {
     font-size: 10px;
     line-height: 14px; }
   .country-panel {
-    box-shadow: 0px 15px 15px -16px #999;
     height: 50%;
     overflow-y: scroll;
     padding: 10px 0 0;
