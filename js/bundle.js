@@ -1249,7 +1249,8 @@ function initCountryPanel() {
     var obj = {date: d['#affected+date+refugees'], value: d['#affected+refugees']};
     sparklineArray.push(obj);
   });
-  createSparkline(sparklineArray, '.figure.refugees .stat');
+
+  if ($('.figure.refugees .stat .sparkline').length<=0) createSparkline(sparklineArray, '.figure.refugees .stat');
 
   //casualty sparklines
   let killedArray = [];
