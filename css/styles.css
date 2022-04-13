@@ -1712,6 +1712,27 @@ a:visited {
 .trendseries-chart .c3-axis text {
   fill: #888; }
 
+.trendseries-chart table {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #CCC;
+  border-collapse: collapse;
+  font-size: 13px; }
+  .trendseries-chart table td,
+  .trendseries-chart table th {
+    padding: 2px 6px; }
+  .trendseries-chart table th {
+    background-color: #EDF6FD;
+    text-align: left; }
+  .trendseries-chart table td {
+    border: 1px solid #CCC; }
+    .trendseries-chart table td:last-child {
+      text-align: right; }
+  .trendseries-chart table .key {
+    display: inline-block;
+    height: 10px;
+    margin-right: 6px;
+    width: 10px; }
+
 .mobile-message {
   background-color: rgba(0, 0, 0, 0.5);
   display: none;
