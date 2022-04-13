@@ -214,7 +214,7 @@ $( document ).ready(function() {
         .text(function(d) {
           return d['#adm1+name']; 
         })
-        .attr('value', function (d) { return d['#adm1+name']; });
+        .attr('value', function (d) { return d['#adm1+code']; });
 
     viewInitialized = true;
   }
