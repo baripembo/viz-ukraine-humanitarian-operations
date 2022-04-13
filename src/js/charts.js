@@ -2,7 +2,7 @@
 /*** SPARKLINES ***/
 /******************/
 function createSparkline(data, div, size) {
-  var width = (isMobile) ? 30 : 65;
+  var width = (isMobile) ? 30 : 60;
   var height = 20;
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
