@@ -75,9 +75,9 @@ function formatData(data) {
 
 
 function createTimeSeries(data, div) {
-  var chartWidth = viewportWidth - $('.country-panel').width() - 150;
-  var chartHeight = (isMobile) ? 180 : 280;
-  var colorArray = eventColorRange;
+  const chartWidth = viewportWidth - $('.country-panel').width() - 150;
+  const chartHeight = (isMobile) ? 180 : 280;
+  let colorArray = eventColorRange;
 
   var chart = c3.generate({
     size: {
@@ -119,10 +119,10 @@ function createTimeSeries(data, div) {
       },
       y: {
         min: 0,
-        padding: { top: 0, bottom: 0 },
+        padding: { top: 50, bottom: 0 },
         tick: { 
           outer: false,
-          //format: shortenNumFormat
+          //format: d3.format('d')
         }
       }
     },
@@ -130,18 +130,22 @@ function createTimeSeries(data, div) {
       position: 'right'
     },
     transition: { duration: 300 },
-    // tooltip: {
-    //   grouped: false,
-    //   format: {
-    //     title: function (d) { 
-    //       let date = new Date(d);
-    //       return moment(d).format('M/D/YY');
-    //     },
-    //     value: function (value, ratio, id) {
-    //       return numFormat(value);
-    //     }
-    //   }
-    // }
+    tooltip: {
+      contents: function (d) {
+        let date = new Date(d[0].x);
+        let total = 0;
+        let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
+        d.forEach(function(event, index) {
+          total += event.index;
+          html += `<tr><td><span class='key' style='background-color: ${eventColorRange[index]}'></span>${event.name}</td><td>${event.index}</td></tr>`;
+        });
+        html += `<tr><td>Total</td><td>${total}</td></tr></table>`;
+        return html;
+      }
+    },
+    onrendered: function() {
+      $('.trendseries-chart').show();
+    }
   });
 
   countryTimeseriesChart = chart;
@@ -150,12 +154,17 @@ function createTimeSeries(data, div) {
 
 
 function updateTimeseries(selected) {
-  let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+name'] == 'Donetsk') : acledData;
+  let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+code'] == selected) : acledData;
   let data = formatData(filteredData);
   $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
-  countryTimeseriesChart.load({
-    columns: data,
-    unload: ['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians']
-  });
+  if (filteredData.length<=0) {
+    $('.trendseries-chart').hide();
+  }
+  else {
+    countryTimeseriesChart.load({
+      columns: data,
+      unload: ['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians']
+    });
+  }
 }
