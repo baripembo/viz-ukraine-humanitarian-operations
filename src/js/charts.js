@@ -153,8 +153,10 @@ function createTimeSeries(data, div) {
         let total = 0;
         let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
         for (var i=0; i<=events.length-1; i++) {
-          html += `<tr><td>${events[i][0]}</td><td>${events[i][id]}</td></tr>`;
-          total += events[i][id];
+          if (events[i][id]>0) {
+            html += `<tr><td>${events[i][0]}</td><td>${events[i][id]}</td></tr>`;
+            total += events[i][id];
+          }
         };
         html += `<tr><td><b>Total</b></td><td><b>${total}</b></td></tr></table>`;
         return html;
