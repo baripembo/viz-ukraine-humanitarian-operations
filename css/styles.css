@@ -1713,25 +1713,29 @@ a:visited {
   fill: #888; }
 
 .trendseries-chart table {
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #CCC;
+  background-color: #FFF;
+  border: 1px solid #E2E2E2;
   border-collapse: collapse;
-  font-size: 13px; }
-  .trendseries-chart table td,
+  border-spacing: 0; }
   .trendseries-chart table th {
-    padding: 2px 6px; }
-  .trendseries-chart table th {
-    background-color: #EDF6FD;
-    text-align: left; }
+    background-color: #B3B3B3;
+    border: 1px solid #B3B3B3;
+    color: #FFF;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 6px 6px; }
   .trendseries-chart table td {
-    border: 1px solid #CCC; }
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 13px;
+    font-weight: normal !important;
+    padding: 4px 7px; }
     .trendseries-chart table td:last-child {
+      border-left: 1px solid #E2E2E2;
       text-align: right; }
-  .trendseries-chart table .key {
-    display: inline-block;
-    height: 10px;
-    margin-right: 6px;
-    width: 10px; }
+  .trendseries-chart table tr:last-child {
+    border-top: 1px solid #E2E2E2; }
 
 .mobile-message {
   background-color: rgba(0, 0, 0, 0.5);
