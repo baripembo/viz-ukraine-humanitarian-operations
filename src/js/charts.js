@@ -126,7 +126,7 @@ function createTimeSeries(data, div) {
       y: {
         min: 0,
         padding: { 
-          top: (isMobile) ? 20 : 60, 
+          top: (isMobile) ? 20 : 50, 
           bottom: 0 
         },
         tick: { 
