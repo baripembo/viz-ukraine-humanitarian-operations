@@ -748,30 +748,55 @@ a:visited {
 	.c3-axis text {
 		fill: #888;
 	}
-	table {
-		background-color: rgba(255, 255, 255, 0.9);
-		border: 1px solid #CCC;
+	// table {
+	// 	background-color: rgba(255, 255, 255, 0.9);
+	// 	border: 1px solid #CCC;
+	// 	border-collapse: collapse;
+	// 	font-size: 13px;
+	// 	td,
+	// 	th {
+	// 		padding: 2px 6px;
+	// 	}
+	// 	th {
+	// 		background-color: #EDF6FD;
+	// 		text-align: left;
+	// 	}
+	// 	td {
+	// 		border: 1px solid #CCC;
+	// 		&:last-child {
+	// 			text-align: right;
+	// 		}
+	// 	}
+	// }
+	table {	
+		background-color: #FFF;
+		border: 1px solid #E2E2E2;
 		border-collapse: collapse;
-		font-size: 13px;
-		td,
+	  border-spacing: 0;
 		th {
-			padding: 2px 6px;
-		}
-		th {
-			background-color: #EDF6FD;
-			text-align: left;
+			background-color: #B3B3B3;
+			border: 1px solid #B3B3B3;
+			color: #FFF;
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 16px;
+			font-weight: bold;
+			margin: 0;
+			padding: 6px 6px;
 		}
 		td {
-			border: 1px solid #CCC;
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 13px;
+			font-weight: normal !important;
+			padding: 4px 7px;
 			&:last-child {
+				border-left: 1px solid #E2E2E2;
 				text-align: right;
 			}
 		}
-		.key {
-			display: inline-block;
-			height: 10px;
-			margin-right: 6px;
-			width: 10px;
+		tr {
+			&:last-child {
+				border-top: 1px solid #E2E2E2;
+			}
 		}
 	}
 }
