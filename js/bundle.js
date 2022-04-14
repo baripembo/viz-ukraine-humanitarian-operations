@@ -147,7 +147,7 @@ function createTimeSeries(data, div) {
     legend: {
       show: false
     },
-    transition: { duration: 300 },
+    transition: { duration: 500 },
     tooltip: {
       contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
         let events = eventsArray;
@@ -184,8 +184,7 @@ function updateTimeseries(selected) {
   }
   else {
     countryTimeseriesChart.load({
-      columns: data.series,
-      unload: true
+      columns: data.series
     });
   }
 }
