@@ -44,6 +44,7 @@ function initTimeseries(data, div) {
   createTimeSeries(formattedData, div);
 }
 
+let eventsArray;
 function formatData(data) {
   let events = d3.nest()
     .key(function(d) { return d['#event+type']; })
@@ -53,31 +54,36 @@ function formatData(data) {
   events.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
   let dates = [... new Set(acledData.map((d) => d['#date+occurred']))];
+  let totals = [];
 
-  let dataArray = [];
+  eventsArray = [];
   events.forEach(function(event) {
     let array = [];
-    array.push(event.key);
-    dates.forEach(function(date) {
+    dates.forEach(function(date, index) {
       let val = 0;
       event.values.forEach(function(e) {
         if (e.key==date)
           val = e.value;
       });
-      array.push(val);
+      totals[index] = (totals[index]==undefined) ? val : totals[index]+val; //save aggregate of all events per day
+      array.push(val); //save each event per day
     });
-    dataArray.push(array);
+    array.reverse();
+    array.unshift(event.key);
+    eventsArray.push(array);
   });
+
+  //format for c3
   dates.unshift('x');
-  dataArray.unshift(dates);
-  return dataArray;
+  totals.unshift('All');
+  return {series: [dates, totals], events: eventsArray};
 }
 
 
 function createTimeSeries(data, div) {
-  const chartWidth = viewportWidth - $('.country-panel').width() - 150;
+  const chartWidth = viewportWidth - $('.country-panel').width();
   const chartHeight = 280;
-  let colorArray = eventColorRange;
+  let colorArray = ['#F8B1AD'];
 
   var chart = c3.generate({
     size: {
@@ -93,17 +99,12 @@ function createTimeSeries(data, div) {
     bindto: div,
     data: {
       x: 'x',
-      columns: data,
-      type: 'spline'
+      columns: data.series,
+      type: 'bar'
     },
     color: {
       pattern: colorArray
     },
-    // spline: {
-    //   interpolation: {
-    //     type: 'cardinal'
-    //   }
-    // },
     point: { show: false },
     grid: {
       y: {
@@ -130,24 +131,20 @@ function createTimeSeries(data, div) {
       }
     },
     legend: {
-      position: (isMobile) ? 'inset' : 'right',      
-      inset: {
-          anchor: 'top-right',
-          x: -20,
-          y: 200,
-          step: 2
-      }
+      show: false
     },
     transition: { duration: 300 },
     tooltip: {
       contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+        let events = eventsArray;
+        let id = d[0].index + 1;
         let date = new Date(d[0].x);
         let total = 0;
         let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
-        d.forEach(function(event, index) {
-          total += event.value;
-          html += `<tr><td><span class='key' style='background-color: ${color(d[index].id)}'></span>${event.name}</td><td>${event.value}</td></tr>`;
-        });
+        for (var i=0; i<=events.length-1; i++) {
+          html += `<tr><td>${events[i][0]}</td><td>${events[i][id]}</td></tr>`;
+          total += events[i][id];
+        };
         html += `<tr><td><b>Total</b></td><td><b>${total}</b></td></tr></table>`;
         return html;
       }
@@ -165,6 +162,7 @@ function createTimeSeries(data, div) {
 function updateTimeseries(selected) {
   let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+code'] == selected) : acledData;
   let data = formatData(filteredData);
+  eventsArray = data.events;
   $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
   if (filteredData.length<=0) {
@@ -172,8 +170,8 @@ function updateTimeseries(selected) {
   }
   else {
     countryTimeseriesChart.load({
-      columns: data,
-      unload: ['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians']
+      columns: data.series,
+      unload: true
     });
   }
 }
