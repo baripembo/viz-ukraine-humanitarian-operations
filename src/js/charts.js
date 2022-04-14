@@ -81,7 +81,7 @@ function formatData(data) {
 
 
 function createTimeSeries(data, div) {
-  const chartWidth = viewportWidth - $('.country-panel').width();
+  const chartWidth = viewportWidth - $('.country-panel').width() - 100;
   const chartHeight = 280;
   let colorArray = ['#F8B1AD'];
 
@@ -101,6 +101,11 @@ function createTimeSeries(data, div) {
       x: 'x',
       columns: data.series,
       type: 'bar'
+    },
+    bar: {
+        width: {
+            ratio: 0.5
+        }
     },
     color: {
       pattern: colorArray
@@ -127,6 +132,12 @@ function createTimeSeries(data, div) {
         tick: { 
           outer: false,
           //format: d3.format('d')
+          format: function(d) {
+            if (Math.floor(d) != d){
+              return;
+            }
+            return d;
+          }
         }
       }
     },
