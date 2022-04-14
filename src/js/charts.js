@@ -159,9 +159,6 @@ function createTimeSeries(data, div) {
         html += `<tr><td><b>Total</b></td><td><b>${total}</b></td></tr></table>`;
         return html;
       }
-    },
-    onrendered: function() {
-      $('.trendseries-chart').show();
     }
   });
 
@@ -176,12 +173,12 @@ function updateTimeseries(selected) {
   eventsArray = data.events;
   $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
-  if (filteredData.length<=0) {
+  if (filteredData.length<=0)
     $('.trendseries-chart').hide();
-  }
-  else {
-    countryTimeseriesChart.load({
-      columns: data.series
-    });
-  }
+  else 
+    $('.trendseries-chart').show();
+
+  countryTimeseriesChart.load({
+    columns: data.series
+  });
 }
