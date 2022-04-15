@@ -874,6 +874,11 @@ a:visited {
 		font-size: 10px;
     line-height: 14px;
 	}
+	label {
+		&.label-small {
+			margin: 0;
+		}
+	}
 	.country-panel {
 		//box-shadow: 0px 15px 15px -16px #999;
 		height: 50%;

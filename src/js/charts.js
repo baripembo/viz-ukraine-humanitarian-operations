@@ -94,7 +94,7 @@ function createTimeSeries(data, div) {
       bottom: (isMobile) ? 60 : 0,
       top: 10,
       left: (isMobile) ? 30 : 35,
-      right: (isMobile) ? 140 : 200
+      right: (isMobile) ? 200 : 200
     },
     bindto: div,
     data: {
