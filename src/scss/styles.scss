@@ -731,13 +731,6 @@ a:visited {
   stroke-width: 1px;
 }
 
-.pie-chart {
-	path {
-		&:last-child {
-			stroke-width: 0 !important;
-		}
-	}
-}
 
 .trendseries-chart {
 	// .c3-target.c3-focused .c3-lines .c3-line {
