@@ -593,6 +593,11 @@ a:visited {
 			.title {
 				height: 36px;
 			}
+			.stat {
+				display: flex;
+		    gap: 5px;
+		    align-items: center;
+			}
 		}
 	}
 }
@@ -722,9 +727,16 @@ a:visited {
 
 .sparkline {
   fill: none;
-  margin-left: 10px;
   stroke: #007CE1;
   stroke-width: 1px;
+}
+
+.pie-chart {
+	path {
+		&:last-child {
+			stroke-width: 0 !important;
+		}
+	}
 }
 
 .trendseries-chart {
@@ -907,16 +919,14 @@ a:visited {
 						font-size: 11px;
 						line-height: 15px;
 					}
-				}
+				}	
 			}
 		}
 	}
 	.stat {
 		font-size: 24px;
 		margin: 20px 0 5px;
-	}
-	.sparkline {
-		margin-left: 6px;
+		gap: 3px;
 	}
 }
 
