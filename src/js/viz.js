@@ -164,6 +164,7 @@ $( document ).ready(function() {
 
       //map humanitarian icons to sector clusters
       humIcons = {
+        'Camp Coordination & Camp Management': 'humanitarianicons-Coordination',
         'Coordination and Common Services': 'humanitarianicons-Coordination',
         'Education': 'humanitarianicons-Education',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
