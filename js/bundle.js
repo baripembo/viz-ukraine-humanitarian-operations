@@ -197,16 +197,13 @@ function createPieChart(data, div) {
   let funded = data[1];
   let fundedPercent = funded/requirement;
 
-  // set the dimensions and margins of the graph
   let width = (isMobile) ? 25 : 30
       height = width
       margin = 1
 
-  // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-  var radius = Math.min(width, height) / 2 - margin
+  let radius = Math.min(width, height)/2 - margin
 
-  // append the svg object to the div called 'my_dataviz'
-  var svg = d3.select(div)
+  let svg = d3.select(div)
     .append('svg')
       .attr('class', 'pie-chart')
       .attr('width', width)
@@ -214,73 +211,27 @@ function createPieChart(data, div) {
     .append('g')
       .attr('transform', `translate(${width/2}, ${height/2})`);
 
-  // Create dummy data
-  console.log(fundedPercent, 100-fundedPercent)
-  var data = {a: fundedPercent, b: 100-fundedPercent}
+  let dataArray = {a: fundedPercent, b: 1-fundedPercent};
 
-  // set the color scale
-  var color = d3.scaleOrdinal()
+  let color = d3.scaleOrdinal()
     .domain(data)
     .range(['#418FDE', '#DFDFDF'])
 
-  // Compute the position of each group on the pie:
-  var pie = d3.pie()
-    .value(function(d) {return d.value; })
-  var data_ready = pie(d3.entries(data))
+  let pie = d3.pie()
+    .value(function(d) { return d.value; }).sort(null);
+  let formatData = pie(d3.entries(dataArray));
 
-  // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
   svg
-    .selectAll('whatever')
-    .data(data_ready)
+    .selectAll('g')
+    .data(formatData)
     .enter()
     .append('path')
     .attr('d', d3.arc()
       .innerRadius(0)
       .outerRadius(radius)
     )
-    .attr('fill', function(d){ return(color(d.data.key)) })
-    .style('stroke', '#418FDE')
-    .style('stroke-width', 1)
-    .style('opacity', 0.7)
-  // console.log(data, div)
-  // let requirement = data[0];
-  // let funded = data[1];
-  // let fundedPercent = funded/requirement;
-
-  // let width = (isMobile) ? 20 : 10;
-  // let height = 10;
-
-  // let pie = c3.generate({
-  //   bindto: div,
-  //   data: {
-  //     columns: [
-  //       ['Requirement',100-fundedPercent],
-  //       ['Funded', fundedPercent],
-  //     ],
-  //     type : 'pie',    
-  //     colors: {
-  //       Requirement: '#DFDFDF',
-  //       Funded: '#418FDE'
-  //     }
-  //     // onclick: function (d, i) { console.log("onclick", d, i); },
-  //     // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-  //     // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-  //   },
-  //   pie: {
-  //     expand: false,
-  //     padAngle: -0.1,
-  //     label: {
-  //       show: false
-  //     }
-  //   },
-  //   legend: {
-  //     show: false
-  //   },
-  //   tooltip: {
-  //     show: false,
-  //     point: false,
-  //   },
-  // });
+    .attr('fill', function(d){ return( color(d.data.key)) })
+    .style('stroke-width', 0)
 }
 
 

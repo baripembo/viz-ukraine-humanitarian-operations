@@ -1698,9 +1698,6 @@ a:visited {
   stroke: #007CE1;
   stroke-width: 1px; }
 
-.pie-chart path:last-child {
-  stroke-width: 0 !important; }
-
 .trendseries-chart .c3-line {
   stroke-width: 2; }
 
