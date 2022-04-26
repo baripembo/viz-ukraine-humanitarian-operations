@@ -78,7 +78,8 @@ $( document ).ready(function() {
       d3.json('data/ukr_refugee_lines.geojson'),
       d3.json('data/wrl_ukr_capp.geojson'),
       d3.json('data/hostilities.geojson'),
-      d3.json('data/macro-region.geojson')
+      d3.json('data/macro-region.geojson'),
+      d3.json('https://data.humdata.org/dataset/a3ac4e13-e765-4b9a-a33f-e7a951c201bf/resource/59c1e127-4a41-4bc8-aaee-9f72a97d7db6/download/ukr_border_crossings.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -101,6 +102,8 @@ $( document ).ready(function() {
       locationData = data[4];
       hostilityData = data[5];
       idpGeoJson = data[6];
+
+      console.log('---', data[7])
             
       //process acled data
       acledData.forEach(function(event) {
