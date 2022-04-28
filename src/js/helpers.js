@@ -59,6 +59,19 @@ function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+function regionMatch(region) {
+  // var match = false;
+  // var regions = region.split('|');
+  // for (var region of regions) {
+  //   if (currentRegion=='' || region==currentRegion) {
+  //     match = true;
+  //     break;
+  //   }
+  // }
+  // return match;
+  return true;
+}
+
 function createFootnote(target, indicator, text) {
   var indicatorName = (indicator==undefined) ? '' : indicator;
   var className = (indicatorName=='') ? 'footnote' : 'footnote footnote-indicator';
