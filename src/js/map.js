@@ -36,7 +36,7 @@ function displayMap() {
     //position global figures
   if (window.innerWidth>=1440) {
     $('.menu-indicators li:first-child div').addClass('expand');
-    $('.tab-menubar, #chart-view, .comparison-panel').css('left', $('.secondary-panel').outerWidth());
+    //$('.tab-menubar, #chart-view, .comparison-panel').css('left', $('.secondary-panel').outerWidth());
     $('.secondary-panel').animate({
       left: 0
     }, 200);
@@ -121,7 +121,7 @@ function displayMap() {
   });
 
   //init global and country layers
-  initGlobalLayer();
+  //initGlobalLayer();
   initCountryLayer();
 
   //deeplink to country if parameter exists
@@ -353,10 +353,10 @@ function initBorderCrossingLayer() {
 
 
 function initLocationLabels() {
-  //location data
-  map.addSource('location-data', {
+  //surrounding country data
+  map.addSource('country-data', {
     type: 'geojson',
-    data: locationData,
+    data: countryData,
     generateId: true 
   });
 
@@ -364,8 +364,7 @@ function initLocationLabels() {
   map.addLayer({
     id: 'country-labels',
     type: 'symbol',
-    source: 'location-data',
-    filter: ['==', 'TYPE', 'ADMIN 0'],
+    source: 'country-data',
     layout: {
       'text-field': [
         'format',
@@ -382,6 +381,14 @@ function initLocationLabels() {
       'text-halo-width': 1,
       'text-halo-blur': 1
     }
+  });
+
+
+  //town/capital data
+  map.addSource('location-data', {
+    type: 'geojson',
+    data: locationData,
+    generateId: true 
   });
 
   //towm markers

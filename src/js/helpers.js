@@ -72,6 +72,19 @@ function regionMatch(region) {
   return true;
 }
 
+
+//regional id/name list
+const regionalList = [
+  {id: 'HRPs', name: 'Humanitarian Response Plan Countries'},
+  {id: 'ROAP', name: 'Asia and the Pacific'},
+  {id: 'ROCCA', name: 'Eastern Europe'},
+  {id: 'ROLAC', name: 'Latin America and the Caribbean'},
+  {id: 'ROMENA', name: 'Middle East and North Africa'},
+  {id: 'ROSEA', name: 'Southern and Eastern Africa'},
+  {id: 'ROWCA', name: 'West and Central Africa'}
+];
+
+
 function createFootnote(target, indicator, text) {
   var indicatorName = (indicator==undefined) ? '' : indicator;
   var className = (indicatorName=='') ? 'footnote' : 'footnote footnote-indicator';
