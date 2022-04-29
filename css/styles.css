@@ -1289,7 +1289,7 @@ a:visited {
   .content .content-left {
     background-color: #FFF;
     box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
-    display: none;
+    display: flex;
     flex-flow: column;
     overflow: auto;
     padding: 20px 0 10px;
@@ -1301,6 +1301,29 @@ a:visited {
     height: 100%;
     position: relative;
     z-index: 1; }
+    .content .content-right .tab-menubar {
+      display: none; }
+    .content .content-right #btn-switch-view {
+      top: 20px; }
+    .content .content-right .mapboxgl-ctrl-top-right {
+      right: 16px;
+      top: 68px; }
+    .content .content-right .mapboxgl-ctrl-bottom-left {
+      left: 10px; }
+  .content .country-panel {
+    display: none; }
+  .content.country-view .content-left {
+    display: none; }
+  .content.country-view .content-right .tab-menubar {
+    display: flex; }
+  .content.country-view .content-right #btn-switch-view {
+    top: 60px; }
+  .content.country-view .content-right .mapboxgl-ctrl-top-right {
+    top: 108px; }
+  .content.country-view .content-right .mapboxgl-ctrl-bottom-left {
+    left: 420px; }
+  .content.country-view .country-panel {
+    display: block; }
   .content.country-view .map-legend.country {
     left: auto;
     right: 24px;
@@ -1325,6 +1348,100 @@ a:visited {
     margin-top: 12px; }
   .logos .footnote {
     padding: 10px 20px; }
+
+.menu h4 {
+  padding: 0 20px 6px;
+  text-transform: uppercase; }
+
+.menu .global-menu {
+  display: block;
+  margin-top: 10px; }
+  .menu .global-menu h4 {
+    font-size: 11px;
+    line-height: 12px;
+    padding: 15px 0 10px 20px;
+    text-transform: uppercase; }
+
+.btn-subscription {
+  background-color: #007CE1;
+  border: 0;
+  color: #FFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 20px 10px;
+  padding: 5px 10px;
+  text-decoration: none; }
+  .btn-subscription:visited {
+    color: #FFF; }
+
+.download-link {
+  padding: 0 20px;
+  text-transform: uppercase; }
+  .download-link a {
+    display: flex;
+    line-height: 16px;
+    margin-bottom: 15px;
+    text-decoration: none;
+    width: 100%; }
+  .download-link i {
+    font-size: 16px;
+    margin-left: auto;
+    padding-top: 3px; }
+  .download-link .download-quarterly label {
+    display: none; }
+
+.menu-indicators li {
+  color: #888;
+  cursor: pointer;
+  font-size: 14px; }
+  .menu-indicators li div {
+    align-items: center;
+    display: flex;
+    height: 60px;
+    padding: 0 54px 0 25px;
+    position: relative; }
+    .menu-indicators li div:after {
+      color: #CCC;
+      content: '\e96e';
+      font-family: 'Humanitarian-Icons-v02';
+      position: absolute;
+      right: 20px; }
+    .menu-indicators li div.expand:after {
+      content: '\e9e8'; }
+    .menu-indicators li div.no-expand:after {
+      content: ''; }
+  .menu-indicators li i {
+    flex: 0 0 18px;
+    font-size: 18px;
+    text-align: center;
+    margin: 0 14px 0 7px; }
+  .menu-indicators li:hover, .menu-indicators li.selected {
+    background-color: #F1F1F1;
+    color: #000;
+    font-weight: 700; }
+    .menu-indicators li:hover i, .menu-indicators li.selected i {
+      color: #007CE1; }
+
+.region-select,
+.ranking-select,
+.sorting-select,
+.trendseries-select {
+  background-color: #FFF;
+  border-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  font: 700 16px 'Source Sans Pro', sans-serif;
+  height: 48px;
+  padding: 0 20px;
+  width: 100%; }
+
+.region-select {
+  margin: 0 20px;
+  width: 82%; }
+
+.trendseries-select {
+  width: auto; }
 
 .label-header {
   display: block;
@@ -1531,13 +1648,6 @@ a:visited {
       .mapboxgl-popup.map-tooltip .mapboxgl-popup-content ul li {
         margin-left: 30px; }
 
-.mapboxgl-ctrl-top-right {
-  top: 60px;
-  right: 16px; }
-
-.mapboxgl-ctrl-bottom-left {
-  left: 420px; }
-
 .country-panel {
   background-color: #FFF;
   box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
@@ -1626,6 +1736,22 @@ a:visited {
       border-color: #F05449;
       color: #F05449; }
 
+#btn-switch-view {
+  background-color: #FFF;
+  border-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  color: #000;
+  font: 700 16px 'Source Sans Pro', sans-serif;
+  height: 48px;
+  padding: 0 30px;
+  line-height: 48px;
+  position: absolute;
+  right: 24px;
+  width: auto; }
+  #btn-switch-view:hover {
+    color: #F05449; }
+
 #chart-view {
   background-color: #FFF;
   display: none;
@@ -1655,15 +1781,145 @@ a:visited {
     fill: #F2645B !important;
     fill-opacity: 1 !important; }
 
-.trendseries-select {
-  background-color: #FFF;
-  border-color: #FFF;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  font: 700 16px 'Source Sans Pro', sans-serif;
-  height: 48px;
-  padding: 0 20px;
-  width: auto; }
+.secondary-panel {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 4px rgba(208, 208, 208, 0.5);
+  height: 100vh;
+  left: -255px;
+  overflow: auto;
+  padding: 20px 25px;
+  position: absolute;
+  top: 0;
+  width: 255px;
+  z-index: 4; }
+  .secondary-panel .close-btn {
+    cursor: pointer;
+    color: #888;
+    position: absolute;
+    right: 20px;
+    top: 20px; }
+  .secondary-panel .secondary-panel-title {
+    padding-left: 0;
+    padding-right: 18px; }
+  .secondary-panel .source-container .source {
+    padding-right: 50px; }
+  .secondary-panel .global-figures {
+    border-bottom: 1px solid #CCC;
+    line-height: 14px;
+    padding: 15px 0; }
+  .secondary-panel .figures {
+    padding-top: 10px; }
+    .secondary-panel .figures .key-figure {
+      padding-bottom: 10px; }
+      .secondary-panel .figures .key-figure .inner {
+        border-bottom: 1px solid #CCC;
+        padding-bottom: 10px; }
+        .secondary-panel .figures .key-figure .inner h3 {
+          color: #000;
+          font-size: 14px;
+          line-height: 16px;
+          margin: 10px 0; }
+        .secondary-panel .figures .key-figure .inner .num {
+          position: relative; }
+        .secondary-panel .figures .key-figure .inner svg {
+          bottom: 10px;
+          left: 125px;
+          position: absolute; }
+        .secondary-panel .figures .key-figure .inner .small + .small {
+          margin-top: 6px; }
+  .secondary-panel .date {
+    padding-bottom: 10px; }
+  .secondary-panel .num {
+    color: #000;
+    font-family: 'Gotham-Light', sans-serif;
+    font-size: 36px;
+    line-height: 40px;
+    padding: 5px 0; }
+    .secondary-panel .num span {
+      font-size: 26px; }
+  .secondary-panel .access-figures {
+    border-bottom: 1px solid #CCC;
+    margin: 10px 0;
+    padding-bottom: 10px; }
+    .secondary-panel .access-figures li {
+      display: flex;
+      font-size: 14px; }
+    .secondary-panel .access-figures .pct {
+      flex: 0 0 40px; }
+
+.ranking-container .ranking-chart {
+  margin-top: 20px;
+  min-height: 234px;
+  overflow: scroll; }
+  .ranking-container .ranking-chart .bar {
+    fill: #F2645B; }
+  .ranking-container .ranking-chart .name {
+    text-anchor: end; }
+  .ranking-container .ranking-chart .y.axis text {
+    display: none; }
+
+.ranking-container .ranking-title {
+  display: block; }
+
+.ranking-container .ranking-select-container {
+  display: block;
+  margin-top: 10px; }
+  .ranking-container .ranking-select-container .default-select {
+    display: block; }
+  .ranking-container .ranking-select-container .covid-select,
+  .ranking-container .ranking-select-container .vaccine-select,
+  .ranking-container .ranking-select-container .vaccine-financing-select,
+  .ranking-container .ranking-select-container .inform-select {
+    display: none; }
+
+.ranking-container.covid .ranking-title {
+  display: none; }
+
+.ranking-container.covid .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.covid .ranking-select-container .covid-select {
+  display: block; }
+  .ranking-container.covid .ranking-select-container .covid-select .ranking-select {
+    height: 50px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-vaccine .ranking-title {
+  display: none; }
+
+.ranking-container.ranking-vaccine .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-vaccine .ranking-select-container .vaccine-select {
+  display: block; }
+  .ranking-container.ranking-vaccine .ranking-select-container .vaccine-select .ranking-select {
+    height: 40px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-vaccine-financing .ranking-title {
+  display: none; }
+
+.ranking-container.ranking-vaccine-financing .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select {
+  display: block; }
+  .ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select .ranking-select {
+    height: 40px;
+    white-space: pre-wrap;
+    width: 100%; }
+
+.ranking-container.ranking-inform .ranking-select-container .default-select {
+  display: none; }
+
+.ranking-container.ranking-inform .ranking-select-container .inform-select {
+  display: block; }
+  .ranking-container.ranking-inform .ranking-select-container .inform-select .ranking-select {
+    height: 30px;
+    white-space: pre-wrap;
+    width: auto; }
 
 .c3-title,
 .chart-title {
