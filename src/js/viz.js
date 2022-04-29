@@ -23,7 +23,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons = '';
+var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons, countryData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -78,7 +78,8 @@ $( document ).ready(function() {
       d3.json('data/ukr_refugee_lines.geojson'),
       d3.json('data/wrl_ukr_capp.geojson'),
       d3.json('data/hostilities.geojson'),
-      d3.json('data/macro-region.geojson')
+      d3.json('data/macro-region.geojson'),
+      d3.json('data/country.geojson')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -101,6 +102,7 @@ $( document ).ready(function() {
       locationData = data[4];
       hostilityData = data[5];
       idpGeoJson = data[6];
+      countryData = data[7];
             
       //process acled data
       acledData.forEach(function(event) {

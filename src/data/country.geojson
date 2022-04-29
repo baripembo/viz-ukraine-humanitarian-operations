@@ -1,0 +1,156 @@
+{
+  "type": "FeatureCollection",
+  "name": "wrl_ukr_capp",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Ukraine",
+        "ISO3": "UKR",
+        "LONGITUDE": 31.16558,
+        "LATITUDE": 48.379433,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.16558,
+          48.379433,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Belarus",
+        "ISO3": "BLR",
+        "LONGITUDE": 28.0463,
+        "LATITUDE": 53.5384,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.0463,
+          53.5384,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Russian Federation",
+        "ISO3": "RUS",
+        "LONGITUDE": 39.1827392578125,
+        "LATITUDE": 51.84595933666335,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1827392578125,
+          51.84595933666335,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Romania",
+        "ISO3": "ROU",
+        "LONGITUDE": 25.3,
+        "LATITUDE": 45.8667,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.3,
+          45.8667,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Republic of Moldova",
+        "ISO3": "MDA",
+        "LONGITUDE": 28.4646,
+        "LATITUDE": 47.1976,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.4646,
+          47.1976,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Slovakia",
+        "ISO3": "SVK",
+        "LONGITUDE": 19.4864,
+        "LATITUDE": 48.7062,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.4864,
+          48.7062,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Hungary",
+        "ISO3": "HUN",
+        "LONGITUDE": 19.4131,
+        "LATITUDE": 47.1672,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.4131,
+          47.1672,
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "CNTRY": "Poland",
+        "ISO3": "POL",
+        "LONGITUDE": 19.4013,
+        "LATITUDE": 52.1224,
+        "TYPE": "ADMIN 0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.4013,
+          52.1224,
+          0
+        ]
+      }
+    }
+  ]
+}

@@ -328,10 +328,10 @@ function initBorderCrossingLayer() {
 
 
 function initLocationLabels() {
-  //location data
-  map.addSource('location-data', {
+  //surrounding country data
+  map.addSource('country-data', {
     type: 'geojson',
-    data: locationData,
+    data: countryData,
     generateId: true 
   });
 
@@ -339,8 +339,7 @@ function initLocationLabels() {
   map.addLayer({
     id: 'country-labels',
     type: 'symbol',
-    source: 'location-data',
-    filter: ['==', 'TYPE', 'ADMIN 0'],
+    source: 'country-data',
     layout: {
       'text-field': [
         'format',
@@ -357,6 +356,14 @@ function initLocationLabels() {
       'text-halo-width': 1,
       'text-halo-blur': 1
     }
+  });
+
+
+  //town/capital data
+  map.addSource('location-data', {
+    type: 'geojson',
+    data: locationData,
+    generateId: true 
   });
 
   //towm markers
@@ -450,7 +457,7 @@ function initAcledLayer() {
   let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
   let dotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([5, 15]);
+    .range([3, 13]);
 
   //get unique event types
   let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
@@ -499,7 +506,7 @@ function initAcledLayer() {
     paint: {
       'circle-color': eventTypeColorScale,
       'circle-stroke-color': eventTypeColorScale,
-      'circle-opacity': 0.7,
+      'circle-opacity': 0.5,
       'circle-radius': ['get', 'iconSize'],
       'circle-stroke-width': 1,
     }
