@@ -13,6 +13,7 @@ function initCountryPanel() {
 
   //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
+  refugeesDiv.children().remove();
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee Arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
   
   //refugee trendline
@@ -38,7 +39,8 @@ function initCountryPanel() {
     sparklineArray.push(obj);
   });
 
-  if ($('.figure.refugees .stat .sparkline').length<=0) createSparkline(sparklineArray, '.figure.refugees .stat');
+  //if ($('.figure.refugees .stat .sparkline').length<=0) 
+  createSparkline(sparklineArray, '.figure.refugees .stat');
 
   //casualty sparklines
   let killedArray = [];

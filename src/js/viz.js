@@ -8,9 +8,10 @@ var populationColorRange = ['#F7FCB9', '#D9F0A3', '#ADDD8E', '#78C679', '#41AB5D
 var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
 var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
 var orgsRange = ['#d5efe6','#c5e1db','#91c4bb','#81aaa4','#6b8883'];
+var foodBasketScale = ['Negative (<0%)', 'Normal (0-3%)', 'Moderate (3-10%)', 'High (10-25%)', 'Severe (>25%)'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
-var regionBoundaryData, regionalData, nationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight = '';
+var regionBoundaryData, regionalData, nationalData, subnationalDataByCountry, dataByCountry, colorScale, viewportWidth, viewportHeight, currentRegion = '';
 var countryTimeseriesChart = '';
 var mapLoaded = false;
 var dataLoaded = false;
@@ -23,7 +24,7 @@ var globalCountryList = [];
 var currentCountryIndicator = {};
 var currentCountry = {};
 
-var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons = '';
+var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons, countryData = '';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
@@ -79,7 +80,8 @@ $( document ).ready(function() {
       d3.json('data/wrl_ukr_capp.geojson'),
       d3.json('data/hostilities.geojson'),
       d3.json('data/macro-region.geojson'),
-      d3.json('https://data.humdata.org/dataset/a3ac4e13-e765-4b9a-a33f-e7a951c201bf/resource/59c1e127-4a41-4bc8-aaee-9f72a97d7db6/download/ukr_border_crossings.geojson')
+      d3.json('data/country.geojson'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json')
     ]).then(function(data) {
       console.log('Data loaded');
       $('.loader span').text('Initializing map...');
@@ -102,8 +104,8 @@ $( document ).ready(function() {
       locationData = data[4];
       hostilityData = data[5];
       idpGeoJson = data[6];
-
-      console.log('---', data[7])
+      countryData = data[7];
+      worldData = data[8].world_data[0];
             
       //process acled data
       acledData.forEach(function(event) {
@@ -148,6 +150,40 @@ $( document ).ready(function() {
 
       //parse national data
       nationalData.forEach(function(item) {
+        //normalize country names
+        if (item['#country+name']=='State of Palestine') item['#country+name'] = 'occupied Palestinian territory';
+        if (item['#country+name']=='Bolivia (Plurinational State of)') item['#country+name'] = 'Bolivia';
+
+        //calculate and inject PIN percentage
+        item['#affected+inneed+pct'] = (item['#affected+inneed']=='' || item['#population']=='') ? '' : item['#affected+inneed']/item['#population'];
+
+        //determine food basket category
+        let foodBasketPct = +item['#indicator+foodbasket+change+pct']*100;
+        let foodBasketCategory = '';
+        if (foodBasketPct<=0)
+          foodBasketCategory = foodBasketScale[0];
+        else if (foodBasketPct>0 && foodBasketPct<=3)
+          foodBasketCategory = foodBasketScale[1];
+        else if (foodBasketPct>3 && foodBasketPct<=10)
+          foodBasketCategory = foodBasketScale[2];
+        else if (foodBasketPct>10 && foodBasketPct<=25)
+          foodBasketCategory = foodBasketScale[3];
+        else if (foodBasketPct>25)
+          foodBasketCategory = foodBasketScale[4];
+        else
+          foodBasketCategory = null;
+        item['#indicator+foodbasket+change+category'] = foodBasketCategory;
+
+        //select CH vs IPC data
+        var ipcParams = ['+analysed+num','+p3+num','+p3plus+num','+p4+num','+p5+num']
+        var ipcPrefix = '#affected+food+ipc';
+        var chPrefix = '#affected+ch+food';
+        ipcParams.forEach(function(param) {
+          if (item[ipcPrefix+param] || item[chPrefix+param]) {
+            item['#affected+food'+param] = (item[chPrefix+param]) ? item[chPrefix+param] : item[ipcPrefix+param];
+          }
+        });
+
         //keep global list of countries
         globalCountryList.push({
           'name': item['#country+name'],
@@ -162,6 +198,44 @@ $( document ).ready(function() {
       //group national data by country -- drives country panel    
       dataByCountry = d3.nest()
         .key(function(d) { return d['#country+code']; })
+        .object(nationalData);
+
+
+      //consolidate subnational IPC data
+      subnationalDataByCountry = d3.nest()
+        .key(function(d) { return d['#country+code']; })
+        .entries(subnationalData);
+      subnationalDataByCountry.forEach(function(country) {
+        var index = 0;
+        var ipcEmpty = false;
+        var chEmpty = false;
+        //check first two data points to choose btwn IPC and CH datasets
+        for (var i=0; i<2; i++) {
+          var ipcVal = country.values[i]['#affected+food+ipc+p3plus+num'];
+          var chVal = country.values[i]['#affected+ch+food+p3plus+num'];
+          if (i==0 && (!isVal(ipcVal) || isNaN(ipcVal))) {
+            ipcEmpty = true;
+          }
+          if (i==1 && ipcEmpty && isVal(ipcVal) && !isNaN(ipcVal)) {
+            ipcEmpty = false;
+          }
+          if (i==0 && (!isVal(chVal) || isNaN(chVal))) {
+            chEmpty = true;
+          }
+          if (i==1 && chEmpty && isVal(chVal) && !isNaN(chVal)) {
+            chEmpty = false;
+          }
+        }
+        //default to ipc source if both ipc and ch are empty
+        country['#ipc+source'] = (!ipcEmpty || chEmpty && ipcEmpty) ? '#affected+food+ipc+p3plus+num' : '#affected+ch+food+p3plus+num';
+
+        //exception for CAF, should default to ch
+        if (country.key=='CAF' && !chEmpty) country['#ipc+source'] = '#affected+ch+food+p3plus+num';
+      });
+
+      //group countries by region    
+      countriesByRegion = d3.nest()
+        .key(function(d) { return d['#region+name']; })
         .object(nationalData);
 
 
@@ -189,6 +263,18 @@ $( document ).ready(function() {
 
 
   function initView() {
+    //create regional select
+    $('.region-select').empty();
+    var regionalSelect = d3.select('.region-select')
+      .selectAll('option')
+      .data(regionalList)
+      .enter().append('option')
+        .text(function(d) { return d.name; })
+        .attr('value', function (d) { return d.id; });
+    //insert default option    
+    $('.region-select').prepend('<option value="">All Regions</option>');
+    $('.region-select').val($('.region-select option:first').val());
+
     //load timeseries for country view 
     initTimeseries(acledData, '.trendseries-chart');
 

@@ -1,6 +1,9 @@
-var map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
-var adm0SourceLayer = 'polbnda_int_uncs-6zgtye';
-var hoveredStateId = null;
+let map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
+let globalLayers = [];
+let countryLayers = [];
+let adm0SourceLayer = 'polbnda_int_uncs-6zgtye';
+let hoveredStateId = null;
+
 function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
@@ -30,43 +33,58 @@ function displayMap() {
   $('.loader, #static-map').remove();
   $('#global-map, .map-legend').css('opacity', 1);
 
+    //position global figures
+  if (window.innerWidth>=1440) {
+    $('.menu-indicators li:first-child div').addClass('expand');
+    //$('.tab-menubar, #chart-view, .comparison-panel').css('left', $('.secondary-panel').outerWidth());
+    $('.secondary-panel').animate({
+      left: 0
+    }, 200);
+  }
+
+  //set initial indicator
+  currentIndicator = {id: $('.menu-indicators').find('.selected').attr('data-id'), name: $('.menu-indicators').find('.selected').attr('data-legend'), title: $('.menu-indicators').find('.selected').text()};
+
   //init element events
   createEvents();
 
   //get layers
   map.getStyle().layers.map(function (layer) {
     switch(layer.id) {
-      // case 'adm0-fills':
-      //   globalLayer = layer.id;
+      case 'adm0-fills':
+        globalLayer = layer.id;
+        globalLayers.push(layer.id);
 
-      //   map.setFeatureState(
-      //     { source: 'composite', sourceLayer: adm0SourceLayer, id: globalLayer },
-      //     { hover: false }
-      //   );
-      //   break;
+        map.setFeatureState(
+          { source: 'composite', sourceLayer: adm0SourceLayer, id: globalLayer },
+          { hover: false }
+        );
+        break;
       case 'adm0-label':
         globalLabelLayer = layer.id;
+        globalLayers.push(layer.id);
         map.setLayoutProperty(globalLabelLayer, 'visibility', 'none');
         break;
       case 'adm0-centroids':
         globalMarkerLayer = layer.id;
+        globalLayers.push(layer.id);
         map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
         break;
       case 'adm1-fills':
         countryLayer = layer.id;
-        map.setLayoutProperty(countryLayer, 'visibility', 'none');
+        countryLayers.push(layer.id);
         break;
       case 'adm1-label':
         countryLabelLayer = layer.id;
-        map.setLayoutProperty(countryLabelLayer, 'visibility', 'none');
+        countryLayers.push(layer.id);
         break;
       case 'adm1-marker-points':
         countryMarkerLayer = layer.id;
-        map.setLayoutProperty(countryMarkerLayer, 'visibility', 'none');
+        countryLayers.push(layer.id);
         break;
       case 'adm1-boundaries':
         countryBoundaryLayer = layer.id;
-        map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'none');
+        countryLayers.push(layer.id);
         break;
       default:
         //do nothing
@@ -102,6 +120,8 @@ function displayMap() {
     }
   });
 
+  //init global and country layers
+  //initGlobalLayer();
   initCountryLayer();
 
   //deeplink to country if parameter exists
@@ -153,6 +173,12 @@ function createEvents() {
     updateTimeseries(selected);
     vizTrack(`chart ${currentCountry.code} view`, selected);
   });
+
+  //switch view event
+  $('#btn-switch-view').on('click', function() {
+    resetMap();
+    //window.history.replaceState(null, null, window.location.pathname);
+  });
 }
 
 function selectCountry(features) {
@@ -167,19 +193,14 @@ function selectCountry(features) {
   $('.panel-content').animate({scrollTop: 0}, 300);
 
   updateCountryLayer();
-  // map.setLayoutProperty(globalLayer, 'visibility', 'none');
-  // map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
-  //map.setLayoutProperty(countryLayer, 'visibility', 'visible');
-  map.setLayoutProperty(countryBoundaryLayer, 'visibility', 'visible');
-  map.setLayoutProperty(countryLabelLayer, 'visibility', 'visible');
-  map.setLayoutProperty(countryMarkerLayer, 'visibility', 'visible');
+  toggleLayers([countryMarkerLayer, countryLabelLayer, countryBoundaryLayer], 'visible');
 
   let target = bbox.default(turfHelpers.featureCollection(features));
   let mapPadding = (isMobile) ?
     {
-        right: -100,
-        left: -200,
-        bottom: 0
+      right: -100,
+      left: -200,
+      bottom: 0
     } :
     { 
       right: $('.map-legend.country').outerWidth()+65,
@@ -281,6 +302,8 @@ function initIDPLayer() {
     }
   }, globalLabelLayer);
 
+  countryLayers.push('macro-regions')
+
   //mouse events
   map.on('mouseenter', 'macro-regions', onMouseEnter);
   map.on('mouseleave', 'macro-regions', onMouseLeave);
@@ -313,6 +336,8 @@ function initBorderCrossingLayer() {
     }
   });
 
+  countryLayers.push('border-crossings-layer')
+
   //mouse events
   map.on('mouseenter', 'border-crossings-layer', onMouseEnter);
   map.on('mouseleave', 'border-crossings-layer', onMouseLeave);
@@ -328,10 +353,10 @@ function initBorderCrossingLayer() {
 
 
 function initLocationLabels() {
-  //location data
-  map.addSource('location-data', {
+  //surrounding country data
+  map.addSource('country-data', {
     type: 'geojson',
-    data: locationData,
+    data: countryData,
     generateId: true 
   });
 
@@ -339,8 +364,7 @@ function initLocationLabels() {
   map.addLayer({
     id: 'country-labels',
     type: 'symbol',
-    source: 'location-data',
-    filter: ['==', 'TYPE', 'ADMIN 0'],
+    source: 'country-data',
     layout: {
       'text-field': [
         'format',
@@ -357,6 +381,14 @@ function initLocationLabels() {
       'text-halo-width': 1,
       'text-halo-blur': 1
     }
+  });
+
+
+  //town/capital data
+  map.addSource('location-data', {
+    type: 'geojson',
+    data: locationData,
+    generateId: true 
   });
 
   //towm markers
@@ -411,6 +443,7 @@ function initLocationLabels() {
     }
   }, globalLabelLayer);
 
+  countryLayers.push(...['country-labels', 'town-dots', 'marker-capital']);
 }
 
 
@@ -443,6 +476,8 @@ function initHostilityLayer() {
       'text-halo-blur': 1,
     }
   });
+
+  countryLayers.push('hostilities-layer');
 }
 
 
@@ -450,7 +485,7 @@ function initAcledLayer() {
   let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
   let dotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([5, 15]);
+    .range([3, 13]);
 
   //get unique event types
   let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
@@ -499,11 +534,13 @@ function initAcledLayer() {
     paint: {
       'circle-color': eventTypeColorScale,
       'circle-stroke-color': eventTypeColorScale,
-      'circle-opacity': 0.7,
+      'circle-opacity': 0.5,
       'circle-radius': ['get', 'iconSize'],
       'circle-stroke-width': 1,
     }
   });
+
+  countryLayers.push('acled-dots');
   map.setLayoutProperty('acled-dots', 'visibility', 'none');
 
 
@@ -570,6 +607,8 @@ function initRefugeeLayer() {
       }
     });
 
+    countryLayers.push(`line-${iso}`);
+
     //get geo for arrow head and label
     map.addSource(`point-${iso}`, {
       'type': 'geojson',
@@ -605,6 +644,8 @@ function initRefugeeLayer() {
         'icon-opacity': 0.8
       }
     });
+
+    countryLayers.push(`arrow-${iso}`);
 
 
     //mouse events
@@ -740,8 +781,7 @@ function updateCountryLayer() {
   if (currentCountryIndicator.id=='#acled+events') {
     resetLayers();
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
-    map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    toggleLayers(['border-crossings-layer', 'hostilities-layer'], 'none');
   }
   else if (currentCountryIndicator.id=='#affected+idps') {
     resetLayers();
@@ -755,11 +795,8 @@ function updateCountryLayer() {
 
 
 function resetLayers() {
-  map.setLayoutProperty(countryLayer, 'visibility', 'visible')
-  map.setLayoutProperty('acled-dots', 'visibility', 'none');
-  map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
-  map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
-  map.setLayoutProperty('macro-regions', 'visibility', 'none');
+  toggleLayers([countryLayer, 'border-crossings-layer', 'hostilities-layer'], 'visible');
+  toggleLayers(['acled-dots', 'macro-regions'], 'none');
 }
 
 
@@ -941,6 +978,60 @@ function setTooltipPosition(point) {
     $('.mapboxgl-popup-tip').css('align-self', 'center');
     $('.mapboxgl-popup-tip').css('margin-top', 0);
     $('.mapboxgl-popup-tip').css('margin-bottom', 0);
+  }
+}
+
+function resetMap() {
+  if ($('.content').hasClass('country-view')) {
+    $('.content').removeClass('country-view');
+    $('#btn-switch-view').html('Ukraine View');
+
+    // if (currentCountry.code!=undefined) {
+    //   var id = currentCountry.code.toLowerCase()
+    //   map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+    // }
+
+    toggleLayers(globalLayers, 'visible');
+    toggleLayers(countryLayers, 'none');
+
+    //reset region
+    if (currentRegion!='') {
+      selectRegion();
+      map.setLayoutProperty(globalLayer, 'visibility', 'visible');
+    }
+    else {
+      //updateGlobalLayer();
+
+      minZoom = 1;
+      map.setMinZoom(minZoom);
+
+      map.flyTo({ 
+        speed: 2,
+        zoom: zoomLevel,
+        center: [-25, 0] 
+      });
+      map.once('moveend', function() {
+        map.setLayoutProperty(globalLayer, 'visibility', 'visible');
+      });
+    }
+  }
+  else {
+    $('.content').addClass('country-view');
+    $('#btn-switch-view').html('Global View');
+    
+    map.setLayoutProperty(globalLayer, 'visibility', 'none');
+    toggleLayers(countryLayers, 'visible');
+
+    minZoom = 4;
+    map.setMinZoom(minZoom);
+
+    deepLinkView();
+  }
+}
+
+function toggleLayers(ids, state) {
+  for (layers in ids) {
+    map.setLayoutProperty(ids[layers], 'visibility', state);
   }
 }
 
