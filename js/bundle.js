@@ -2041,15 +2041,35 @@ function displayMap() {
 }
 
 function deepLinkView() {
-  var countryCode = 'UKR';
+  let countryCode = 'UKR';
   if (countryCodeList.hasOwnProperty(countryCode)) {
     currentCountry.code = countryCode;
     currentCountry.name = 'Ukraine';
 
     //find matched features and zoom to country
-    var selectedFeatures = matchMapFeatures(currentCountry.code);
+    let selectedFeatures = matchMapFeatures(currentCountry.code);
     selectCountry(selectedFeatures);
   }
+
+  //deep link to specific layer 
+  let location = window.location.search;
+  if (location.indexOf('?layer=')>-1) {
+    let param = location.split('layer=')[1];
+    let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
+    selectLayer(layer);
+  }
+}
+
+function selectLayer(layer) {
+  layer.prop('checked', true);
+  currentCountryIndicator = {id: layer.val(), name: layer.parent().text()};
+  updateCountryLayer();
+  vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+
+  //reset any deep links
+  let layerID = layer.attr('data-layer');
+  let location = (layerID==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layerID;
+  window.history.replaceState(null, null, location);
 }
 
 function matchMapFeatures(country_code) {
@@ -2067,16 +2087,15 @@ function createEvents() {
   //country legend radio events
   $('input[type="radio"]').click(function(){
     var selected = $('input[name="countryIndicators"]:checked');
-    currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
-    updateCountryLayer();
-    vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+    selectLayer(selected);
   });
 
   //chart view trendseries select event
   d3.select('.trendseries-select').on('change',function(e) {
     var selected = d3.select('.trendseries-select').node().value;
     updateTimeseries(selected);
-    vizTrack(`chart ${currentCountry.code} view`, selected);
+    if (currentCountry.code!==undefined && selected!==undefined)
+      vizTrack(`chart ${currentCountry.code} view`, selected);
   });
 
   //switch view event
@@ -2390,7 +2409,7 @@ function initAcledLayer() {
   let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
   let dotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([3, 13]);
+    .range([4, 16]);
 
   //get unique event types
   let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
