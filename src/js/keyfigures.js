@@ -26,7 +26,7 @@ function setKeyFigures() {
 	//secondaryPanel.find('.global-figures').html(globalFigures);
 
 	//if on covax layer, show HRP data by default
-	currentRegion = (currentRegion=='HRPs') ? 'HRPs' : d3.select('.region-select').node().value;
+	//currentRegion = (currentRegion=='HRPs') ? 'HRPs' : d3.select('.region-select').node().value;
 
 	//get regional data
 	var data = worldData;
@@ -40,7 +40,7 @@ function setKeyFigures() {
 
 	//tally countries with data
 	var totalCountries = 0;
-	nationalData.forEach(function(d) {
+	secondaryNationalData.forEach(function(d) {
 		if (regionMatch(d['#region+name'])) {
 			var val = d[currentIndicator.id];
 			if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
