@@ -396,6 +396,7 @@ a:visited {
 }
 
 .region-select {
+	display: none;
 	margin: 0 20px;
 	width: 82%;
 }
@@ -596,6 +597,20 @@ a:visited {
 		}
 		.toggle-icon:before {
 			content: '\ea2a';
+		}
+	}
+	&.global {
+		.legend-container {
+			height: 83px;
+		}
+		.indicator-source {
+			margin-bottom: 10px;
+		}
+		.small.source {
+			margin-left: 0;
+		}
+		.special-key {
+			display: none;
 		}
 	}
 }
@@ -867,6 +882,9 @@ a:visited {
 	.source-container {
 		.source {
 			padding-right: 50px;
+		}
+		.small.source {
+			margin-left: 0;
 		}
 	}
 	.global-figures {

@@ -1,4 +1,4 @@
-let map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, tooltip, markerScale, countryMarkerScale;
+let map, mapFeatures, globalLayer, globalLabelLayer, globalMarkerLayer, countryLayer, countryBoundaryLayer, countryLabelLayer, countryMarkerLayer, secondaryGlobalLayer, tooltip, markerScale, countryMarkerScale;
 let globalLayers = [];
 let countryLayers = [];
 let adm0SourceLayer = 'polbnda_int_uncs-6zgtye';
@@ -8,7 +8,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q/draft',
     center: [-25, 0],
     minZoom: minZoom,
     zoom: zoomLevel,
@@ -60,16 +60,26 @@ function displayMap() {
           { hover: false }
         );
         break;
+      case 'secondary-adm0-fills':
+        secondaryGlobalLayer = layer.id;
+        globalLayers.push(layer.id);
+        map.setLayoutProperty(secondaryGlobalLayer, 'visibility', 'none');
+        break;
+      case 'secondary-adm0-label':
+        secondaryGlobalLabelLayer = layer.id;
+        globalLayers.push(layer.id);
+        map.setLayoutProperty(secondaryGlobalLabelLayer, 'visibility', 'none');
+        break;
       case 'adm0-label':
         globalLabelLayer = layer.id;
-        globalLayers.push(layer.id);
-        map.setLayoutProperty(globalLabelLayer, 'visibility', 'none');
+        //globalLayers.push(layer.id);
+        //map.setLayoutProperty(globalLabelLayer, 'visibility', 'none');
         break;
-      case 'adm0-centroids':
-        globalMarkerLayer = layer.id;
-        globalLayers.push(layer.id);
-        map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
-        break;
+      // case 'adm0-centroids':
+      //   globalMarkerLayer = layer.id;
+      //   globalLayers.push(layer.id);
+      //   map.setLayoutProperty(globalMarkerLayer, 'visibility', 'none');
+      //   break;
       case 'adm1-fills':
         countryLayer = layer.id;
         countryLayers.push(layer.id);
@@ -121,7 +131,7 @@ function displayMap() {
   });
 
   //init global and country layers
-  //initGlobalLayer();
+  initGlobalLayer();
   initCountryLayer();
 
   //deeplink to country if parameter exists
@@ -1019,7 +1029,7 @@ function resetMap() {
       map.setLayoutProperty(globalLayer, 'visibility', 'visible');
     }
     else {
-      //updateGlobalLayer();
+      updateGlobalLayer();
 
       minZoom = 1;
       map.setMinZoom(minZoom);
@@ -1027,7 +1037,7 @@ function resetMap() {
       map.flyTo({ 
         speed: 2,
         zoom: zoomLevel,
-        center: [-25, 0] 
+        center: [-10, 0] 
       });
       map.once('moveend', function() {
         map.setLayoutProperty(globalLayer, 'visibility', 'visible');
@@ -1038,7 +1048,7 @@ function resetMap() {
     $('.content').addClass('country-view');
     $('#btn-switch-view').html('Global View');
     
-    map.setLayoutProperty(globalLayer, 'visibility', 'none');
+    toggleLayers(globalLayers, 'none');
     toggleLayers(countryLayers, 'visible');
 
     minZoom = 4;

@@ -4,7 +4,7 @@
 function handleGlobalEvents(layer) {
   //menu events
   $('.menu-indicators li').on('click', function() {
-    selectLayer(this);
+    selectGlobalLayer(this);
 
     //reset any deep links
     // var layer = $(this).attr('data-layer');
@@ -23,7 +23,7 @@ function handleGlobalEvents(layer) {
   });
 
 
-  map.on('mouseenter', globalLayer, function(e) {
+  map.on('mouseenter', secondaryGlobalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
     if (currentIndicator.id!='#indicator+foodbasket+change+pct') {
       tooltip.addTo(map);
@@ -32,7 +32,7 @@ function handleGlobalEvents(layer) {
 
   map.on('mousemove', function(e) {
     if (currentIndicator.id!='#indicator+foodbasket+change+pct') {
-      var features = map.queryRenderedFeatures(e.point, { layers: [globalLayer, globalLabelLayer, globalMarkerLayer] });
+      var features = map.queryRenderedFeatures(e.point, { layers: [secondaryGlobalLayer] });
       var target;
       features.forEach(function(feature) {
         if (feature.sourceLayer==adm0SourceLayer)
@@ -46,13 +46,13 @@ function handleGlobalEvents(layer) {
     }
   });
      
-  map.on('mouseleave', globalLayer, function() {
+  map.on('mouseleave', secondaryGlobalLayer, function() {
     map.getCanvas().style.cursor = '';
     tooltip.remove();
   });
 
   map.on('click', function(e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: [globalLayer, globalLabelLayer, globalMarkerLayer] });
+    var features = map.queryRenderedFeatures(e.point, { layers: [secondaryGlobalLayer] });
     var target;
     features.forEach(function(feature) {
       if (feature.sourceLayer==adm0SourceLayer)
@@ -63,7 +63,7 @@ function handleGlobalEvents(layer) {
       currentCountry.name = (target.properties.Terr_Name=='CuraÃ§ao') ? 'Curaçao' : target.properties.Terr_Name;
 
       if (currentCountry.code!=undefined) {
-        var country = nationalData.filter(c => c['#country+code'] == currentCountry.code);
+        var country = secondaryNationalData.filter(c => c['#country+code'] == currentCountry.code);
 
         createComparison(country)
      
@@ -77,12 +77,6 @@ function handleGlobalEvents(layer) {
 
 
 function initGlobalLayer() {
-  //create log scale for circle markers
-  var maxCases = d3.max(nationalData, function(d) { return +d['#affected+infected']; })
-  markerScale = d3.scaleSqrt()
-    .domain([1, maxCases])
-    .range([2, 15]);
-  
   //color scale
   colorScale = getGlobalLegendScale();
   setGlobalLegend(colorScale);
@@ -90,27 +84,17 @@ function initGlobalLayer() {
   //data join
   var expression = ['match', ['get', 'ISO_3']];
   var expressionMarkers = ['match', ['get', 'ISO_3']];
-  nationalData.forEach(function(d) {
+  secondaryNationalData.forEach(function(d) {
     var val = d[currentIndicator.id];
     var color = (val==null) ? colorNoData : colorScale(val);
     expression.push(d['#country+code'], color);
-
-    //covid markers
-    var covidVal = d['#affected+infected'];
-    var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
-    expressionMarkers.push(d['#country+code'], size);
   });
 
   //default value for no data
   expression.push(colorDefault);
-  expressionMarkers.push(0);
   
   //set properties
-  map.setPaintProperty(globalLayer, 'fill-color', expression);
-  map.setPaintProperty(globalMarkerLayer, 'circle-stroke-opacity', 1);
-  map.setPaintProperty(globalMarkerLayer, 'circle-opacity', 1);
-  map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
-  map.setPaintProperty(globalMarkerLayer, 'circle-translate', [0,-7]);
+  map.setPaintProperty(secondaryGlobalLayer, 'fill-color', expression);
 
   //define mouse events
   handleGlobalEvents();
@@ -125,27 +109,17 @@ function updateGlobalLayer() {
 
   //color scales
   colorScale = getGlobalLegendScale();
-  colorNoData = (currentIndicator.id=='#affected+inneed+pct' || currentIndicator.id=='#value+funding+hrp+pct') ? '#E7E4E6' : '#FFF';
-
-  var maxCases = d3.max(nationalData, function(d) { 
-    if (regionMatch(d['#region+name']))
-      return +d['#affected+infected']; 
-  });
-  markerScale.domain([1, maxCases]);
+  colorNoData = (currentIndicator.id=='#affected+inneed+pct') ? '#E7E4E6' : '#FFF';
 
   //data join
   var countryList = [];
   var expression = ['match', ['get', 'ISO_3']];
-  var expressionMarkers = ['match', ['get', 'ISO_3']];
-  nationalData.forEach(function(d) {
+  secondaryNationalData.forEach(function(d) {
     if (regionMatch(d['#region+name'])) {
       var val = (currentIndicator.id=='#indicator+foodbasket+change+pct') ? d['#indicator+foodbasket+change+category'] : d[currentIndicator.id];
       var color = colorDefault;
       
-      if (currentIndicator.id=='#affected+infected+new+weekly') {
-        color = (val==null) ? colorNoData : colorScale(val);
-      }
-      else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+      if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
         val = d['#indicator+foodbasket+change+category'];
         //if (val<0) val = 0; //hotfix for negative values
         color = (val==null) ? colorNoData : colorScale(val);
@@ -153,24 +127,10 @@ function updateGlobalLayer() {
       else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') {
         color = (!isVal(val)) ? colorNoData : colorScale(val);
       }
-      else if (currentIndicator.id=='#targeted+doses+delivered+pct') {
-        color = (!isVal(val)) ? colorNoData : colorScale(val);
-        if (isVal(val)) {
-          color = (val==0) ? '#DDD' : colorScale(val);
-        }
-        else {
-          color = colorNoData;
-        }
-      }
       else {
         color = (val<0 || isNaN(val) || !isVal(val)) ? colorNoData : colorScale(val);
       }
       expression.push(d['#country+code'], color);
-
-      //covid markers
-      var covidVal = d['#affected+infected'];
-      var size = (!isVal(covidVal)) ? 0 : markerScale(covidVal);
-      expressionMarkers.push(d['#country+code'], size);
 
       //create country list for global timeseries chart
       countryList.push(d['#country+name']);
@@ -179,53 +139,40 @@ function updateGlobalLayer() {
 
   //default value for no data
   expression.push(colorDefault);
-  expressionMarkers.push(0);
 
-  map.setPaintProperty(globalLayer, 'fill-color', expression);
-  //map.setLayoutProperty(globalMarkerLayer, 'visibility', 'visible');
-  map.setPaintProperty(globalMarkerLayer, 'circle-radius', expressionMarkers);
+  map.setPaintProperty(secondaryGlobalLayer, 'fill-color', expression);
   setGlobalLegend(colorScale);
 }
 
 
 function getGlobalLegendScale() {
   //get min/max
-  var min = d3.min(nationalData, function(d) { 
+  var min = d3.min(secondaryNationalData, function(d) { 
     if (regionMatch(d['#region+name'])) return +d[currentIndicator.id]; 
   });
-  var max = d3.max(nationalData, function(d) { 
+  var max = d3.max(secondaryNationalData, function(d) { 
     if (regionMatch(d['#region+name'])) return +d[currentIndicator.id];
   });
 
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
   
-  if (currentIndicator.id=='#severity+economic+num') max = 10;
-  else if (currentIndicator.id=='#affected+inneed') max = roundUp(max, 1000000);
-  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
-  else max = max;
+  if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
+  else max = Math.ceil(max)+1;
 
   //set scale
   var scale;
-  if (currentIndicator.id=='#vaccination+postponed+num') {
-    //set the max to at least 5
-    max = (max>5) ? max : 5;
-    scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
-  }
-  else if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
+  if (currentIndicator.id=='#indicator+foodbasket+change+pct') {
     //scale = d3.scaleQuantize().domain([min, max]).range(colorRange);
     scale = d3.scaleOrdinal().domain(foodBasketScale).range(colorRange);
   }
   else if (currentIndicator.id=='#impact+type') {
     scale = d3.scaleOrdinal().domain(['Fully open', 'Partially open', 'Closed due to COVID-19', 'Academic break']).range(schoolClosureColorRange);
   }
-  else if (currentIndicator.id=='#severity+stringency+num') {
-    scale = d3.scaleQuantize().domain([0, 100]).range(oxfordColorRange);
-  }
   else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
   else {
-    scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
+    scale = d3.scaleQuantize().domain([0, max]).range(frameworkColorRange);
   }
 
   return (max==undefined) ? null : scale;
@@ -339,7 +286,7 @@ function setGlobalLegend(scale) {
 
 
 //set global layer view
-function selectLayer(menuItem) {
+function selectGlobalLayer(menuItem) {
   $('.menu-indicators li').removeClass('selected');
   $('.menu-indicators li div').removeClass('expand');
   $(menuItem).addClass('selected');
@@ -381,3 +328,146 @@ function toggleSecondaryPanel(currentBtn, state) {
     }
   });
 }
+
+/*************************/
+/*** TOOLTIP FUNCTIONS ***/
+/*************************/
+function createMapTooltip(country_code, country_name, point) {
+  var country = secondaryNationalData.filter(c => c['#country+code'] == country_code);
+  if (country[0]!=undefined) {
+    var val = country[0][currentIndicator.id];
+
+    //format content for tooltip
+    if (isVal(val)) {
+      if (currentIndicator.id.indexOf('pct')>-1) {
+        if (currentIndicator.id=='#value+gdp+ifi+pct') {
+          if (isNaN(val))
+            val = 'No Data'
+          else
+            val = (val==0) ? '0%' : d3.format('.2%')(val);
+        }
+        else
+          val = (isNaN(val)) ? 'No Data' : percentFormat(val);
+      }
+      if (currentIndicator.id=='#severity+economic+num') val = shortenNumFormat(val);
+    }
+    else {
+      val = 'No Data';
+    }
+
+    //format content for display
+    var content = '<h2>'+ country_name +'</h2>';
+
+    //framework index layer
+    if (currentIndicator.id=='#severity+overall+num') {
+      if (val!='No Data') {
+        content += `${currentIndicator.name}: <div class="stat">${val}</div>`;
+        content += `<div class="table-display">`;
+        if (country[0]['#severity+food+short_term+num']!=undefined) content += `<div class="table-row"><div>Food Insecurity Risk, Short Term:</div><div>${country[0]['#severity+food+short_term+num']}</div></div>`;
+        if (country[0]['#severity+food+long_term+num']!=undefined) content += `<div class="table-row"><div>Food Insecurity Risk, Long Term:</div><div>${country[0]['#severity+food+long_term+num']}</div></div>`;
+        if (country[0]['#severity+energy+num']!=undefined) content += `<div class="table-row"><div>Energy Risk:</div><div>${country[0]['#severity+energy+num']}</div></div>`;
+        if (country[0]['#severity+debt+num']!=undefined) content += `<div class="table-row"><div>Debt Risk</div><div>${country[0]['#severity+debt+num']}</div></div>`;
+        if (country[0]['#severity+dependence+rus+num']!=undefined) content += `<div class="table-row"><div>Financial Dependence on Russia:</div><div>${country[0]['#severity+dependence+rus+num']}</div></div>`;
+        if (country[0]['#severity+economic+num']!=undefined) content += `<div class="table-row"><div>Economic Outlook:</div><div>${country[0]['#severity+economic+num']}</div></div>`;
+        if (country[0]['#severity+conflict+num']!=undefined) content += `<div class="table-row"><div>Conflict Outlook:</div><div>${country[0]['#severity+conflict+num']}</div></div>`;
+        content += `</div>`;
+      }
+      else {
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+    }
+    //PIN layer shows refugees and IDPs
+    else if (currentIndicator.id=='#affected+inneed+pct') {
+      if (val!='No Data') {
+        content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+      }
+
+      content += '<div class="table-display">';
+      if (country_code=='COL') {
+        //hardcode PIN for COL
+        content += '<div class="table-row">Refugees & Migrants:<span>1,700,000</span></div>';
+      }
+      else {
+        var tableArray = [{label: 'People in Need', value: country[0]['#affected+inneed']},
+                          {label: 'Refugees & Migrants', value: country[0]['#affected+refugees']},
+                          {label: 'IDPs', value: country[0]['#affected+displaced']}];
+        tableArray.forEach(function(row, index) {
+          if (row.value!=undefined) {
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ numFormat(row.value) +'</div></div>';
+          }
+        });
+      }
+      content += '</div>';
+    }
+    //IPC layer
+    else if (currentIndicator.id=='#affected+food+p3plus+num') {
+      var dateSpan = '';
+      if (country[0]['#date+ipc+start']!=undefined) {
+        var startDate = new Date(country[0]['#date+ipc+start']);
+        var endDate = new Date(country[0]['#date+ipc+end']);
+        startDate = (startDate.getFullYear()==endDate.getFullYear()) ? d3.utcFormat('%b')(startDate) : d3.utcFormat('%b %Y')(startDate);
+        var dateSpan = '<span class="subtext">('+ startDate +'-'+ d3.utcFormat('%b %Y')(endDate) +' - '+ country[0]['#date+ipc+period'] +')</span>';
+      }
+      var shortVal = (isNaN(val)) ? val : shortenNumFormat(val);
+      content += 'Total Population in IPC Phase 3+ '+ dateSpan +':<div class="stat">' + shortVal + '</div>';
+      if (val!='No Data') {
+        if (country[0]['#affected+food+analysed+num']!=undefined) content += '<span>('+ shortenNumFormat(country[0]['#affected+food+analysed+num']) +' of total country population analysed)</span>';
+        var tableArray = [{label: 'IPC Phase 3 (Critical)', value: country[0]['#affected+food+p3+num']},
+                          {label: 'IPC Phase 4 (Emergency)', value: country[0]['#affected+food+p4+num']},
+                          {label: 'IPC Phase 5 (Famine)', value: country[0]['#affected+food+p5+num']}];
+        content += '<div class="table-display">Breakdown:';
+        tableArray.forEach(function(row) {
+          if (row.value!=undefined) {
+            var shortRowVal = (row.value==0) ? 0 : shortenNumFormat(row.value);
+            content += '<div class="table-row"><div>'+ row.label +':</div><div>'+ shortRowVal +'</div></div>';
+          }
+        });
+        content += '</div>';
+      }
+    }
+    //INFORM layer
+    else if (currentIndicator.id=='#severity+inform+type') {
+      var numVal = (isVal(country[0]['#severity+inform+num'])) ? country[0]['#severity+inform+num'] : 'No Data';
+      var informClass = country[0]['#severity+inform+type'];
+      var informTrend = country[0]['#severity+inform+trend'];
+      content += 'INFORM Severity Index: <div><span class="stat">' + numVal + '</span> <span class="subtext inline">(' + informClass + ' / ' + informTrend + ')</span></div>';
+    }
+    //all other layers
+    else {
+      content += currentIndicator.name + ':<div class="stat">' + val + '</div>';
+    }
+
+    //set content for tooltip
+    tooltip.setHTML(content);
+    setTooltipPosition(point);
+  }
+}
+
+// function setTooltipPosition(point) {
+//   var tooltipWidth = $('.map-tooltip').width();
+//   var tooltipHeight = $('.map-tooltip').height();
+//   var anchorDirection = (point.x + tooltipWidth > viewportWidth) ? 'right' : 'left';
+//   var yOffset = 0;
+//   if (point.y + tooltipHeight/2 > viewportHeight) yOffset = viewportHeight - (point.y + tooltipHeight/2);
+//   if (point.y - tooltipHeight/2 < 0) yOffset = tooltipHeight/2 - point.y;
+//   var popupOffsets = {
+//     'right': [0, yOffset],
+//     'left': [0, yOffset]
+//   };
+//   tooltip.options.offset = popupOffsets;
+//   tooltip.options.anchor = anchorDirection;
+
+//   if (yOffset>0) {
+//     $('.mapboxgl-popup-tip').css('align-self', 'flex-start');
+//     $('.mapboxgl-popup-tip').css('margin-top', point.y);
+//   }
+//   else if (yOffset<0)  {
+//     $('.mapboxgl-popup-tip').css('align-self', 'flex-end');
+//     $('.mapboxgl-popup-tip').css('margin-bottom', viewportHeight-point.y-10);
+//   }
+//   else {
+//     $('.mapboxgl-popup-tip').css('align-self', 'center');
+//     $('.mapboxgl-popup-tip').css('margin-top', 0);
+//     $('.mapboxgl-popup-tip').css('margin-bottom', 0);
+//   }
+// }
