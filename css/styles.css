@@ -1437,6 +1437,7 @@ a:visited {
   width: 100%; }
 
 .region-select {
+  display: none;
   margin: 0 20px;
   width: 82%; }
 
@@ -1583,6 +1584,14 @@ a:visited {
       opacity: 0; }
     .map-legend.collapsed .toggle-icon:before {
       content: '\ea2a'; }
+  .map-legend.global .legend-container {
+    height: 83px; }
+  .map-legend.global .indicator-source {
+    margin-bottom: 10px; }
+  .map-legend.global .small.source {
+    margin-left: 0; }
+  .map-legend.global .special-key {
+    display: none; }
 
 .legend-gradient {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
@@ -1803,6 +1812,8 @@ a:visited {
     padding-right: 18px; }
   .secondary-panel .source-container .source {
     padding-right: 50px; }
+  .secondary-panel .source-container .small.source {
+    margin-left: 0; }
   .secondary-panel .global-figures {
     border-bottom: 1px solid #CCC;
     line-height: 14px;
