@@ -1640,6 +1640,7 @@ function deepLinkView() {
       resetMap();
     }
     else {
+      setCountry();
       let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
       selectLayer(layer);
     }
