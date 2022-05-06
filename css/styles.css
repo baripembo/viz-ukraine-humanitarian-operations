@@ -1444,6 +1444,17 @@ a:visited {
 .trendseries-select {
   width: auto; }
 
+.ranking-select,
+.sorting-select {
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: normal;
+  height: 30px;
+  margin-left: 4px;
+  padding: 0;
+  width: auto; }
+
 .label-header {
   display: block;
   margin: 0;
@@ -1883,42 +1894,16 @@ a:visited {
   .ranking-container .ranking-select-container .inform-select {
     display: none; }
 
-.ranking-container.covid .ranking-title {
+.ranking-container.ranking-framework .ranking-title {
   display: none; }
 
-.ranking-container.covid .ranking-select-container .default-select {
+.ranking-container.ranking-framework .ranking-select-container .default-select {
   display: none; }
 
-.ranking-container.covid .ranking-select-container .covid-select {
+.ranking-container.ranking-framework .ranking-select-container .framework-select {
   display: block; }
-  .ranking-container.covid .ranking-select-container .covid-select .ranking-select {
+  .ranking-container.ranking-framework .ranking-select-container .framework-select .ranking-select {
     height: 50px;
-    white-space: pre-wrap;
-    width: 100%; }
-
-.ranking-container.ranking-vaccine .ranking-title {
-  display: none; }
-
-.ranking-container.ranking-vaccine .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.ranking-vaccine .ranking-select-container .vaccine-select {
-  display: block; }
-  .ranking-container.ranking-vaccine .ranking-select-container .vaccine-select .ranking-select {
-    height: 40px;
-    white-space: pre-wrap;
-    width: 100%; }
-
-.ranking-container.ranking-vaccine-financing .ranking-title {
-  display: none; }
-
-.ranking-container.ranking-vaccine-financing .ranking-select-container .default-select {
-  display: none; }
-
-.ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select {
-  display: block; }
-  .ranking-container.ranking-vaccine-financing .ranking-select-container .vaccine-financing-select .ranking-select {
-    height: 40px;
     white-space: pre-wrap;
     width: 100%; }
 
