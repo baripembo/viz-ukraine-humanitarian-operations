@@ -172,6 +172,26 @@ function setCountry() {
     let selectedFeatures = matchMapFeatures(currentCountry.code);
     selectCountry(selectedFeatures);
   }
+
+  //deep link to specific layer 
+  let location = window.location.search;
+  if (location.indexOf('?layer=')>-1) {
+    let param = location.split('layer=')[1];
+    let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
+    selectLayer(layer);
+  }
+}
+
+function selectLayer(layer) {
+  layer.prop('checked', true);
+  currentCountryIndicator = {id: layer.val(), name: layer.parent().text()};
+  updateCountryLayer();
+  vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+
+  //reset any deep links
+  let layerID = layer.attr('data-layer');
+  let location = (layerID==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layerID;
+  window.history.replaceState(null, null, location);
 }
 
 function selectLayer(layer) {
