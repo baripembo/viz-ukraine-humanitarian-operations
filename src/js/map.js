@@ -187,7 +187,7 @@ function createEvents() {
   //switch view event
   $('#btn-switch-view').on('click', function() {
     resetMap();
-    //window.history.replaceState(null, null, window.location.pathname);
+    window.history.replaceState(null, null, window.location.pathname);
   });
 }
 
@@ -994,7 +994,7 @@ function setTooltipPosition(point) {
 function resetMap() {
   if ($('.content').hasClass('country-view')) {
     $('.content').removeClass('country-view');
-    $('#btn-switch-view').html('Ukraine View');
+    $('#btn-switch-view').html('Go to Ukraine View');
 
     // if (currentCountry.code!=undefined) {
     //   var id = currentCountry.code.toLowerCase()
@@ -1027,7 +1027,7 @@ function resetMap() {
   }
   else {
     $('.content').addClass('country-view');
-    $('#btn-switch-view').html('Global View');
+    $('#btn-switch-view').html('Go to Global View');
     
     toggleLayers(globalLayers, 'none');
     toggleLayers(countryLayers, 'visible');
