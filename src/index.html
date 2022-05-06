@@ -159,6 +159,20 @@
                     <option value='stable'>Stable</option>
                   </select>
                 </div>
+                <!-- custom framework data sorting -->
+                <div class='framework-select'>
+                  <label for='frameworkRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
+                  <select id='frameworkRankingSelect' class='ranking-select'>
+                    <option value='#severity+overall+num'>Overall Risk</option>
+                    <option value='#severity+food+short_term+num'>Food Insecurity Risk: Short Term</option>
+                    <option value='#severity+food+long_term+num'>Food Insecurity Risk: Long Term</option>
+                    <option value='#severity+energy+num'>Energy Risk</option>
+                    <option value='#severity+debt+num'>Debt Risk</option>
+                    <option value='#severity+dependence+rus+num'>Financial Dependence on Russia</option>
+                    <option value='#severity+economic+num'>Economic Outlook</option>
+                    <option value='#severity+conflict+num'>Conflict Risk</option>
+                  </select>
+                </div>
               </div>
               <div class='ranking-chart'></div>
             </div>

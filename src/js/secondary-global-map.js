@@ -22,6 +22,14 @@ function handleGlobalEvents(layer) {
     toggleSecondaryPanel(currentBtn);
   });
 
+  //ranking select event
+  d3.selectAll('.ranking-select').on('change',function(e) {
+    var selected = d3.select(this).node().value;
+    if (selected!='') {
+      updateRankingChart(selected);
+    }
+  });
+
 
   map.on('mouseenter', secondaryGlobalLayer, function(e) {
     map.getCanvas().style.cursor = 'pointer';
@@ -155,9 +163,9 @@ function getGlobalLegendScale() {
   });
 
   if (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) max = 1;
-  
-  if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
-  else max = Math.ceil(max)+1;
+  else if (currentIndicator.id=='#severity+inform+type' || currentIndicator.id=='#impact+type') max = 0;
+  else if (currentIndicator.id=='#severity+overall+num' || currentIndicator.id=='#impact+type') max = Math.ceil(max)+1;
+  else max = max; //Math.ceil(max)+1
 
   //set scale
   var scale;
@@ -171,8 +179,17 @@ function getGlobalLegendScale() {
   else if (currentIndicator.id=='#severity+inform+type') {
     scale = d3.scaleOrdinal().domain(['Very Low', 'Low', 'Medium', 'High', 'Very High']).range(informColorRange);
   }
+  else if (currentIndicator.id=='#severity+overall+num') {
+
+    scale = d3.scaleThreshold()
+      .domain([ 1, 2, 3, 4 ])
+      .range(frameworkColorRange);
+
+    //scale = d3.scaleOrdinal().domain(['<1', '1-2', '2-3', '3-4', '>5']).range(frameworkColorRange);
+    //scale = d3.scaleQuantize().domain([0, max]).range(frameworkColorRange);
+  }
   else {
-    scale = d3.scaleQuantize().domain([0, max]).range(frameworkColorRange);
+    scale = d3.scaleQuantize().domain([0, max]).range(colorRange);
   }
 
   return (max==undefined) ? null : scale;
@@ -254,11 +271,21 @@ function setGlobalLegend(scale) {
     $('.map-legend.global .legend-container').attr('class', 'legend-container '+ layerID);
 
     var legendFormat = (currentIndicator.id.indexOf('pct')>-1 || currentIndicator.id.indexOf('ratio')>-1) ? d3.format('.0%') : shortenNumFormat;
-    
-    var legend = d3.legendColor()
-      .labelFormat(legendFormat)
-      .cells(colorRange.length)
-      .scale(scale);
+    var legend;
+
+    if (currentIndicator.id=='#severity+overall+num') {
+      legend = d3.legendColor()
+        .labelFormat(legendFormat)
+        .cells(colorRange.length)
+        .scale(scale)
+        .labels(d3.legendHelpers.thresholdLabels);
+    }
+    else {
+      legend = d3.legendColor()
+        .labelFormat(legendFormat)
+        .cells(colorRange.length)
+        .scale(scale);
+    }
 
     var g = d3.select('.map-legend.global .scale');
     g.call(legend);
@@ -366,7 +393,7 @@ function createMapTooltip(country_code, country_name, point) {
         if (country[0]['#severity+food+short_term+num']!=undefined) content += `<div class="table-row"><div>Food Insecurity Risk, Short Term:</div><div>${country[0]['#severity+food+short_term+num']}</div></div>`;
         if (country[0]['#severity+food+long_term+num']!=undefined) content += `<div class="table-row"><div>Food Insecurity Risk, Long Term:</div><div>${country[0]['#severity+food+long_term+num']}</div></div>`;
         if (country[0]['#severity+energy+num']!=undefined) content += `<div class="table-row"><div>Energy Risk:</div><div>${country[0]['#severity+energy+num']}</div></div>`;
-        if (country[0]['#severity+debt+num']!=undefined) content += `<div class="table-row"><div>Debt Risk</div><div>${country[0]['#severity+debt+num']}</div></div>`;
+        if (country[0]['#severity+debt+num']!=undefined) content += `<div class="table-row"><div>Debt Risk:</div><div>${country[0]['#severity+debt+num']}</div></div>`;
         if (country[0]['#severity+dependence+rus+num']!=undefined) content += `<div class="table-row"><div>Financial Dependence on Russia:</div><div>${country[0]['#severity+dependence+rus+num']}</div></div>`;
         if (country[0]['#severity+economic+num']!=undefined) content += `<div class="table-row"><div>Economic Outlook:</div><div>${country[0]['#severity+economic+num']}</div></div>`;
         if (country[0]['#severity+conflict+num']!=undefined) content += `<div class="table-row"><div>Conflict Outlook:</div><div>${country[0]['#severity+conflict+num']}</div></div>`;
