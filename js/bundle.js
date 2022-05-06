@@ -1632,6 +1632,23 @@ function displayMap() {
 }
 
 function deepLinkView() {
+  setCountry();
+
+  //deep link to specific layer 
+  let location = window.location.search;
+  if (location.indexOf('?layer=')>-1) {
+    let param = location.split('layer=')[1];
+    if (param=='global') {
+      resetMap();
+    }
+    else {
+      let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
+      selectLayer(layer);
+    }
+  }
+}
+
+function setCountry() {
   let countryCode = 'UKR';
   if (countryCodeList.hasOwnProperty(countryCode)) {
     currentCountry.code = countryCode;
@@ -1649,6 +1666,18 @@ function deepLinkView() {
     let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
     selectLayer(layer);
   }
+}
+
+function selectLayer(layer) {
+  layer.prop('checked', true);
+  currentCountryIndicator = {id: layer.val(), name: layer.parent().text()};
+  updateCountryLayer();
+  vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+
+  //reset any deep links
+  let layerID = layer.attr('data-layer');
+  let location = (layerID==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layerID;
+  window.history.replaceState(null, null, location);
 }
 
 function selectLayer(layer) {
@@ -1692,7 +1721,6 @@ function createEvents() {
   //switch view event
   $('#btn-switch-view').on('click', function() {
     resetMap();
-    //window.history.replaceState(null, null, window.location.pathname);
   });
 }
 
@@ -2499,13 +2527,15 @@ function setTooltipPosition(point) {
 function resetMap() {
   if ($('.content').hasClass('country-view')) {
     $('.content').removeClass('country-view');
-    $('#btn-switch-view').html('Ukraine View');
+    $('#btn-switch-view').html('Go to Ukraine View');
 
-    // if (currentCountry.code!=undefined) {
-    //   var id = currentCountry.code.toLowerCase()
-    //   map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
-    // }
+    //hide pop rasters
+    if (currentCountry.code!=undefined) {
+      var id = currentCountry.code.toLowerCase()
+      map.setLayoutProperty(id+'-popdensity', 'visibility', 'none');
+    }
 
+    //toggle btwn global and country map layers
     toggleLayers(globalLayers, 'visible');
     toggleLayers(countryLayers, 'none');
 
@@ -2529,18 +2559,25 @@ function resetMap() {
         map.setLayoutProperty(globalLayer, 'visibility', 'visible');
       });
     }
+
+    window.history.replaceState(null, null, window.location.pathname+'?layer=global');
   }
   else {
     $('.content').addClass('country-view');
-    $('#btn-switch-view').html('Global View');
-    
-    toggleLayers(globalLayers, 'none');
-    toggleLayers(countryLayers, 'visible');
+    $('#btn-switch-view').html('Go to Global View');
 
     minZoom = 4;
     map.setMinZoom(minZoom);
+    
+    //toggle btwn global and country map layers
+    toggleLayers(globalLayers, 'none');
+    toggleLayers(countryLayers, 'visible');
 
-    deepLinkView();
+    //show default layer
+    let layer = $('.map-legend.country').find('input[data-layer="humanitarian_operations"]');
+    selectLayer(layer);
+
+    setCountry();
   }
 }
 
