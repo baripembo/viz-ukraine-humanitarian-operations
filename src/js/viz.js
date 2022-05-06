@@ -9,7 +9,7 @@ var eventColorRange = ['#EEB598','#CE7C7F','#60A2A4','#91C4B7'];
 var idpColorRange = ['#D1E3EA','#BBD1E6','#ADBCE3','#B2B3E0','#A99BC6'];
 var orgsRange = ['#d5efe6','#c5e1db','#91c4bb','#81aaa4','#6b8883'];
 var foodBasketScale = ['Negative (<0%)', 'Normal (0-3%)', 'Moderate (3-10%)', 'High (10-25%)', 'Severe (>25%)'];
-var frameworkColorRange = ['#F7DBD9', '#F6BDB9', '#F5A09A', '#F4827A', '#F2645A'];
+var frameworkColorRange = ['#FDEADA', '#FCD5B3', '#FAC08E', '#E46C25', '#984922'];
 var colorDefault = '#F2F2EF';
 var colorNoData = '#FFF';
 var regionBoundaryData, regionalData, nationalData, subnationalDataByCountry, secondaryNationalData, dataByCountry, colorScale, viewportWidth, viewportHeight, currentRegion = '';
@@ -109,8 +109,6 @@ $( document ).ready(function() {
       worldData = data[8].world_data[0];
 
       secondaryNationalData = allData.secondary_national_data;
-
-      console.log(secondaryNationalData)
             
       //process acled data
       acledData.forEach(function(event) {

@@ -238,12 +238,12 @@ function createPieChart(data, div) {
 var rankingX, rankingY, rankingBars, rankingData, rankingBarHeight, valueFormat;
 function createRankingChart() {
   //reset
-  $('.ranking-container').removeClass('covid ranking-vaccine ranking-vaccine-financing ranking-inform');
+  //$('.ranking-container').removeClass('covid ranking-vaccine ranking-vaccine-financing ranking-inform');
 
   //set title
   var rankingTitle = $('.menu-indicators').find('.selected').attr('data-legend') + ' by Country';
-  if (currentIndicator.id=='#impact+type') rankingTitle = 'Total duration of full and partial school closures (in weeks)';
-  if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index Trend (last 3 months) by Country';
+  // if (currentIndicator.id=='#impact+type') rankingTitle = 'Total duration of full and partial school closures (in weeks)';
+  // if (currentIndicator.id=='#severity+inform+type') rankingTitle = 'INFORM Severity Index Trend (last 3 months) by Country';
   $('.secondary-panel .ranking-title').text(rankingTitle);
 
   var indicator;
@@ -254,11 +254,11 @@ function createRankingChart() {
     case '#impact+type':
       indicator = '#impact+full_partial+weeks';
       break;
-    case '#immunization-campaigns':
-      indicator = '#vaccination+postponed+num';
-      break;
     case '#food-prices':
       indicator = '#indicator+foodbasket+change+pct+val';
+      break;
+    case '#severity+overall+num':
+      indicator = '#severity+overall+num';
       break;
     default:
       indicator = currentIndicator.id;
@@ -269,20 +269,19 @@ function createRankingChart() {
     $('.ranking-container').addClass('ranking-inform');
     $('.ranking-select').val(indicator);
   }
+  else if (currentIndicator.id=='#severity+overall+num') {
+    $('.ranking-container').addClass('ranking-framework');
+    $('.ranking-select').val(indicator);
+  }
   else {
     $('.ranking-select').val('descending');
   }
 
   //format data
-  rankingData = formatRankingData(indicator, d3.select('#vaccineSortingSelect').node().value);
+  rankingData = formatRankingData(indicator, '');
 
   var valueMax = d3.max(rankingData, function(d) { return +d.value; });
   valueFormat = d3.format(',.0f');
-  if (indicator.indexOf('funding')>-1 || indicator.indexOf('gdp')>-1) {
-    valueFormat = formatValue;
-    rankingData.reverse();
-    $('.ranking-select').val('ascending');
-  }
   if (indicator.indexOf('pct')>-1 || indicator.indexOf('ratio')>-1) {
     valueFormat = (currentIndicator.id=='#value+gdp+ifi+pct') ? d3.format('.2%') : percentFormat;
   }
@@ -361,47 +360,13 @@ function createRankingChart() {
       return xpos + 3;
     })
     .text(function (d) {
-      return valueFormat(d.value);
+      return d.value;
     });
 }
 
 function formatRankingData(indicator, sorter) {
   var isCovaxLayer = (indicator.indexOf('#capacity+doses')>-1) ? true : false;
-  if (isCovaxLayer) {
-    if (sorter==undefined) sorter = '#country+name';
-    if (sorter=='#country+name') {
-      var rankingByCountry = d3.nest()
-        .key(function(d) {
-          if (regionMatch(d['#region+name'])) return d[sorter]; 
-        })
-        .rollup(function(v) {
-          if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
-        })
-        .entries(nationalData);
-    }
-    else {
-      //aggregate vax data by funder
-      var funderObject = {};
-      for (var i=0; i<nationalData.length; i++) {
-        if (regionMatch(nationalData[i]['#region+name'])) {
-          if (nationalData[i]['#meta+vaccine+funder']!=undefined && nationalData[i]['#capacity+vaccine+doses']!=undefined) {          
-            var funders = nationalData[i]['#meta+vaccine+funder'].split('|');
-            var doses = nationalData[i]['#capacity+vaccine+doses'].split('|');
-            funders.forEach(function(funder, index) {
-              funderObject[funder] = (funderObject[funder]==undefined) ? +doses[index] : funderObject[funder] + +doses[index];
-            });
-          }
-        }
-      }
-
-      //format aggregated vax data for ranking chart
-      var rankingByCountry = [];
-      for (const [funder, doses] of Object.entries(funderObject)) {
-        rankingByCountry.push({key: funder, value: doses});        
-      }
-    }
-  }
-  else if (currentIndicator.id == '#severity+inform+type') {
+  if (currentIndicator.id == '#severity+inform+type') {
     var rankingByCountry = d3.nest()
       .key(function(d) {
         if (regionMatch(d['#region+name'])) return d['#country+name']; 
@@ -422,7 +387,7 @@ function formatRankingData(indicator, sorter) {
       .rollup(function(v) {
         if (regionMatch(v[0]['#region+name'])) return v[0][indicator];
       })
-      .entries(nationalData);
+      .entries(secondaryNationalData);
   }
 
   var data = rankingByCountry.filter(function(item) {
@@ -537,7 +502,7 @@ function updateRankingChart(sortMode, secondarySortMode) {
       })
       .text(function (d) {
         if (sortMode.indexOf('pct')>-1 && d.value>1) d.value = 1;
-        return valueFormat(d.value);
+        return d.value;
       });
   }
 }

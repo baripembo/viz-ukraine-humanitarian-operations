@@ -79,7 +79,7 @@ function setKeyFigures() {
 
 	//ranking chart
 	$('.ranking-container').show();
-	//createRankingChart();
+	createRankingChart();
 }
 
 function createKeyFigure(target, title, className, value) {
