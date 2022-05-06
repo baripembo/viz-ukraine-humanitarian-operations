@@ -146,8 +146,6 @@ function displayMap() {
 }
 
 function deepLinkView() {
-  setCountry();
-
   //deep link to specific layer 
   let location = window.location.search;
   if (location.indexOf('?layer=')>-1) {
@@ -159,6 +157,9 @@ function deepLinkView() {
       let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
       selectLayer(layer);
     }
+  }
+  else {
+    setCountry();
   }
 }
 
