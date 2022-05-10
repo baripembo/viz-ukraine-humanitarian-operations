@@ -79,7 +79,7 @@ $( document ).ready(function() {
       d3.json('data/ee-regions-bbox.geojson'),
       d3.json('data/ukr_refugee_lines.geojson'),
       d3.json('data/wrl_ukr_capp.geojson'),
-      d3.json('data/hostilities.geojson'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Hostilities.geojson'),
       d3.json('data/macro-region.geojson'),
       d3.json('data/country.geojson'),
       d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-covid-viz/master/out.json')
