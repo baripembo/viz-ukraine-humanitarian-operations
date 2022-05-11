@@ -553,22 +553,6 @@ a:visited {
 				flex-direction: column;
 				margin-top: 0;
 			}
-			&.hostilities {
-				.marker {
-					background-color: #F05449;
-			    border: 1px solid #CCC;
-			    border-radius: 50%;  
-			    height: 11px;
-    			margin: 2px 8px 0 1px;
-    			width: 11px;
-				}
-			}
-			&.border-crossing {
-				.marker img {
-					height: 12px;
-					width: 12px;
-				}
-			}
 		}
 		.footnote {
 			margin-top: 15px;
