@@ -447,7 +447,7 @@ a:visited {
 	opacity: 0;
 	padding: 15px 20px 5px;
 	position: absolute;
-	bottom: 30px;
+	bottom: 20px;
 	width: 215px;
 	z-index: 3;
 	label {    
@@ -507,7 +507,7 @@ a:visited {
 		height: auto;
 		left: -215px;
 		opacity: 0;
-		padding-bottom: 5px;
+		padding-bottom: 10px;
 		z-index: -1;
 		hr {
 			border: 1px solid #E0E0E0;
@@ -629,10 +629,10 @@ a:visited {
 
 .legend-gradient {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-  bottom: 30px;
-  height: 25px;
+  bottom: 20px;
+  height: 30px;
   pointer-events: none;
-	position: fixed;
+	position: absolute;
   right: 24px;
   width: 215px;
   z-index: 3;
