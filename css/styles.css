@@ -1560,16 +1560,6 @@ a:visited {
       .map-legend.country .legend-marker label {
         flex-direction: column;
         margin-top: 0; }
-      .map-legend.country .legend-marker.hostilities .marker {
-        background-color: #F05449;
-        border: 1px solid #CCC;
-        border-radius: 50%;
-        height: 11px;
-        margin: 2px 8px 0 1px;
-        width: 11px; }
-      .map-legend.country .legend-marker.border-crossing .marker img {
-        height: 12px;
-        width: 12px; }
     .map-legend.country .footnote {
       margin-top: 15px; }
     .map-legend.country.population .legend-container {
