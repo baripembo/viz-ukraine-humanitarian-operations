@@ -3279,7 +3279,7 @@ $( document ).ready(function() {
     $('.content').height(viewportHeight);
     $('.content-right').width(viewportWidth);
     $('.country-panel .panel-content').height(viewportHeight - $('.country-panel .panel-content').position().top);
-    $('.map-legend.country').css('max-height', viewportHeight - 200);
+    $('.map-legend.country').css('max-height', viewportHeight - 218);
     if (viewportHeight<696) {
       zoomLevel = 1.4;
     }
