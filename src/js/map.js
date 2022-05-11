@@ -507,32 +507,36 @@ function initLocationLabels() {
 
 
 function initHostilityLayer() {
+  //tag current/past hostilities
+  let today = new Date();
+  hostilityData.features.forEach(function(f) {
+    let prop = f.properties;
+    
+    let date = new Date(prop.Date);
+    date.setDate(date.getDate() + 7) //mark as current up to 1 week
+    prop.opacity = (today < date) ? 1 : 0.6;
+    
+    console.log(prop.Date, prop.opacity);
+  });
+
   //add hostilty markers
   map.addSource('hostility-data', {
     type: 'geojson',
     data: hostilityData,
     generateId: true 
   });
+
   map.addLayer({
     id: 'hostilities-layer',
-    type: 'symbol',
+    type: 'circle',
     source: 'hostility-data',
-    layout: {
-      'icon-image': 'marker-hostility',
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 4, 1.5, 6, 1.8],
-      'icon-allow-overlap': true,
-      'icon-ignore-placement': true,
-      'text-field': ["get", "NAME"],
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 0, 10, 4, 12],
-      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      'text-radial-offset': 0.7
-    },
     paint: {
-      'text-color': '#000',
-      'text-halo-color': '#EEE',
-      'text-halo-width': 1,
-      'text-halo-blur': 1,
+      'circle-color': '#F05449',
+      'circle-stroke-color': '#CCC',
+      'circle-opacity': ['get', 'opacity'],
+      'circle-radius': 5,
+      'circle-stroke-width': 1,
+      'circle-stroke-opacity': ['get', 'opacity']
     }
   });
 
