@@ -174,6 +174,7 @@ $( document ).ready(function() {
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
         'Health': 'humanitarianicons-Health',
+        'Logistics': 'humanitarianicons-Logistics',
         'Multi-purpose Cash': 'humanitarianicons-Fund',
         'Nutrition': 'fa-solid fa-person-breastfeeding',
         'Protection': 'humanitarianicons-Protection',
