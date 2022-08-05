@@ -599,6 +599,11 @@ a:visited {
 		    align-items: center;
 			}
 		}
+		&.refugees {
+			.figure-inner .title {
+				height: 56px;
+			}
+		}
 	}
 }
 
