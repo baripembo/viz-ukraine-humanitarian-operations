@@ -599,7 +599,8 @@ a:visited {
 		    align-items: center;
 			}
 		}
-		&.refugees {
+		&.refugees,
+		&.idps {
 			.figure-inner .title {
 				height: 56px;
 			}
@@ -918,6 +919,12 @@ a:visited {
 						line-height: 15px;
 					}
 				}	
+			}
+			&.refugees,
+			&.idps {
+				.figure-inner .title {
+					height: 36px;
+				}
 			}
 		}
 	}
