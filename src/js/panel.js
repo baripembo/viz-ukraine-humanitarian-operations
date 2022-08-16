@@ -11,6 +11,11 @@ function initCountryPanel() {
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
 
+   //black sea grain initiative key figures
+  var grainDiv = $('.country-panel .grain .panel-inner');
+  createFigure(grainDiv, {className: 'voyages', title: 'Number of Voyages (Inbound/Outbound)', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
+  createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
+
   //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
   createFigure(refugeesDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
