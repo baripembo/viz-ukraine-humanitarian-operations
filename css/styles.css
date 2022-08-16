@@ -1725,6 +1725,8 @@ a:visited {
         display: flex;
         gap: 5px;
         align-items: center; }
+    .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.idps .figure-inner .title {
+      height: 56px; }
 
 .refugees-timeseries {
   display: none; }
@@ -2085,6 +2087,8 @@ a:visited {
         .country-panel .figure .figure-inner .title .small {
           font-size: 11px;
           line-height: 15px; }
+      .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.idps .figure-inner .title {
+        height: 36px; }
   .stat {
     font-size: 24px;
     margin: 20px 0 5px;

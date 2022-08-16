@@ -1888,7 +1888,7 @@ function initBorderCrossingLayer() {
   map.on('mouseleave', 'border-crossings-layer', onMouseLeave);
   map.on('mousemove', 'border-crossings-layer', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2>`;
+    const content = `Border Crossing:<h2>${e.features[0].properties['Name - Eng']}</h2>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
@@ -2603,19 +2603,14 @@ function initCountryPanel() {
   $('.flag').attr('src', 'assets/flags/'+data['#country+code']+'.png');
   $('.country-panel h3').text(data['#country+name'] + ' Data Explorer');
 
+   //black sea grain initiative key figures
+  var grainDiv = $('.country-panel .grain .panel-inner');
+  createFigure(grainDiv, {className: 'voyages', title: 'Number of Voyages (Inbound/Outbound)', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
+  createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
+
   //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
-  refugeesDiv.children().remove();
-  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugee Arrivals from Ukraine (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
-  
-  //refugee trendline
-  var sparklineArray = [];
-  refugeeTimeseriesData.forEach(function(d) {
-    var obj = {date: d['#affected+date+refugees'], value: d['#affected+refugees']};
-    sparklineArray.push(obj);
-  });
-  createSparkline(sparklineArray, '.figure.refugees .stat');
-
+  createFigure(refugeesDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
   createFigure(refugeesDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(refugeesDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(refugeesDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
@@ -3476,6 +3471,7 @@ $( document ).ready(function() {
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
         'Health': 'humanitarianicons-Health',
+        'Logistics': 'humanitarianicons-Logistics',
         'Multi-purpose Cash': 'humanitarianicons-Fund',
         'Nutrition': 'fa-solid fa-person-breastfeeding',
         'Protection': 'humanitarianicons-Protection',
