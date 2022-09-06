@@ -1252,11 +1252,10 @@ function mpTrack(view, content) {
 }
 
 function gaTrack(eventCategory, eventAction, eventLabel, type) {
-  ga('send', 'event', eventCategory, eventAction, eventLabel, {
-    'dimension2': type,
-    hitCallback: function() {
-      console.log('Finishing sending click event to GA')
-    }
+  dataLayer.push({
+    'event': eventCategory,
+    'label': eventAction,
+    'type': eventLabel
   });
 }
 
