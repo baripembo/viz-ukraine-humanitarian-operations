@@ -1236,7 +1236,7 @@ function transitionBarChart(data){
 
 function vizTrack(view, content) {
   mpTrack(view, content);
-  gaTrack('viz interaction', 'switch viz', 'ukr data explorer / '+view, content);
+  gaTrack('viz interaction hdx', 'switch viz', 'ukr data explorer', content);
 }
 
 function mpTrack(view, content) {
