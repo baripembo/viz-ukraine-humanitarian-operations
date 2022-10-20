@@ -2604,7 +2604,7 @@ function initCountryPanel() {
 
    //black sea grain initiative key figures
   var grainDiv = $('.country-panel .grain .panel-inner');
-  createFigure(grainDiv, {className: 'voyages', title: 'Number of Voyages (Inbound/Outbound)', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
+  createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
   createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
 
   //humanitarian impact key figures
