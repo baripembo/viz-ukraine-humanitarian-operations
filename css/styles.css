@@ -1727,6 +1727,35 @@ a:visited {
         align-items: center; }
     .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.idps .figure-inner .title {
       height: 56px; }
+  .country-panel .panel-tooltip {
+    display: block;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transition: opacity 0.2s ease-out;
+    z-index: 1070; }
+    .country-panel .panel-tooltip .tooltip-arrow {
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid #000;
+      bottom: -7px;
+      height: 0;
+      position: absolute;
+      left: 50%;
+      margin-left: -4px;
+      width: 0; }
+    .country-panel .panel-tooltip .tooltip-inner {
+      background-color: #000;
+      border-radius: 4px;
+      color: #FFF;
+      max-width: 200px;
+      padding: 10px 15px;
+      text-align: left; }
 
 .refugees-timeseries {
   display: none; }
