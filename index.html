@@ -51,128 +51,14 @@
     <main>
       
       <div class='content country-view'>
-        <div class='content-left'>
-
-          <div class='menu'>
-            <div class='org-logo'>
-              <a href='https://www.unocha.org' target='_blank' rel='noopener'>
-                <img width='100' src='assets/logo-ocha-blue.png' alt='OCHA logo'>
-              </a>
-              <a href='https://data.humdata.org' target='_blank' rel='noopener'>
-                <img width='100' src='assets/logo-hdx.svg' alt='HDX logo'>
-              </a>
-            </div>
-
-            <h1>Ukraine Data Explorer:<br>Secondary Impacts</h1>
-            <!-- <h4>Download:</h4>
-            <div class='download-link'>
-              <a href='https://data.humdata.org/snap?output=pdf&pdfFormat=A4&pdfLandscape=true&pdfMarginTop=35&pdfMarginLeft=20&pdfMarginRight=20&url=https%3A%2F%2Fdata.humdata.org%2Fvisualization%2Fcovid-snapshot%2F' target='_blank' rel='noopener' class='download-daily'><span><b>DAILY SNAPSHOT</b><br><span class='today-date'></span> (pdf)</span><i class='humanitarianicons-Download'></i></a>
-              <a href='https://data.humdata.org/dataset/2048a947-5714-4220-905b-e662cbcd14c8/resource/79bfca07-d55b-44ab-a214-5608367d2d1f/download/ocha-data-explorer-quarterly-report.pdf' target='_blank' rel='noopener' class='download-quarterly'><span><b>QUARTERLY HIGHLIGHTS</b><br><label class="label-small">NEW</label>(pdf)</span><i class='humanitarianicons-Download'></i></a>
-            </div>
-            <a href="https://mailchi.mp/humdata/c19-monthly" target="_blank" class='btn-subscription'>Sign up for the quarterly report</a> -->
-
-            <div class='global-menu'>
-              <label for='regionSelect' class='visuallyhidden'>Select a region: </label>
-              <select id='regionSelect' class='region-select'>
-                <option value=''>All Regions</option>
-              </select>
-              
-              <h4>Ukraine Monitoring Framework</h4>
-              <ul class='menu-indicators'>
-                <li data-id='#severity+overall+num' data-legend='Overall Risk' data-layer='overall_risk' class='selected'>
-                  <div><i class='humanitarianicons-Monitoring'></i>Overall Risk</div>
-                </li>
-<!--                 <li data-id='#affected+inneed+pct' data-legend='People in Need (as % of total population)' data-layer='people_in_need_2022' class='selected'>
-                  <div><i class='humanitarianicons-People-in-need'></i>People in Need 2022</div>
-                </li>
-                <li data-id='#affected+food+p3plus+num' data-legend='IPC Acute Food Insecurity (population in IPC Phase 3+)' data-layer='ipc_acute_food_insecurity'>
-                  <div><i class='humanitarianicons-Food-Security'></i>IPC Acute Food Insecurity</div>
-                </li>
-                <li data-id='#vaccination+postponed+num' data-legend='Number of immunization campaigns postponed due to COVID' data-layer='immunization_campaign_status'>
-                  <div><i class='humanitarianicons-Vaccine'></i>Immunization campaign status</div>
-                </li>
-                <li data-id='#indicator+foodbasket+change+pct' data-legend='Food Price Change - Cost of the food basket' data-layer='food_market_prices'>
-                  <div><i class='humanitarianicons-Livelihood'></i>Food Market Prices</div>
-                </li>
-                <li data-id='#severity+inform+type' data-legend='INFORM Severity Class' data-layer='inform_severity_index'>
-                  <div><i class='humanitarianicons-Analysis'></i>INFORM Severity Index</div>
-                </li> -->
-              </ul>
-              
-            </div>
-          </div>
-
-          <div class='logos'>
-            <a href='mailto:hdx@un.org?subject=Feedback on COVID-19 Data Explorer'>Send us feedback</a>
-            <p class='footnote small'>The countries represented here have inter-agency plans that address the humanitarian needs of the most vulnerable, including refugees and migrants.</p>
-            <a href='https://centre.humdata.org' target='_blank' rel='noopener'>
-              <img src='assets/logo-centre-gray.png' alt='Centre for Humanitarian Data logo'>
-            </a>
-            <a href='https://www.unocha.org' target='_blank' rel='noopener'>
-              <img src='assets/logo-ocha-gray.png' alt='Office for the Coordination of Humanitarian Affairs logo'>
-            </a>
-          </div>
-
-        </div>
+        <div class='content-left'></div>
         <div class='content-right'>
 
           <div class="tab-menubar">
             <div class="tab-button active" data-id="map-view">Map View</div>
             <div class="tab-button" data-id="chart-view">Chart View</div>
           </div>
-
-          <div class='secondary-panel'>
-            <div class='close-btn'><i class='humanitarianicons-Exit-Cancel'></i></div>
-            <div class="h1 secondary-panel-title"></div>
-            <div class='source-container'></div>
-            <div class='global-figures'></div>
-            <div class='figures'></div>
-            <div class='ranking-container'>
-              <h6 class='ranking-title'></h6>
-              <div class='ranking-select-container'>
-                <div class='default-select'>
-                  <label for='rankingSelect'>Sort by:</label>
-                  <select id='rankingSelect' class='ranking-select'>
-                    <option value='descending'>Highest to Lowest</option>
-                    <option value='ascending'>Lowest to Highest</option>
-                  </select>
-                </div>
-                <!-- custom inform data sorting -->
-                <div class='inform-select'>
-                  <label for='informSelect'>Sort by:</label>
-                  <select id='informSelect' class='ranking-select'>
-                    <option value='#severity+inform+num'>All</option>
-                    <option value='increasing'>Increasing</option>
-                    <option value='decreasing'>Decreasing</option>
-                    <option value='stable'>Stable</option>
-                  </select>
-                </div>
-                <!-- custom framework data sorting -->
-                <div class='framework-select'>
-                  <label for='frameworkRankingSelect' class='visuallyhidden'>Select ranking mode: </label>
-                  <select id='frameworkRankingSelect' class='ranking-select'>
-                    <option value='#severity+overall+num'>Overall Risk</option>
-                    <option value='#severity+food+short_term+num'>Food Insecurity Risk: Short Term</option>
-                    <option value='#severity+food+long_term+num'>Food Insecurity Risk: Long Term</option>
-                    <option value='#severity+energy+num'>Energy Risk</option>
-                    <option value='#severity+debt+num'>Debt Risk</option>
-                    <option value='#severity+dependence+rus+num'>Financial Dependence on Russia</option>
-                    <option value='#severity+economic+num'>Economic Outlook</option>
-                    <option value='#severity+conflict+num'>Conflict Risk</option>
-                  </select>
-                </div>
-              </div>
-              <div class='ranking-chart'></div>
-            </div>
-          </div>
-
           <div id='global-map'>
-            <div class='map-legend global'>
-              <div class='toggle-icon'></div>
-              <h4 class='collapsed-title'>MAP LEGEND</h4>
-              <h4 class='indicator-title'>MAP DATA LAYER</h4>
-              <div class='indicator-source'></div>
-            </div>
             <div class='map-legend country'>
               <div class='toggle-icon'></div>
               <h4 class='collapsed-title'>MAP LEGEND</h4>
@@ -239,8 +125,6 @@
             <div class="sp sp-circle"></div>
             <span>Loading data...</span>
           </div>
-
-          <div id='btn-switch-view'>Go to Global View</div>
         </div>
 
         <div class='country-panel'>
