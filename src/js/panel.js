@@ -15,6 +15,8 @@ function initCountryPanel() {
   var grainDiv = $('.country-panel .grain .panel-inner');
   createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
   createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
+  createFigure(grainDiv, {className: 'wheat', title: 'Quantity of wheat shipped to lower-income countries [?]', stat: shortenNumFormat(data['#indicator+commodities+wheat+num']), indicator: '#indicator+commodities+wheat+num', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
+  createFigure(grainDiv, {className: 'wheat-pct', title: 'Proportion of wheat shipped to lower-income countries [?]', stat: percentFormat(data['#indicator+commodities+wheat+pct']), indicator: '#indicator+commodities+wheat+pct', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
 
   //humanitarian impact key figures
   var refugeesDiv = $('.country-panel .refugees .panel-inner');
@@ -68,13 +70,26 @@ function initCountryPanel() {
 
 
 function createFigure(div, obj) {
-  div.append('<div class="figure '+ obj.className +'"><div class="figure-inner"></div></div>');
+  div.append(`<div class="figure ${obj.className}"><div class="figure-inner"></div></div>`);
   var divInner = $('.'+ obj.className +' .figure-inner');
-  if (obj.title != undefined) divInner.append('<h6 class="title">'+ obj.title +'</h6>');
-  divInner.append('<p class="stat">'+ obj.stat +'</p>');
+  if (obj.title != undefined) divInner.append(`<h6 class="title">${obj.title}</h6>`);
+  divInner.append(`<p class="stat">${obj.stat}</p>`);
 
   if (obj.indicator!='')
     createSource(divInner, obj.indicator);
+
+  if (obj.tooltip!=undefined) {
+    divInner.find('.title').on('mouseenter', function(e) {
+      let pos = $(e.currentTarget).position();
+      $('.panel-tooltip .tooltip-inner').html(obj.tooltip);
+      $('.panel-tooltip').css('opacity', 0.9);
+      $('.panel-tooltip').css('top', `${pos.top - $('.panel-tooltip').height() - 10}px`);
+      $('.panel-tooltip').css('left', `${pos.left + $(this).width()/2 - $('.panel-tooltip').width()/2}px`);
+    });
+    divInner.find('.title').on('mouseout', function(e) {
+      $('.panel-tooltip').css('opacity', 0);
+    });
+  }
 }
 
 
