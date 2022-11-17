@@ -25,11 +25,13 @@ var currentCountry = {};
 
 var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons, countryData = '';
 
+mapboxgl.baseApiUrl='https://data.humdata.org/mapbox';
+mapboxgl.accessToken = 'cacheToken';
+
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
   //console.log(prod);
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbDA5cWZmNjAwZzAyM3BtZ3U3OXNldW1hIn0.Tcs909e7BLLnpWBjM6tuvw';
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
   viewportWidth = (window.innerWidth<minWidth) ? minWidth : window.innerWidth;
@@ -77,7 +79,7 @@ $( document ).ready(function() {
       d3.json('data/ee-regions-bbox.geojson'),
       d3.json('data/ukr_refugee_lines.geojson'),
       d3.json('data/wrl_ukr_capp.geojson'),
-      d3.json('data/hostilities.geojson'),
+      d3.json('https://raw.githubusercontent.com/OCHA-DAP/hdx-scraper-ukraine-viz/main/UKR_Hostilities.geojson'),
       d3.json('data/macro-region.geojson'),
       d3.json('data/country.geojson')
     ]).then(function(data) {
@@ -172,6 +174,7 @@ $( document ).ready(function() {
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
         'Health': 'humanitarianicons-Health',
+        'Logistics': 'humanitarianicons-Logistics',
         'Multi-purpose Cash': 'humanitarianicons-Fund',
         'Nutrition': 'fa-solid fa-person-breastfeeding',
         'Protection': 'humanitarianicons-Protection',
@@ -205,6 +208,8 @@ $( document ).ready(function() {
       else {
         $('#chart-view').hide();
       }
+      let location = ($(this).data('id')==undefined) ? window.location.pathname : window.location.pathname + '?tab=' + $(this).data('id');
+      window.history.replaceState(null, null, location);
       vizTrack($(this).data('id'), currentCountryIndicator.name);
     });
 

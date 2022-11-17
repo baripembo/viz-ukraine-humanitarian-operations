@@ -116,15 +116,42 @@ function displayMap() {
 }
 
 function deepLinkView() {
-  var countryCode = 'UKR';
+  let countryCode = 'UKR';
   if (countryCodeList.hasOwnProperty(countryCode)) {
     currentCountry.code = countryCode;
     currentCountry.name = 'Ukraine';
 
     //find matched features and zoom to country
-    var selectedFeatures = matchMapFeatures(currentCountry.code);
+    let selectedFeatures = matchMapFeatures(currentCountry.code);
     selectCountry(selectedFeatures);
   }
+
+  //deep link to specific layer 
+  let location = window.location.search;
+  if (location.indexOf('?layer=')>-1) {
+    let param = location.split('layer=')[1];
+    let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
+    selectLayer(layer);
+  }
+
+  //deep link to tabbed view
+  if (location.indexOf('?tab=')>-1) {
+    let view = location.split('tab=')[1];
+    let selectedTab = $(`.tab-menubar .tab-button[data-id="${view}"]`);
+    selectedTab.click();
+  }
+}
+
+function selectLayer(layer) {
+  layer.prop('checked', true);
+  currentCountryIndicator = {id: layer.val(), name: layer.parent().text()};
+  updateCountryLayer();
+  vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+
+  //reset any deep links
+  let layerID = layer.attr('data-layer');
+  let location = (layerID==undefined) ? window.location.pathname : window.location.pathname+'?layer='+layerID;
+  window.history.replaceState(null, null, location);
 }
 
 function matchMapFeatures(country_code) {
@@ -142,16 +169,15 @@ function createEvents() {
   //country legend radio events
   $('input[type="radio"]').click(function(){
     var selected = $('input[name="countryIndicators"]:checked');
-    currentCountryIndicator = {id: selected.val(), name: selected.parent().text()};
-    updateCountryLayer();
-    vizTrack(`main ${currentCountry.code} view`, currentCountryIndicator.name);
+    selectLayer(selected);
   });
 
   //chart view trendseries select event
   d3.select('.trendseries-select').on('change',function(e) {
     var selected = d3.select('.trendseries-select').node().value;
     updateTimeseries(selected);
-    vizTrack(`chart ${currentCountry.code} view`, selected);
+    if (currentCountry.code!==undefined && selected!==undefined)
+      vizTrack(`chart ${currentCountry.code} view`, selected);
   });
 }
 
@@ -318,7 +344,7 @@ function initBorderCrossingLayer() {
   map.on('mouseleave', 'border-crossings-layer', onMouseLeave);
   map.on('mousemove', 'border-crossings-layer', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    const content = `Border Crossing:<h2>${e.features[0].properties['Name - English']}</h2>`;
+    const content = `Border Crossing:<h2>${e.features[0].properties['Name - Eng']}</h2>`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
@@ -457,7 +483,7 @@ function initAcledLayer() {
   let maxCount = d3.max(cleanedCoords, function(d) { return +d['#affected+killed']; });
   let dotScale = d3.scaleSqrt()
     .domain([1, maxCount])
-    .range([3, 13]);
+    .range([4, 16]);
 
   //get unique event types
   let acledEvents = [...new Set(cleanedCoords.map(d => d['#event+type']))];
