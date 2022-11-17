@@ -133,6 +133,13 @@ function deepLinkView() {
     let layer = $('.map-legend.country').find('input[data-layer="'+param+'"]');
     selectLayer(layer);
   }
+
+  //deep link to tabbed view
+  if (location.indexOf('?tab=')>-1) {
+    let view = location.split('tab=')[1];
+    let selectedTab = $(`.tab-menubar .tab-button[data-id="${view}"]`);
+    selectedTab.click();
+  }
 }
 
 function selectLayer(layer) {

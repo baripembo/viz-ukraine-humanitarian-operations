@@ -208,6 +208,8 @@ $( document ).ready(function() {
       else {
         $('#chart-view').hide();
       }
+      let location = ($(this).data('id')==undefined) ? window.location.pathname : window.location.pathname + '?tab=' + $(this).data('id');
+      window.history.replaceState(null, null, location);
       vizTrack($(this).data('id'), currentCountryIndicator.name);
     });
 
