@@ -720,7 +720,7 @@ function updateCountryLayer() {
     //$('.map-legend.country').addClass('idps');
   }
   else if (currentCountryIndicator.id=='#affected+inneed+total') {
-    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+    countryColorScale = d3.scaleQuantize().domain([0, max]).range(pinColorRange);
   }
   else {}
 
