@@ -279,15 +279,17 @@ function initIDPLayer() {
   idpGeoJson.features.forEach(function(f) {
     let prop = f.properties;
     idpMacroData.forEach(function(d) {
-      if (prop.ADM1_EN!=='') {
-        if (prop.ADM1_EN.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
-          prop.idpPresence = d['#affected+idps'];
-          prop.color = colorScale(d['#affected+idps']);
+      if (d['#region+macro+name']!==undefined) {
+        if (prop.ADM1_EN!=='') {
+          if (prop.ADM1_EN.toLowerCase()==d['#region+macro+name'].toLowerCase()) {
+            prop.idpPresence = d['#affected+idps'];
+            prop.color = colorScale(d['#affected+idps']);
+          }
         }
-      }
-      else {
-        prop.idpPresence = '';
-        prop.color = '#FFF';
+        else {
+          prop.idpPresence = '';
+          prop.color = '#FFF';
+        }
       }
     });
   });
@@ -717,6 +719,9 @@ function updateCountryLayer() {
     $('.no-data-key').show();
     //$('.map-legend.country').addClass('idps');
   }
+  else if (currentCountryIndicator.id=='#affected+inneed+total') {
+    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+  }
   else {}
 
   updateCountryLegend(countryColorScale);
@@ -798,6 +803,7 @@ function resetLayers() {
 
 function createCountryLegend(scale) {
   //set data sources
+  createSource($('.map-legend.country .pin-source'), '#affected+inneed+total');
   createSource($('.map-legend.country .idp-source'), '#affected+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
@@ -845,7 +851,7 @@ function createCountryLegend(scale) {
 
 function updateCountryLegend(scale) {
   //set format for legend format
-  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population') ? shortenNumFormat : d3.format('.0f');
+  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+inneed+total') ? shortenNumFormat : d3.format('.0f');
 
   //set legend title
   let legendTitle = $('input[name="countryIndicators"]:checked').attr('data-legend');
@@ -937,6 +943,15 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       sectors.forEach(function(sector, index) {
         content += `<div class="table-row breakdown"><div><i class="${humIcons[sector]}"></i> ${sector}</div></div>`;
       });
+      content += `</div>`;
+    }
+    else if (currentCountryIndicator.id=='#affected+inneed+total') {
+      content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${numFormat(val)}</div>`;
+      content += `<div class="table-display">`;
+      content += `<div class="table-row"><div>People Affected:</div><div>${numFormat(adm1[0]['#affected+total'])}</div></div>`;
+      content += `<div class="table-row"><div>IDPs in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+idps'])}</div></div>`;
+      content += `<div class="table-row"><div>Non-displaced People in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+nondisplaced'])}</div></div>`;
+      content += `<div class="table-row"><div>Returnees in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+returnees'])}</div></div>`;
       content += `</div>`;
     }
     else {
