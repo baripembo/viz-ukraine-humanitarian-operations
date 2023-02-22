@@ -89,6 +89,7 @@ $( document ).ready(function() {
 
       //parse data
       var allData = data[0];
+      console.log(allData)
       regionalData = allData.regional_data[0];
       nationalData = allData.national_data;
       subnationalData = allData.subnational_data;
