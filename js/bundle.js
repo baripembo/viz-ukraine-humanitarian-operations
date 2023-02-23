@@ -1058,6 +1058,7 @@ function updateCountryLayer() {
     //$('.map-legend.country').addClass('idps');
   }
   else if (currentCountryIndicator.id=='#affected+inneed+total') {
+    $('.no-data-key').show();
     countryColorScale = d3.scaleQuantize().domain([0, max]).range(pinColorRange);
   }
   else {}
@@ -1283,7 +1284,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       });
       content += `</div>`;
     }
-    else if (currentCountryIndicator.id=='#affected+inneed+total') {
+    else if (val!='No Data' && currentCountryIndicator.id=='#affected+inneed+total') {
       content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${numFormat(val)}</div>`;
       content += `<div class="table-display">`;
       content += `<div class="table-row"><div>People Affected:</div><div>${numFormat(adm1[0]['#affected+total'])}</div></div>`;
