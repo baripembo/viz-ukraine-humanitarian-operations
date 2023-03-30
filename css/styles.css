@@ -1736,6 +1736,10 @@ a:visited {
   stroke: #F2F2F3;
   stroke-dasharray: 0; }
 
+.trendseries-chart .c3-xgrid-focus line {
+  stroke: #CCC;
+  stroke-dasharray: 3; }
+
 .trendseries-chart .c3-axis .tick line,
 .trendseries-chart .c3-axis-y path.domain {
   display: none; }

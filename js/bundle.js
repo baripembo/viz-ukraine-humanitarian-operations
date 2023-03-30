@@ -102,13 +102,7 @@ function createTimeSeries(data, div) {
     bindto: div,
     data: {
       x: 'x',
-      columns: data.series,
-      type: 'bar'
-    },
-    bar: {
-        width: {
-            ratio: 0.5
-        }
+      columns: data.series
     },
     color: {
       pattern: colorArray
