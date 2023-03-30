@@ -148,7 +148,7 @@ function createTimeSeries(data, div) {
         let id = d[0].index + 1;
         let date = new Date(d[0].x);
         let total = 0;
-        let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
+        let html = `<table><thead><tr><th colspan="2">${format(date, 'MMM d, yyyy')}</th></tr><thead>`;
         for (var i=0; i<=events.length-1; i++) {
           if (events[i][id]>0) {
             html += `<tr><td>${events[i][0]}</td><td>${events[i][id]}</td></tr>`;
