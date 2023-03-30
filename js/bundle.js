@@ -117,6 +117,9 @@ function createTimeSeries(data, div) {
       x: {
         type: 'timeseries',
         tick: { 
+          format: function (x) { 
+            return (x.getMonth()+1) + '/' + x.getDate() + '/' + x.getYear(); 
+          },
           outer: false
         }
       },
