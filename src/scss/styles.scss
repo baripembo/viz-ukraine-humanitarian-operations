@@ -771,15 +771,19 @@ a:visited {
 
 
 .trendseries-chart {
-	// .c3-target.c3-focused .c3-lines .c3-line {
-	// 	stroke: #007CE1 !important;
-	// }
+	.c3-target.c3-focused .c3-lines .c3-line {
+		stroke: #007CE1 !important;
+	}
 	.c3-line {
 		stroke-width: 2;
 	}
 	.c3-grid line {
 	  stroke: #F2F2F3;
 	  stroke-dasharray: 0;
+	}
+	.c3-xgrid-focus line { 
+		stroke: #CCC; 
+	  stroke-dasharray: 3;
 	}
 	.c3-axis .tick line,
 	.c3-axis-y path.domain {
