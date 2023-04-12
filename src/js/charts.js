@@ -56,21 +56,21 @@ function formatData(data) {
   let totals = [];
 
   eventsArray = [];
-  events.forEach(function(event) {
-    let array = [];
-    dates.forEach(function(date, index) {
+  dates.forEach(function(date, index) {
+    totals[index] = 0;
+    eventsArray[date] = [];
+    events.forEach(function(event) {
       let val = 0;
-      if (event.key==date) {
-        let sum = 0;
-        event.values.forEach(function (v) {
-          val += v.value;
-        });
+      event.values.forEach(function (v) {
+        val += v.value;
+      });
 
+      if (event.key==date) {
         totals[index] = (totals[index]==undefined) ? val : totals[index]+val; //save aggregate of all events per day
-        eventsArray[date] = event.values; //save event breakdown by date
-      };
+        eventsArray[event.key] = event.values; //save event breakdown by date
+      }
     });
-  });
+  })
 
   //format for c3
   dates.unshift('x');
@@ -165,6 +165,7 @@ function updateTimeseries(selected) {
   let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+code'] == selected) : acledData;
   let data = formatData(filteredData);
   eventsArray = data.events;
+
   $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
   if (filteredData.length<=0)
