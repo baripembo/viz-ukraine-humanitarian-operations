@@ -549,7 +549,7 @@ function initAcledLayer() {
     map.getCanvas().style.cursor = 'pointer';
     let prop = e.features[0].properties;
     let date = new Date(prop.date);
-    let content = `<span class='small'>${moment(date).format('MMM D, YYYY')}</span>`;
+    let content = `<span class='small'>${format(date, 'MMM d, yyyy')}</span>`;
     content += `<h2>${prop.event_type}</h2>`;
     content += `<p>${prop.notes}</p>`;
     content += `<p>Fatalities: ${prop.fatalities}</p>`;

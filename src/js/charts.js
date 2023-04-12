@@ -47,31 +47,30 @@ function initTimeseries(data, div) {
 let eventsArray;
 function formatData(data) {
   let events = d3.nest()
-    .key(function(d) { return d['#event+type']; })
     .key(function(d) { return d['#date+occurred']; })
+    .key(function(d) { return d['#event+type']; })
     .rollup(function(leaves) { return leaves.length; })
     .entries(data);
-  events.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
   let dates = [... new Set(acledData.map((d) => d['#date+occurred']))];
   let totals = [];
 
   eventsArray = [];
-  events.forEach(function(event) {
-    let array = [];
-    dates.forEach(function(date, index) {
+  dates.forEach(function(date, index) {
+    totals[index] = 0;
+    eventsArray[date] = [];
+    events.forEach(function(event) {
       let val = 0;
-      event.values.forEach(function(e) {
-        if (e.key==date)
-          val = e.value;
+      event.values.forEach(function (v) {
+        val += v.value;
       });
-      totals[index] = (totals[index]==undefined) ? val : totals[index]+val; //save aggregate of all events per day
-      array.push(val); //save each event per day
+
+      if (event.key==date) {
+        totals[index] = (totals[index]==undefined) ? val : totals[index]+val; //save aggregate of all events per day
+        eventsArray[event.key] = event.values; //save event breakdown by date
+      }
     });
-    array.reverse();
-    array.unshift(event.key);
-    eventsArray.push(array);
-  });
+  })
 
   //format for c3
   dates.unshift('x');
@@ -115,7 +114,7 @@ function createTimeSeries(data, div) {
         type: 'timeseries',
         tick: { 
           format: function (x) { 
-            return (x.getMonth()+1) + '/' + x.getDate() + '/' + x.getYear(); 
+            return (x.getMonth()+1) + '/' + x.getDate() + '/' + x.getFullYear(); 
           },
           outer: false
         }
@@ -128,7 +127,6 @@ function createTimeSeries(data, div) {
         },
         tick: { 
           outer: false,
-          //format: d3.format('d')
           format: function(d) {
             if (Math.floor(d) != d){
               return;
@@ -144,16 +142,13 @@ function createTimeSeries(data, div) {
     transition: { duration: 500 },
     tooltip: {
       contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-        let events = eventsArray;
-        let id = d[0].index + 1;
         let date = new Date(d[0].x);
-        let total = 0;
-        let html = `<table><thead><tr><th colspan="2">${moment(date).format('MMM D, YYYY')}</th></tr><thead>`;
+        let dateID = format(date, 'yyyy-MM-dd');
+        let events = eventsArray[dateID];
+        let total = d[0].value;
+        let html = `<table><thead><tr><th colspan="2">${format(date, 'MMM d, yyyy')}</th></tr><thead>`;
         for (var i=0; i<=events.length-1; i++) {
-          if (events[i][id]>0) {
-            html += `<tr><td>${events[i][0]}</td><td>${events[i][id]}</td></tr>`;
-            total += events[i][id];
-          }
+          html += `<tr><td>${events[i].key}</td><td>${events[i].value}</td></tr>`;
         };
         html += `<tr><td><b>Total</b></td><td><b>${total}</b></td></tr></table>`;
         return html;
@@ -170,6 +165,7 @@ function updateTimeseries(selected) {
   let filteredData = (selected!='All') ? acledData.filter((d) => d['#adm1+code'] == selected) : acledData;
   let data = formatData(filteredData);
   eventsArray = data.events;
+
   $('.trendseries-title').find('.num').html(numFormat(filteredData.length));
 
   if (filteredData.length<=0)
