@@ -605,6 +605,11 @@ a:visited {
 				height: 56px;
 			}
 		}
+		&.casualties-killed {
+			.source {
+				min-height: 42px;
+			}
+		}
 	}
 	.panel-tooltip {
     display: block;
