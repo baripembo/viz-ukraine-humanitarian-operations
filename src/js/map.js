@@ -527,6 +527,7 @@ function initAcledLayer() {
     generateId: true 
   });
 
+  console.log('eventsGeoJson',eventsGeoJson)
   map.addLayer({
     id: 'acled-dots',
     type: 'circle',
