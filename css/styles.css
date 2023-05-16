@@ -1597,6 +1597,8 @@ a:visited {
         align-items: center; }
     .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.idps .figure-inner .title {
       height: 56px; }
+    .country-panel .figure.casualties-killed .source {
+      min-height: 42px; }
   .country-panel .panel-tooltip {
     display: block;
     font-family: 'Source Sans Pro', sans-serif;
