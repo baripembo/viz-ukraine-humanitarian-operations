@@ -27,10 +27,10 @@ var currentCountry = {};
 
 var refugeeTimeseriesData, refugeeCountData, casualtiesTimeseriesData, borderCrossingData, acledData, locationData, hostilityData, refugeeLineData, cleanedCoords, idpGeoJson, humIcons, countryData = '';
 
-// mapboxgl.baseApiUrl='https://data.humdata.org/mapbox';
-// mapboxgl.accessToken = 'cacheToken';
+mapboxgl.baseApiUrl='https://data.humdata.org/mapbox';
+mapboxgl.accessToken = 'cacheToken';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbGluZXpzYjAwYW9iM21wZ3llNzllOTV1In0.96fHlL2zQq6ItqHm0f-f6A';
+// mapboxgl.accessToken = 'pk.eyJ1IjoiaHVtZGF0YSIsImEiOiJjbGluZXpzYjAwYW9iM21wZ3llNzllOTV1In0.96fHlL2zQq6ItqHm0f-f6A';
 
 $( document ).ready(function() {
   var prod = (window.location.href.indexOf('ocha-dap')>-1 || window.location.href.indexOf('data.humdata.org')>-1) ? true : false;
