@@ -22,12 +22,14 @@ function initCountryPanel() {
   //humanitarian impact key figures
   var humImpactDiv = $('.country-panel .hum-impact .panel-inner');
   createFigure(humImpactDiv, {className: 'affected', title: 'People Affected', stat: shortenNumFormat(data['#affected+total']), indicator: '#affected+total'});
+  createFigure(humImpactDiv, {className: 'targeted', title: 'People Targeted', stat: shortenNumFormat(data['#targeted+total']), indicator: '#targeted+total'});
   createFigure(humImpactDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(data['#affected+inneed+total']), indicator: '#affected+inneed+total'});
-  createFigure(humImpactDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
-  createFigure(humImpactDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
-  createFigure(humImpactDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
-  createFigure(humImpactDiv, {className: 'returnees', title: 'Estimated Number of Returnees', stat: shortenNumFormat(data['#affected+returnees+ind']), indicator: '#affected+returnees+ind'});
   createFigure(humImpactDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: shortenNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
+  createFigure(humImpactDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
+  createFigure(humImpactDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
+  createFigure(humImpactDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  createFigure(humImpactDiv, {className: 'returnees', title: 'Estimated Number of Returnees', stat: shortenNumFormat(data['#affected+returnees+ind']), indicator: '#affected+returnees+ind'});
+  createFigure(humImpactDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(humImpactDiv, {className: 'orgs', title: 'Humanitarian orgs present within Ukraine (total)', stat: numFormat(data['#org+count+num']), indicator: '#org+count+num'});
   // createFigure(humImpactDiv, {className: 'attacks-health', title: 'Attacks on Health Care', stat: numFormat(data['#indicator+attacks+healthcare+num']), indicator: '#indicator+attacks+healthcare+num'});
   // createFigure(humImpactDiv, {className: 'attacks-education', title: 'Attacks on Education Facilities', stat: numFormat(data['#indicator+attacks+education+num']), indicator: '#indicator+attacks+education+num'});

@@ -170,18 +170,21 @@ $( document ).ready(function() {
 
       //map humanitarian icons to sector clusters
       humIcons = {
-        'Camp Coordination & Camp Management': 'humanitarianicons-Coordination',
-        'Coordination and Common Services': 'humanitarianicons-Coordination',
+        'Child Protection': 'humanitarianicons-Child-protection',
         'Education': 'humanitarianicons-Education',
+        'Camp Coordination and Camp Management': 'humanitarianicons-Coordination',
+        'Coordination and Common Services': 'humanitarianicons-Coordination',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
+        'Gender-Based Violence': 'humanitarianicons-Sexual-violence',
+        'General Protection': 'humanitarianicons-Protection',
         'Health': 'humanitarianicons-Health',
         'Logistics': 'humanitarianicons-Logistics',
-        'Multi-purpose Cash': 'humanitarianicons-Fund',
+        'Mine Action': 'humanitarianicons-Mine',
+        'Multi-Purpose Cash': 'humanitarianicons-Fund',
         'Nutrition': 'fa-solid fa-person-breastfeeding',
-        'Protection': 'humanitarianicons-Protection',
-        'Shelter/NFI': 'humanitarianicons-Shelter',
-        'WASH': 'humanitarianicons-Water-Sanitation-and-Hygiene',
+        'Shelter and Non-Food Items': 'humanitarianicons-Shelter',
+        'Water, Sanitation and Hygiene': 'humanitarianicons-Water-Sanitation-and-Hygiene',
       };
 
 
