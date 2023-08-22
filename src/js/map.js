@@ -938,10 +938,12 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       let sectors = adm1[0]['#sector+cluster+names'].split(';').sort();
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
-      content += `<div class="table-row"><div>People reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
+      content += `<div class="table-row"><div>People Reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
+      content += `<div class="table-row"><div>People Targeted:</div><div>${numFormat(adm1[0]['#targeted+total'])}</div></div>`;
       content += `<div class="table-row"><div>${label}:</div><div>${val}</div></div>`;
       content += `<div class="table-row row-separator"><div>Clusters present:</div><div>${sectors.length}</div></div>`;
       sectors.forEach(function(sector, index) {
+        sector = sector.trimStart();
         content += `<div class="table-row breakdown"><div><i class="${humIcons[sector]}"></i> ${sector}</div></div>`;
       });
       content += `</div>`;
@@ -950,6 +952,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${numFormat(val)}</div>`;
       content += `<div class="table-display">`;
       content += `<div class="table-row"><div>People Affected:</div><div>${numFormat(adm1[0]['#affected+total'])}</div></div>`;
+      content += `<div class="table-row"><div>People Targeted:</div><div>${numFormat(adm1[0]['#targeted+total'])}</div></div>`;
       content += `<div class="table-row"><div>IDPs in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+idps'])}</div></div>`;
       content += `<div class="table-row"><div>Non-displaced People in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+nondisplaced'])}</div></div>`;
       content += `<div class="table-row"><div>Returnees in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+returnees'])}</div></div>`;
