@@ -13,7 +13,8 @@ function initCountryPanel() {
 
    //black sea grain initiative key figures
   var grainDiv = $('.country-panel .grain .panel-inner');
-  createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
+  grainDiv.append('<p style="font-size: 13px;">*Data on the Black Sea Grain Initiative vessel movements covers the period 1 August 2022 - 17 July 2023. The Initiative was not renewed after its third term, which expired on 17 July 2023.</p>');
+  createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: numFormat(data['#indicator+voyages+num']), indicator: '#indicator+voyages+num'});
   createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
   createFigure(grainDiv, {className: 'wheat', title: 'Quantity of wheat shipped to lower-income countries [?]', stat: shortenNumFormat(data['#indicator+commodities+wheat+num']), indicator: '#indicator+commodities+wheat+num', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
   createFigure(grainDiv, {className: 'wheat-pct', title: 'Proportion of wheat shipped to lower-income countries [?]', stat: percentFormat(data['#indicator+commodities+wheat+pct']), indicator: '#indicator+commodities+wheat+pct', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
