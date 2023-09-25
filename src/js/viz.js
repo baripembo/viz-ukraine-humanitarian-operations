@@ -171,9 +171,9 @@ $( document ).ready(function() {
       //map humanitarian icons to sector clusters
       humIcons = {
         'Child Protection': 'humanitarianicons-Child-protection',
-        'Education': 'humanitarianicons-Education',
-        'Camp Coordination and Camp Management': 'humanitarianicons-Coordination',
+        'Camp Coordination and Camp Management': 'humanitarianicons-Camp-Coordination-and-Camp-Management',
         'Coordination and Common Services': 'humanitarianicons-Coordination',
+        'Education': 'humanitarianicons-Education',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
         'Gender-Based Violence': 'humanitarianicons-Sexual-violence',
