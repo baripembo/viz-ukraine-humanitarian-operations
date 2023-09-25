@@ -337,7 +337,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q?draft=true',
     center: [-25, 0],
     minZoom: minZoom,
     zoom: zoomLevel,
@@ -670,7 +670,20 @@ function initBorderCrossingLayer() {
       'icon-image': 'marker-border-crossing',
       'icon-size': 0.6,
       'icon-allow-overlap': isMobile ? false : true
-    }
+    },
+    'filter': ['==', 'Status', 'Operational']
+  });
+
+  map.addLayer({
+    id: 'border-crossings-closed-layer',
+    type: 'symbol',
+    source: 'border-crossings',
+    layout: {
+      'icon-image': 'marker-border-crossing-closed',
+      'icon-size': 0.6,
+      'icon-allow-overlap': isMobile ? false : true
+    },
+    'filter': ['==', 'Status', 'Closed']
   });
 
   //mouse events
@@ -678,7 +691,19 @@ function initBorderCrossingLayer() {
   map.on('mouseleave', 'border-crossings-layer', onMouseLeave);
   map.on('mousemove', 'border-crossings-layer', function(e) {
     map.getCanvas().style.cursor = 'pointer';
-    const content = `Border Crossing:<h2>${e.features[0].properties['Name_ENG']}</h2>`;
+    let content = `Border Crossing:<h2>${e.features[0].properties['Name_ENG']}</h2>`;
+    content += `Status: ${e.features[0].properties['Status']}`;
+    tooltip.setHTML(content);
+    tooltip
+      .addTo(map)
+      .setLngLat(e.lngLat);
+  });
+  map.on('mouseenter', 'border-crossings-closed-layer', onMouseEnter);
+  map.on('mouseleave', 'border-crossings-closed-layer', onMouseLeave);
+  map.on('mousemove', 'border-crossings-closed-layer', function(e) {
+    map.getCanvas().style.cursor = 'pointer';
+    let content = `Border Crossing:<h2>${e.features[0].properties['Name_ENG']}</h2>`;
+    content += `Status: ${e.features[0].properties['Status']}`;
     tooltip.setHTML(content);
     tooltip
       .addTo(map)
@@ -1112,6 +1137,7 @@ function updateCountryLayer() {
     resetLayers();
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
+    map.setLayoutProperty('border-crossings-closed-layer', 'visibility', 'none');
     //map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
   }
   else if (currentCountryIndicator.id=='#affected+idps') {
@@ -1129,6 +1155,7 @@ function resetLayers() {
   map.setLayoutProperty(countryLayer, 'visibility', 'visible')
   map.setLayoutProperty('acled-dots', 'visibility', 'none');
   map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
+  map.setLayoutProperty('border-crossings-closed-layer', 'visibility', 'visible');
   //map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
   map.setLayoutProperty('macro-regions', 'visibility', 'none');
 }
@@ -1267,7 +1294,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     let content = '';
     if (val!='No Data' && currentCountryIndicator.id=='#org+count+num') {
       //humanitarian presence layer
-      let sectors = adm1[0]['#sector+cluster+names'].split(';').sort();
+      let sectors = adm1[0]['#sector+cluster+names'].split(';');
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
       content += `<div class="table-row"><div>People Reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
@@ -1644,9 +1671,9 @@ $( document ).ready(function() {
       //map humanitarian icons to sector clusters
       humIcons = {
         'Child Protection': 'humanitarianicons-Child-protection',
-        'Education': 'humanitarianicons-Education',
-        'Camp Coordination and Camp Management': 'humanitarianicons-Coordination',
+        'Camp Coordination and Camp Management': 'humanitarianicons-Camp-Coordination-and-Camp-Management',
         'Coordination and Common Services': 'humanitarianicons-Coordination',
+        'Education': 'humanitarianicons-Education',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
         'Gender-Based Violence': 'humanitarianicons-Sexual-violence',
