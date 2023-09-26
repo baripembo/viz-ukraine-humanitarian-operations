@@ -44,6 +44,10 @@ function formatValue(val) {
   return value;
 }
 
+function oneDecNumFormat(num) {
+  let val = (num.length>=8) ? d3.format('.3s')(num) : d3.format('.2s')(num);
+  return val;
+}
 
 function roundUp(x, limit) {
   return Math.ceil(x/limit)*limit;

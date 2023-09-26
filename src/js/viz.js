@@ -176,7 +176,7 @@ $( document ).ready(function() {
         'Education': 'humanitarianicons-Education',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
-        'Gender-Based Violence': 'humanitarianicons-Sexual-violence',
+        'Gender-Based Violence': 'humanitarianicons-Gender-based-violence',
         'General Protection': 'humanitarianicons-Protection',
         'Health': 'humanitarianicons-Health',
         'Logistics': 'humanitarianicons-Logistics',

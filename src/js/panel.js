@@ -21,10 +21,10 @@ function initCountryPanel() {
 
   //humanitarian impact key figures
   var humImpactDiv = $('.country-panel .hum-impact .panel-inner');
-  createFigure(humImpactDiv, {className: 'affected', title: 'People Affected', stat: shortenNumFormat(data['#affected+total']), indicator: '#affected+total'});
-  createFigure(humImpactDiv, {className: 'targeted', title: 'People Targeted', stat: shortenNumFormat(data['#targeted+total']), indicator: '#targeted+total'});
-  createFigure(humImpactDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(data['#affected+inneed+total']), indicator: '#affected+inneed+total'});
-  createFigure(humImpactDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: shortenNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
+  createFigure(humImpactDiv, {className: 'affected', title: 'People Affected', stat: oneDecNumFormat(data['#affected+total']), indicator: '#affected+total'});
+  createFigure(humImpactDiv, {className: 'targeted', title: 'People Targeted', stat: oneDecNumFormat(data['#targeted+total']), indicator: '#targeted+total'});
+  createFigure(humImpactDiv, {className: 'pin', title: 'People in Need', stat: oneDecNumFormat(data['#affected+inneed+total']), indicator: '#affected+inneed+total'});
+  createFigure(humImpactDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: oneDecNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
   createFigure(humImpactDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
   createFigure(humImpactDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
   createFigure(humImpactDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});

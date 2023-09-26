@@ -330,6 +330,8 @@ function initBorderCrossingLayer() {
     data: borderCrossingData,
     generateId: true 
   });
+
+  //add operational crossings
   map.addLayer({
     id: 'border-crossings-layer',
     type: 'symbol',
@@ -342,6 +344,7 @@ function initBorderCrossingLayer() {
     'filter': ['==', 'Status', 'Operational']
   });
 
+  //add closed crossings
   map.addLayer({
     id: 'border-crossings-closed-layer',
     type: 'symbol',
@@ -952,7 +955,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
-      if (currentCountryIndicator.id=='#affected+idps') val = numFormat(val);
+      if (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#loc+count+health') val = numFormat(val);
       if (currentCountryIndicator.id=='#org+count+num') label = 'Humanitarian organizations present';
     }
     else {
