@@ -33,7 +33,7 @@ function truncateString(str, num) {
 
 
 function formatValue(val) {
-  var format = d3.format('$.2s');
+  var format = d3.format('$.3s');
   var value;
   if (!isVal(val)) {
     value = 'NA';
