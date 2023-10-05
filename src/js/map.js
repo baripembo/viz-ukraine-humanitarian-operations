@@ -5,7 +5,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q?draft=true',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
     minZoom: minZoom,
     zoom: zoomLevel,
@@ -248,9 +248,10 @@ function initCountryLayer() {
   map.on('mousemove', countryLayer, function(e) {  
     if (currentCountryIndicator.id!='#acled+events') {
       var f = map.queryRenderedFeatures(e.point)[0];
-      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+      console.log(f.properties)
+      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
-        if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE, e.point);
+        if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM1_REF, f.properties.ADM1_PCODE, e.point);
         tooltip
           .addTo(map)
           .setLngLat(e.lngLat);
